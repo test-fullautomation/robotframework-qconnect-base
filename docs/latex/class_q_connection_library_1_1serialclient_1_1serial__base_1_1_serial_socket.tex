@@ -1,0 +1,168 @@
+\hypertarget{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket}{}\doxysection{Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket Class Reference}
+\label{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket}\index{QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}}
+
+
+Class for handling serial connection.  
+
+
+Inheritance diagram for Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_ac269a394342042f3e8d35488389fe897}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \+\_\+mode, config)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket}{Serial\+Socket}} class. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a5fd5bd3c6f9e38cd68eeb7b2bf119f48}{connect}} (self)
+\begin{DoxyCompactList}\small\item\em Connect to serial port. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a61e6280dcab2699ca9d2a62722674a52}{disconnect}} (self, \+\_\+device)
+\begin{DoxyCompactList}\small\item\em Disconnect serial port. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_aa29b79cdcb1278586fddc9e11b055f21}{quit}} (self)
+\begin{DoxyCompactList}\small\item\em Quit serial connection. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_aa98fcfd5e755f021b82c92c10159101e}{socket}}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a14e5ac305036db5d90fa7b60250f41b3}{serial\+\_\+queue}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Class for handling serial connection. 
+
+Definition at line 47 of file serial\+\_\+base.\+py.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_ac269a394342042f3e8d35488389fe897}\label{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_ac269a394342042f3e8d35488389fe897}} 
+\index{QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{\+\_\+mode,  }\item[{}]{config }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket}{Serial\+Socket}} class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+mode} & unused. \\
+\hline
+{\em config} & Configurations for Serial connection. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_client_a899955e25ba3079b8c776dcfd34876a7}{Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Client}}.
+
+
+
+Definition at line 63 of file serial\+\_\+base.\+py.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a5fd5bd3c6f9e38cd68eeb7b2bf119f48}\label{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a5fd5bd3c6f9e38cd68eeb7b2bf119f48}} 
+\index{QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}!connect@{connect}}
+\index{connect@{connect}!QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}}
+\doxysubsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket.\+connect (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Connect to serial port. 
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_client_aa77c6f4820d784c2934dc7aace85e6cf}{Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Client}}.
+
+
+
+Definition at line 140 of file serial\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a61e6280dcab2699ca9d2a62722674a52}\label{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a61e6280dcab2699ca9d2a62722674a52}} 
+\index{QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}!disconnect@{disconnect}}
+\index{disconnect@{disconnect}!QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}}
+\doxysubsubsection{\texorpdfstring{disconnect()}{disconnect()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket.\+disconnect (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{\+\_\+device }\end{DoxyParamCaption})}
+
+
+
+Disconnect serial port. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+device} & unused.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_ad054cebb02c0a4d84a294e43755c4404}{Q\+Connection\+Library.\+connection\+\_\+base.\+Connection\+Base}}.
+
+
+
+Definition at line 151 of file serial\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_aa29b79cdcb1278586fddc9e11b055f21}\label{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_aa29b79cdcb1278586fddc9e11b055f21}} 
+\index{QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}!quit@{quit}}
+\index{quit@{quit}!QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}}
+\doxysubsubsection{\texorpdfstring{quit()}{quit()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket.\+quit (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Quit serial connection. 
+
+\begin{DoxyReturn}{Returns}
+
+
+None 
+\end{DoxyReturn}
+
+
+Definition at line 232 of file serial\+\_\+base.\+py.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a14e5ac305036db5d90fa7b60250f41b3}\label{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_a14e5ac305036db5d90fa7b60250f41b3}} 
+\index{QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}!serial\_queue@{serial\_queue}}
+\index{serial\_queue@{serial\_queue}!QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}}
+\doxysubsubsection{\texorpdfstring{serial\_queue}{serial\_queue}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket.\+serial\+\_\+queue}
+
+
+
+Definition at line 91 of file serial\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_aa98fcfd5e755f021b82c92c10159101e}\label{class_q_connection_library_1_1serialclient_1_1serial__base_1_1_serial_socket_aa98fcfd5e755f021b82c92c10159101e}} 
+\index{QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}!socket@{socket}}
+\index{socket@{socket}!QConnectionLibrary.serialclient.serial\_base.SerialSocket@{QConnectionLibrary.serialclient.serial\_base.SerialSocket}}
+\doxysubsubsection{\texorpdfstring{socket}{socket}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+serialclient.\+serial\+\_\+base.\+Serial\+Socket.\+socket}
+
+
+
+Definition at line 66 of file serial\+\_\+base.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Project/robot/\+R\+O\+B\+F\+W-\/85/robotframework-\/qconnect-\/base/\+Q\+Connection\+Library/serialclient/\mbox{\hyperlink{serial__base_8py}{serial\+\_\+base.\+py}}\end{DoxyCompactItemize}

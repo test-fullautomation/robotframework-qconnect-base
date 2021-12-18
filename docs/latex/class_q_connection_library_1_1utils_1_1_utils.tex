@@ -1,0 +1,229 @@
+\hypertarget{class_q_connection_library_1_1utils_1_1_utils}{}\doxysection{Q\+Connection\+Library.\+utils.\+Utils Class Reference}
+\label{class_q_connection_library_1_1utils_1_1_utils}\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+
+
+Class to implement utilities for supporting development.  
+
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_a07ce3631d4aa39775b9dfcd2dc0ff68a}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\begin{DoxyCompactList}\small\item\em Empty constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_a77dcc355802aaa42e39246c6073a7185}{get\+\_\+all\+\_\+descendant\+\_\+classes}} (cls)
+\begin{DoxyCompactList}\small\item\em Get all descendant classes of a class. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_af84fb58d8c48eb97a03e1ea86cc922e5}{get\+\_\+all\+\_\+sub\+\_\+classes}} (cls)
+\begin{DoxyCompactList}\small\item\em Get all children classes of a class. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_a9b740166cd78326901c1c710087d4bb9}{execute\+\_\+command}} (s\+Cmd)
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_adbb720ab7e625f0a9ce19549673bbd3f}{kill\+\_\+process}} (s\+Process\+Name)
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_a8fbbf9952e1770d1f5fdef1ef6bbf872}{caller\+\_\+name}} (skip=2)
+\begin{DoxyCompactList}\small\item\em Get a name of a caller in the format module.\+class.\+method. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_a7d19c32fec9d1fd8de9b3b8c28dacc15}{load\+\_\+library}} (path, is\+\_\+stdcall=True)
+\begin{DoxyCompactList}\small\item\em Load native library depend on the calling convention. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_a2b51ea1157c7d66a68dc5f73df82fc2e}{is\+\_\+ascii\+\_\+or\+\_\+unicode}} (str\+\_\+check, codecs=\mbox{[}\textquotesingle{}utf8\textquotesingle{}, \textquotesingle{}utf16\textquotesingle{}, \textquotesingle{}utf32\textquotesingle{}, \textquotesingle{}ascii\textquotesingle{}\mbox{]})
+\begin{DoxyCompactList}\small\item\em Check if the string is ascii or unicode. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_a7b40de23dfdf4c4b78df8b9d64363565}{L\+I\+N\+U\+X\+\_\+\+OS}} = \char`\"{}linux\char`\"{}
+\item 
+string \mbox{\hyperlink{class_q_connection_library_1_1utils_1_1_utils_ad675025e8c25c015d7b2553742fdd205}{W\+I\+N\+D\+O\+W\+S\+\_\+\+OS}} = \char`\"{}windows\char`\"{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to implement utilities for supporting development. 
+
+Definition at line 75 of file utils.\+py.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_a07ce3631d4aa39775b9dfcd2dc0ff68a}\label{class_q_connection_library_1_1utils_1_1_utils_a07ce3631d4aa39775b9dfcd2dc0ff68a}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Empty constructor. 
+
+
+
+Definition at line 82 of file utils.\+py.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_a8fbbf9952e1770d1f5fdef1ef6bbf872}\label{class_q_connection_library_1_1utils_1_1_utils_a8fbbf9952e1770d1f5fdef1ef6bbf872}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!caller\_name@{caller\_name}}
+\index{caller\_name@{caller\_name}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{caller\_name()}{caller\_name()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+caller\+\_\+name (\begin{DoxyParamCaption}\item[{}]{skip = {\ttfamily 2} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get a name of a caller in the format module.\+class.\+method. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em skip} & specifies how many levels of stack to skip while getting caller name. skip=1 means \char`\"{}who calls me\char`\"{}, skip=2 \char`\"{}who calls my caller\char`\"{} etc.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An empty string is returned if skipped levels exceed stack height 
+\end{DoxyReturn}
+
+
+Definition at line 143 of file utils.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_a9b740166cd78326901c1c710087d4bb9}\label{class_q_connection_library_1_1utils_1_1_utils_a9b740166cd78326901c1c710087d4bb9}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!execute\_command@{execute\_command}}
+\index{execute\_command@{execute\_command}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{execute\_command()}{execute\_command()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+execute\+\_\+command (\begin{DoxyParamCaption}\item[{}]{s\+Cmd }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 112 of file utils.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_a77dcc355802aaa42e39246c6073a7185}\label{class_q_connection_library_1_1utils_1_1_utils_a77dcc355802aaa42e39246c6073a7185}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!get\_all\_descendant\_classes@{get\_all\_descendant\_classes}}
+\index{get\_all\_descendant\_classes@{get\_all\_descendant\_classes}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{get\_all\_descendant\_classes()}{get\_all\_descendant\_classes()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+get\+\_\+all\+\_\+descendant\+\_\+classes (\begin{DoxyParamCaption}\item[{}]{cls }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get all descendant classes of a class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cls} & Input class for finding descendants.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Array of descendant classes. 
+\end{DoxyReturn}
+
+
+Definition at line 94 of file utils.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_af84fb58d8c48eb97a03e1ea86cc922e5}\label{class_q_connection_library_1_1utils_1_1_utils_af84fb58d8c48eb97a03e1ea86cc922e5}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!get\_all\_sub\_classes@{get\_all\_sub\_classes}}
+\index{get\_all\_sub\_classes@{get\_all\_sub\_classes}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{get\_all\_sub\_classes()}{get\_all\_sub\_classes()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+get\+\_\+all\+\_\+sub\+\_\+classes (\begin{DoxyParamCaption}\item[{}]{cls }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get all children classes of a class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cls} & Input class for finding children.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Array of children classes. 
+\end{DoxyReturn}
+
+
+Definition at line 107 of file utils.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_a2b51ea1157c7d66a68dc5f73df82fc2e}\label{class_q_connection_library_1_1utils_1_1_utils_a2b51ea1157c7d66a68dc5f73df82fc2e}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!is\_ascii\_or\_unicode@{is\_ascii\_or\_unicode}}
+\index{is\_ascii\_or\_unicode@{is\_ascii\_or\_unicode}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{is\_ascii\_or\_unicode()}{is\_ascii\_or\_unicode()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+is\+\_\+ascii\+\_\+or\+\_\+unicode (\begin{DoxyParamCaption}\item[{}]{str\+\_\+check,  }\item[{}]{codecs = {\ttfamily \mbox{[}\textquotesingle{}utf8\textquotesingle{},~\textquotesingle{}utf16\textquotesingle{},~\textquotesingle{}utf32\textquotesingle{},~\textquotesingle{}ascii\textquotesingle{}\mbox{]}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Check if the string is ascii or unicode. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em str\+\_\+check} & string for checking \\
+\hline
+{\em codecs} & encoding type list\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+True if checked string is ascii or unicode 
+
+False if checked string is not ascii or unicode 
+\end{DoxyReturn}
+
+
+Definition at line 201 of file utils.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_adbb720ab7e625f0a9ce19549673bbd3f}\label{class_q_connection_library_1_1utils_1_1_utils_adbb720ab7e625f0a9ce19549673bbd3f}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!kill\_process@{kill\_process}}
+\index{kill\_process@{kill\_process}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{kill\_process()}{kill\_process()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+kill\+\_\+process (\begin{DoxyParamCaption}\item[{}]{s\+Process\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 121 of file utils.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_a7d19c32fec9d1fd8de9b3b8c28dacc15}\label{class_q_connection_library_1_1utils_1_1_utils_a7d19c32fec9d1fd8de9b3b8c28dacc15}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!load\_library@{load\_library}}
+\index{load\_library@{load\_library}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{load\_library()}{load\_library()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+utils.\+Utils.\+load\+\_\+library (\begin{DoxyParamCaption}\item[{}]{path,  }\item[{}]{is\+\_\+stdcall = {\ttfamily True} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Load native library depend on the calling convention. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & library path. \\
+\hline
+{\em is\+\_\+stdcall} & determine if the library\textquotesingle{}s calling convention is stdcall or cdecl.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Loaded library object. 
+\end{DoxyReturn}
+
+
+Definition at line 178 of file utils.\+py.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_a7b40de23dfdf4c4b78df8b9d64363565}\label{class_q_connection_library_1_1utils_1_1_utils_a7b40de23dfdf4c4b78df8b9d64363565}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!LINUX\_OS@{LINUX\_OS}}
+\index{LINUX\_OS@{LINUX\_OS}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{LINUX\_OS}{LINUX\_OS}}
+{\footnotesize\ttfamily string Q\+Connection\+Library.\+utils.\+Utils.\+L\+I\+N\+U\+X\+\_\+\+OS = \char`\"{}linux\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 76 of file utils.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1utils_1_1_utils_ad675025e8c25c015d7b2553742fdd205}\label{class_q_connection_library_1_1utils_1_1_utils_ad675025e8c25c015d7b2553742fdd205}} 
+\index{QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}!WINDOWS\_OS@{WINDOWS\_OS}}
+\index{WINDOWS\_OS@{WINDOWS\_OS}!QConnectionLibrary.utils.Utils@{QConnectionLibrary.utils.Utils}}
+\doxysubsubsection{\texorpdfstring{WINDOWS\_OS}{WINDOWS\_OS}}
+{\footnotesize\ttfamily string Q\+Connection\+Library.\+utils.\+Utils.\+W\+I\+N\+D\+O\+W\+S\+\_\+\+OS = \char`\"{}windows\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 77 of file utils.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Project/robot/\+R\+O\+B\+F\+W-\/85/robotframework-\/qconnect-\/base/\+Q\+Connection\+Library/\mbox{\hyperlink{utils_8py}{utils.\+py}}\end{DoxyCompactItemize}

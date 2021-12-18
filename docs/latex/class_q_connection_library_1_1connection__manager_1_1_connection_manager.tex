@@ -1,0 +1,516 @@
+\hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager}{}\doxysection{Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager Class Reference}
+\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager}\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+
+
+Class to manage all connections.  
+
+
+Inheritance diagram for Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_q_connection_library_1_1connection__manager_1_1_connection_manager}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a16ff61e890b36dcd2dde713addd8dcfa}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager}{Connection\+Manager}} class. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_abf15fc76475b72de06f022f76e0ce693}{\+\_\+\+\_\+del\+\_\+\+\_\+}} (self)
+\begin{DoxyCompactList}\small\item\em Destructor for \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager}{Connection\+Manager}} class. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a0eeec99f4db1786f8a12ad4a6ae8630d}{quit}} (self)
+\begin{DoxyCompactList}\small\item\em Quit connection manager. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_adf3f6593d08c9de1613d77aaf831420d}{add\+\_\+connection}} (self, name, conn)
+\begin{DoxyCompactList}\small\item\em Add a connection to managed dictionary. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_abdc6770b215083c019b248f788cd1686}{remove\+\_\+connection}} (self, connection\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Remove a connection by name. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_adb3ae46efceb87617bba3f0aeadcb933}{get\+\_\+connection\+\_\+by\+\_\+name}} (self, connection\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Get an exist connection by name. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a0cb208fd10878b2c6ed18056159994b7}{disconnect}} (self, connection\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Keyword for disconnecting a connection by name. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a865bd3df41238a2c46f4595c63086020}{connect}} (self, $\ast$args, $\ast$$\ast$kwargs)
+\begin{DoxyCompactList}\small\item\em Keyword for making a connection. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa78e209c46e7aa583ed619b676f2ad86}{connect\+\_\+named\+\_\+args}} (self, $\ast$$\ast$kwargs)
+\begin{DoxyCompactList}\small\item\em Making a connection with name arguments. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a587fd162f0619a9e94374c4ceed07f76}{connect\+\_\+unnamed\+\_\+args}} (self, connection\+\_\+name, connection\+\_\+type, mode, config)
+\begin{DoxyCompactList}\small\item\em Making a connection. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a2e07a380ab1f13333ff917a91f08488d}{send\+\_\+command}} (self, $\ast$args, $\ast$$\ast$kwargs)
+\begin{DoxyCompactList}\small\item\em Keyword for sending command to a connection. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a65bb8774edffaff0c6024fc69520bcfe}{send\+\_\+command\+\_\+named\+\_\+args}} (self, $\ast$$\ast$args)
+\begin{DoxyCompactList}\small\item\em Send command to a connection with name arguments. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_afea8ff6db3d7658d14462df93f437290}{send\+\_\+command\+\_\+unnamed\+\_\+args}} (self, connection\+\_\+name, command)
+\begin{DoxyCompactList}\small\item\em Send command to a connection. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_ab7dcd2f674bdf45e1b22c295d551f7d7}{verify}} (self, $\ast$args, $\ast$$\ast$kwargs)
+\begin{DoxyCompactList}\small\item\em Keyword uses to verify a pattern from connection response after sending a command. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a751623edb91610e001d55961c631eaa9}{verify\+\_\+named\+\_\+args}} (self, $\ast$$\ast$kwargs)
+\begin{DoxyCompactList}\small\item\em Verify a pattern from connection response after sending a command with named arguments. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa70bf6eeaea5245f66ba926c86063b0b}{verify\+\_\+unnamed\+\_\+args}} (self, connection\+\_\+name, search\+\_\+obj, timeout=0, fetch\+\_\+block=False, end\+\_\+of\+\_\+block\+\_\+pattern=\textquotesingle{}.$\ast$\textquotesingle{}, filter\+\_\+pattern=\textquotesingle{}.$\ast$\textquotesingle{}, $\ast$fct\+\_\+args)
+\begin{DoxyCompactList}\small\item\em Verify a pattern from connection response after sending a command. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a3a9c49b165af2aa627bcf27fae0a4f9d}{connection\+\_\+manage\+\_\+dict}}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a6323ab0cb1328d18877e9f1c186f8ef9}{supported\+\_\+connection\+\_\+classes\+\_\+dict}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a2641f704c12390ef1ad67c20da9790e4}{R\+O\+B\+O\+T\+\_\+\+L\+I\+B\+R\+A\+R\+Y\+\_\+\+S\+C\+O\+PE}} = \textquotesingle{}G\+L\+O\+B\+AL\textquotesingle{}
+\item 
+bool \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa521273aadcc3fba1f24e2c6d9025de1}{R\+O\+B\+O\+T\+\_\+\+A\+U\+T\+O\+\_\+\+K\+E\+Y\+W\+O\+R\+DS}} = False
+\item 
+string \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager_ab938a8859139d6dc3834b213688d90ea}{L\+I\+B\+R\+A\+R\+Y\+\_\+\+E\+X\+T\+E\+N\+S\+I\+O\+N\+\_\+\+P\+R\+E\+F\+IX}} = \textquotesingle{}robotframework\+\_\+qconnect\textquotesingle{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class to manage all connections. 
+
+Definition at line 79 of file connection\+\_\+manager.\+py.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a16ff61e890b36dcd2dde713addd8dcfa}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a16ff61e890b36dcd2dde713addd8dcfa}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager}{Connection\+Manager}} class. 
+
+
+
+Definition at line 87 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_abf15fc76475b72de06f022f76e0ce693}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_abf15fc76475b72de06f022f76e0ce693}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!\_\_del\_\_@{\_\_del\_\_}}
+\index{\_\_del\_\_@{\_\_del\_\_}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{\_\_del\_\_()}{\_\_del\_\_()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+\_\+\+\_\+del\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Destructor for \mbox{\hyperlink{class_q_connection_library_1_1connection__manager_1_1_connection_manager}{Connection\+Manager}} class. 
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 116 of file connection\+\_\+manager.\+py.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_adf3f6593d08c9de1613d77aaf831420d}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_adf3f6593d08c9de1613d77aaf831420d}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!add\_connection@{add\_connection}}
+\index{add\_connection@{add\_connection}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{add\_connection()}{add\_connection()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+add\+\_\+connection (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{name,  }\item[{}]{conn }\end{DoxyParamCaption})}
+
+
+
+Add a connection to managed dictionary. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & connection\textquotesingle{}s name. \\
+\hline
+{\em conn} & connection object.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 138 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a865bd3df41238a2c46f4595c63086020}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a865bd3df41238a2c46f4595c63086020}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!connect@{connect}}
+\index{connect@{connect}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+connect (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{$\ast$}]{args,  }\item[{$\ast$$\ast$}]{kwargs }\end{DoxyParamCaption})}
+
+
+
+Keyword for making a connection. 
+
+\begin{DoxyVerb}    *args:   Non-Keyword Arguments.
+    **kwargs:   Keyword Arguments.
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 193 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa78e209c46e7aa583ed619b676f2ad86}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa78e209c46e7aa583ed619b676f2ad86}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!connect\_named\_args@{connect\_named\_args}}
+\index{connect\_named\_args@{connect\_named\_args}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{connect\_named\_args()}{connect\_named\_args()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+connect\+\_\+named\+\_\+args (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{$\ast$$\ast$}]{kwargs }\end{DoxyParamCaption})}
+
+
+
+Making a connection with name arguments. 
+
+\begin{DoxyVerb}    **kwargs: Dictionary of arguments.
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 212 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a587fd162f0619a9e94374c4ceed07f76}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a587fd162f0619a9e94374c4ceed07f76}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!connect\_unnamed\_args@{connect\_unnamed\_args}}
+\index{connect\_unnamed\_args@{connect\_unnamed\_args}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{connect\_unnamed\_args()}{connect\_unnamed\_args()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+connect\+\_\+unnamed\+\_\+args (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{connection\+\_\+name,  }\item[{}]{connection\+\_\+type,  }\item[{}]{mode,  }\item[{}]{config }\end{DoxyParamCaption})}
+
+
+
+Making a connection. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection\+\_\+name} & Name of connection. \\
+\hline
+{\em connection\+\_\+type} & Type of connection. \\
+\hline
+{\em mode} & Connection mode. \\
+\hline
+{\em config} & Configuration for connection.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 234 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a0cb208fd10878b2c6ed18056159994b7}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a0cb208fd10878b2c6ed18056159994b7}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!disconnect@{disconnect}}
+\index{disconnect@{disconnect}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{disconnect()}{disconnect()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+disconnect (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{connection\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Keyword for disconnecting a connection by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection\+\_\+name} & Name of connection.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 178 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_adb3ae46efceb87617bba3f0aeadcb933}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_adb3ae46efceb87617bba3f0aeadcb933}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!get\_connection\_by\_name@{get\_connection\_by\_name}}
+\index{get\_connection\_by\_name@{get\_connection\_by\_name}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{get\_connection\_by\_name()}{get\_connection\_by\_name()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+get\+\_\+connection\+\_\+by\+\_\+name (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{connection\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Get an exist connection by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection\+\_\+name} & connection\textquotesingle{}s name.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Connection object. 
+\end{DoxyReturn}
+
+
+Definition at line 163 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a0eeec99f4db1786f8a12ad4a6ae8630d}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a0eeec99f4db1786f8a12ad4a6ae8630d}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!quit@{quit}}
+\index{quit@{quit}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{quit()}{quit()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+quit (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Quit connection manager. 
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 124 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_abdc6770b215083c019b248f788cd1686}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_abdc6770b215083c019b248f788cd1686}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!remove\_connection@{remove\_connection}}
+\index{remove\_connection@{remove\_connection}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{remove\_connection()}{remove\_connection()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+remove\+\_\+connection (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{connection\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Remove a connection by name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection\+\_\+name} & connection name.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 150 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a2e07a380ab1f13333ff917a91f08488d}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a2e07a380ab1f13333ff917a91f08488d}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!send\_command@{send\_command}}
+\index{send\_command@{send\_command}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{send\_command()}{send\_command()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+send\+\_\+command (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{$\ast$}]{args,  }\item[{$\ast$$\ast$}]{kwargs }\end{DoxyParamCaption})}
+
+
+
+Keyword for sending command to a connection. 
+
+\begin{DoxyVerb}    *args:   Non-Keyword Arguments.
+    **kwargs:   Keyword Arguments.
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 262 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a65bb8774edffaff0c6024fc69520bcfe}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a65bb8774edffaff0c6024fc69520bcfe}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!send\_command\_named\_args@{send\_command\_named\_args}}
+\index{send\_command\_named\_args@{send\_command\_named\_args}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{send\_command\_named\_args()}{send\_command\_named\_args()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+send\+\_\+command\+\_\+named\+\_\+args (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{$\ast$$\ast$}]{args }\end{DoxyParamCaption})}
+
+
+
+Send command to a connection with name arguments. 
+
+\begin{DoxyVerb}    **args: Dictionary of arguments.
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 281 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_afea8ff6db3d7658d14462df93f437290}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_afea8ff6db3d7658d14462df93f437290}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!send\_command\_unnamed\_args@{send\_command\_unnamed\_args}}
+\index{send\_command\_unnamed\_args@{send\_command\_unnamed\_args}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{send\_command\_unnamed\_args()}{send\_command\_unnamed\_args()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+send\+\_\+command\+\_\+unnamed\+\_\+args (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{connection\+\_\+name,  }\item[{}]{command }\end{DoxyParamCaption})}
+
+
+
+Send command to a connection. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection\+\_\+name} & connection\textquotesingle{}s name. \\
+\hline
+{\em command} & command.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 299 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_ab7dcd2f674bdf45e1b22c295d551f7d7}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_ab7dcd2f674bdf45e1b22c295d551f7d7}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!verify@{verify}}
+\index{verify@{verify}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{verify()}{verify()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+verify (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{$\ast$}]{args,  }\item[{$\ast$$\ast$}]{kwargs }\end{DoxyParamCaption})}
+
+
+
+Keyword uses to verify a pattern from connection response after sending a command. 
+
+\begin{DoxyVerb}    *args:   Non-Keyword Arguments.
+    **kwargs:   Keyword Arguments.
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+
+
+match\+\_\+res matched string. 
+\end{DoxyReturn}
+
+
+Definition at line 318 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a751623edb91610e001d55961c631eaa9}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a751623edb91610e001d55961c631eaa9}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!verify\_named\_args@{verify\_named\_args}}
+\index{verify\_named\_args@{verify\_named\_args}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{verify\_named\_args()}{verify\_named\_args()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+verify\+\_\+named\+\_\+args (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{$\ast$$\ast$}]{kwargs }\end{DoxyParamCaption})}
+
+
+
+Verify a pattern from connection response after sending a command with named arguments. 
+
+\begin{DoxyVerb}    **kwargs: Dictionary of arguments.
+\end{DoxyVerb}
+
+
+\begin{DoxyReturn}{Returns}
+
+
+match\+\_\+res matched string. 
+\end{DoxyReturn}
+
+
+Definition at line 337 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa70bf6eeaea5245f66ba926c86063b0b}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa70bf6eeaea5245f66ba926c86063b0b}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!verify\_unnamed\_args@{verify\_unnamed\_args}}
+\index{verify\_unnamed\_args@{verify\_unnamed\_args}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{verify\_unnamed\_args()}{verify\_unnamed\_args()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+verify\+\_\+unnamed\+\_\+args (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{connection\+\_\+name,  }\item[{}]{search\+\_\+obj,  }\item[{}]{timeout = {\ttfamily 0},  }\item[{}]{fetch\+\_\+block = {\ttfamily False},  }\item[{}]{end\+\_\+of\+\_\+block\+\_\+pattern = {\ttfamily \textquotesingle{}.$\ast$\textquotesingle{}},  }\item[{}]{filter\+\_\+pattern = {\ttfamily \textquotesingle{}.$\ast$\textquotesingle{}},  }\item[{$\ast$}]{fct\+\_\+args }\end{DoxyParamCaption})}
+
+
+
+Verify a pattern from connection response after sending a command. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em connection\+\_\+name} & connection\textquotesingle{}s name. \\
+\hline
+{\em search\+\_\+obj} & search pattern. \\
+\hline
+{\em timeout} & timeout for waiting result. \\
+\hline
+{\em fetch\+\_\+block} & use fetch block feature. \\
+\hline
+{\em end\+\_\+of\+\_\+block\+\_\+pattern} & pattern for detecting the end of block. \\
+\hline
+{\em filter\+\_\+pattern} & line filter pattern. \\
+\hline
+{\em fct\+\_\+args} & command to be sent.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+match\+\_\+res matched string. 
+\end{DoxyReturn}
+
+
+Definition at line 365 of file connection\+\_\+manager.\+py.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a3a9c49b165af2aa627bcf27fae0a4f9d}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a3a9c49b165af2aa627bcf27fae0a4f9d}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!connection\_manage\_dict@{connection\_manage\_dict}}
+\index{connection\_manage\_dict@{connection\_manage\_dict}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{connection\_manage\_dict}{connection\_manage\_dict}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+connection\+\_\+manage\+\_\+dict}
+
+
+
+Definition at line 88 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_ab938a8859139d6dc3834b213688d90ea}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_ab938a8859139d6dc3834b213688d90ea}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!LIBRARY\_EXTENSION\_PREFIX@{LIBRARY\_EXTENSION\_PREFIX}}
+\index{LIBRARY\_EXTENSION\_PREFIX@{LIBRARY\_EXTENSION\_PREFIX}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{LIBRARY\_EXTENSION\_PREFIX}{LIBRARY\_EXTENSION\_PREFIX}}
+{\footnotesize\ttfamily string Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+L\+I\+B\+R\+A\+R\+Y\+\_\+\+E\+X\+T\+E\+N\+S\+I\+O\+N\+\_\+\+P\+R\+E\+F\+IX = \textquotesingle{}robotframework\+\_\+qconnect\textquotesingle{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 82 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa521273aadcc3fba1f24e2c6d9025de1}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_aa521273aadcc3fba1f24e2c6d9025de1}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!ROBOT\_AUTO\_KEYWORDS@{ROBOT\_AUTO\_KEYWORDS}}
+\index{ROBOT\_AUTO\_KEYWORDS@{ROBOT\_AUTO\_KEYWORDS}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{ROBOT\_AUTO\_KEYWORDS}{ROBOT\_AUTO\_KEYWORDS}}
+{\footnotesize\ttfamily bool Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+R\+O\+B\+O\+T\+\_\+\+A\+U\+T\+O\+\_\+\+K\+E\+Y\+W\+O\+R\+DS = False\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 81 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a2641f704c12390ef1ad67c20da9790e4}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a2641f704c12390ef1ad67c20da9790e4}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!ROBOT\_LIBRARY\_SCOPE@{ROBOT\_LIBRARY\_SCOPE}}
+\index{ROBOT\_LIBRARY\_SCOPE@{ROBOT\_LIBRARY\_SCOPE}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{ROBOT\_LIBRARY\_SCOPE}{ROBOT\_LIBRARY\_SCOPE}}
+{\footnotesize\ttfamily string Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+R\+O\+B\+O\+T\+\_\+\+L\+I\+B\+R\+A\+R\+Y\+\_\+\+S\+C\+O\+PE = \textquotesingle{}G\+L\+O\+B\+AL\textquotesingle{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 80 of file connection\+\_\+manager.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a6323ab0cb1328d18877e9f1c186f8ef9}\label{class_q_connection_library_1_1connection__manager_1_1_connection_manager_a6323ab0cb1328d18877e9f1c186f8ef9}} 
+\index{QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}!supported\_connection\_classes\_dict@{supported\_connection\_classes\_dict}}
+\index{supported\_connection\_classes\_dict@{supported\_connection\_classes\_dict}!QConnectionLibrary.connection\_manager.ConnectionManager@{QConnectionLibrary.connection\_manager.ConnectionManager}}
+\doxysubsubsection{\texorpdfstring{supported\_connection\_classes\_dict}{supported\_connection\_classes\_dict}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+connection\+\_\+manager.\+Connection\+Manager.\+supported\+\_\+connection\+\_\+classes\+\_\+dict}
+
+
+
+Definition at line 109 of file connection\+\_\+manager.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Project/robot/\+R\+O\+B\+F\+W-\/85/robotframework-\/qconnect-\/base/\+Q\+Connection\+Library/\mbox{\hyperlink{connection__manager_8py}{connection\+\_\+manager.\+py}}\end{DoxyCompactItemize}

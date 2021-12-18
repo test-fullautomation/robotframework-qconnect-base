@@ -1,0 +1,308 @@
+\hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base}{}\doxysection{Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base Class Reference}
+\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base}\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+
+
+Base class for a tcp connection.  
+
+
+Inheritance diagram for Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.819738cm]{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ab023d9dab9bc106fcbb016344d70574f}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, mode=None, config=None)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base}{T\+C\+P\+Base}} class. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a0fb0a9a7c7eb133675877e224b7944c5}{\+\_\+\+\_\+del\+\_\+\+\_\+}} (self)
+\begin{DoxyCompactList}\small\item\em Destructor for \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base}{T\+C\+P\+Base}} class. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a7a800344166158bede5c2adef8be219e}{close}} (self)
+\begin{DoxyCompactList}\small\item\em Close connection. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a3c97db192d29a3646ce3290350e6fc23}{quit}} (self, is\+\_\+disconnect\+\_\+all=True)
+\begin{DoxyCompactList}\small\item\em Quit connection. \end{DoxyCompactList}\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ac6edde19bef4c4e3de419042c299a55b}{connect}} (self)
+\item 
+def \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a3daa1ac60a79e6696e28b7d20840d7e7}{disconnect}} (self, device)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ac501eff886c766c314df94586d36147a}{socket}}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a493cdce30a46ee84630a5ea2ed4fe88d}{conn}}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a6435de8662a371c47b9db1817da6e8e4}{socket\+Type}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+float \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_aa56f088ec0fb0f9018c36963aceecf1d}{R\+E\+C\+V\+\_\+\+M\+S\+G\+S\+\_\+\+P\+O\+L\+L\+I\+N\+G\+\_\+\+I\+N\+T\+E\+R\+V\+AL}} = 0.\+005
+\end{DoxyCompactItemize}
+\doxysubsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a2413b6e3700b177cd837af064eee4a13}{is\+\_\+connected}} = property(\+\_\+is\+\_\+connected)
+\begin{DoxyCompactList}\small\item\em properties \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a948bfd8f9dd5b4698d5c0b758f82a656}{timeout}} = property(\+\_\+get\+\_\+timeout, \+\_\+set\+\_\+timeout)
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a1d3602d68952e6aa226372519052038e}{conn\+\_\+timeout}} = property(\+\_\+get\+\_\+conn\+\_\+timeout, \+\_\+set\+\_\+conn\+\_\+timeout)
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_acb11ef30bdb54ef3d876044d623b42d4}{address}} = property(\+\_\+get\+\_\+address, \+\_\+set\+\_\+address)
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_aced50c6d7d08b7af0e9fdc194d4f05a4}{port}} = property(\+\_\+get\+\_\+port, \+\_\+set\+\_\+port)
+\item 
+\mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a157d3aa363fcdf7177137a5e49fd9d8a}{socket\+\_\+instance}} = property(\+\_\+get\+\_\+socket\+\_\+instance)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Base class for a tcp connection. 
+
+Definition at line 39 of file tcp\+\_\+base.\+py.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ab023d9dab9bc106fcbb016344d70574f}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ab023d9dab9bc106fcbb016344d70574f}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{mode = {\ttfamily None},  }\item[{}]{config = {\ttfamily None} }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base}{T\+C\+P\+Base}} class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & T\+CP mode. \\
+\hline
+{\em config} & Configuration for T\+CP connection in dictionary format. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1raw_1_1raw__tcp_1_1_raw_t_c_p_client_a819a854e0001b8828d1500963ac6537e}{Q\+Connection\+Library.\+tcp.\+raw.\+raw\+\_\+tcp.\+Raw\+T\+C\+P\+Client}}, \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1raw_1_1raw__tcp_1_1_raw_t_c_p_server_a47d955058fd6c9b531fdd230edaac6a3}{Q\+Connection\+Library.\+tcp.\+raw.\+raw\+\_\+tcp.\+Raw\+T\+C\+P\+Server}}, and \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1ssh_1_1ssh__client_1_1_s_s_h_client_aaae00c9cb9121f0efeba30cd20f63af4}{Q\+Connection\+Library.\+tcp.\+ssh.\+ssh\+\_\+client.\+S\+S\+H\+Client}}.
+
+
+
+Definition at line 57 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a0fb0a9a7c7eb133675877e224b7944c5}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a0fb0a9a7c7eb133675877e224b7944c5}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!\_\_del\_\_@{\_\_del\_\_}}
+\index{\_\_del\_\_@{\_\_del\_\_}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{\_\_del\_\_()}{\_\_del\_\_()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+\_\+\+\_\+del\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Destructor for \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base}{T\+C\+P\+Base}} class. 
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Definition at line 98 of file tcp\+\_\+base.\+py.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a7a800344166158bede5c2adef8be219e}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a7a800344166158bede5c2adef8be219e}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!close@{close}}
+\index{close@{close}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+close (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Close connection. 
+
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1ssh_1_1ssh__client_1_1_s_s_h_client_a99d3bfa696635042b887a1aaaebe1761}{Q\+Connection\+Library.\+tcp.\+ssh.\+ssh\+\_\+client.\+S\+S\+H\+Client}}.
+
+
+
+Definition at line 137 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ac6edde19bef4c4e3de419042c299a55b}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ac6edde19bef4c4e3de419042c299a55b}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!connect@{connect}}
+\index{connect@{connect}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+connect (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1ssh_1_1ssh__client_1_1_s_s_h_client_a8868defd0853874c7615898c1e98fcb8}{Q\+Connection\+Library.\+tcp.\+ssh.\+ssh\+\_\+client.\+S\+S\+H\+Client}}.
+
+
+
+Definition at line 357 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a3daa1ac60a79e6696e28b7d20840d7e7}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a3daa1ac60a79e6696e28b7d20840d7e7}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!disconnect@{disconnect}}
+\index{disconnect@{disconnect}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{disconnect()}{disconnect()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+disconnect (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{device }\end{DoxyParamCaption})}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_ad054cebb02c0a4d84a294e43755c4404}{Q\+Connection\+Library.\+connection\+\_\+base.\+Connection\+Base}}.
+
+
+
+Definition at line 366 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a3c97db192d29a3646ce3290350e6fc23}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a3c97db192d29a3646ce3290350e6fc23}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!quit@{quit}}
+\index{quit@{quit}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{quit()}{quit()}}
+{\footnotesize\ttfamily def Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+quit (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{is\+\_\+disconnect\+\_\+all = {\ttfamily True} }\end{DoxyParamCaption})}
+
+
+
+Quit connection. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+disconnect\+\_\+all} & Determine if it\textquotesingle{}s necessary for disconnect all connection.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+
+None. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a7c39d9906a1a619a0f60330fae0087ce}{Q\+Connection\+Library.\+connection\+\_\+base.\+Connection\+Base}}.
+
+
+
+Definition at line 348 of file tcp\+\_\+base.\+py.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a493cdce30a46ee84630a5ea2ed4fe88d}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a493cdce30a46ee84630a5ea2ed4fe88d}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!conn@{conn}}
+\index{conn@{conn}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{conn}{conn}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+conn}
+
+
+
+Definition at line 73 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_aa56f088ec0fb0f9018c36963aceecf1d}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_aa56f088ec0fb0f9018c36963aceecf1d}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!RECV\_MSGS\_POLLING\_INTERVAL@{RECV\_MSGS\_POLLING\_INTERVAL}}
+\index{RECV\_MSGS\_POLLING\_INTERVAL@{RECV\_MSGS\_POLLING\_INTERVAL}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{RECV\_MSGS\_POLLING\_INTERVAL}{RECV\_MSGS\_POLLING\_INTERVAL}}
+{\footnotesize\ttfamily float Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+R\+E\+C\+V\+\_\+\+M\+S\+G\+S\+\_\+\+P\+O\+L\+L\+I\+N\+G\+\_\+\+I\+N\+T\+E\+R\+V\+AL = 0.\+005\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 40 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ac501eff886c766c314df94586d36147a}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_ac501eff886c766c314df94586d36147a}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!socket@{socket}}
+\index{socket@{socket}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{socket}{socket}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+socket}
+
+
+
+Definition at line 67 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a6435de8662a371c47b9db1817da6e8e4}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a6435de8662a371c47b9db1817da6e8e4}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!socketType@{socketType}}
+\index{socketType@{socketType}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{socketType}{socketType}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+socket\+Type}
+
+
+
+Definition at line 84 of file tcp\+\_\+base.\+py.
+
+
+
+\doxysubsection{Property Documentation}
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_acb11ef30bdb54ef3d876044d623b42d4}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_acb11ef30bdb54ef3d876044d623b42d4}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!address@{address}}
+\index{address@{address}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{address}{address}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+address = property(\+\_\+get\+\_\+address, \+\_\+set\+\_\+address)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 336 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a1d3602d68952e6aa226372519052038e}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a1d3602d68952e6aa226372519052038e}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!conn\_timeout@{conn\_timeout}}
+\index{conn\_timeout@{conn\_timeout}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{conn\_timeout}{conn\_timeout}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+conn\+\_\+timeout = property(\+\_\+get\+\_\+conn\+\_\+timeout, \+\_\+set\+\_\+conn\+\_\+timeout)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 335 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a2413b6e3700b177cd837af064eee4a13}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a2413b6e3700b177cd837af064eee4a13}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!is\_connected@{is\_connected}}
+\index{is\_connected@{is\_connected}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{is\_connected}{is\_connected}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+is\+\_\+connected = property(\+\_\+is\+\_\+connected)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+properties 
+
+
+
+Definition at line 333 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_aced50c6d7d08b7af0e9fdc194d4f05a4}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_aced50c6d7d08b7af0e9fdc194d4f05a4}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!port@{port}}
+\index{port@{port}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{port}{port}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+port = property(\+\_\+get\+\_\+port, \+\_\+set\+\_\+port)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 337 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a157d3aa363fcdf7177137a5e49fd9d8a}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a157d3aa363fcdf7177137a5e49fd9d8a}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!socket\_instance@{socket\_instance}}
+\index{socket\_instance@{socket\_instance}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{socket\_instance}{socket\_instance}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+socket\+\_\+instance = property(\+\_\+get\+\_\+socket\+\_\+instance)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 338 of file tcp\+\_\+base.\+py.
+
+\mbox{\Hypertarget{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a948bfd8f9dd5b4698d5c0b758f82a656}\label{class_q_connection_library_1_1tcp_1_1tcp__base_1_1_t_c_p_base_a948bfd8f9dd5b4698d5c0b758f82a656}} 
+\index{QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}!timeout@{timeout}}
+\index{timeout@{timeout}!QConnectionLibrary.tcp.tcp\_base.TCPBase@{QConnectionLibrary.tcp.tcp\_base.TCPBase}}
+\doxysubsubsection{\texorpdfstring{timeout}{timeout}}
+{\footnotesize\ttfamily Q\+Connection\+Library.\+tcp.\+tcp\+\_\+base.\+T\+C\+P\+Base.\+timeout = property(\+\_\+get\+\_\+timeout, \+\_\+set\+\_\+timeout)\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 334 of file tcp\+\_\+base.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Project/robot/\+R\+O\+B\+F\+W-\/85/robotframework-\/qconnect-\/base/\+Q\+Connection\+Library/tcp/\mbox{\hyperlink{tcp__base_8py}{tcp\+\_\+base.\+py}}\end{DoxyCompactItemize}

@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QConnectionLibrary.tcp.tcp_base &#8212; The QConnection Base Library  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for QConnectionLibrary.tcp.tcp_base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># *******************************************************************************</span>
+<span class="c1">#</span>
+<span class="c1"># File: tcp_base.py</span>
+<span class="c1">#</span>
+<span class="c1"># Initially created by Cuong Nguyen (RBVH/ECM11) / May 2021.</span>
+<span class="c1"># Based on \lib\TCP\CVirtualSocket.py in TML Framework.</span>
+<span class="c1">#</span>
+<span class="c1"># Description:</span>
+<span class="c1">#   Provide the base class for all TCP client and server connection.</span>
+<span class="c1">#</span>
+<span class="c1"># History:</span>
+<span class="c1">#</span>
+<span class="c1"># 12.05.2021 / V 0.1 / Cuong Nguyen</span>
+<span class="c1"># - Initialize</span>
+<span class="c1">#</span>
+<span class="c1"># *******************************************************************************</span>
+<span class="kn">from</span> <span class="nn">robot.libraries.BuiltIn</span> <span class="kn">import</span> <span class="n">BuiltIn</span>
+<span class="kn">from</span> <span class="nn">QConnectionLibrary.connection_base</span> <span class="kn">import</span> <span class="n">ConnectionBase</span><span class="p">,</span> <span class="n">BrokenConnError</span>
+<span class="kn">from</span> <span class="nn">QConnectionLibrary.utils</span> <span class="kn">import</span> <span class="n">DictToClass</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">currentframe</span>
+<span class="kn">import</span> <span class="nn">QConnectionLibrary.constants</span> <span class="k">as</span> <span class="nn">constants</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+
+<div class="viewcode-block" id="TCPConfig"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPConfig">[docs]</a><span class="k">class</span> <span class="nc">TCPConfig</span><span class="p">(</span><span class="n">DictToClass</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Class to store configurations for TCP connection.</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="n">address</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>
+   <span class="n">port</span> <span class="o">=</span> <span class="mi">12345</span></div>
+
+
+<div class="viewcode-block" id="TCPBase"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBase">[docs]</a><span class="k">class</span> <span class="nc">TCPBase</span><span class="p">(</span><span class="n">ConnectionBase</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Base class for a tcp connection.</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="n">RECV_MSGS_POLLING_INTERVAL</span> <span class="o">=</span> <span class="mf">0.005</span>
+   <span class="n">_socket_instance</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="n">_CONNECTION_TYPE</span> <span class="o">=</span> <span class="s2">&quot;TCPIPBase&quot;</span>
+
+
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Constructor for TCPBase class.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         mode: TCP mode.</span>
+<span class="sd">         config: Configuration for TCP connection in dictionary format.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">TCPConfig</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+      <span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">address</span>
+      <span class="n">port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">port</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: Creating socket for &#39;</span><span class="si">%s</span><span class="s2">&#39;:&#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+      <span class="n">ConnectionBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">gettimeout</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_address</span> <span class="o">=</span> <span class="n">address</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">port</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">mode</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+
+      <span class="c1"># default timeout for send/receive is 10 seconds</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_conn_timeout</span> <span class="o">=</span> <span class="mi">10</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span> <span class="o">=</span> <span class="kc">False</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_send_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_read_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+      <span class="n">TCPBase</span><span class="o">.</span><span class="n">_socket_instance</span> <span class="o">+=</span> <span class="mi">1</span>
+
+      <span class="c1"># initialize receiver thread</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_init_thread_receiver</span><span class="p">(</span><span class="n">TCPBase</span><span class="o">.</span><span class="n">_socket_instance</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">socketType</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">SocketType</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_term</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_start</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_broken_conn</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_term</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_start</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+   <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Destructor for TCPBase class.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+   <span class="k">def</span> <span class="nf">_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">cr</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; Should be override in derived class.</span>
+<span class="sd">      Actual method to send message to a tcp connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         msg: Message to be sent.</span>
+<span class="sd">         cr: Determine if it&#39;s necessary to add newline character at the end of command.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span>
+
+   <span class="k">def</span> <span class="nf">_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; Should be override in derived class.</span>
+<span class="sd">      Actual method to read message from a tcp connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Empty string.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+<div class="viewcode-block" id="TCPBase.close"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBase.close">[docs]</a>   <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Close connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">)</span>
+
+      <span class="c1"># close listener thread</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+      <span class="c1"># SSH made problems here, therefore ignore possible exceptions.</span>
+      <span class="c1"># noinspection PyBroadException</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>
+      <span class="k">except</span><span class="p">:</span>
+         <span class="c1"># ignore, if not possible</span>
+         <span class="k">pass</span>
+
+      <span class="c1"># noinspection PyBroadException</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+      <span class="k">except</span><span class="p">:</span>
+         <span class="c1"># ignore, if not possible</span>
+         <span class="k">pass</span></div>
+
+      <span class="c1"># 23.07.2014 Pollerspoeck</span>
+      <span class="c1"># self.socket.close was in case of tcpip client redundant,</span>
+      <span class="c1"># and in case of tcpip service not required.</span>
+      <span class="c1"># commented it out</span>
+      <span class="c1"># self.socket.close()</span>
+
+   <span class="k">def</span> <span class="nf">_get_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Get connection timeout value.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Value of connection timeout.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+
+   <span class="k">def</span> <span class="nf">_set_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Set the connection timeout.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         timeout: timeout value in second.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: set timeout to &#39;</span><span class="si">%d</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">timeout</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">_get_conn_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Get connection timeout.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Connection timeout.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn_timeout</span>
+
+   <span class="k">def</span> <span class="nf">_set_conn_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Set connection timeout.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         timeout: Timeout in second.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: set timeout to &#39;</span><span class="si">%d</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">timeout</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">_conn_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">_get_address</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Get connection address.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Connection address.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_address</span>
+
+   <span class="k">def</span> <span class="nf">_set_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Set connection address.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         address: Address of connection.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="n">address</span>
+
+   <span class="k">def</span> <span class="nf">_get_port</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Get connection port.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Connection port.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_port</span>
+
+   <span class="k">def</span> <span class="nf">_set_port</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Set connection port.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         port: port number.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+
+   <span class="k">def</span> <span class="nf">_is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Get connected state.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         True if connection is connected.</span>
+<span class="sd">         False if connection is not connected.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span>
+
+   <span class="k">def</span> <span class="nf">_get_socket_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Get method of socket_instance property.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Value of _socket_instance.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">TCPBase</span><span class="o">.</span><span class="n">_socket_instance</span>
+
+   <span class="c1">##############################################################</span>
+   <span class="c1"># properties</span>
+   <span class="c1">##############################################################</span>
+   <span class="n">is_connected</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_is_connected</span><span class="p">)</span>
+   <span class="n">timeout</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_timeout</span><span class="p">,</span> <span class="n">_set_timeout</span><span class="p">)</span>
+   <span class="n">conn_timeout</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_conn_timeout</span><span class="p">,</span> <span class="n">_set_conn_timeout</span><span class="p">)</span>
+   <span class="n">address</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_address</span><span class="p">,</span> <span class="n">_set_address</span><span class="p">)</span>
+   <span class="n">port</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_port</span><span class="p">,</span> <span class="n">_set_port</span><span class="p">)</span>
+   <span class="n">socket_instance</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_socket_instance</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TCPBase.quit"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBase.quit">[docs]</a>   <span class="k">def</span> <span class="nf">quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_disconnect_all</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Quit connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         is_disconnect_all: Determine if it&#39;s necessary for disconnect all connection.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="nb">super</span><span class="p">(</span><span class="n">TCPBase</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TCPBase.connect"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBase.connect">[docs]</a>   <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; Should be override in derived class.</span>
+<span class="sd">      Establish the connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="TCPBase.disconnect"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBase.disconnect">[docs]</a>   <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; Should be override in derived class.</span>
+<span class="sd">      Disconnect the connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="TCPBaseServer"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBaseServer">[docs]</a><span class="k">class</span> <span class="nc">TCPBaseServer</span><span class="p">:</span>
+   <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Base class for TCP server.</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="k">def</span> <span class="nf">_bind</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+
+   <span class="k">def</span> <span class="nf">_listen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Listen for client socket.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">_accept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Method for handling socket accept action.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         conn: TCP connection socket object.</span>
+<span class="sd">         addr: The address bound to the socket on the other end of the connection.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+      <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_WARNING</span><span class="p">)</span>
+         <span class="k">raise</span> <span class="n">reason</span>
+
+      <span class="k">return</span> <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span>
+
+<div class="viewcode-block" id="TCPBaseServer.accept_connection"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBaseServer.accept_connection">[docs]</a>   <span class="k">def</span> <span class="nf">accept_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Wrapper method for handling accept action of TCP Server.</span>
+<span class="sd">      </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_listen</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accept</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">conn_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn_timeout</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: connected to &#39;</span><span class="si">%s</span><span class="s2">&#39;:&#39;</span><span class="si">%d</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span></div></div>
+
+
+<div class="viewcode-block" id="TCPBaseClient"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBaseClient">[docs]</a><span class="k">class</span> <span class="nc">TCPBaseClient</span><span class="p">:</span>
+   <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Base class for TCP client.</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TCPBaseClient.connect"><a class="viewcode-back" href="../../../QConnectionLibrary.html#QConnectionLibrary.tcp.tcp_base.TCPBaseClient.connect">[docs]</a>   <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: Try to connect to &#39;</span><span class="si">%s</span><span class="s2">&#39;:&#39;</span><span class="si">%d</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">socket</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">socket</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_ERROR</span><span class="p">)</span>
+         <span class="k">raise</span> <span class="n">BrokenConnError</span><span class="p">(</span><span class="s2">&quot;Not possible to connect.&quot;</span><span class="p">)</span>
+
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: connected to &#39;</span><span class="si">%s</span><span class="s2">&#39;:&#39;</span><span class="si">%d</span><span class="s2">&#39; &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">))</span></div></div>
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">The QConnection Base Library</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../QConnectionLibrary.html">QConnectionLibrary package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nguyen Huynh Tri Cuong (RBVH/ECM1).
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

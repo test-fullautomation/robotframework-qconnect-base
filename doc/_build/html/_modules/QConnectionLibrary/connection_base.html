@@ -1,0 +1,733 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QConnectionLibrary.connection_base &#8212; The QConnection Base Library  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for QConnectionLibrary.connection_base</h1><div class="highlight"><pre>
+<span></span><span class="c1"># *******************************************************************************</span>
+<span class="c1">#</span>
+<span class="c1"># File: connection_base.py</span>
+<span class="c1">#</span>
+<span class="c1"># Initially created by Cuong Nguyen (RBVH/ECM11) / May 2021.</span>
+<span class="c1"># Based on \lib\TCP\CTCPMultiQueued.py in TML Framework.</span>
+<span class="c1">#</span>
+<span class="c1"># Description:</span>
+<span class="c1">#   Provide the infrastructure for sending commands and getting traces from connection continuously.</span>
+<span class="c1">#</span>
+<span class="c1"># History:</span>
+<span class="c1">#</span>
+<span class="c1"># 12.05.2021 / V 0.1 / Cuong Nguyen</span>
+<span class="c1"># - Initialize</span>
+<span class="c1">#</span>
+<span class="c1"># *******************************************************************************</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">currentframe</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span> <span class="nn">robot.libraries.BuiltIn</span> <span class="kn">import</span> <span class="n">BuiltIn</span>
+<span class="kn">from</span> <span class="nn">QConnectionLibrary.qlogger</span> <span class="kn">import</span> <span class="n">QLogger</span>
+<span class="kn">import</span> <span class="nn">QConnectionLibrary.constants</span> <span class="k">as</span> <span class="nn">constants</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">_platform</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="BrokenConnError"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.BrokenConnError">[docs]</a><span class="k">class</span> <span class="nc">BrokenConnError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+   <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="ConnectionBase"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase">[docs]</a><span class="k">class</span> <span class="nc">ConnectionBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+   <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Base class for all connection classes.</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+   <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">ABCMeta</span>
+   <span class="n">_SUPPORTED_PLATFORM_LIST</span> <span class="o">=</span> <span class="p">[</span><span class="n">constants</span><span class="o">.</span><span class="n">OS_WINDOWS_STR</span><span class="p">,</span>
+                               <span class="n">constants</span><span class="o">.</span><span class="n">OS_LINUX_STR</span><span class="p">]</span>
+   <span class="n">_CONNECTION_TYPE</span> <span class="o">=</span> <span class="s2">&quot;NotSupported&quot;</span>
+   <span class="n">_ERROR_INSTRUCTION</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">UNKNOWN_STR</span>
+
+   <span class="n">MAX_LEN_BACKTRACE</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># Lines</span>
+
+   <span class="n">RECV_MSGS_POLLING_INTERVAL</span> <span class="o">=</span> <span class="mf">0.005</span>
+
+   <span class="n">_call_thrd_obj</span> <span class="o">=</span> <span class="kc">None</span>
+   <span class="n">_call_thrd_init</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+   <span class="n">_call_thrd_term</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+   <span class="n">_recv_thrd_obj</span> <span class="o">=</span> <span class="kc">None</span>
+   <span class="n">_recv_thrd_term</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+   <span class="n">_force_seq_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+   <span class="n">_start_dlt_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+   <span class="n">_traceq_handle</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="n">_traceq_obj</span> <span class="o">=</span> <span class="p">{}</span>
+   <span class="n">_traceq_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+   <span class="n">supported_devices</span> <span class="o">=</span> <span class="p">[]</span>
+
+   <span class="c1"># # for continuous processing</span>
+   <span class="c1"># _msgq_c_handle = 0</span>
+   <span class="c1"># _msgq_c_obj = {}</span>
+   <span class="c1"># _msgq_c_lock = threading.Lock()</span>
+
+
+   <span class="n">_is_precondition_valid</span> <span class="o">=</span> <span class="kc">True</span>
+   <span class="n">_should_check_timeout</span> <span class="o">=</span> <span class="kc">False</span>
+
+   <span class="n">_logger</span> <span class="o">=</span> <span class="kc">None</span>
+   <span class="n">_logger_handler</span> <span class="o">=</span> <span class="kc">None</span>
+   <span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
+   <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Override creating instance method to check for conditions.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:   </span>
+<span class="sd">         args: Non-Keyword Arguments.</span>
+<span class="sd">		 </span>
+<span class="sd">         kwargs:   Keyword Arguments.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         ConnectionBase instance if passing the conditions.</span>
+<span class="sd">		 </span>
+<span class="sd">         None if failing the conditions.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_supported_platform</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">cls</span><span class="o">.</span><span class="n">is_precondition_pass</span><span class="p">()):</span>
+         <span class="k">return</span> <span class="kc">None</span>
+      <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ConnectionBase</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+   <span class="c1"># region GENERAL METHODS</span>
+<div class="viewcode-block" id="ConnectionBase.is_supported_platform"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.is_supported_platform">[docs]</a>   <span class="nd">@classmethod</span>
+   <span class="k">def</span> <span class="nf">is_supported_platform</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Check if current platform is supported.</span>
+<span class="sd">	  </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         True if platform is supported.</span>
+<span class="sd">		 </span>
+<span class="sd">         False if platform is not supported.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">return</span> <span class="n">_platform</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_SUPPORTED_PLATFORM_LIST</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.is_precondition_pass"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.is_precondition_pass">[docs]</a>   <span class="nd">@classmethod</span>
+   <span class="k">def</span> <span class="nf">is_precondition_pass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Check for precondition.</span>
+<span class="sd">	  </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         True if passing the precondition.</span>
+<span class="sd">		 </span>
+<span class="sd">         False if failing the precondition.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_is_precondition_valid</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.error_instruction"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.error_instruction">[docs]</a>   <span class="k">def</span> <span class="nf">error_instruction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Get the error instruction.</span>
+<span class="sd">	  </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Error instruction string.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ERROR_INSTRUCTION</span></div>
+   <span class="c1"># endregion</span>
+
+   <span class="c1"># region MUST BE OVERRIDE METHODS</span>
+<div class="viewcode-block" id="ConnectionBase.quit"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.quit">[docs]</a>   <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+   <span class="k">def</span> <span class="nf">quit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_disconnect_all</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; This method MUST be overridden in derived class &lt;&lt;</span>
+<span class="sd">      Abstract method for quiting the connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         is_disconnect_all: Determine if it&#39;s necessary to disconnect all connections.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_logger_handler</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.connect"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.connect">[docs]</a>   <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+   <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_connection</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; This method MUST be overridden in derived class &lt;&lt;</span>
+<span class="sd">      Abstract method for quiting the connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         device: Determine if it&#39;s necessary to disconnect all connections.</span>
+<span class="sd">		 </span>
+<span class="sd">         files: Determine if it&#39;s necessary to disconnect all connections.</span>
+<span class="sd">		 </span>
+<span class="sd">         test_connection: Determine if it&#39;s necessary to disconnect all connections.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="ConnectionBase.disconnect"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.disconnect">[docs]</a>   <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+   <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; This method MUST be overridden in derived class &lt;&lt;</span>
+<span class="sd">      Abstract method for disconnecting connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         device: Device name.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span></div>
+   <span class="c1"># endregion</span>
+
+   <span class="c1"># region RECEIVER THREAD METHODS</span>
+   <span class="k">def</span> <span class="nf">_init_thrd_llrecv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_thrd_id</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Start a thread which receive message from connection continuously.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         n_thrd_id: thread id.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_llrecv_thrd_obj</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_thrd_llrecv_from_connection_interface</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_llrecv_thrd_obj</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_llrecv_thrd_obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_CONNECTION_TYPE</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_thrd_id</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: starting low-level receiver thread &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_llrecv_thrd_obj</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_llrecv_thrd_obj</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+   <span class="k">def</span> <span class="nf">_thrd_llrecv_from_connection_interface</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; This method will be override in derived class &lt;&lt;</span>
+<span class="sd">      The thread which receive message from connection continuously.</span>
+<span class="sd">	  </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         None</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span>
+
+   <span class="k">def</span> <span class="nf">_init_thread_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thread_id</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sync_with_start</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Initialize a thread for receiving data from connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         thread_id: Thread ID number.</span>
+<span class="sd">         mode: Connection&#39;s mode.</span>
+<span class="sd">         sync_with_start: Determine if receiving thread needs to wait for start event.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span> <span class="o">=</span> <span class="n">QLogger</span><span class="p">()</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_CONNECTION_TYPE</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_logger_handler</span> <span class="o">=</span> <span class="n">QLogger</span><span class="p">()</span><span class="o">.</span><span class="n">set_handler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_obj</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_thread_receive_from_connection</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">sync_with_start</span><span class="o">=</span><span class="n">sync_with_start</span><span class="p">))</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_obj</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+      <span class="n">thread_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_CONNECTION_TYPE</span>
+      <span class="k">if</span> <span class="n">mode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+         <span class="n">thread_name</span> <span class="o">=</span> <span class="n">mode</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">thread_name</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">thread_id</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: starting receiver thread &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_obj</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_obj</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+   <span class="k">def</span> <span class="nf">_thread_receive_from_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sync_with_start</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Thread to receive data from connection continuously.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         sync_with_start: determine if thread needs to wait for start event.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">sync_with_start</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: receiver thread is waiting to start.&quot;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+         <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_start</span><span class="o">.</span><span class="n">isSet</span><span class="p">():</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">RECV_MSGS_POLLING_INTERVAL</span><span class="p">)</span>
+
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: receiver thread started.&quot;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_term</span><span class="o">.</span><span class="n">isSet</span><span class="p">():</span>
+         <span class="k">try</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_obj</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_check_timeout</span><span class="p">:</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">check_timeout</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">msg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">_should_check_timeout</span> <span class="o">=</span> <span class="kc">False</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">pre_msg_check</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+               <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_INFO</span><span class="p">)</span>
+               <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="p">:</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+               <span class="c1"># with self._msgq_c_lock:</span>
+               <span class="c1">#    now = time.time()</span>
+               <span class="c1">#    for q in self._msgq_c_obj.values():</span>
+               <span class="c1">#       q.put((now, msg), False)</span>
+
+               <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_traceq_lock</span><span class="p">:</span>
+                  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_traceq_obj</span><span class="p">:</span>
+                     <span class="k">for</span> <span class="p">(</span><span class="n">regex_filter</span><span class="p">,</span> <span class="n">msg_queue</span><span class="p">,</span> <span class="n">back_trace_queue</span><span class="p">,</span> <span class="n">use_fetch_block</span><span class="p">,</span> <span class="n">regex_end_block_pattern</span><span class="p">,</span> <span class="n">regex_line_filter</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">_traceq_obj</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                        <span class="n">is_hit</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">result_obj</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">if</span> <span class="n">use_fetch_block</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                           <span class="n">matchObj</span> <span class="o">=</span> <span class="n">regex_line_filter</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                           <span class="k">if</span> <span class="n">matchObj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                              <span class="n">back_trace_queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                              <span class="p">(</span><span class="n">is_hit</span><span class="p">,</span> <span class="n">result_obj</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_msg</span><span class="p">(</span><span class="n">regex_end_block_pattern</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                           <span class="p">(</span><span class="n">is_hit</span><span class="p">,</span> <span class="n">result_obj</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_msg</span><span class="p">(</span><span class="n">regex_filter</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">is_hit</span><span class="p">:</span>
+                           <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                           <span class="k">if</span> <span class="n">use_fetch_block</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                              <span class="n">result_obj</span> <span class="o">=</span> <span class="n">regex_filter</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">back_trace_queue</span><span class="p">))</span>
+                              <span class="n">back_trace_queue</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                           <span class="n">msg_queue</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">now</span><span class="p">,</span> <span class="n">result_obj</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">post_msg_check</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+         <span class="k">except</span> <span class="n">BrokenConnError</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+            <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_broken_conn</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+            <span class="k">break</span>
+         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+            <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_WARNING</span><span class="p">)</span>
+         <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">RECV_MSGS_POLLING_INTERVAL</span><span class="p">)</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">_recv_thrd_term</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: receiver thread terminated.&quot;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ConnectionBase.send_obj"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.send_obj">[docs]</a>   <span class="k">def</span> <span class="nf">send_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">cr</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Wrapper method to send message to a tcp connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         obj: Data to be sent.</span>
+<span class="sd">         cr: Determine if it&#39;s necessary to add newline character at the end of command.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="n">msg</span> <span class="o">=</span> <span class="n">obj</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span><span class="p">:</span>
+         <span class="c1"># noinspection PyBroadException</span>
+         <span class="k">try</span><span class="p">:</span>
+            <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: sending: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">cr</span><span class="p">)</span>
+         <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.read_obj"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.read_obj">[docs]</a>   <span class="k">def</span> <span class="nf">read_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Wrapper method to get the response from connection.</span>
+<span class="sd">	  </span>
+<span class="sd">      Returns:</span>
+<span class="sd">         Responded message.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span><span class="p">:</span>
+         <span class="k">try</span><span class="p">:</span>
+            <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: reading...&quot;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read</span><span class="p">()</span>
+            <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: read: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+         <span class="k">except</span> <span class="n">BrokenConnError</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+            <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_ERROR</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_connected</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">raise</span> <span class="n">reason</span>
+         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+            <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_WARNING</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">msg</span></div>
+   <span class="c1"># endregion</span>
+
+   <span class="c1"># region TRACE INFRASTRUCTURE METHODS</span>
+<div class="viewcode-block" id="ConnectionBase.wait_4_trace"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.wait_4_trace">[docs]</a>   <span class="k">def</span> <span class="nf">wait_4_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_obj</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">use_fetch_block</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">end_of_block_pattern</span><span class="o">=</span><span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="n">filter_pattern</span><span class="o">=</span><span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">fct_args</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Suspend the control flow until a Trace message is received which matches to a specified regular expression.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">          search_obj : Regular expression all received trace messages are compare to. \</span>
+<span class="sd">          Can be passed either as a string or a regular expression object. Refer to Python documentation for module &#39;re&#39;.</span>
+<span class="sd">          </span>
+<span class="sd">          use_fetch_block : Determine if &#39;fetch block&#39; feature is used.</span>
+<span class="sd">          </span>
+<span class="sd">          end_of_block_pattern : The end of block pattern.</span>
+<span class="sd">          </span>
+<span class="sd">          filter_pattern : Regular expression object to filter message line by line.</span>
+<span class="sd">          </span>
+<span class="sd">          timeout :   Optional timeout parameter specified as a floating point number in the unit &#39;seconds&#39;.</span>
+<span class="sd">          </span>
+<span class="sd">          fct_args:   Optional list of function arguments passed to be sent.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">          None :    If no trace message matched to the specified regular expression and a timeout occurred.</span>
+<span class="sd">		  </span>
+<span class="sd">          &lt;match&gt; : If a trace message has matched to the specified regular expression, a match object is returned as the result.\</span>
+<span class="sd">                    The complete trace message can be accessed by the &#39;string&#39; attribute of the match object.\</span>
+<span class="sd">                    For access to groups within the regular expression, use the group() method.\</span>
+<span class="sd">                    For more information, refer to Python documentation for module &#39;re&#39;.\</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Execute </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="n">search_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">search_obj</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">U</span><span class="p">)</span>
+      <span class="n">regex_obj_filter</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">filter_pattern</span><span class="p">)</span>
+      <span class="n">trq_handle</span><span class="p">,</span> <span class="n">trace_queue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_and_activate_trace_queue</span><span class="p">(</span><span class="n">search_regex</span><span class="p">,</span> <span class="n">use_fetch_block</span><span class="p">,</span> <span class="n">end_of_block_pattern</span><span class="p">,</span> <span class="n">regex_obj_filter</span><span class="p">)</span>
+
+      <span class="k">try</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">send_obj</span><span class="p">(</span><span class="o">*</span><span class="n">fct_args</span><span class="p">)</span>
+      <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err_msg</span><span class="p">:</span>  <span class="c1"># pylint: disable=W0703</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: An Exception occurred executing function object: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_obj</span><span class="p">)),</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Function Arguments: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">fct_args</span><span class="p">),</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Error Message: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">err_msg</span><span class="p">),</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+      <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="n">match</span> <span class="o">=</span> <span class="kc">None</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="n">match</span><span class="p">)</span> <span class="o">=</span> <span class="n">trace_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+         <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+      <span class="k">finally</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">deactivate_and_delete_trace_queue</span><span class="p">(</span><span class="n">trq_handle</span><span class="p">,</span> <span class="n">trace_queue</span><span class="p">)</span>
+
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Completed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+         <span class="k">return</span> <span class="n">match</span>
+      <span class="k">else</span><span class="p">:</span>
+         <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="ConnectionBase.wait_4_trace_continuously"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.wait_4_trace_continuously">[docs]</a>   <span class="k">def</span> <span class="nf">wait_4_trace_continuously</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trace_queue</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">fct_args</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Getting trace log continuously without creating a new trace queue.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         trace_queue: Queue to store the traces.</span>
+<span class="sd">         </span>
+<span class="sd">         timeout: Timeout for waiting a matched log.</span>
+<span class="sd">         </span>
+<span class="sd">         fct_args: Arguments to be sent to connection.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None :    If no trace message matched to the specified regular expression and a timeout occurred.</span>
+<span class="sd">		 </span>
+<span class="sd">         match object : If a trace message has matched to the specified regular expression, a match object is returned as the result. \</span>
+<span class="sd">                        The complete trace message can be accessed by the &#39;string&#39; attribute of the match object. \</span>
+<span class="sd">                        For access to groups within the regular expression, use the group() method. \</span>
+<span class="sd">                        For more information, refer to Python documentation for module &#39;re&#39;. \</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Execute </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">send_obj</span><span class="p">(</span><span class="o">*</span><span class="n">fct_args</span><span class="p">)</span>
+      <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err_msg</span><span class="p">:</span>  <span class="c1"># pylint: disable=W0703</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: An Exception occurred executing function object: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_obj</span><span class="p">)),</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Function Arguments: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">fct_args</span><span class="p">),</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Error Message: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">err_msg</span><span class="p">),</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+
+      <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="n">match</span> <span class="o">=</span> <span class="kc">None</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="k">if</span> <span class="n">trace_queue</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="n">match</span><span class="p">)</span> <span class="o">=</span> <span class="n">trace_queue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+         <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Completed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+         <span class="k">return</span> <span class="n">match</span>
+      <span class="k">else</span><span class="p">:</span>
+         <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.create_and_activate_trace_queue"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.create_and_activate_trace_queue">[docs]</a>   <span class="nd">@classmethod</span>
+   <span class="k">def</span> <span class="nf">create_and_activate_trace_queue</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">search_element</span><span class="p">,</span> <span class="n">use_fetch_block</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">end_of_block_pattern</span><span class="o">=</span><span class="s1">&#39;.*&#39;</span><span class="p">,</span> <span class="n">regex_line_filter_pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Create Queue and assign it to _trace_queue object and activate the queue with the search element.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         search_element :  Regular expression all received trace messages are compare to. \</span>
+<span class="sd">		 Can be passed either as a string or a regular expression object. Refer to Python documentation for module &#39;re&#39;.#</span>
+<span class="sd">		 </span>
+<span class="sd">         use_fetch_block : Determine if &#39;fetch block&#39; feature is used.</span>
+<span class="sd">		 </span>
+<span class="sd">         end_of_block_pattern : The end of block pattern.</span>
+<span class="sd">		 </span>
+<span class="sd">         regex_line_filter_pattern : Regular expression object to filter message line by line.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         trq_handle, trace_queue: the handle and search object</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">trace_queue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+      <span class="n">trq_handle</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">activate_trace_queue</span><span class="p">(</span><span class="n">search_element</span><span class="p">,</span> <span class="n">trace_queue</span><span class="p">,</span> <span class="n">use_fetch_block</span><span class="p">,</span> <span class="n">end_of_block_pattern</span><span class="p">,</span> <span class="n">regex_line_filter_pattern</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">trq_handle</span><span class="p">,</span> <span class="n">trace_queue</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.deactivate_and_delete_trace_queue"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.deactivate_and_delete_trace_queue">[docs]</a>   <span class="nd">@classmethod</span>
+   <span class="k">def</span> <span class="nf">deactivate_and_delete_trace_queue</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">trq_handle</span><span class="p">,</span> <span class="n">trace_queue</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Deactivate trace queue and delete.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         trq_handle: Trace queue handle.</span>
+<span class="sd">		 </span>
+<span class="sd">         trace_queue: Trace queue object.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="bp">cls</span><span class="o">.</span><span class="n">deactivate_trace_queue</span><span class="p">(</span><span class="n">trq_handle</span><span class="p">)</span>
+      <span class="k">del</span> <span class="n">trace_queue</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.activate_trace_queue"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.activate_trace_queue">[docs]</a>   <span class="nd">@classmethod</span>
+   <span class="k">def</span> <span class="nf">activate_trace_queue</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">search_obj</span><span class="p">,</span> <span class="n">trace_queue</span><span class="p">,</span> <span class="n">use_fetch_block</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">end_of_block_pattern</span><span class="o">=</span><span class="s1">&#39;.*&#39;</span><span class="p">,</span> <span class="n">line_filter_pattern</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Activates a trace message filter specified as a regular expression. All matching trace messages are put in the specified queue object.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">          search_obj :  Regular expression all received trace messages are compare to. \</span>
+<span class="sd">                       Can be passed either as a string or a regular expression object. Refer to Python documentation for module &#39;re&#39;.#</span>
+<span class="sd">					   </span>
+<span class="sd">          trace_queue : A queue object all trace message which matches the regular expression are put in. \</span>
+<span class="sd">                       The using application must assure, that the queue is emptied or deleted.</span>
+<span class="sd">					   </span>
+<span class="sd">          use_fetch_block : Determine if &#39;fetch block&#39; feature is used</span>
+<span class="sd">		  </span>
+<span class="sd">          end_of_block_pattern : The end of block pattern</span>
+<span class="sd">		  </span>
+<span class="sd">          line_filter_pattern : Regular expression object to filter message line by line.</span>
+<span class="sd">      Returns:</span>
+<span class="sd">          &lt;int&gt; : Handle to deactivate the message filter.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Execute </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_lock</span><span class="p">:</span>
+         <span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_handle</span> <span class="o">+=</span> <span class="mi">1</span>
+         <span class="n">back_trace_queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="n">maxlen</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">MAX_LEN_BACKTRACE</span><span class="p">)</span>
+         <span class="n">search_regex_obj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">search_obj</span><span class="p">)</span>
+         <span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_obj</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_handle</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">search_regex_obj</span><span class="p">,</span>
+                                                <span class="n">trace_queue</span><span class="p">,</span>
+                                                <span class="n">back_trace_queue</span><span class="p">,</span>
+                                                <span class="n">use_fetch_block</span><span class="p">,</span>
+                                                <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">end_of_block_pattern</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">S</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">U</span><span class="p">),</span>
+                                                <span class="n">line_filter_pattern</span><span class="p">)</span>
+         <span class="n">handle_id</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_handle</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Completed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">handle_id</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.deactivate_trace_queue"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.deactivate_trace_queue">[docs]</a>   <span class="nd">@classmethod</span>
+   <span class="k">def</span> <span class="nf">deactivate_trace_queue</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">handle</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Deactivates a trace message filter previously activated by ActivateTraceQ() method.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">          handle :  Integer object returned by ActivateTraceQ() method.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">          False : No trace message filter active with the specified handle (i.e. handle is not in use).</span>
+<span class="sd">		  </span>
+<span class="sd">          True :  Trace message filter successfully deleted.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Execute </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_lock</span><span class="p">:</span>
+         <span class="k">if</span> <span class="n">handle</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_obj</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_traceq_obj</span><span class="p">[</span><span class="n">handle</span><span class="p">]</span>
+            <span class="n">is_success</span> <span class="o">=</span> <span class="kc">True</span>
+         <span class="k">else</span><span class="p">:</span>
+            <span class="n">is_success</span> <span class="o">=</span> <span class="kc">False</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Completed </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">is_success</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.check_timeout"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.check_timeout">[docs]</a>   <span class="k">def</span> <span class="nf">check_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; This method will be override in derived class &lt;&lt;</span>
+<span class="sd">      Check if responded message come in cls._RESPOND_TIMEOUT or we will raise a timeout event.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         msg: Responded message for checking.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.pre_msg_check"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.pre_msg_check">[docs]</a>   <span class="k">def</span> <span class="nf">pre_msg_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; This method will be override in derived class &lt;&lt;</span>
+<span class="sd">      Pre-checking message when receiving it from connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         msg: received message to be checked.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ConnectionBase.post_msg_check"><a class="viewcode-back" href="../../QConnectionLibrary.html#QConnectionLibrary.connection_base.ConnectionBase.post_msg_check">[docs]</a>   <span class="k">def</span> <span class="nf">post_msg_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      &gt;&gt; This method will be override in derived class &lt;&lt;</span>
+<span class="sd">      Post-checking message when receiving it from connection.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         msg: received message to be checked.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         None.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="k">pass</span></div>
+   <span class="c1"># endregion</span>
+
+   <span class="c1"># region UTILITIES METHODS</span>
+   <span class="nd">@staticmethod</span>
+   <span class="k">def</span> <span class="nf">_rm_q_dollar</span><span class="p">(</span><span class="n">input_</span><span class="p">):</span>
+      <span class="c1"># noinspection PyBroadException</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="n">output</span> <span class="o">=</span> <span class="n">input_</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;\$(&quot;</span><span class="p">,</span> <span class="s2">&quot;$(&quot;</span><span class="p">)</span>
+         <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;\${&quot;</span><span class="p">,</span> <span class="s2">&quot;${&quot;</span><span class="p">)</span>
+      <span class="k">except</span><span class="p">:</span>
+         <span class="c1"># in case of any issue return input as it is</span>
+         <span class="n">output</span> <span class="o">=</span> <span class="n">input_</span>
+
+      <span class="k">return</span> <span class="n">output</span>
+
+   <span class="nd">@staticmethod</span>
+   <span class="k">def</span> <span class="nf">_q_dollar</span><span class="p">(</span><span class="n">input_</span><span class="p">):</span>
+      <span class="c1"># noinspection PyBroadException</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="n">output</span> <span class="o">=</span> <span class="n">input_</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$(&quot;</span><span class="p">,</span> <span class="s2">&quot;\$(&quot;</span><span class="p">)</span>
+         <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;${&quot;</span><span class="p">,</span> <span class="s2">&quot;\${&quot;</span><span class="p">)</span>
+      <span class="k">except</span><span class="p">:</span>
+         <span class="c1"># in case of any issue return input as it is</span>
+         <span class="n">output</span> <span class="o">=</span> <span class="n">input_</span>
+
+      <span class="k">return</span> <span class="n">output</span>
+
+   <span class="k">def</span> <span class="nf">_filter_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regex_filter_obj</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+      <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">      Filter message by regular expression object.</span>
+<span class="sd">      </span>
+<span class="sd">      Args:</span>
+<span class="sd">         regex_filter_obj: regular expression object.</span>
+<span class="sd">		 </span>
+<span class="sd">         msg: message string.</span>
+
+<span class="sd">      Returns:</span>
+<span class="sd">         is_hit: Determine if there is any matched.</span>
+<span class="sd">		 </span>
+<span class="sd">         matched_obj: Matched object.</span>
+<span class="sd">      &quot;&quot;&quot;</span>
+      <span class="n">_mident</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">)</span>
+      <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+      <span class="n">matched_obj</span> <span class="o">=</span> <span class="kc">None</span>
+      <span class="k">try</span><span class="p">:</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: regex_filter_obj &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">regex_filter_obj</span><span class="p">)),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: msg &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">msg</span><span class="p">)),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_DEBUG</span><span class="p">)</span>
+         <span class="n">matched_obj</span> <span class="o">=</span> <span class="n">regex_filter_obj</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+      <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">reason</span><span class="p">:</span>
+         <span class="n">BuiltIn</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">_mident</span><span class="p">,</span> <span class="n">reason</span><span class="p">),</span> <span class="n">constants</span><span class="o">.</span><span class="n">LOG_LEVEL_ERROR</span><span class="p">)</span>
+
+      <span class="n">is_hit</span> <span class="o">=</span> <span class="kc">False</span>
+      <span class="k">if</span> <span class="n">matched_obj</span><span class="p">:</span>
+         <span class="n">is_hit</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="k">return</span> <span class="n">is_hit</span><span class="p">,</span> <span class="n">matched_obj</span></div>
+   <span class="c1"># endregion</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">The QConnection Base Library</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../QConnectionLibrary.html">QConnectionLibrary package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nguyen Huynh Tri Cuong (RBVH/ECM1).
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
