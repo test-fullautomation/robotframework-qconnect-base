@@ -27,7 +27,7 @@
 #
 # *******************************************************************************
 from robot.libraries.BuiltIn import BuiltIn
-import QConnectionLibrary.constants as constants
+import QConnectBase.constants as constants
 import inspect
 import threading
 import platform

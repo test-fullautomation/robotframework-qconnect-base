@@ -31,8 +31,8 @@ from abc import ABCMeta
 from inspect import currentframe
 from collections import deque
 from robot.libraries.BuiltIn import BuiltIn
-from QConnectionLibrary.qlogger import QLogger
-import QConnectionLibrary.constants as constants
+from QConnectBase.qlogger import QLogger
+import QConnectBase.constants as constants
 import queue
 import abc
 import time

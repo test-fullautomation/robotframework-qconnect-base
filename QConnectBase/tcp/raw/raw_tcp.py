@@ -28,7 +28,7 @@
 #
 # *******************************************************************************
 from __future__ import with_statement
-from QConnectionLibrary.tcp.tcp_base import BrokenConnError, TCPBase, TCPBaseServer, TCPBaseClient
+from QConnectBase.tcp.tcp_base import BrokenConnError, TCPBase, TCPBaseServer, TCPBaseClient
 
 
 class RawTCPBase(TCPBase):

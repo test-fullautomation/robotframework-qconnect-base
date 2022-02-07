@@ -28,10 +28,10 @@
 #
 # *******************************************************************************
 from __future__ import with_statement
-from QConnectionLibrary.connection_base import ConnectionBase, BrokenConnError
-from QConnectionLibrary.utils import DictToClass
+from QConnectBase.connection_base import ConnectionBase, BrokenConnError
+from QConnectBase.utils import DictToClass
 from robot.libraries.BuiltIn import BuiltIn
-import QConnectionLibrary.constants as constants
+import QConnectBase.constants as constants
 import threading
 from inspect import currentframe
 import time

@@ -28,10 +28,10 @@
 #
 # *******************************************************************************
 from robot.libraries.BuiltIn import BuiltIn
-from QConnectionLibrary.connection_base import ConnectionBase, BrokenConnError
-from QConnectionLibrary.utils import DictToClass
+from QConnectBase.connection_base import ConnectionBase, BrokenConnError
+from QConnectBase.utils import DictToClass
 from inspect import currentframe
-import QConnectionLibrary.constants as constants
+import QConnectBase.constants as constants
 import socket
 import threading
 

@@ -21,7 +21,7 @@
 
 
 QConnect base library's API!
-========================
+============================
 
 .. toctree::
    :maxdepth: 4

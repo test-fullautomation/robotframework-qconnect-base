@@ -27,8 +27,8 @@
 #
 # *******************************************************************************
 from robot.libraries.BuiltIn import BuiltIn
-from QConnectionLibrary.utils import *
-import QConnectionLibrary.constants as constants
+from QConnectBase.utils import *
+import QConnectBase.constants as constants
 import logging
 import os
 

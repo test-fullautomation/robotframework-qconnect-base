@@ -31,11 +31,11 @@ from __future__ import with_statement
 from robot.libraries.BuiltIn import BuiltIn
 import threading
 from inspect import currentframe
-import QConnectionLibrary.constants as constants
+import QConnectBase.constants as constants
 import time
 import queue
 import paramiko
-from QConnectionLibrary.tcp.tcp_base import BrokenConnError, TCPBaseClient, TCPBase, TCPConfig
+from QConnectBase.tcp.tcp_base import BrokenConnError, TCPBaseClient, TCPBase, TCPConfig
 
 
 class AuthenticationType:

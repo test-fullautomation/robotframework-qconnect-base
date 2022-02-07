@@ -26,16 +26,16 @@
 # - Initialize
 #
 # *******************************************************************************
-from QConnectionLibrary.utils import *
-from QConnectionLibrary.connection_base import ConnectionBase
+from QConnectBase.utils import *
+from QConnectBase.connection_base import ConnectionBase
 from robot.libraries.BuiltIn import BuiltIn
 from os.path import dirname
-from QConnectionLibrary.utils import DictToClass
+from QConnectBase.utils import DictToClass
 from robot.api.deco import keyword
 import os
 import importlib
 import pkgutil
-import QConnectionLibrary.constants as constants
+import QConnectBase.constants as constants
 import site
 
 

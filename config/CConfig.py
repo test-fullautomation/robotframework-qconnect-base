@@ -84,17 +84,21 @@ class CConfig():
 
         # 1. basic setup stuff
         self.__dictConfig['sPackageName']                = "QConnectBase"
-        self.__dictConfig['sVersion']                    = "1.0.0"
+        self.__dictConfig['sVersion']                    = "0.0.1"
         self.__dictConfig['sAuthor']                     = "Nguyen Huynh Tri Cuong"
         self.__dictConfig['sAuthorEMail']                = "cuong.nguyenhuynhtri@vn.bosch.com"
         self.__dictConfig['sDescription']                = "Robot Framework testing library for TCP, SSH, Serial Connection"
         self.__dictConfig['sLongDescriptionContentType'] = "text/markdown"
-        self.__dictConfig['sURL']                        = "https://sourcecode.socialcoding.bosch.com/projects/ROBFW/repos/robotframework-qconnect-base/browse"
+        self.__dictConfig['sURL']                        = "https://github.com/test-fullautomation/robotframework-qconnect-base"
         self.__dictConfig['sProgrammingLanguage']        = "Programming Language :: Python :: 3"
-        self.__dictConfig['sLicence']                    = "License :: OSI Approved :: MIT License"
+        self.__dictConfig['sLicence']                    = "License :: OSI Approved :: Apache Software License"
         self.__dictConfig['sOperatingSystem']            = "Operating System :: OS Independent"
-        self.__dictConfig['sPythonRequires']             = ">=3.9"
-        # self.__dictConfig[''] = ""
+        self.__dictConfig['sPythonRequires']             = ">=3.0"
+        self.__dictConfig['sDevelopmentStatus']          = "Development Status :: 4 - Beta"
+        self.__dictConfig['sIntendedAudience']           = "Intended Audience :: Developers"
+        self.__dictConfig['sTopic']                      = "Topic :: Software Development"
+        self.__dictConfig['arInstallRequires']            = ['sphinx','pypandoc','colorama']
+
 
         # 2. certain folder and executables (things that requires computation)
         bSuccess, sResult = self.__InitConfig()

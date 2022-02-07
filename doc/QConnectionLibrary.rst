@@ -13,37 +13,37 @@
    limitations under the License.
 
 QConnectionLibrary package
-========================
+==========================
 
 
 Module contents
 ---------------
-
-.. automodule:: QConnectionLibrary.connection_manager
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: QConnectionLibrary.connection_base
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: QConnectionLibrary.qlogger
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: QConnectionLibrary.tcp.tcp_base
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: QConnectionLibrary.tcp.ssh.ssh_client
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: QConnectionLibrary.tcp.raw.raw_tcp
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: QConnectionLibrary.serialclient.serial_base
-   :members:
-   :undoc-members:
-   :show-inheritance:
+..
+   .. automodule:: QConnectionLibrary.connection_manager
+      :members:
+      :undoc-members:
+      :show-inheritance:
+   .. automodule:: QConnectionLibrary.connection_base
+      :members:
+      :undoc-members:
+      :show-inheritance:
+   .. automodule:: QConnectionLibrary.qlogger
+      :members:
+      :undoc-members:
+      :show-inheritance:
+   .. automodule:: QConnectionLibrary.tcp.tcp_base
+      :members:
+      :undoc-members:
+      :show-inheritance:
+   .. automodule:: QConnectionLibrary.tcp.ssh.ssh_client
+      :members:
+      :undoc-members:
+      :show-inheritance:
+   .. automodule:: QConnectionLibrary.tcp.raw.raw_tcp
+      :members:
+      :undoc-members:
+      :show-inheritance:
+   .. automodule:: QConnectionLibrary.serialclient.serial_base
+      :members:
+      :undoc-members:
+      :show-inheritance:
