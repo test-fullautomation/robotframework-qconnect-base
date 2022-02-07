@@ -66,7 +66,8 @@ class ConnectionBase(object):
    _call_thrd_term = threading.Event()
 
    _recv_thrd_obj = None
-   _recv_thrd_term = threading.Event()
+   # _recv_thrd_term = threading.Event()
+   _recv_thrd_term = None
 
    _force_seq_lock = threading.RLock()
    _start_dlt_lock = threading.RLock()
@@ -238,6 +239,7 @@ class ConnectionBase(object):
       conn_id_name = str(thread_name) + str(thread_id)
       self._logger = QLogger().get_logger(conn_id_name)
       self._logger_handler = QLogger().set_handler(self.config)
+      self._recv_thrd_term = threading.Event()
       self._recv_thrd_obj = threading.Thread(target=self._thread_receive_from_connection, kwargs=dict(sync_with_start=sync_with_start))
       self._recv_thrd_obj.setDaemon(True)
 
