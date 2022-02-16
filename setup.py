@@ -76,6 +76,7 @@
 import os, sys, platform, shlex, subprocess
 import setuptools
 from setuptools.command.install import install
+from setuptools import setup, find_packages
 
 from config.CConfig import CConfig # providing repository and environment specific information
 from config.CExtendedSetup import CExtendedSetup # providing functions to support the extended setup process
@@ -186,7 +187,7 @@ setuptools.setup(
     long_description = long_description,
     long_description_content_type = str(oRepositoryConfig.Get('sLongDescriptionContentType')),
     url = str(oRepositoryConfig.Get('sURL')),
-    packages = [str(oRepositoryConfig.Get('sPackageName')), ],
+    packages = find_packages(exclude=["demo", "docs", "tests", ]),
     classifiers = [
         str(oRepositoryConfig.Get('sProgrammingLanguage')),
         str(oRepositoryConfig.Get('sLicence')),

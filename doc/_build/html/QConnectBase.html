@@ -1,0 +1,1250 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>QConnectBase package &#8212; The QConnection Base Library  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="QConnectBaseLibrary" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="qconnectbase-package">
+<h1>QConnectBase package<a class="headerlink" href="#qconnectbase-package" title="Permalink to this headline">¶</a></h1>
+<section id="module-QConnectBase.connection_manager">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-QConnectBase.connection_manager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectParam">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_manager.</span></span><span class="sig-name descname"><span class="pre">ConnectParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectParam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.connection_manager.InputParam" title="QConnectBase.connection_manager.InputParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.connection_manager.InputParam</span></code></a></p>
+<p>Class for storing parameters for connect action.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectParam.conn_conf">
+<span class="sig-name descname"><span class="pre">conn_conf</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectParam.conn_conf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectParam.conn_mode">
+<span class="sig-name descname"><span class="pre">conn_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectParam.conn_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectParam.conn_name">
+<span class="sig-name descname"><span class="pre">conn_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default_conn'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectParam.conn_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectParam.conn_type">
+<span class="sig-name descname"><span class="pre">conn_type</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'TCPIP'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectParam.conn_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectParam.exclude_list">
+<span class="sig-name descname"><span class="pre">exclude_list</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['conn_conf']</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectParam.exclude_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectParam.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectParam.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_manager.</span></span><span class="sig-name descname"><span class="pre">ConnectionManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.utils.Singleton</span></code></p>
+<p>Class to manage all connections.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.LIBRARY_EXTENSION_PREFIX">
+<span class="sig-name descname"><span class="pre">LIBRARY_EXTENSION_PREFIX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'robotframework_qconnect'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.LIBRARY_EXTENSION_PREFIX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.LIBRARY_EXTENSION_PREFIX2">
+<span class="sig-name descname"><span class="pre">LIBRARY_EXTENSION_PREFIX2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'QConnection'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.LIBRARY_EXTENSION_PREFIX2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.ROBOT_AUTO_KEYWORDS">
+<span class="sig-name descname"><span class="pre">ROBOT_AUTO_KEYWORDS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.ROBOT_AUTO_KEYWORDS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.ROBOT_LIBRARY_SCOPE">
+<span class="sig-name descname"><span class="pre">ROBOT_LIBRARY_SCOPE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'GLOBAL'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.ROBOT_LIBRARY_SCOPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.add_connection">
+<span class="sig-name descname"><span class="pre">add_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.add_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.add_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a connection to managed dictionary.</p>
+<dl>
+<dt>Args:</dt><dd><p>name: connection’s name.</p>
+<p>conn: connection object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keyword for making a connection.</p>
+<dl>
+<dt>Args:</dt><dd><p>args:   Non-Keyword Arguments.</p>
+<p>kwargs:   Keyword Arguments.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.connect_named_args">
+<span class="sig-name descname"><span class="pre">connect_named_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.connect_named_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.connect_named_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Making a connection with name arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>kwargs: Dictionary of arguments.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.connect_unnamed_args">
+<span class="sig-name descname"><span class="pre">connect_unnamed_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.connect_unnamed_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.connect_unnamed_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Making a connection.</p>
+<dl>
+<dt>Args:</dt><dd><p>connection_name: Name of connection.</p>
+<p>connection_type: Type of connection.</p>
+<p>mode: Connection mode.</p>
+<p>config: Configuration for connection.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keyword for disconnecting a connection by name.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>connection_name: Name of connection.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.get_connection_by_name">
+<span class="sig-name descname"><span class="pre">get_connection_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.get_connection_by_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.get_connection_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an exist connection by name.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>connection_name: connection’s name.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Connection object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.quit">
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.quit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quit connection manager.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.remove_connection">
+<span class="sig-name descname"><span class="pre">remove_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.remove_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.remove_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a connection by name.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>connection_name: connection name.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.send_command">
+<span class="sig-name descname"><span class="pre">send_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.send_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.send_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keyword for sending command to a connection.</p>
+<dl>
+<dt>Args:</dt><dd><p>args:   Non-Keyword Arguments.</p>
+<p>kwargs:   Keyword Arguments.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.send_command_named_args">
+<span class="sig-name descname"><span class="pre">send_command_named_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.send_command_named_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.send_command_named_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send command to a connection with name arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args: Dictionary of arguments.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.send_command_unnamed_args">
+<span class="sig-name descname"><span class="pre">send_command_unnamed_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.send_command_unnamed_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.send_command_unnamed_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send command to a connection.</p>
+<dl>
+<dt>Args:</dt><dd><p>connection_name: connection’s name.</p>
+<p>command: command.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keyword uses to verify a pattern from connection response after sending a command.</p>
+<dl>
+<dt>Args:</dt><dd><p>args:   Non-Keyword Arguments.</p>
+<p>kwargs:   Keyword Arguments.</p>
+</dd>
+<dt>Returns:</dt><dd><p>match_res: matched string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.verify_named_args">
+<span class="sig-name descname"><span class="pre">verify_named_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.verify_named_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.verify_named_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify a pattern from connection response after sending a command with named arguments.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>kwargs: Dictionary of arguments.</p>
+</dd>
+<dt>Returns:</dt><dd><p>match_res: matched string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.ConnectionManager.verify_unnamed_args">
+<span class="sig-name descname"><span class="pre">verify_unnamed_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fetch_block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eob_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fct_args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#ConnectionManager.verify_unnamed_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.ConnectionManager.verify_unnamed_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify a pattern from connection response after sending a command.</p>
+<dl>
+<dt>Args:</dt><dd><p>connection_name: connection’s name.</p>
+<p>search_obj: search pattern.</p>
+<p>timeout: timeout for waiting result.</p>
+<p>fetch_block: use fetch block feature.</p>
+<p>end_of_block_pattern: pattern for detecting the end of block.</p>
+<p>filter_pattern: line filter pattern.</p>
+<p>fct_args: command to be sent.</p>
+</dd>
+<dt>Returns:</dt><dd><p>match_res: matched string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.InputParam">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_manager.</span></span><span class="sig-name descname"><span class="pre">InputParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#InputParam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.InputParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.utils.DictToClass</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.InputParam.get_attr_list">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_attr_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#InputParam.get_attr_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.InputParam.get_attr_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.SendCommandParam">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_manager.</span></span><span class="sig-name descname"><span class="pre">SendCommandParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#SendCommandParam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.SendCommandParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.connection_manager.InputParam" title="QConnectBase.connection_manager.InputParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.connection_manager.InputParam</span></code></a></p>
+<p>Class for storing parameters for send command action.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.SendCommandParam.command">
+<span class="sig-name descname"><span class="pre">command</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#QConnectBase.connection_manager.SendCommandParam.command" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.SendCommandParam.conn_name">
+<span class="sig-name descname"><span class="pre">conn_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default_conn'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.SendCommandParam.conn_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.TestOption">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_manager.</span></span><span class="sig-name descname"><span class="pre">TestOption</span></span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#TestOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.TestOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.TestOption.DLT_OPT">
+<span class="sig-name descname"><span class="pre">DLT_OPT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#QConnectBase.connection_manager.TestOption.DLT_OPT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.TestOption.SERIAL_OPT">
+<span class="sig-name descname"><span class="pre">SERIAL_OPT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#QConnectBase.connection_manager.TestOption.SERIAL_OPT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.TestOption.SSH_OPT">
+<span class="sig-name descname"><span class="pre">SSH_OPT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#QConnectBase.connection_manager.TestOption.SSH_OPT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_manager.</span></span><span class="sig-name descname"><span class="pre">VerifyParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_manager.html#VerifyParam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.connection_manager.InputParam" title="QConnectBase.connection_manager.InputParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.connection_manager.InputParam</span></code></a></p>
+<p>Class for storing parameters for verify action.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam.conn_name">
+<span class="sig-name descname"><span class="pre">conn_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default_conn'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam.conn_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam.eob_pattern">
+<span class="sig-name descname"><span class="pre">eob_pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'.*'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam.eob_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam.fetch_block">
+<span class="sig-name descname"><span class="pre">fetch_block</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam.fetch_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam.filter_pattern">
+<span class="sig-name descname"><span class="pre">filter_pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'.*'</span></em><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam.filter_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam.search_pattern">
+<span class="sig-name descname"><span class="pre">search_pattern</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam.search_pattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam.send_cmd">
+<span class="sig-name descname"><span class="pre">send_cmd</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam.send_cmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_manager.VerifyParam.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#QConnectBase.connection_manager.VerifyParam.timeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-QConnectBase.connection_base"></span><dl class="py exception">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.BrokenConnError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_base.</span></span><span class="sig-name descname"><span class="pre">BrokenConnError</span></span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#BrokenConnError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.BrokenConnError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.connection_base.</span></span><span class="sig-name descname"><span class="pre">ConnectionBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for all connection classes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.MAX_LEN_BACKTRACE">
+<span class="sig-name descname"><span class="pre">MAX_LEN_BACKTRACE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></em><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.MAX_LEN_BACKTRACE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.RECV_MSGS_POLLING_INTERVAL">
+<span class="sig-name descname"><span class="pre">RECV_MSGS_POLLING_INTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.005</span></em><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.RECV_MSGS_POLLING_INTERVAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.activate_trace_queue">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">activate_trace_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fetch_block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_of_block_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_filter_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.activate_trace_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.activate_trace_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Activates a trace message filter specified as a regular expression. All matching trace messages are put in the specified queue object.</p>
+<dl>
+<dt>Args:</dt><dd><p>search_obj :  Regular expression all received trace messages are compare to.                        Can be passed either as a string or a regular expression object. Refer to Python documentation for module ‘re’.#</p>
+<p>trace_queue : A queue object all trace message which matches the regular expression are put in.                        The using application must assure, that the queue is emptied or deleted.</p>
+<p>use_fetch_block : Determine if ‘fetch block’ feature is used</p>
+<p>end_of_block_pattern : The end of block pattern</p>
+<p>line_filter_pattern : Regular expression object to filter message line by line.</p>
+</dd>
+<dt>Returns:</dt><dd><p>&lt;int&gt; : Handle to deactivate the message filter.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.check_timeout">
+<span class="sig-name descname"><span class="pre">check_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.check_timeout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.check_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; This method will be override in derived class &lt;&lt;
+Check if responded message come in cls._RESPOND_TIMEOUT or we will raise a timeout event.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: Responded message for checking.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.config">
+<span class="sig-name descname"><span class="pre">config</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.connect">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_connection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; This method MUST be overridden in derived class &lt;&lt;
+Abstract method for quiting the connection.</p>
+<dl>
+<dt>Args:</dt><dd><p>device: Determine if it’s necessary to disconnect all connections.</p>
+<p>files: Determine if it’s necessary to disconnect all connections.</p>
+<p>test_connection: Determine if it’s necessary to disconnect all connections.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.create_and_activate_trace_queue">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_and_activate_trace_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fetch_block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_of_block_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regex_line_filter_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.create_and_activate_trace_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.create_and_activate_trace_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create Queue and assign it to _trace_queue object and activate the queue with the search element.</p>
+<dl>
+<dt>Args:</dt><dd><p>search_element :  Regular expression all received trace messages are compare to.                Can be passed either as a string or a regular expression object. Refer to Python documentation for module ‘re’.#</p>
+<p>use_fetch_block : Determine if ‘fetch block’ feature is used.</p>
+<p>end_of_block_pattern : The end of block pattern.</p>
+<p>regex_line_filter_pattern : Regular expression object to filter message line by line.</p>
+</dd>
+<dt>Returns:</dt><dd><p>trq_handle, trace_queue: the handle and search object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.deactivate_and_delete_trace_queue">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deactivate_and_delete_trace_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trq_handle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace_queue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.deactivate_and_delete_trace_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.deactivate_and_delete_trace_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deactivate trace queue and delete.</p>
+<dl>
+<dt>Args:</dt><dd><p>trq_handle: Trace queue handle.</p>
+<p>trace_queue: Trace queue object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.deactivate_trace_queue">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deactivate_trace_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.deactivate_trace_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.deactivate_trace_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deactivates a trace message filter previously activated by ActivateTraceQ() method.</p>
+<dl>
+<dt>Args:</dt><dd><p>handle :  Integer object returned by ActivateTraceQ() method.</p>
+</dd>
+<dt>Returns:</dt><dd><p>False : No trace message filter active with the specified handle (i.e. handle is not in use).</p>
+<p>True :  Trace message filter successfully deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.disconnect">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; This method MUST be overridden in derived class &lt;&lt;
+Abstract method for disconnecting connection.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>device: Device name.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.error_instruction">
+<span class="sig-name descname"><span class="pre">error_instruction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.error_instruction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.error_instruction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the error instruction.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Error instruction string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.is_precondition_pass">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_precondition_pass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.is_precondition_pass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.is_precondition_pass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for precondition.</p>
+<dl>
+<dt>Returns:</dt><dd><p>True if passing the precondition.</p>
+<p>False if failing the precondition.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.is_supported_platform">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_supported_platform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.is_supported_platform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.is_supported_platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if current platform is supported.</p>
+<dl>
+<dt>Returns:</dt><dd><p>True if platform is supported.</p>
+<p>False if platform is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.post_msg_check">
+<span class="sig-name descname"><span class="pre">post_msg_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.post_msg_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.post_msg_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; This method will be override in derived class &lt;&lt;
+Post-checking message when receiving it from connection.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: received message to be checked.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.pre_msg_check">
+<span class="sig-name descname"><span class="pre">pre_msg_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.pre_msg_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.pre_msg_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; This method will be override in derived class &lt;&lt;
+Pre-checking message when receiving it from connection.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: received message to be checked.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.quit">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_disconnect_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.quit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; This method MUST be overridden in derived class &lt;&lt;
+Abstract method for quiting the connection.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>is_disconnect_all: Determine if it’s necessary to disconnect all connections.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.read_obj">
+<span class="sig-name descname"><span class="pre">read_obj</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.read_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.read_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper method to get the response from connection.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Responded message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.send_obj">
+<span class="sig-name descname"><span class="pre">send_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.send_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.send_obj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper method to send message to a tcp connection.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>obj: Data to be sent.
+cr: Determine if it’s necessary to add newline character at the end of command.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.supported_devices">
+<span class="sig-name descname"><span class="pre">supported_devices</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.supported_devices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.wait_4_trace">
+<span class="sig-name descname"><span class="pre">wait_4_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_fetch_block</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_of_block_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fct_args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.wait_4_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.wait_4_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Suspend the control flow until a Trace message is received which matches to a specified regular expression.</p>
+<dl>
+<dt>Args:</dt><dd><p>search_obj : Regular expression all received trace messages are compare to.           Can be passed either as a string or a regular expression object. Refer to Python documentation for module ‘re’.</p>
+<p>use_fetch_block : Determine if ‘fetch block’ feature is used.</p>
+<p>end_of_block_pattern : The end of block pattern.</p>
+<p>filter_pattern : Regular expression object to filter message line by line.</p>
+<p>timeout :   Optional timeout parameter specified as a floating point number in the unit ‘seconds’.</p>
+<p>fct_args:   Optional list of function arguments passed to be sent.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None :    If no trace message matched to the specified regular expression and a timeout occurred.</p>
+<p>&lt;match&gt; : If a trace message has matched to the specified regular expression, a match object is returned as the result.                    The complete trace message can be accessed by the ‘string’ attribute of the match object.                    For access to groups within the regular expression, use the group() method.                    For more information, refer to Python documentation for module ‘re’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.connection_base.ConnectionBase.wait_4_trace_continuously">
+<span class="sig-name descname"><span class="pre">wait_4_trace_continuously</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trace_queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">fct_args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/connection_base.html#ConnectionBase.wait_4_trace_continuously"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.connection_base.ConnectionBase.wait_4_trace_continuously" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getting trace log continuously without creating a new trace queue.</p>
+<dl>
+<dt>Args:</dt><dd><p>trace_queue: Queue to store the traces.</p>
+<p>timeout: Timeout for waiting a matched log.</p>
+<p>fct_args: Arguments to be sent to connection.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None :    If no trace message matched to the specified regular expression and a timeout occurred.</p>
+<p>match object : If a trace message has matched to the specified regular expression, a match object is returned as the result.                         The complete trace message can be accessed by the ‘string’ attribute of the match object.                         For access to groups within the regular expression, use the group() method.                         For more information, refer to Python documentation for module ‘re’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-QConnectBase.qlogger"></span><dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.qlogger.</span></span><span class="sig-name descname"><span class="pre">ColorFormatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datefmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#ColorFormatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></p>
+<p>Custom formatter class for setting log color.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter.FORMATS">
+<span class="sig-name descname"><span class="pre">FORMATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{10:</span> <span class="pre">'\x1b[38;21m%(asctime)s</span> <span class="pre">[%(threadName)-12.12s]</span> <span class="pre">[%(levelname)-5.5s]</span>&#160; <span class="pre">%(message)s\x1b[0m',</span> <span class="pre">20:</span> <span class="pre">'\x1b[38;21m%(asctime)s</span> <span class="pre">[%(threadName)-12.12s]</span> <span class="pre">[%(levelname)-5.5s]</span>&#160; <span class="pre">%(message)s\x1b[0m',</span> <span class="pre">30:</span> <span class="pre">'\x1b[33;21m%(asctime)s</span> <span class="pre">[%(threadName)-12.12s]</span> <span class="pre">[%(levelname)-5.5s]</span>&#160; <span class="pre">%(message)s\x1b[0m',</span> <span class="pre">40:</span> <span class="pre">'\x1b[31;21m%(asctime)s</span> <span class="pre">[%(threadName)-12.12s]</span> <span class="pre">[%(levelname)-5.5s]</span>&#160; <span class="pre">%(message)s\x1b[0m',</span> <span class="pre">50:</span> <span class="pre">'\x1b[31;1m%(asctime)s</span> <span class="pre">[%(threadName)-12.12s]</span> <span class="pre">[%(levelname)-5.5s]</span>&#160; <span class="pre">%(message)s\x1b[0m'}</span></em><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter.FORMATS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter.bold_red">
+<span class="sig-name descname"><span class="pre">bold_red</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[31;1m'</span></em><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter.bold_red" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter.format">
+<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#ColorFormatter.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the color format for the log.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>record: log record.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Log with color formatter.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter.grey">
+<span class="sig-name descname"><span class="pre">grey</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[38;21m'</span></em><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter.grey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter.red">
+<span class="sig-name descname"><span class="pre">red</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[31;21m'</span></em><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter.red" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></em><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.ColorFormatter.yellow">
+<span class="sig-name descname"><span class="pre">yellow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[33;21m'</span></em><a class="headerlink" href="#QConnectBase.qlogger.ColorFormatter.yellow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QConsoleHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.qlogger.</span></span><span class="sig-name descname"><span class="pre">QConsoleHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_logger_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_formatter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QConsoleHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QConsoleHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.StreamHandler</span></code></p>
+<p>Handler class for console log.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QConsoleHandler.get_config_supported">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_config_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QConsoleHandler.get_config_supported"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QConsoleHandler.get_config_supported" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the connection config is supported by this handler.</p>
+<dl>
+<dt>Args:</dt><dd><p>config: connection configurations.</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if the config is supported.</p>
+<p>False if the config is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QDefaultFileHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.qlogger.</span></span><span class="sig-name descname"><span class="pre">QDefaultFileHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formatter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QDefaultFileHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QDefaultFileHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.FileHandler</span></code></p>
+<p>Handler class for default log file path.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QDefaultFileHandler.get_config_supported">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_config_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QDefaultFileHandler.get_config_supported"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QDefaultFileHandler.get_config_supported" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the connection config is supported by this handler.</p>
+<dl>
+<dt>Args:</dt><dd><p>config: connection configurations.</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if the config is supported.</p>
+<p>False if the config is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QDefaultFileHandler.get_log_path">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_log_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QDefaultFileHandler.get_log_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QDefaultFileHandler.get_log_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the log file path for this handler.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>logger_name: name of the logger.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Log file path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QFileHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.qlogger.</span></span><span class="sig-name descname"><span class="pre">QFileHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_logger_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formatter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QFileHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QFileHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.FileHandler</span></code></p>
+<p>Handler class for user defined file in config.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QFileHandler.get_config_supported">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_config_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QFileHandler.get_config_supported"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QFileHandler.get_config_supported" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the connection config is supported by this handler.</p>
+<dl>
+<dt>Args:</dt><dd><p>config: connection configurations.</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if the config is supported.</p>
+<p>False if the config is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QFileHandler.get_log_path">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_log_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QFileHandler.get_log_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QFileHandler.get_log_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the log file path for this handler.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>config: connection configurations.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Log file path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QLogger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.qlogger.</span></span><span class="sig-name descname"><span class="pre">QLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.utils.Singleton</span></code></p>
+<p>Logger class for QConnect Libraries.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QLogger.NAME_2_LEVEL_DICT">
+<span class="sig-name descname"><span class="pre">NAME_2_LEVEL_DICT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'NONE':</span> <span class="pre">51,</span> <span class="pre">'TRACE':</span> <span class="pre">0}</span></em><a class="headerlink" href="#QConnectBase.qlogger.QLogger.NAME_2_LEVEL_DICT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QLogger.get_logger">
+<span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QLogger.get_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QLogger.get_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the logger object.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>logger_name: Name of the logger.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Logger object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.qlogger.QLogger.set_handler">
+<span class="sig-name descname"><span class="pre">set_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/qlogger.html#QLogger.set_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.qlogger.QLogger.set_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set handler for logger.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>config: connection configurations.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None if no handler is set.
+Handler object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-QConnectBase.tcp.tcp_base"></span><dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.tcp_base.</span></span><span class="sig-name descname"><span class="pre">TCPBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.connection_base.ConnectionBase" title="QConnectBase.connection_base.ConnectionBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.connection_base.ConnectionBase</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for a tcp connection.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.RECV_MSGS_POLLING_INTERVAL">
+<span class="sig-name descname"><span class="pre">RECV_MSGS_POLLING_INTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.005</span></em><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.RECV_MSGS_POLLING_INTERVAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.address">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">address</span></span><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get connection address.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Connection address.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBase.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close connection.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.conn_timeout">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">conn_timeout</span></span><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.conn_timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get connection timeout.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Connection timeout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBase.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; Should be override in derived class.
+Establish the connection.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBase.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>&gt;&gt; Should be override in derived class.
+Disconnect the connection.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.is_connected">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_connected</span></span><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.is_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get connected state.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True if connection is connected.
+False if connection is not connected.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get connection port.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Connection port.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.quit">
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_disconnect_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBase.quit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quit connection.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>is_disconnect_all: Determine if it’s necessary for disconnect all connection.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.socket_instance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">socket_instance</span></span><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.socket_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get method of socket_instance property.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Value of _socket_instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBase.timeout">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBase.timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get connection timeout value.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Value of connection timeout.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBaseClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.tcp_base.</span></span><span class="sig-name descname"><span class="pre">TCPBaseClient</span></span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBaseClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBaseClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for TCP client.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBaseClient.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBaseClient.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBaseClient.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBaseServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.tcp_base.</span></span><span class="sig-name descname"><span class="pre">TCPBaseServer</span></span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBaseServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBaseServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for TCP server.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPBaseServer.accept_connection">
+<span class="sig-name descname"><span class="pre">accept_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPBaseServer.accept_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPBaseServer.accept_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper method for handling accept action of TCP Server.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.tcp_base.</span></span><span class="sig-name descname"><span class="pre">TCPConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/tcp_base.html#TCPConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.utils.DictToClass</span></code></p>
+<p>Class to store configurations for TCP connection.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPConfig.address">
+<span class="sig-name descname"><span class="pre">address</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'localhost'</span></em><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPConfig.address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.tcp_base.TCPConfig.port">
+<span class="sig-name descname"><span class="pre">port</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12345</span></em><a class="headerlink" href="#QConnectBase.tcp.tcp_base.TCPConfig.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-QConnectBase.tcp.ssh.ssh_client"></span><dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.AuthenticationType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.ssh.ssh_client.</span></span><span class="sig-name descname"><span class="pre">AuthenticationType</span></span><a class="reference internal" href="_modules/QConnectBase/tcp/ssh/ssh_client.html#AuthenticationType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.AuthenticationType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.AuthenticationType.KEYFILE">
+<span class="sig-name descname"><span class="pre">KEYFILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'keyfile'</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.AuthenticationType.KEYFILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.AuthenticationType.PASSWORD">
+<span class="sig-name descname"><span class="pre">PASSWORD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'password'</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.AuthenticationType.PASSWORD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.AuthenticationType.PASSWORDKEYFILE">
+<span class="sig-name descname"><span class="pre">PASSWORDKEYFILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'passwordkeyfile'</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.AuthenticationType.PASSWORDKEYFILE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.ssh.ssh_client.</span></span><span class="sig-name descname"><span class="pre">SSHClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/ssh/ssh_client.html#SSHClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.tcp.tcp_base.TCPBase" title="QConnectBase.tcp.tcp_base.TCPBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.tcp_base.TCPBase</span></code></a>, <a class="reference internal" href="#QConnectBase.tcp.tcp_base.TCPBaseClient" title="QConnectBase.tcp.tcp_base.TCPBaseClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.tcp_base.TCPBaseClient</span></code></a></p>
+<p>SSH client connection class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHClient.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/ssh/ssh_client.html#SSHClient.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHClient.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close SSH connection.</p>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHClient.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/ssh/ssh_client.html#SSHClient.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHClient.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation for creating a SSH connection.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHClient.quit">
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/ssh/ssh_client.html#SSHClient.quit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHClient.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quit and stop receiver thread.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.ssh.ssh_client.</span></span><span class="sig-name descname"><span class="pre">SSHConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/ssh/ssh_client.html#SSHConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.tcp.tcp_base.TCPConfig" title="QConnectBase.tcp.tcp_base.TCPConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.tcp_base.TCPConfig</span></code></a></p>
+<p>Class to store the configuration for SSH connection.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHConfig.address">
+<span class="sig-name descname"><span class="pre">address</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'localhost'</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHConfig.address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHConfig.authentication">
+<span class="sig-name descname"><span class="pre">authentication</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'password'</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHConfig.authentication" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHConfig.key_filename">
+<span class="sig-name descname"><span class="pre">key_filename</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHConfig.key_filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHConfig.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHConfig.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHConfig.port">
+<span class="sig-name descname"><span class="pre">port</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHConfig.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.tcp.ssh.ssh_client.SSHConfig.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'root'</span></em><a class="headerlink" href="#QConnectBase.tcp.ssh.ssh_client.SSHConfig.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-QConnectBase.tcp.raw.raw_tcp"></span><dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.raw.raw_tcp.RawTCPBase">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.raw.raw_tcp.</span></span><span class="sig-name descname"><span class="pre">RawTCPBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/raw/raw_tcp.html#RawTCPBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.raw.raw_tcp.RawTCPBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.tcp.tcp_base.TCPBase" title="QConnectBase.tcp.tcp_base.TCPBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.tcp_base.TCPBase</span></code></a></p>
+<p>Base class for a raw tcp connection.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.raw.raw_tcp.RawTCPClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.raw.raw_tcp.</span></span><span class="sig-name descname"><span class="pre">RawTCPClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/raw/raw_tcp.html#RawTCPClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.raw.raw_tcp.RawTCPClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.tcp.raw.raw_tcp.RawTCPBase" title="QConnectBase.tcp.raw.raw_tcp.RawTCPBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.raw.raw_tcp.RawTCPBase</span></code></a>, <a class="reference internal" href="#QConnectBase.tcp.tcp_base.TCPBaseClient" title="QConnectBase.tcp.tcp_base.TCPBaseClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.tcp_base.TCPBaseClient</span></code></a></p>
+<p>Class for a raw tcp connection client.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.tcp.raw.raw_tcp.RawTCPServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.tcp.raw.raw_tcp.</span></span><span class="sig-name descname"><span class="pre">RawTCPServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/tcp/raw/raw_tcp.html#RawTCPServer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.tcp.raw.raw_tcp.RawTCPServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.tcp.raw.raw_tcp.RawTCPBase" title="QConnectBase.tcp.raw.raw_tcp.RawTCPBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.raw.raw_tcp.RawTCPBase</span></code></a>, <a class="reference internal" href="#QConnectBase.tcp.tcp_base.TCPBaseServer" title="QConnectBase.tcp.tcp_base.TCPBaseServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.tcp.tcp_base.TCPBaseServer</span></code></a></p>
+<p>Class for a raw tcp connection server.</p>
+</dd></dl>
+
+<span class="target" id="module-QConnectBase.serialclient.serial_base"></span><dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.serialclient.serial_base.</span></span><span class="sig-name descname"><span class="pre">SerialClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/serialclient/serial_base.html#SerialClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.serialclient.serial_base.SerialSocket" title="QConnectBase.serialclient.serial_base.SerialSocket"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.serialclient.serial_base.SerialSocket</span></code></a></p>
+<p>Serial client class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialClient.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/serialclient/serial_base.html#SerialClient.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialClient.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the Serial port.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.serialclient.serial_base.</span></span><span class="sig-name descname"><span class="pre">SerialConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">dictionary</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/serialclient/serial_base.html#SerialConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.utils.DictToClass</span></code></p>
+<p>Class to store the configuration for Serial connection.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig.baudrate">
+<span class="sig-name descname"><span class="pre">baudrate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">115200</span></em><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig.baudrate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig.bytesize">
+<span class="sig-name descname"><span class="pre">bytesize</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig.bytesize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig.parity">
+<span class="sig-name descname"><span class="pre">parity</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'N'</span></em><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig.parity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig.port">
+<span class="sig-name descname"><span class="pre">port</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'COM1'</span></em><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig.rtscts">
+<span class="sig-name descname"><span class="pre">rtscts</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig.rtscts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig.stopbits">
+<span class="sig-name descname"><span class="pre">stopbits</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig.stopbits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialConfig.xonxoff">
+<span class="sig-name descname"><span class="pre">xonxoff</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialConfig.xonxoff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialSocket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">QConnectBase.serialclient.serial_base.</span></span><span class="sig-name descname"><span class="pre">SerialSocket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/serialclient/serial_base.html#SerialSocket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialSocket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#QConnectBase.connection_base.ConnectionBase" title="QConnectBase.connection_base.ConnectionBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">QConnectBase.connection_base.ConnectionBase</span></code></a></p>
+<p>Class for handling serial connection.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialSocket.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/serialclient/serial_base.html#SerialSocket.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialSocket.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to serial port.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialSocket.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/serialclient/serial_base.html#SerialSocket.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialSocket.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect serial port.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>_device: unused.</p>
+</dd>
+<dt>Returns:</dt><dd><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="QConnectBase.serialclient.serial_base.SerialSocket.quit">
+<span class="sig-name descname"><span class="pre">quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QConnectBase/serialclient/serial_base.html#SerialSocket.quit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#QConnectBase.serialclient.serial_base.SerialSocket.quit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quit serial connection.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">The QConnection Base Library</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">QConnectBase package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-QConnectBase.connection_manager">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">QConnectBaseLibrary</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Nguyen Huynh Tri Cuong (RBVH/ECM1).
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/QConnectBase.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

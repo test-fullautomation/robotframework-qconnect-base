@@ -27,7 +27,7 @@ QConnect base library's API!
    :maxdepth: 4
    :caption: Contents:
 
-   QConnectionLibrary
+   QConnectBase
 
 
 Indices and tables
