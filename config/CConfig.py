@@ -83,8 +83,8 @@ class CConfig():
         self.__bGenPDFSupported = False
 
         # 1. basic setup stuff
-        self.__dictConfig['sPackageName']                = "QConnectBase"
-        self.__dictConfig['sVersion']                    = "0.0.1"
+        self.__dictConfig['sPackageName']                = "robotframework-qconnect-base"
+        self.__dictConfig['sVersion']                    = "1.0.0"
         self.__dictConfig['sAuthor']                     = "Nguyen Huynh Tri Cuong"
         self.__dictConfig['sAuthorEMail']                = "cuong.nguyenhuynhtri@vn.bosch.com"
         self.__dictConfig['sDescription']                = "Robot Framework testing library for TCP, SSH, Serial Connection"
