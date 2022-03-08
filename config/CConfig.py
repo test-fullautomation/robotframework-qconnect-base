@@ -1,6 +1,6 @@
 # **************************************************************************************************************
 #
-#  Copyright 2020-2022 Robert Bosch Car Multimedia GmbH
+#  Copyright 2020-2022 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -37,6 +37,11 @@
 #   and we have 'build' containing the build of the setup tools. These are different things.
 #
 # --------------------------------------------------------------------------------------------------------------
+#
+# 08.03.2022 / XC-CT/ECA3-Queckenstedt
+# Fixed package name in CConfig (QConnectBase now; previously robotframework-qconnect-base)
+# The package name defined in CConfig must fit to the folder name containing the sources!
+# Otherwise the setup will not run properly.
 #
 # 25.02.2022 / XC-CT/ECA3-Queckenstedt
 # Usage of %RobotPythonPath% exchanged by sys.executable
@@ -85,7 +90,7 @@ class CConfig():
         self.__dictConfig['sReferencePath'] = self.__sReferencePath # only to have the possibility to print out all values only with help of 'self.__dictConfig'
 
         # 1. basic setup stuff
-        self.__dictConfig['sPackageName']                = "robotframework-qconnect-base"
+        self.__dictConfig['sPackageName']                = "QConnectBase"
         self.__dictConfig['sVersion']                    = "1.0.0"
         self.__dictConfig['sAuthor']                     = "Nguyen Huynh Tri Cuong"
         self.__dictConfig['sAuthorEMail']                = "cuong.nguyenhuynhtri@vn.bosch.com"

@@ -1,6 +1,6 @@
 # **************************************************************************************************************
 #
-#  Copyright 2020-2022 Robert Bosch Car Multimedia GmbH
+#  Copyright 2020-2022 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -211,7 +211,7 @@ setuptools.setup(
     long_description = long_description,
     long_description_content_type = str(oRepositoryConfig.Get('sLongDescriptionContentType')),
     url = str(oRepositoryConfig.Get('sURL')),
-    packages = find_packages(exclude=["demo", "docs", "tests", ]),
+    packages = find_packages(exclude=["demo", "docs", "tests", "config", ]),
     classifiers = [
         str(oRepositoryConfig.Get('sProgrammingLanguage')),
         str(oRepositoryConfig.Get('sLicence')),
