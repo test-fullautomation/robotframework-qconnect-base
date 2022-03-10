@@ -212,6 +212,7 @@ setuptools.setup(
     long_description_content_type = str(oRepositoryConfig.Get('sLongDescriptionContentType')),
     url = str(oRepositoryConfig.Get('sURL')),
     packages = find_packages(exclude=["demo", "docs", "tests", "config", ]),
+    package_dir = {str(oRepositoryConfig.Get('sPackageName')) : str(oRepositoryConfig.Get('sImportName'))},
     classifiers = [
         str(oRepositoryConfig.Get('sProgrammingLanguage')),
         str(oRepositoryConfig.Get('sLicence')),

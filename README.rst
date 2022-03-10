@@ -12,8 +12,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-QConnectBaseLibrary
-===================
+QConnectBase Library
+====================
 
 QConnectBaseLibrary is a connection testing library for `Robot
 Framework <https://robotframework.org>`__. Library will be supported to
@@ -48,9 +48,9 @@ Getting Started
 
 We have a plan to publish all the sourcecode as OSS in the near future
 so that you can downloaded from PyPI. For the current period, you can
-checkout all
-`QConnectBaseLibrary <https://sourcecode.socialcoding.bosch.com/projects/ROBFW/repos/robotframework-qconnect-base/browse>`__
-sourcecode from the Bosch Internal Open Source Repositories.
+checkout
+
+`QConnectBaseLibrary <https://github.com/test-fullautomation/robotframework-qconnect-base>`__
 
 After checking out the source completely, you can install by running
 below command inside **robotframework-qconnect-base** directory.
@@ -62,7 +62,7 @@ below command inside **robotframework-qconnect-base** directory.
 Usage
 -----
 
-QConnectBaseLibrary support following keywords for testing connection in RobotFramework.
+QConnectBase Library support following keywords for testing connection in RobotFramework.
 
 **connect**
 ~~~~~~~~~~~
@@ -315,8 +315,7 @@ git correctly as defined.
 Sourcecode Documentation
 ------------------------
 
-For investigating sourcecode, please refer to `QConnectBaseLibrary
-Documentation <docs/html/index.html>`__
+For investigating sourcecode, please refer to `QConnectBase library documentation <docs/html/index.html>`__
 
 A detailed documentation of the QConnectBase package can also be found here: `QConnectBase.pdf <https://github.com/test-fullautomation/robotframework-qconnect-base/blob/develop/doc/_build/latex/QConnectBase.pdf>`_
 

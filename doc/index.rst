@@ -27,5 +27,5 @@ QConnect base library's API!
    :maxdepth: 4
    :caption: Contents:
 
-   QConnectBase
+   ./QConnectBase.rst
 
