@@ -10,7 +10,7 @@
 > implied. See the License for the specific language governing
 > permissions and limitations under the License.
 
-# QConnectBaseLibrary
+# QConnectBase Library
 
 QConnectBaseLibrary is a connection testing library for [Robot
 Framework](https://robotframework.org). Library will be supported to
@@ -42,9 +42,9 @@ RobotFramework 3.2+.
 
 We have a plan to publish all the sourcecode as OSS in the near future
 so that you can downloaded from PyPI. For the current period, you can
-checkout all
-[QConnectBaseLibrary](https://sourcecode.socialcoding.bosch.com/projects/ROBFW/repos/robotframework-qconnect-base/browse)
-sourcecode from the Bosch Internal Open Source Repositories.
+checkout
+
+[QConnectBaseLibrary](https://github.com/test-fullautomation/robotframework-qconnect-base)
 
 After checking out the source completely, you can install by running
 below command inside **robotframework-qconnect-base** directory.
@@ -53,8 +53,8 @@ below command inside **robotframework-qconnect-base** directory.
 
 ## Usage
 
-QConnectBaseLibrary support following keywords for testing connection in
-RobotFramework.
+QConnectBase Library support following keywords for testing connection
+in RobotFramework.
 
 ### **connect**
 
@@ -318,15 +318,19 @@ git correctly as defined.
 
 ## Sourcecode Documentation
 
-For investigating sourcecode, please refer to [QConnectBaseLibrary
-Documentation](docs/html/index.html)
+For investigating sourcecode, please refer to [QConnectBase library
+documentation](docs/html/index.html)
+
+A detailed documentation of the QConnectBase package can also be found
+here:
+[QConnectBase.pdf](https://github.com/test-fullautomation/robotframework-qconnect-base/blob/develop/doc/_build/latex/QConnectBase.pdf)
 
 ## Feedback
 
 If you have any problem when using the library or think there is a
 better solution for any part of the library, I'd love to know it, as
 this will all help me to improve the library. Please don\'t hesitate to
-contact me..
+contact me.
 
 Do share your valuable opinion, I appreciate your honest feedback!
 
@@ -334,15 +338,26 @@ Do share your valuable opinion, I appreciate your honest feedback!
 
 ### Maintainers
 
-[Nguyen Huynh Tri Cuong](http://apache.org/licenses/LICENSE-2.0)
+[Nguyen Huynh Tri Cuong](mailto:Cuong.NguyenHuynhTri@vn.bosch.com)
 
 ### Contributors
 
-[Nguyen Huynh Tri Cuong]{.title-ref}\_\_
+[Nguyen Huynh Tri Cuong](mailto:Cuong.NguyenHuynhTri@vn.bosch.com)
 
-[Thomas Pollerspoeck]{.title-ref}\_\_
+[Thomas Pollerspöck](mailto:Thomas.Pollerspoeck@de.bosch.com)
 
 ## License
 
-robotframework-qconnect-base is open source software provided under the
-[Apache License 2.0]{.title-ref}\_\_.
+Copyright 2020-2022 Robert Bosch GmbH
+
+Licensed under the Apache License, Version 2.0 (the \"License\"); you
+may not use this file except in compliance with the License. You may
+obtain a copy of the License at
+
+> <http://www.apache.org/licenses/LICENSE-2.0>
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an \"AS IS\" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
