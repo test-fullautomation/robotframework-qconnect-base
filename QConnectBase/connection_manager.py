@@ -98,7 +98,7 @@ class ConnectionManager(Singleton):
       Constructor for ConnectionManager class.
       """
       self.connection_manage_dict = {}
-      main_lib_path = dirname(dirname(os.path.realpath(__file__)))
+      main_lib_path = dirname(os.path.realpath(__file__))
       site_package_dirs = site.getsitepackages()
       extension_lib_paths = []
       for site_package_dir in site_package_dirs:
