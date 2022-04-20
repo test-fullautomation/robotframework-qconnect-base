@@ -114,7 +114,7 @@ class SSHClient(TCPBase, TCPBaseClient):
             while self.chan.recv_ready() and not self.chan.closed:
                # data = data + self.chan.recv(1)
                recv = self.chan.recv(1)
-               data = data + recv.decode('utf-8')
+               data = data + recv.decode(self.config.encoding, 'ignore')
 
             for character in data:
                self.SSHq.put(character)

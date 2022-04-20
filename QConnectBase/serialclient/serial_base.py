@@ -113,11 +113,11 @@ class SerialSocket(ConnectionBase):
          # implementation from here:
          # http://sourceforge.net/p/pyserial/code/HEAD/tree/trunk/pyserial/examples/rfc2217_server.py
          try:
-            data = self.socket.read(1).decode('utf-8')  # read one, blocking
+            data = self.socket.read(1).decode(self.config.encoding, 'ignore')  # read one, blocking
             n = self.socket.in_waiting  # look if there is more
             if n:
                read_data = self.socket.read(n)
-               data = data + read_data.decode('utf-8')  # and get as much as possible
+               data = data + read_data.decode(self.config.encoding, 'ignore')  # and get as much as possible
             if data:
                for character in data:
                   self.serial_queue.put(character)
