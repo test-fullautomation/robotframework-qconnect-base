@@ -66,6 +66,7 @@ class DictToClass:
    """
    exclude_list = []
    logfile = None
+   encoding = 'utf-8'
 
    def __init__(self, **dictionary):
       for k, v in dictionary.items():
