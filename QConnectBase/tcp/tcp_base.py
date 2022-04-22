@@ -139,7 +139,7 @@ class TCPBase(ConnectionBase, object):
       BuiltIn().log('%s' % _mident)
 
       # close listener thread
-      self.quit()
+      # self.quit()
 
       # SSH made problems here, therefore ignore possible exceptions.
       # noinspection PyBroadException
@@ -327,7 +327,7 @@ class TCPBase(ConnectionBase, object):
       Returns:
          None.
       """
-      pass
+      super(TCPBase, self).disconnect()
 
 
 class TCPBaseServer:

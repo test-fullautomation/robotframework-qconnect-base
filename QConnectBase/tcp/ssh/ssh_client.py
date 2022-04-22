@@ -155,28 +155,40 @@ class SSHClient(TCPBase, TCPBaseClient):
       # To reset the flag set by CVirtualClient.connect
       self._is_connected = False
       try:
-         if self._authentication == AuthenticationType.KEYFILE:
-            BuiltIn().log("%s: trying to establish keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
-            self.client.connect(sock=self.socket, hostname=self._address, username=self._username, key_filename=self._key_filename, timeout=30.0, allow_agent=False)
-         elif self._authentication == AuthenticationType.PASSWORD:
-            BuiltIn().log("%s: trying to establish password based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
-            self.client.connect(sock=self.socket, hostname=self._address, username=self._username, password=self._password, timeout=30.0, allow_agent=False)
-         elif self._authentication == AuthenticationType.PASSWORDKEYFILE:
-            BuiltIn().log("%s: trying to establish password and keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
-
-            # From http://docs.paramiko.org/en/1.13/api/client.html
-            # Authentication is attempted in the following order of priority:
-            # 1. The pkey or key_filename passed in (if any)
-            # 2. Any key we can find through an SSH agent
-            # 3. Any "id_rsa" or "id_dsa" key discoverable in ~/.ssh/
-            # 4. Plain username/password auth, if a password was given
-            #
-            # If a private key requires a password to unlock it, and a password is passed in,
-            # that password will be used to attempt to unlock the key.
-            self.client.connect(sock=self.socket, hostname=self._address, username=self._username, password=self._password, key_filename=self._key_filename, timeout=30.0,
-                                allow_agent=False)
-         else:  # other authentication
-            raise BrokenConnError("Authentication '%s' is not supported." % self._authentication)
+         max_try = 5
+         while max_try > 0:
+            try:
+               if self._authentication == AuthenticationType.KEYFILE:
+                  BuiltIn().log("%s: trying to establish keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
+                  self.client.connect(sock=self.socket, hostname=self._address, username=self._username, key_filename=self._key_filename, timeout=30.0, allow_agent=False)
+               elif self._authentication == AuthenticationType.PASSWORD:
+                  BuiltIn().log("%s: trying to establish password based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
+                  self.client.connect(sock=self.socket, hostname=self._address, username=self._username, password=self._password, timeout=30.0, allow_agent=False)
+               elif self._authentication == AuthenticationType.PASSWORDKEYFILE:
+                  BuiltIn().log("%s: trying to establish password and keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
+                  # From http://docs.paramiko.org/en/1.13/api/client.html
+                  # Authentication is attempted in the following order of priority:
+                  # 1. The pkey or key_filename passed in (if any)
+                  # 2. Any key we can find through an SSH agent
+                  # 3. Any "id_rsa" or "id_dsa" key discoverable in ~/.ssh/
+                  # 4. Plain username/password auth, if a password was given
+                  #
+                  # If a private key requires a password to unlock it, and a password is passed in,
+                  # that password will be used to attempt to unlock the key.
+                  self.client.connect(sock=self.socket, hostname=self._address, username=self._username, password=self._password, key_filename=self._key_filename, timeout=30.0,
+                                      allow_agent=False)
+               else:  # other authentication
+                  raise BrokenConnError("Authentication '%s' is not supported." % self._authentication)
+            except Exception as e:
+               if str(e) == 'Error reading SSH protocol banner':
+                  max_try -= 1
+                  if max_try == 0:
+                     raise e
+                  time.sleep(1)
+               else:
+                  raise e
+            else:
+               break
 
          BuiltIn().log("%s: successfully established SSH connection on existing TCPIP socket." % _mident, constants.LOG_LEVEL_INFO)
          self._is_connected = True
@@ -285,6 +297,7 @@ class SSHClient(TCPBase, TCPBaseClient):
          self._llrecv_thrd_term.set()
 
       self._llrecv_thrd_obj = None
+      self.close()
 
 
 
