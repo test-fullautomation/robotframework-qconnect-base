@@ -81,6 +81,10 @@ class DictToClass:
                self.__dict__[k] = type_obj(v)
             else:
                self.__dict__[k] = v
+      self.validate()
+
+   def validate(self):
+      pass
 
 
 class Utils:
@@ -123,6 +127,17 @@ class Utils:
       """
       return set(cls.__subclasses__()).union(
          [s for s in cls.__subclasses__()])
+
+   @staticmethod
+   def is_valid_host(address, port):
+      import socket
+      is_valid = False
+      sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      result = sock.connect_ex((address, port))
+      if result == 0:
+         is_valid = True
+      sock.close()
+      return is_valid
 
    @staticmethod
    def execute_command(sCmd):
