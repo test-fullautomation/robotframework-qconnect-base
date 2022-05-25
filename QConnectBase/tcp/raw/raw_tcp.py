@@ -71,12 +71,12 @@ class RawTCPBase(TCPBase):
       sent = 0
       with self._send_lock:
          while sent < len(msg):
-            sent += self.conn.send(msg[sent:])
+            sent += self.conn.send(msg[sent:].encode(self.config.encoding))
          if cr and msg != "":
-            self.conn.send("\r\n")
+            self.conn.send("\r\n".encode(self.config.encoding))
 
 
-class RawTCPServer(RawTCPBase, TCPBaseServer):
+class RawTCPServer(TCPBaseServer, RawTCPBase):
    """
    Class for a raw tcp connection server.
    """
@@ -94,7 +94,7 @@ class RawTCPServer(RawTCPBase, TCPBaseServer):
       self._bind()
 
 
-class RawTCPClient(RawTCPBase, TCPBaseClient):
+class RawTCPClient(TCPBaseClient, RawTCPBase):
    """
    Class for a raw tcp connection client.
    """
