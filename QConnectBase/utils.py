@@ -111,8 +111,13 @@ class Utils:
       Returns:
          Array of descendant classes.
       """
-      return set(cls.__subclasses__()).union(
-         [s for c in cls.__subclasses__() for s in Utils.get_all_sub_classes(c)])
+      trace_class_list = cls.__subclasses__()
+      descendant_classes_list = []
+      for subclass in trace_class_list:
+         descendant_classes_list.append(subclass)
+         if len(subclass.__subclasses__()) > 0:
+            trace_class_list.extend(subclass.__subclasses__())
+      return set(descendant_classes_list)
 
    @staticmethod
    def get_all_sub_classes(cls):

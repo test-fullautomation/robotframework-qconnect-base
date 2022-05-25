@@ -44,7 +44,7 @@ class RawTCPBase(TCPBase):
       """
       data = ''
       while 1:
-         data = data + self.conn.recv(1)
+         data = data + self.conn.recv(1).decode(self.config.encoding, 'ignore')
 
          # Simple socket expects \r\n for terminating a message
          if data[-2:] == "\r\n":
@@ -82,7 +82,7 @@ class RawTCPServer(RawTCPBase, TCPBaseServer):
    """
    _CONNECTION_TYPE = "TCPIPServer"
 
-   def __init__(self, address='localhost', port=12345):
+   def __init__(self, mode=None, config=None):
       """
       Constructor of RawTCPServer class.
       
@@ -90,7 +90,7 @@ class RawTCPServer(RawTCPBase, TCPBaseServer):
          address: Address of TCP server.
          port: Port number.
       """
-      super(RawTCPServer, self).__init__(address, port)
+      super(RawTCPServer, self).__init__(mode, config)
       self._bind()
 
 
@@ -100,7 +100,7 @@ class RawTCPClient(RawTCPBase, TCPBaseClient):
    """
    _CONNECTION_TYPE = "TCPIPClient"
 
-   def __init__(self, address='localhost', port=12345):
+   def __init__(self, mode=None, config=None):
       """
       Constructor of RawTCPClient class.
       
@@ -108,4 +108,4 @@ class RawTCPClient(RawTCPBase, TCPBaseClient):
          address: Address of TCP server.
          port: Port number.
       """
-      super(RawTCPClient, self).__init__(address, port)
+      super(RawTCPClient, self).__init__(mode, config)
