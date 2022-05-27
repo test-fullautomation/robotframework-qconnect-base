@@ -388,6 +388,7 @@ class TCPBaseServer:
       self.accept_connection()
 
    def disconnect(self):
+      self._is_connected = False
       self.socket.close()
       self.conn.close()
 
@@ -410,4 +411,5 @@ class TCPBaseClient:
       BuiltIn().log("%s: connected to '%s':'%d' " % (_mident, self.address, self.port))
 
    def disconnect(self):
+      self._is_connected = False
       self.conn.close()

@@ -47,14 +47,14 @@ class RawTCPBase(TCPBase):
          data = data + self.conn.recv(1).decode(self.config.encoding, 'ignore')
 
          # Simple socket expects \r\n for terminating a message
-         if data[-2:] == "\r\n":
+         if data[(eol:=-2):] == "\r\n" or data[(eol:=-1):] == "\n":
             break
 
          if data == '':
             raise BrokenConnError("socket connection broken")
 
-      # remove \r\n
-      data = data[:-2]
+      # remove \r\n or \n
+      data = data[:eol]
       return data
 
    def _send(self, msg, cr):
