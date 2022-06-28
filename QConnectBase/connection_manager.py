@@ -91,7 +91,7 @@ class ConnectionManager(Singleton):
    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
    ROBOT_AUTO_KEYWORDS = False
    LIBRARY_EXTENSION_PREFIX = 'robotframework_qconnect'
-   LIBRARY_EXTENSION_PREFIX2 = 'QConnection'
+   LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
 
    def __init__(self):
       """

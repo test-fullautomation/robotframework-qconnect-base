@@ -44,17 +44,17 @@ class RawTCPBase(TCPBase):
       """
       data = ''
       while 1:
-         data = data + self.conn.recv(1)
+         data = data + self.conn.recv(1).decode(self.config.encoding, 'ignore')
 
          # Simple socket expects \r\n for terminating a message
-         if data[-2:] == "\r\n":
+         if data[(eol:=-2):] == "\r\n" or data[(eol:=-1):] == "\n":
             break
 
          if data == '':
             raise BrokenConnError("socket connection broken")
 
-      # remove \r\n
-      data = data[:-2]
+      # remove \r\n or \n
+      data = data[:eol]
       return data
 
    def _send(self, msg, cr):
@@ -71,18 +71,18 @@ class RawTCPBase(TCPBase):
       sent = 0
       with self._send_lock:
          while sent < len(msg):
-            sent += self.conn.send(msg[sent:])
+            sent += self.conn.send(msg[sent:].encode(self.config.encoding))
          if cr and msg != "":
-            self.conn.send("\r\n")
+            self.conn.send("\r\n".encode(self.config.encoding))
 
 
-class RawTCPServer(RawTCPBase, TCPBaseServer):
+class RawTCPServer(TCPBaseServer, RawTCPBase):
    """
    Class for a raw tcp connection server.
    """
    _CONNECTION_TYPE = "TCPIPServer"
 
-   def __init__(self, address='localhost', port=12345):
+   def __init__(self, mode=None, config=None):
       """
       Constructor of RawTCPServer class.
       
@@ -90,17 +90,17 @@ class RawTCPServer(RawTCPBase, TCPBaseServer):
          address: Address of TCP server.
          port: Port number.
       """
-      super(RawTCPServer, self).__init__(address, port)
+      super(RawTCPServer, self).__init__(mode, config)
       self._bind()
 
 
-class RawTCPClient(RawTCPBase, TCPBaseClient):
+class RawTCPClient(TCPBaseClient, RawTCPBase):
    """
    Class for a raw tcp connection client.
    """
    _CONNECTION_TYPE = "TCPIPClient"
 
-   def __init__(self, address='localhost', port=12345):
+   def __init__(self, mode=None, config=None):
       """
       Constructor of RawTCPClient class.
       
@@ -108,4 +108,4 @@ class RawTCPClient(RawTCPBase, TCPBaseClient):
          address: Address of TCP server.
          port: Port number.
       """
-      super(RawTCPClient, self).__init__(address, port)
+      super(RawTCPClient, self).__init__(mode, config)
