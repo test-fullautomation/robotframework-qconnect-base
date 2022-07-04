@@ -133,7 +133,7 @@ class QDefaultFileHandler(logging.FileHandler):
          formatter: log's formatter.
       """
       path = self.get_log_path(logger_name)
-      super(QDefaultFileHandler, self).__init__(path)
+      super(QDefaultFileHandler, self).__init__(path, mode='w')
       self.setFormatter(formatter)
 
    @staticmethod
