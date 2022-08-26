@@ -37,9 +37,9 @@ class RawTCPBase(TCPBase):
    """
    def _read(self):
       """
-      Actual method to read message from a tcp connection.
+Actual method to read message from a tcp connection.
       
-      Returns:
+**Returns:**
          Empty string.
       """
       data = ''
@@ -59,14 +59,25 @@ class RawTCPBase(TCPBase):
 
    def _send(self, msg, cr):
       """
-      Actual method to send message to a tcp connection.
+Actual method to send message to a tcp connection.
       
-      Args:
-         msg: Message to be sent.
-         cr: Determine if it's necessary to add newline character at the end of command.
+**Arguments:**   
 
-      Returns:
-         None
+* ``obj``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Data to be sent.
+  
+* ``cr``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Determine if it's necessary to add newline character at the end of command.
+
+**Returns:**
+
+(*no returns*)
       """
       sent = 0
       with self._send_lock:
@@ -78,17 +89,27 @@ class RawTCPBase(TCPBase):
 
 class RawTCPServer(TCPBaseServer, RawTCPBase):
    """
-   Class for a raw tcp connection server.
+Class for a raw tcp connection server.
    """
    _CONNECTION_TYPE = "TCPIPServer"
 
    def __init__(self, mode=None, config=None):
       """
-      Constructor of RawTCPServer class.
+Constructor of RawTCPServer class.
       
-      Args:
-         address: Address of TCP server.
-         port: Port number.
+**Arguments:**   
+
+* ``address``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Address of TCP server.
+
+* ``port``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Port number.
       """
       super(RawTCPServer, self).__init__(mode, config)
       self._bind()
@@ -96,16 +117,26 @@ class RawTCPServer(TCPBaseServer, RawTCPBase):
 
 class RawTCPClient(TCPBaseClient, RawTCPBase):
    """
-   Class for a raw tcp connection client.
+Class for a raw tcp connection client.
    """
    _CONNECTION_TYPE = "TCPIPClient"
 
    def __init__(self, mode=None, config=None):
       """
-      Constructor of RawTCPClient class.
+Constructor of RawTCPClient class.
       
-      Args:
-         address: Address of TCP server.
-         port: Port number.
+**Arguments:**   
+
+* ``address``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Address of TCP server.
+
+* ``port``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Port number.
       """
       super(RawTCPClient, self).__init__(mode, config)

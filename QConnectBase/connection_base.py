@@ -394,7 +394,7 @@ Wrapper method to send message to a tcp connection.
 
 * ``obj``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Data to be sent.
   

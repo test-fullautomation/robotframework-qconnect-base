@@ -64,11 +64,21 @@ class SSHClient(TCPBase, TCPBaseClient):
 
    def __init__(self, _mode, config):
       """
-      Constructor for SSHClient class.
+Constructor for SSHClient class.
       
-      Args:
-         _mode: unused.
-         config: configurations for SSH Client.
+**Arguments:**   
+
+* ``_mode``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Unused
+  
+* ``config``    
+
+  / *Condition*: required / *Type*: DictToClass /
+  
+  Configurations for SSH Client.
       """
       # paramiko.SSHClient.__init__(self)
       # CVirtualSocket.__init__(self, address, port)
@@ -98,10 +108,11 @@ class SSHClient(TCPBase, TCPBaseClient):
 
    def _thrd_llrecv_from_connection_interface(self):
       """
-      Implementation the thread for getting data from ssh connection.
+Implementation the thread for getting data from ssh connection.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log("%s: low-level receiver thread started." % _mident, constants.LOG_LEVEL_INFO)
@@ -133,10 +144,11 @@ class SSHClient(TCPBase, TCPBaseClient):
 
    def connect(self):
       """
-      Implementation for creating a SSH connection.
+Implementation for creating a SSH connection.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       TCPBaseClient.connect(self)
@@ -221,14 +233,25 @@ class SSHClient(TCPBase, TCPBaseClient):
 
    def _send(self, msg, _cr):
       """
-      Send message to SSH connection.
+Send message to SSH connection.
       
-      Args:
-         msg: Message to be sent.
-         _cr: Unused.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``msg``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Message to be sent.
+  
+* ``_cr``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Unused.
+
+**Returns:**
+
+(*no returns*)
       """
       # noinspection PyBroadException
       try:
@@ -241,9 +264,10 @@ class SSHClient(TCPBase, TCPBaseClient):
 
    def _read(self):
       """
-      Read data from SSH connection.
+Read data from SSH connection.
       
-      Returns:
+**Returns:**
+
          Data from SSH connection.
       """
       data = ''
@@ -268,10 +292,11 @@ class SSHClient(TCPBase, TCPBaseClient):
 
    def close(self):
       """
-      Close SSH connection.
+Close SSH connection.
       
-      Returns:
+**Returns:**
 
+(*no returns*)
       """
       # shutdown SSHClient
       if self.chan is not None:
@@ -284,10 +309,11 @@ class SSHClient(TCPBase, TCPBaseClient):
 
    def quit(self):
       """
-      Quit and stop receiver thread.
+Quit and stop receiver thread.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       # Execute parents Quit() first
       super(SSHClient, self).quit()
