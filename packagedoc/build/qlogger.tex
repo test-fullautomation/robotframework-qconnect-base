@@ -1,0 +1,247 @@
+%
+% Generated at 26.08.2022 - 15:39:40 by QConnectBase
+%
+
+\hypertarget{qconnectbase-qlogger-class-colorformatter-43}{%
+\section{Class: ColorFormatter}\label{qconnectbase-qlogger-class-colorformatter-43}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{QConnectBase.qlogger}
+\end{Highlighting}
+\end{Shaded}
+
+Custom formatter class for setting log color.
+
+\hypertarget{qconnectbase-qlogger-method-format-44}{%
+\subsection{Method: format}\label{qconnectbase-qlogger-method-format-44}}
+
+Set the color format for the log.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{record}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Log record.
+\end{itemize}
+
+\begin{description}
+\item[\textbf{Returns:}]
+Log with color formatter.
+\end{description}
+
+\hypertarget{qconnectbase-qlogger-class-qfilehandler-45}{%
+\section{Class: QFileHandler}\label{qconnectbase-qlogger-class-qfilehandler-45}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{QConnectBase.qlogger}
+\end{Highlighting}
+\end{Shaded}
+
+Handler class for user defined file in config.
+
+\hypertarget{qconnectbase-qlogger-method-get_log_path-46}{%
+\subsection{Method: get\_log\_path}\label{qconnectbase-qlogger-method-get_log_path-46}}
+
+Get the log file path for this handler.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{config}
+
+  / \emph{Condition}: required / \emph{Type}: DictToClass /
+
+  Connection configurations.
+\end{itemize}
+
+\begin{description}
+\item[\textbf{Returns:}]
+Log file path.
+\end{description}
+
+\hypertarget{qconnectbase-qlogger-method-get_config_supported-47}{%
+\subsection{Method:
+get\_config\_supported}\label{qconnectbase-qlogger-method-get_config_supported-47}}
+
+Check if the connection config is supported by this handler.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{config}
+
+  / \emph{Condition}: required / \emph{Type}: DictToClass /
+
+  Connection configurations.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+True if the config is supported.
+
+False if the config is not supported.
+\end{quote}
+
+\hypertarget{qconnectbase-qlogger-class-qdefaultfilehandler-48}{%
+\section{Class: QDefaultFileHandler}\label{qconnectbase-qlogger-class-qdefaultfilehandler-48}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{QConnectBase.qlogger}
+\end{Highlighting}
+\end{Shaded}
+
+Handler class for default log file path.
+
+\hypertarget{qconnectbase-qlogger-method-get_log_path-1-49}{%
+\subsection{Method: get\_log\_path}\label{qconnectbase-qlogger-method-get_log_path-1-49}}
+
+Get the log file path for this handler.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{logger\_name}
+
+  / \emph{Condition}: required / \emph{Type}: str /
+
+  Name of the logger.
+\end{itemize}
+
+\begin{description}
+\item[\textbf{Returns:}]
+Log file path.
+\end{description}
+
+\hypertarget{qconnectbase-qlogger-method-get_config_supported-1-50}{%
+\subsection{Method:
+get\_config\_supported}\label{qconnectbase-qlogger-method-get_config_supported-1-50}}
+
+Check if the connection config is supported by this handler.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{config}
+
+  / \emph{Condition}: required / \emph{Type}: DictToClass /
+
+  Connection configurations.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+True if the config is supported.
+
+False if the config is not supported.
+\end{quote}
+
+\hypertarget{qconnectbase-qlogger-class-qconsolehandler-51}{%
+\section{Class: QConsoleHandler}\label{qconnectbase-qlogger-class-qconsolehandler-51}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{QConnectBase.qlogger}
+\end{Highlighting}
+\end{Shaded}
+
+Handler class for console log.
+
+\hypertarget{qconnectbase-qlogger-method-get_config_supported-2-52}{%
+\subsection{Method:
+get\_config\_supported}\label{qconnectbase-qlogger-method-get_config_supported-2-52}}
+
+Check if the connection config is supported by this handler.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{config}
+
+  / \emph{Condition}: required / \emph{Type}: DictToClass /
+
+  Connection configurations.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+True if the config is supported.
+
+False if the config is not supported.
+\end{quote}
+
+\hypertarget{qconnectbase-qlogger-class-qlogger-53}{%
+\section{Class: QLogger}\label{qconnectbase-qlogger-class-qlogger-53}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{QConnectBase.qlogger}
+\end{Highlighting}
+\end{Shaded}
+
+Logger class for QConnect Libraries.
+
+\hypertarget{qconnectbase-qlogger-method-get_logger-54}{%
+\subsection{Method: get\_logger}\label{qconnectbase-qlogger-method-get_logger-54}}
+
+Get the logger object.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{logger\_name}
+
+  / \emph{Condition}: required / \emph{Type}: str /
+
+  Name of the logger.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{itemize}
+\item
+  \texttt{logger}
+
+  / \emph{Type}: Logger /
+
+  Logger object. .
+\end{itemize}
+
+\hypertarget{qconnectbase-qlogger-method-set_handler-55}{%
+\subsection{Method: set\_handler}\label{qconnectbase-qlogger-method-set_handler-55}}
+
+Set handler for logger.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{config}
+
+  / \emph{Condition}: required / \emph{Type}: DictToClass /
+
+  Connection configurations.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+None if no handler is set.
+
+Handler object.
+\end{quote}

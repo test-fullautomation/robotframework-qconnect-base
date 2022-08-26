@@ -1,0 +1,560 @@
+%
+% Generated at 26.08.2022 - 15:39:36 by QConnectBase
+%
+
+\hypertarget{qconnectbase-connection-base-class-brokenconnerror-2}{%
+\section{Class: BrokenConnError}\label{qconnectbase-connection-base-class-brokenconnerror-2}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{QConnectBase.connection\_base}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{qconnectbase-connection-base-class-connectionbase-3}{%
+\section{Class: ConnectionBase}\label{qconnectbase-connection-base-class-connectionbase-3}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{QConnectBase.connection\_base}
+\end{Highlighting}
+\end{Shaded}
+
+Base class for all connection classes.
+
+\hypertarget{qconnectbase-connection-base-method-is_supported_platform-4}{%
+\subsection{Method:
+is\_supported\_platform}\label{qconnectbase-connection-base-method-is_supported_platform-4}}
+
+Check if current platform is supported.
+
+\textbf{Returns:}
+
+\begin{itemize}
+\item
+  \texttt{is\_supported}
+
+  / \emph{Type}: bool /
+
+  True if platform is supported.
+
+  False if platform is not supported.
+\end{itemize}
+
+\hypertarget{qconnectbase-connection-base-method-is_precondition_pass-5}{%
+\subsection{Method:
+is\_precondition\_pass}\label{qconnectbase-connection-base-method-is_precondition_pass-5}}
+
+Check for precondition.
+
+\textbf{Returns:}
+
+\begin{quote}
+True if passing the precondition.
+
+False if failing the precondition.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-error_instruction-6}{%
+\subsection{Method: error\_instruction}\label{qconnectbase-connection-base-method-error_instruction-6}}
+
+Get the error instruction.
+
+\textbf{Returns:}
+
+\begin{quote}
+Error instruction string.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-quit-7}{%
+\subsection{Method: quit}\label{qconnectbase-connection-base-method-quit-7}}
+
+\textgreater\textgreater{} This method MUST be overridden in derived
+class \textless\textless{}
+
+Abstract method for quiting the connection.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{is\_disconnect\_all}
+
+  / \emph{Condition}: optional / \emph{Type}: bool /
+
+  Determine if it\textquotesingle s necessary to disconnect all
+  connections.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+None.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-connect-8}{%
+\subsection{Method: connect}\label{qconnectbase-connection-base-method-connect-8}}
+
+\textgreater\textgreater{} This method MUST be overridden in derived
+class \textless\textless{}
+
+Abstract method for quiting the connection.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{device}
+
+  / \emph{Condition}: required / \emph{Type}: str /
+
+  Device name.
+\item
+  \texttt{device}
+
+  / \emph{Condition}: optional / \emph{Type}: list /
+
+  Trace file list if using dlt connection.
+\item
+  \texttt{test\_connection}
+
+  / \emph{Condition}: optional / \emph{Type}: bool /
+
+  Deternmine if it\textquotesingle s necessary for testing the
+  connection.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+None.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-disconnect-9}{%
+\subsection{Method: disconnect}\label{qconnectbase-connection-base-method-disconnect-9}}
+
+\textgreater\textgreater{} This method MUST be overridden in derived
+class \textless\textless{}
+
+Abstract method for disconnecting connection.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{n\_thrd\_id}
+
+  / \emph{Condition}: required / \emph{Type}: int /
+
+  Thread id.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+None.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-send_obj-10}{%
+\subsection{Method: send\_obj}\label{qconnectbase-connection-base-method-send_obj-10}}
+
+Wrapper method to send message to a tcp connection.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{obj}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Data to be sent.
+\item
+  \texttt{cr}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Determine if it\textquotesingle s necessary to add newline character
+  at the end of command.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+None
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-read_obj-11}{%
+\subsection{Method: read\_obj}\label{qconnectbase-connection-base-method-read_obj-11}}
+
+Wrapper method to get the response from connection.
+
+\textbf{Returns:}
+
+\begin{quote}
+Responded message.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-wait_4_trace-12}{%
+\subsection{Method: wait\_4\_trace}\label{qconnectbase-connection-base-method-wait_4_trace-12}}
+
+Suspend the control flow until a Trace message is received which matches
+to a specified regular expression.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{search\_obj}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Regular expression all received trace messages are compare to. Can be
+  passed either as a string or a regular expression object. Refer to
+  Python documentation for module \textquotesingle re\textquotesingle.
+\item
+  \texttt{use\_fetch\_block}
+
+  / \emph{Condition}: optional / \emph{Type}: bool /
+
+  Determine if \textquotesingle fetch block\textquotesingle{} feature is
+  used.
+\item
+  \texttt{end\_of\_block\_pattern}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  The end of block pattern.
+\item
+  \texttt{filter\_pattern}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Pattern to filter message line by line.
+\item
+  \texttt{timeout}
+
+  / \emph{Condition}: optional / \emph{Type}: re.Pattern /
+
+  Timeout parameter specified as a floating point number in the unit
+  \textquotesingle seconds\textquotesingle.
+\item
+  \texttt{fct\_args}
+
+  / \emph{Condition}: optional / \emph{Type}: Tuple /
+
+  List of function arguments passed to be sent.
+\end{itemize}
+
+\textbf{Returns:}
+
+* \texttt{abc}
+
+\begin{quote}
+/ \emph{Type}: re.Match /
+
+If no trace message matched to the specified regular expression and a
+timeout occurred.
+
+If a trace message has matched to the specified regular expression, a
+match object is returned as the result. The complete trace message can
+be accessed by the \textquotesingle string\textquotesingle{} attribute
+of the match object. For access to groups within the regular expression,
+use the group() method. For more information, refer to Python
+documentation for module \textquotesingle re\textquotesingle.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-wait_4_trace_continuously-13}{%
+\subsection{Method:
+wait\_4\_trace\_continuously}\label{qconnectbase-connection-base-method-wait_4_trace_continuously-13}}
+
+Getting trace log continuously without creating a new trace queue.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{trace\_queue}
+
+  / \emph{Condition}: optional / \emph{Type}: Queue /
+
+  Queue to store the traces.
+\item
+  \texttt{timeout}
+
+  / \emph{Condition}: optional / \emph{Type}: int /
+
+  Timeout for waiting a matched log.
+\item
+  \texttt{fct\_args}
+
+  / \emph{Condition}: optional / \emph{Type}: Tuple /
+
+  Arguments to be sent to connection.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{itemize}
+\item
+  \texttt{None}
+
+  / \emph{Type}: None /
+
+  If no trace message matched to the specified regular expression and a
+  timeout occurred.
+\end{itemize}
+
+* \texttt{match}
+
+\begin{quote}
+/ \emph{Type}: re.Match /
+
+If a trace message has matched to the specified regular expression, a
+match object is returned as the result. The complete trace message can
+be accessed by the \textquotesingle string\textquotesingle{} attribute
+of the match object. For access to groups within the regular expression,
+use the group() method. For more information, refer to Python
+documentation for module \textquotesingle re\textquotesingle.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-create_and_activate_trace_queue-14}{%
+\subsection{Method:
+create\_and\_activate\_trace\_queue}\label{qconnectbase-connection-base-method-create_and_activate_trace_queue-14}}
+
+Create Queue and assign it to \_trace\_queue object and activate the
+queue with the search element.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{search\_element}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Regular expression all received trace messages are compare to.
+
+  Can be passed either as a string or a regular expression object. Refer
+  to Python documentation for module
+  \textquotesingle re\textquotesingle.\#
+\item
+  \texttt{use\_fetch\_block}
+
+  / \emph{Condition}: optional / \emph{Type}: bool /
+
+  Determine if \textquotesingle fetch block\textquotesingle{} feature is
+  used.
+\item
+  \texttt{end\_of\_block\_pattern}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  The end of block pattern.
+\item
+  \texttt{regex\_line\_filter\_pattern}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Regular expression object to filter message line by line.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{itemize}
+\item
+  \texttt{trq\_handle,\ trace\_queue}
+
+  / \emph{Type}: tuple /
+
+  The handle and search object
+\end{itemize}
+
+\hypertarget{qconnectbase-connection-base-method-deactivate_and_delete_trace_queue-15}{%
+\subsection{Method:
+deactivate\_and\_delete\_trace\_queue}\label{qconnectbase-connection-base-method-deactivate_and_delete_trace_queue-15}}
+
+Deactivate trace queue and delete.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{trq\_handle}
+
+  / \emph{Condition}: optional / \emph{Type}: int /
+
+  Trace queue handle.
+\item
+  \texttt{trace\_queue}
+
+  / \emph{Condition}: optional / \emph{Type}: Queue /
+
+  Trace queue object.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{quote}
+None.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-activate_trace_queue-16}{%
+\subsection{Method:
+activate\_trace\_queue}\label{qconnectbase-connection-base-method-activate_trace_queue-16}}
+
+Activates a trace message filter specified as a regular expression. All
+matching trace messages are put in the specified queue object.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{search\_obj}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Regular expression all received trace messages are compare to. Can be
+  passed either as a string or a regular expression object. Refer to
+  Python documentation for module \textquotesingle re\textquotesingle.
+\item
+  \texttt{trace\_queue}
+
+  / \emph{Condition}: optional / \emph{Type}: Queue /
+
+  A queue object all trace message which matches the regular expression
+  are put in. The using application must assure, that the queue is
+  emptied or deleted.
+\item
+  \texttt{use\_fetch\_block}
+
+  / \emph{Condition}: optional / \emph{Type}: bool /
+
+  Determine if \textquotesingle fetch block\textquotesingle{} feature is
+  used.
+\item
+  \texttt{end\_of\_block\_pattern}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  The end of block pattern.
+\item
+  \texttt{line\_filter\_pattern}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Regular expression object to filter message line by line.
+\end{itemize}
+
+\textbf{Returns:}
+
+\begin{itemize}
+\item
+  \texttt{handle\_id}
+
+  / \emph{Type}: int /
+
+  Handle to deactivate the message filter.
+\end{itemize}
+
+\hypertarget{qconnectbase-connection-base-method-deactivate_trace_queue-17}{%
+\subsection{Method:
+deactivate\_trace\_queue}\label{qconnectbase-connection-base-method-deactivate_trace_queue-17}}
+
+Deactivates a trace message filter previously activated by
+ActivateTraceQ() method.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{handle}
+
+  / \emph{Condition}: optional / \emph{Type}: int /
+
+  Integer object returned by ActivateTraceQ() method.
+\end{itemize}
+
+\textbf{Returns:}
+
+* \texttt{is\_success}
+
+\begin{quote}
+/ \emph{Type}: bool / . False : No trace message filter active with the
+specified handle (i.e. handle is not in use).
+
+True : Trace message filter successfully deleted.
+\end{quote}
+
+\hypertarget{qconnectbase-connection-base-method-check_timeout-18}{%
+\subsection{Method: check\_timeout}\label{qconnectbase-connection-base-method-check_timeout-18}}
+
+\textgreater\textgreater{} This method will be override in derived class
+\textless\textless{}
+
+Check if responded message come in cls.\_RESPOND\_TIMEOUT or we will
+raise a timeout event.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{timeout}
+
+  / \emph{Condition}: optional / \emph{Type}: int /
+
+  Timeout in seconds.
+\end{itemize}
+
+\begin{description}
+\item[\textbf{Returns:}]
+None.
+\end{description}
+
+\hypertarget{qconnectbase-connection-base-method-pre_msg_check-19}{%
+\subsection{Method: pre\_msg\_check}\label{qconnectbase-connection-base-method-pre_msg_check-19}}
+
+\textgreater\textgreater{} This method will be override in derived class
+\textless\textless{}
+
+Pre-checking message when receiving it from connection.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{msg}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Received message to be checked.
+\end{itemize}
+
+\begin{description}
+\item[\textbf{Returns:}]
+None.
+\end{description}
+
+\hypertarget{qconnectbase-connection-base-method-post_msg_check-20}{%
+\subsection{Method: post\_msg\_check}\label{qconnectbase-connection-base-method-post_msg_check-20}}
+
+\textgreater\textgreater{} This method will be override in derived class
+\textless\textless{}
+
+Post-checking message when receiving it from connection.
+
+\textbf{Arguments:}
+
+\begin{itemize}
+\item
+  \texttt{msg}
+
+  / \emph{Condition}: optional / \emph{Type}: str /
+
+  Received message to be checked.
+\end{itemize}
+
+\begin{description}
+\item[\textbf{Returns:}]
+None.
+\end{description}

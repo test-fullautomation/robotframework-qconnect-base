@@ -16,7 +16,7 @@ from QConnectBase.connection_manager import ConnectionManager
 
 class ConnectionManager(ConnectionManager):
    """
-   Class to manage all connections.
+Class to manage all connections.
    """
    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 

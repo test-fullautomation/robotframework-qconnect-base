@@ -49,7 +49,7 @@ class BrokenConnError(Exception):
 
 class ConnectionBase(object):
    """
-   Base class for all connection classes.
+Base class for all connection classes.
    """
    __metaclass__ = ABCMeta
    _SUPPORTED_PLATFORM_LIST = [constants.OS_WINDOWS_STR,
@@ -92,17 +92,30 @@ class ConnectionBase(object):
    config = None
    def __new__(cls, *args, **kwargs):
       """
-      Override creating instance method to check for conditions.
+Override creating instance method to check for conditions.
       
-      Args:   
-         args: Non-Keyword Arguments.
-		 
-         kwargs:   Keyword Arguments.
+**Arguments:**
 
-      Returns:
-         ConnectionBase instance if passing the conditions.
-		 
-         None if failing the conditions.
+* ``args``    
+
+  / *Condition*: require / *Type*: tuple /
+
+  Non-Keyword Arguments.
+
+* ``kwargs``   
+
+  / *Condition*: require / *Type*: dict /
+
+  Keyword Arguments.
+
+**Returns:**
+
+* ``ConnectionBase instance``
+
+  / *Type*: ConnectionBase /
+  
+  ConnectionBase instance if passing the conditions.\
+  None if failing the conditions.
       """
       if (not cls.is_supported_platform()) or (not cls.is_precondition_pass()):
          return None
@@ -112,32 +125,39 @@ class ConnectionBase(object):
    @classmethod
    def is_supported_platform(cls):
       """
-      Check if current platform is supported.
-	  
-      Returns:
-         True if platform is supported.
-		 
-         False if platform is not supported.
+Check if current platform is supported.
+
+**Returns:**
+
+* ``is_supported``
+
+  / *Type*: bool /
+  
+  True if platform is supported. 
+  
+  False if platform is not supported.
       """
       return _platform in cls._SUPPORTED_PLATFORM_LIST
 
    @classmethod
    def is_precondition_pass(cls):
       """
-      Check for precondition.
+Check for precondition.
 	  
-      Returns:
+**Returns:**
+
          True if passing the precondition.
-		 
+
          False if failing the precondition.
       """
       return cls._is_precondition_valid
 
    def error_instruction(self):
       """
-      Get the error instruction.
+Get the error instruction.
 	  
-      Returns:
+**Returns:**
+
          Error instruction string.
       """
       return self._ERROR_INSTRUCTION
@@ -147,13 +167,20 @@ class ConnectionBase(object):
    @abc.abstractmethod
    def quit(self, is_disconnect_all=True):
       """
-      >> This method MUST be overridden in derived class <<
-      Abstract method for quiting the connection.
-      
-      Args:
-         is_disconnect_all: Determine if it's necessary to disconnect all connections.
+>> This method MUST be overridden in derived class << 
 
-      Returns:
+Abstract method for quiting the connection.
+      
+**Arguments:**
+
+* ``is_disconnect_all``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Determine if it's necessary to disconnect all connections.
+
+**Returns:**
+
          None.
       """
       self._logger.removeHandler(self._logger_handler)
@@ -161,17 +188,32 @@ class ConnectionBase(object):
    @abc.abstractmethod
    def connect(self, device, files=None, test_connection=False):
       """
-      >> This method MUST be overridden in derived class <<
-      Abstract method for quiting the connection.
-      
-      Args:
-         device: Determine if it's necessary to disconnect all connections.
-		 
-         files: Determine if it's necessary to disconnect all connections.
-		 
-         test_connection: Determine if it's necessary to disconnect all connections.
+>> This method MUST be overridden in derived class << 
 
-      Returns:
+Abstract method for quiting the connection.
+      
+**Arguments:**
+
+* ``device``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Device name.
+
+* ``device``    
+
+  / *Condition*: optional / *Type*: list /
+  
+  Trace file list if using dlt connection.
+
+* ``test_connection``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Deternmine if it's necessary for testing the connection.
+
+**Returns:**
+
          None.
       """
       pass
@@ -180,13 +222,20 @@ class ConnectionBase(object):
    @abc.abstractmethod
    def disconnect(self, device):
       """
-      >> This method MUST be overridden in derived class <<
-      Abstract method for disconnecting connection.
-      
-      Args:
-         device: Device name.
+>> This method MUST be overridden in derived class << 
 
-      Returns:
+Abstract method for disconnecting connection.
+      
+**Arguments:**   
+
+* ``n_thrd_id``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Thread id.
+
+**Returns:**
+
          None.
       """
       pass
@@ -195,12 +244,14 @@ class ConnectionBase(object):
    # region RECEIVER THREAD METHODS
    def _init_thrd_llrecv(self, n_thrd_id):
       """
-      Start a thread which receive message from connection continuously.
+Start a thread which receive message from connection continuously.
       
-      Args:
+**Arguments:**   
+
+
          n_thrd_id: thread id.
 
-      Returns:
+**Returns:**
          None
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -212,24 +263,41 @@ class ConnectionBase(object):
 
    def _thrd_llrecv_from_connection_interface(self):
       """
-      >> This method will be override in derived class <<
-      The thread which receive message from connection continuously.
+>> This method will be override in derived class << \
+The thread which receive message from connection continuously.
 	  
-      Returns:
+**Returns:**
+
          None
       """
       pass
 
    def _init_thread_receiver(self, thread_id, mode=None, sync_with_start=False):
       """
-      Initialize a thread for receiving data from connection.
+Initialize a thread for receiving data from connection.
       
-      Args:
-         thread_id: Thread ID number.
-         mode: Connection's mode.
-         sync_with_start: Determine if receiving thread needs to wait for start event.
+**Arguments:**
 
-      Returns:
+* ``thread_id``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Thread ID number.
+
+* ``mode``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Connection's mode.
+
+* ``sync_with_start``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Determine if receiving thread needs to wait for start event.
+
+**Returns:**
+
          None
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -249,12 +317,18 @@ class ConnectionBase(object):
 
    def _thread_receive_from_connection(self, sync_with_start=False):
       """
-      Thread to receive data from connection continuously.
+Thread to receive data from connection continuously.
       
-      Args:
-         sync_with_start: determine if thread needs to wait for start event.
+**Arguments:**   
 
-      Returns:
+* ``sync_with_start``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Determine if receiving thread needs to wait for start event.
+
+**Returns:**
+
          None
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -314,13 +388,24 @@ class ConnectionBase(object):
 
    def send_obj(self, obj, cr=True):
       """
-      Wrapper method to send message to a tcp connection.
+Wrapper method to send message to a tcp connection.
       
-      Args:
-         obj: Data to be sent.
-         cr: Determine if it's necessary to add newline character at the end of command.
+**Arguments:**
 
-      Returns:
+* ``obj``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Data to be sent.
+  
+* ``cr``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Determine if it's necessary to add newline character at the end of command.
+
+**Returns:**
+
          None
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -336,9 +421,10 @@ class ConnectionBase(object):
 
    def read_obj(self):
       """
-      Wrapper method to get the response from connection.
+Wrapper method to get the response from connection.
 	  
-      Returns:
+**Returns:**
+
          Responded message.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -361,26 +447,56 @@ class ConnectionBase(object):
    # region TRACE INFRASTRUCTURE METHODS
    def wait_4_trace(self, search_obj, timeout=0, use_fetch_block=False, end_of_block_pattern=".*", filter_pattern=".*", *fct_args):
       """
-      Suspend the control flow until a Trace message is received which matches to a specified regular expression.
+Suspend the control flow until a Trace message is received which matches to a specified regular expression.
       
-      Args:
-          search_obj : Regular expression all received trace messages are compare to. \
-          Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
-          
-          use_fetch_block : Determine if 'fetch block' feature is used.
-          
-          end_of_block_pattern : The end of block pattern.
-          
-          filter_pattern : Regular expression object to filter message line by line.
-          
-          timeout :   Optional timeout parameter specified as a floating point number in the unit 'seconds'.
-          
-          fct_args:   Optional list of function arguments passed to be sent.
+**Arguments:**   
 
-      Returns:
-          None :    If no trace message matched to the specified regular expression and a timeout occurred.
-		  
-          <match> : If a trace message has matched to the specified regular expression, a match object is returned as the result.\
+* ``search_obj``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Regular expression all received trace messages are compare to. 
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
+  
+* ``use_fetch_block``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Determine if 'fetch block' feature is used.
+  
+* ``end_of_block_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  The end of block pattern.  
+
+* ``filter_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Pattern to filter message line by line.
+  
+* ``timeout``    
+
+  / *Condition*: optional / *Type*: re.Pattern /
+  
+  Timeout parameter specified as a floating point number in the unit 'seconds'.
+  
+* ``fct_args``    
+
+  / *Condition*: optional / *Type*: Tuple /
+  
+  List of function arguments passed to be sent.
+
+**Returns:**
+
+* ``abc``
+
+  / *Type*: re.Match /
+  
+  If no trace message matched to the specified regular expression and a timeout occurred.
+  
+  If a trace message has matched to the specified regular expression, a match object is returned as the result.\
                     The complete trace message can be accessed by the 'string' attribute of the match object.\
                     For access to groups within the regular expression, use the group() method.\
                     For more information, refer to Python documentation for module 're'.\
@@ -415,22 +531,45 @@ class ConnectionBase(object):
 
    def wait_4_trace_continuously(self, trace_queue, timeout=0, *fct_args):
       """
-      Getting trace log continuously without creating a new trace queue.
+Getting trace log continuously without creating a new trace queue.
       
-      Args:
-         trace_queue: Queue to store the traces.
-         
-         timeout: Timeout for waiting a matched log.
-         
-         fct_args: Arguments to be sent to connection.
+**Arguments:**   
 
-      Returns:
-         None :    If no trace message matched to the specified regular expression and a timeout occurred.
-		 
-         match object : If a trace message has matched to the specified regular expression, a match object is returned as the result. \
-                        The complete trace message can be accessed by the 'string' attribute of the match object. \
-                        For access to groups within the regular expression, use the group() method. \
-                        For more information, refer to Python documentation for module 're'. \
+
+* ``trace_queue``    
+
+  / *Condition*: optional / *Type*: Queue /
+  
+  Queue to store the traces.
+  
+* ``timeout``    
+
+  / *Condition*: optional / *Type*: int /
+  
+  Timeout for waiting a matched log.
+
+* ``fct_args``    
+
+  / *Condition*: optional / *Type*: Tuple /
+  
+  Arguments to be sent to connection.
+
+**Returns:**
+
+* ``None``
+
+  / *Type*: None /
+  
+  If no trace message matched to the specified regular expression and a timeout occurred.
+  
+* ``match``
+
+  / *Type*: re.Match /
+  
+  If a trace message has matched to the specified regular expression, a match object is returned as the result.\
+                    The complete trace message can be accessed by the 'string' attribute of the match object.\
+                    For access to groups within the regular expression, use the group() method.\
+                    For more information, refer to Python documentation for module 're'.\
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -458,20 +597,43 @@ class ConnectionBase(object):
    @classmethod
    def create_and_activate_trace_queue(cls, search_element, use_fetch_block=False, end_of_block_pattern='.*', regex_line_filter_pattern=None):
       """
-      Create Queue and assign it to _trace_queue object and activate the queue with the search element.
+Create Queue and assign it to _trace_queue object and activate the queue with the search element.
       
-      Args:
-         search_element :  Regular expression all received trace messages are compare to. \
-		 Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.#
-		 
-         use_fetch_block : Determine if 'fetch block' feature is used.
-		 
-         end_of_block_pattern : The end of block pattern.
-		 
-         regex_line_filter_pattern : Regular expression object to filter message line by line.
+**Arguments:**   
 
-      Returns:
-         trq_handle, trace_queue: the handle and search object
+* ``search_element``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Regular expression all received trace messages are compare to. 
+         
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.#
+
+* ``use_fetch_block``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Determine if 'fetch block' feature is used.
+  
+* ``end_of_block_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  The end of block pattern.
+  
+* ``regex_line_filter_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Regular expression object to filter message line by line.
+
+**Returns:**
+
+* ``trq_handle, trace_queue``
+
+  / *Type*: tuple /
+  
+  The handle and search object
       """
       trace_queue = queue.Queue()
       trq_handle = cls.activate_trace_queue(search_element, trace_queue, use_fetch_block, end_of_block_pattern, regex_line_filter_pattern)
@@ -480,14 +642,24 @@ class ConnectionBase(object):
    @classmethod
    def deactivate_and_delete_trace_queue(cls, trq_handle, trace_queue):
       """
-      Deactivate trace queue and delete.
+Deactivate trace queue and delete.
       
-      Args:
-         trq_handle: Trace queue handle.
-		 
-         trace_queue: Trace queue object.
+**Arguments:**   
 
-      Returns:
+* ``trq_handle``    
+
+  / *Condition*: optional / *Type*: int /
+  
+  Trace queue handle.
+  
+* ``trace_queue``    
+
+  / *Condition*: optional / *Type*: Queue /
+  
+  Trace queue object.
+
+**Returns:**
+
          None.
       """
       cls.deactivate_trace_queue(trq_handle)
@@ -496,22 +668,51 @@ class ConnectionBase(object):
    @classmethod
    def activate_trace_queue(cls, search_obj, trace_queue, use_fetch_block=False, end_of_block_pattern='.*', line_filter_pattern=None):
       """
-      Activates a trace message filter specified as a regular expression. All matching trace messages are put in the specified queue object.
+Activates a trace message filter specified as a regular expression. All matching trace messages are put in the specified queue object.
       
-      Args:
-          search_obj :  Regular expression all received trace messages are compare to. \
-                       Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.#
-					   
-          trace_queue : A queue object all trace message which matches the regular expression are put in. \
-                       The using application must assure, that the queue is emptied or deleted.
-					   
-          use_fetch_block : Determine if 'fetch block' feature is used
-		  
-          end_of_block_pattern : The end of block pattern
-		  
-          line_filter_pattern : Regular expression object to filter message line by line.
-      Returns:
-          <int> : Handle to deactivate the message filter.
+**Arguments:**   
+
+* ``search_obj``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Regular expression all received trace messages are compare to. \
+         
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
+  
+* ``trace_queue``    
+
+  / *Condition*: optional / *Type*: Queue /
+  
+  A queue object all trace message which matches the regular expression are put in. \
+  
+  The using application must assure, that the queue is emptied or deleted.
+  
+* ``use_fetch_block``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Determine if 'fetch block' feature is used.
+  
+* ``end_of_block_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  The end of block pattern.
+  
+* ``line_filter_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Regular expression object to filter message line by line.
+          
+**Returns:**
+
+* ``handle_id``
+
+  / *Type*: int /
+  
+  Handle to deactivate the message filter.
       """
       _mident = '%s.%s()' % (cls.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -532,15 +733,25 @@ class ConnectionBase(object):
    @classmethod
    def deactivate_trace_queue(cls, handle):
       """
-      Deactivates a trace message filter previously activated by ActivateTraceQ() method.
+Deactivates a trace message filter previously activated by ActivateTraceQ() method.
       
-      Args:
-          handle :  Integer object returned by ActivateTraceQ() method.
+**Arguments:**
 
-      Returns:
-          False : No trace message filter active with the specified handle (i.e. handle is not in use).
-		  
-          True :  Trace message filter successfully deleted.
+* ``handle``    
+
+  / *Condition*: optional / *Type*: int /
+  
+  Integer object returned by ActivateTraceQ() method.
+
+**Returns:**
+
+* ``is_success``
+
+  / *Type*: bool /
+ .
+  False : No trace message filter active with the specified handle (i.e. handle is not in use). 
+  
+  True :  Trace message filter successfully deleted.
       """
       _mident = '%s.%s()' % (cls.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -553,41 +764,59 @@ class ConnectionBase(object):
       BuiltIn().log('Completed %s' % _mident, constants.LOG_LEVEL_DEBUG)
       return is_success
 
-   def check_timeout(self, msg):
+   def check_timeout(self, timeout):
       """
-      >> This method will be override in derived class <<
-      Check if responded message come in cls._RESPOND_TIMEOUT or we will raise a timeout event.
-      
-      Args:
-         msg: Responded message for checking.
+>> This method will be override in derived class << 
 
-      Returns:
+Check if responded message come in cls._RESPOND_TIMEOUT or we will raise a timeout event.
+      
+**Arguments:**   
+
+* ``timeout``    
+
+  / *Condition*: optional / *Type*: int /
+  
+  Timeout in seconds.
+
+**Returns:**
          None.
       """
       pass
 
    def pre_msg_check(self, msg):
       """
-      >> This method will be override in derived class <<
-      Pre-checking message when receiving it from connection.
-      
-      Args:
-         msg: received message to be checked.
+>> This method will be override in derived class <<
 
-      Returns:
+Pre-checking message when receiving it from connection.
+      
+**Arguments:**   
+
+* ``msg``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Received message to be checked.
+
+**Returns:**
          None.
       """
       pass
 
    def post_msg_check(self, msg):
       """
-      >> This method will be override in derived class <<
-      Post-checking message when receiving it from connection.
-      
-      Args:
-         msg: received message to be checked.
+>> This method will be override in derived class <<
 
-      Returns:
+Post-checking message when receiving it from connection.
+      
+**Arguments:**   
+
+* ``msg``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Received message to be checked.
+
+**Returns:**
          None.
       """
       pass
@@ -620,17 +849,31 @@ class ConnectionBase(object):
 
    def _filter_msg(self, regex_filter_obj, msg):
       """
-      Filter message by regular expression object.
+Filter message by regular expression object.
       
-      Args:
-         regex_filter_obj: regular expression object.
-		 
-         msg: message string.
+**Arguments:**   
 
-      Returns:
-         is_hit: Determine if there is any matched.
+* ``regex_filter_obj``    
+
+  / *Condition*: optional / *Type*: re.Pattern /
+  
+  Regular expression object.
+  
+* ``msg``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Message string to be filtered.
+
+**Returns:**
+
+* ``is_hit, matched_obj``
+
+  / *Type*: tuple /
+  
+  is_hit: Determine if there is any matched.
 		 
-         matched_obj: Matched object.
+  matched_obj: Matched object if exists.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log(_mident, constants.LOG_LEVEL_DEBUG)

@@ -1,0 +1,123 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Description}{2}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Table of Contents}{2}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Getting Started}{2}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Usage}{2}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}\textbf {connect}}{3}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}\textbf {disconnect}}{3}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}\textbf {send command}}{4}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}\textbf {verify}}{4}{subsection.2.3.4}%
+\contentsline {section}{\numberline {2.4}Example}{4}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Contribution Guidelines}{5}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Configure Git and correct EOL handling}{6}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Sourcecode Documentation}{6}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Feedback}{6}{section.2.8}%
+\contentsline {section}{\numberline {2.9}About}{6}{section.2.9}%
+\contentsline {subsection}{\numberline {2.9.1}Maintainers}{6}{subsection.2.9.1}%
+\contentsline {subsection}{\numberline {2.9.2}Contributors}{6}{subsection.2.9.2}%
+\contentsline {section}{\numberline {2.10}License}{6}{section.2.10}%
+\contentsline {chapter}{\numberline {3}\_\_init\_\_.py}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Class: ConnectionManager}{7}{section.3.1}%
+\contentsline {chapter}{\numberline {4}connection\_base.py}{8}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Class: BrokenConnError}{8}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Class: ConnectionBase}{8}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Method: is\_supported\_platform}{8}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Method: is\_precondition\_pass}{8}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Method: error\_instruction}{8}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Method: quit}{9}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Method: connect}{9}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}Method: disconnect}{9}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}Method: send\_obj}{10}{subsection.4.2.7}%
+\contentsline {subsection}{\numberline {4.2.8}Method: read\_obj}{10}{subsection.4.2.8}%
+\contentsline {subsection}{\numberline {4.2.9}Method: wait\_4\_trace}{10}{subsection.4.2.9}%
+\contentsline {subsection}{\numberline {4.2.10}Method: wait\_4\_trace\_continuously}{11}{subsection.4.2.10}%
+\contentsline {subsection}{\numberline {4.2.11}Method: create\_and\_activate\_trace\_queue}{11}{subsection.4.2.11}%
+\contentsline {subsection}{\numberline {4.2.12}Method: deactivate\_and\_delete\_trace\_queue}{12}{subsection.4.2.12}%
+\contentsline {subsection}{\numberline {4.2.13}Method: activate\_trace\_queue}{12}{subsection.4.2.13}%
+\contentsline {subsection}{\numberline {4.2.14}Method: deactivate\_trace\_queue}{13}{subsection.4.2.14}%
+\contentsline {subsection}{\numberline {4.2.15}Method: check\_timeout}{13}{subsection.4.2.15}%
+\contentsline {subsection}{\numberline {4.2.16}Method: pre\_msg\_check}{13}{subsection.4.2.16}%
+\contentsline {subsection}{\numberline {4.2.17}Method: post\_msg\_check}{13}{subsection.4.2.17}%
+\contentsline {chapter}{\numberline {5}connection\_manager.py}{14}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Class: InputParam}{14}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Method: get\_attr\_list}{14}{subsection.5.1.1}%
+\contentsline {section}{\numberline {5.2}Class: ConnectParam}{14}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Class: SendCommandParam}{14}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Class: VerifyParam}{14}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Class: ConnectionManager}{14}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Method: add\_connection}{15}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}Method: remove\_connection}{15}{subsection.5.5.2}%
+\contentsline {subsection}{\numberline {5.5.3}Method: get\_connection\_by\_name}{15}{subsection.5.5.3}%
+\contentsline {subsection}{\numberline {5.5.4}Method: disconnect}{15}{subsection.5.5.4}%
+\contentsline {subsection}{\numberline {5.5.5}Method: connect}{16}{subsection.5.5.5}%
+\contentsline {subsection}{\numberline {5.5.6}Method: connect\_named\_args}{16}{subsection.5.5.6}%
+\contentsline {subsection}{\numberline {5.5.7}Method: connect\_unnamed\_args}{16}{subsection.5.5.7}%
+\contentsline {subsection}{\numberline {5.5.8}Method: send\_command}{17}{subsection.5.5.8}%
+\contentsline {subsection}{\numberline {5.5.9}Method: send\_command\_named\_args}{17}{subsection.5.5.9}%
+\contentsline {subsection}{\numberline {5.5.10}Method: send\_command\_unnamed\_args}{17}{subsection.5.5.10}%
+\contentsline {subsection}{\numberline {5.5.11}Method: verify}{17}{subsection.5.5.11}%
+\contentsline {subsection}{\numberline {5.5.12}Method: verify\_named\_args}{18}{subsection.5.5.12}%
+\contentsline {subsection}{\numberline {5.5.13}Method: verify\_unnamed\_args}{18}{subsection.5.5.13}%
+\contentsline {section}{\numberline {5.6}Class: TestOption}{19}{section.5.6}%
+\contentsline {chapter}{\numberline {6}constants.py}{20}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Class: SocketType}{20}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Class: String}{20}{section.6.2}%
+\contentsline {chapter}{\numberline {7}qlogger.py}{21}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Class: ColorFormatter}{21}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Method: format}{21}{subsection.7.1.1}%
+\contentsline {section}{\numberline {7.2}Class: QFileHandler}{21}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Method: get\_log\_path}{21}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Method: get\_config\_supported}{22}{subsection.7.2.2}%
+\contentsline {section}{\numberline {7.3}Class: QDefaultFileHandler}{22}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Method: get\_log\_path}{22}{subsection.7.3.1}%
+\contentsline {subsection}{\numberline {7.3.2}Method: get\_config\_supported}{22}{subsection.7.3.2}%
+\contentsline {section}{\numberline {7.4}Class: QConsoleHandler}{22}{section.7.4}%
+\contentsline {subsection}{\numberline {7.4.1}Method: get\_config\_supported}{23}{subsection.7.4.1}%
+\contentsline {section}{\numberline {7.5}Class: QLogger}{23}{section.7.5}%
+\contentsline {subsection}{\numberline {7.5.1}Method: get\_logger}{23}{subsection.7.5.1}%
+\contentsline {subsection}{\numberline {7.5.2}Method: set\_handler}{23}{subsection.7.5.2}%
+\contentsline {chapter}{\numberline {8}serial\_base.py}{24}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Class: SerialConfig}{24}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Method: disconnect}{24}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Method: quit}{24}{subsection.8.1.2}%
+\contentsline {section}{\numberline {8.2}Class: SerialClient}{24}{section.8.2}%
+\contentsline {chapter}{\numberline {9}raw\_tcp.py}{25}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Class: RawTCPBase}{25}{section.9.1}%
+\contentsline {chapter}{\numberline {10}ssh\_client.py}{26}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Class: AuthenticationType}{26}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Class: SSHConfig}{26}{section.10.2}%
+\contentsline {subsection}{\numberline {10.2.1}Method: close}{26}{subsection.10.2.1}%
+\contentsline {chapter}{\numberline {11}tcp\_base.py}{27}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Class: TCPConfig}{27}{section.11.1}%
+\contentsline {section}{\numberline {11.2}Class: TCPBase}{27}{section.11.2}%
+\contentsline {subsection}{\numberline {11.2.1}Method: close}{27}{subsection.11.2.1}%
+\contentsline {subsection}{\numberline {11.2.2}Method: quit}{27}{subsection.11.2.2}%
+\contentsline {subsection}{\numberline {11.2.3}Method: connect}{27}{subsection.11.2.3}%
+\contentsline {subsection}{\numberline {11.2.4}Method: disconnect}{27}{subsection.11.2.4}%
+\contentsline {section}{\numberline {11.3}Class: TCPBaseServer}{28}{section.11.3}%
+\contentsline {subsection}{\numberline {11.3.1}Method: accept\_connection}{28}{subsection.11.3.1}%
+\contentsline {subsection}{\numberline {11.3.2}Method: connect}{28}{subsection.11.3.2}%
+\contentsline {subsection}{\numberline {11.3.3}Method: disconnect}{28}{subsection.11.3.3}%
+\contentsline {section}{\numberline {11.4}Class: TCPBaseClient}{28}{section.11.4}%
+\contentsline {subsection}{\numberline {11.4.1}Method: connect}{28}{subsection.11.4.1}%
+\contentsline {subsection}{\numberline {11.4.2}Method: disconnect}{28}{subsection.11.4.2}%
+\contentsline {chapter}{\numberline {12}utils.py}{29}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Class: Singleton}{29}{section.12.1}%
+\contentsline {section}{\numberline {12.2}Class: DictToClass}{29}{section.12.2}%
+\contentsline {section}{\numberline {12.3}Class: Utils}{29}{section.12.3}%
+\contentsline {subsection}{\numberline {12.3.1}Method: get\_all\_sub\_classes}{29}{subsection.12.3.1}%
+\contentsline {subsection}{\numberline {12.3.2}Method: is\_valid\_host}{30}{subsection.12.3.2}%
+\contentsline {subsection}{\numberline {12.3.3}Method: execute\_command}{30}{subsection.12.3.3}%
+\contentsline {subsection}{\numberline {12.3.4}Method: kill\_process}{30}{subsection.12.3.4}%
+\contentsline {subsection}{\numberline {12.3.5}Method: caller\_name}{30}{subsection.12.3.5}%
+\contentsline {subsection}{\numberline {12.3.6}Method: load\_library}{30}{subsection.12.3.6}%
+\contentsline {subsection}{\numberline {12.3.7}Method: is\_ascii\_or\_unicode}{30}{subsection.12.3.7}%
+\contentsline {section}{\numberline {12.4}Class: Job}{30}{section.12.4}%
+\contentsline {subsection}{\numberline {12.4.1}Method: stop}{30}{subsection.12.4.1}%
+\contentsline {subsection}{\numberline {12.4.2}Method: run}{30}{subsection.12.4.2}%
+\contentsline {section}{\numberline {12.5}Class: ResultType}{30}{section.12.5}%
+\contentsline {subsection}{\numberline {12.5.1}Method: get\_json}{31}{subsection.12.5.1}%
+\contentsline {subsection}{\numberline {12.5.2}Method: get\_data}{31}{subsection.12.5.2}%
+\contentsline {subsection}{\numberline {12.5.3}Method: create\_from\_string}{31}{subsection.12.5.3}%
+\contentsline {chapter}{\numberline {13}Appendix}{32}{chapter.13}%
+\contentsline {chapter}{\numberline {14}History}{33}{chapter.14}%

@@ -47,7 +47,7 @@ class InputParam(DictToClass):
 
 class ConnectParam(InputParam):
    """
-   Class for storing parameters for connect action.
+Class for storing parameters for connect action.
    """
    id = 0
    conn_name = 'default_conn'
@@ -65,7 +65,7 @@ class ConnectParam(InputParam):
 
 class SendCommandParam(InputParam):
    """
-   Class for storing parameters for send command action.
+Class for storing parameters for send command action.
    """
    conn_name = 'default_conn'
    command = ''
@@ -73,7 +73,7 @@ class SendCommandParam(InputParam):
 
 class VerifyParam(InputParam):
    """
-   Class for storing parameters for verify action.
+Class for storing parameters for verify action.
    """
    conn_name = 'default_conn'
    search_pattern = None
@@ -95,7 +95,7 @@ class ConnectionManager(Singleton):
 
    def __init__(self):
       """
-      Constructor for ConnectionManager class.
+Constructor for ConnectionManager class.
       """
       self.connection_manage_dict = {}
       main_lib_path = dirname(os.path.realpath(__file__))
@@ -125,18 +125,18 @@ class ConnectionManager(Singleton):
 
    def __del__(self):
       """
-      Destructor for ConnectionManager class.
+Destructor for ConnectionManager class.
 
-      Returns:
+**Returns:**
          None.
       """
       self.quit()
 
    def quit(self):
       """
-      Quit connection manager.
+Quit connection manager.
       
-      Returns:
+**Returns:**
          None.
       """
       for connection in self.connection_manage_dict.values():
@@ -145,14 +145,23 @@ class ConnectionManager(Singleton):
 
    def add_connection(self, name, conn):
       """
-      Add a connection to managed dictionary.
+Add a connection to managed dictionary.
       
-      Args:
-         name: connection's name.
-         
-         conn: connection object.
+**Arguments:**   
 
-      Returns:
+* ``name``   
+
+  / *Condition*: require / *Type*: str /
+
+  Connection's name.
+  
+* ``conn``   
+
+  / *Condition*: require / *Type*: socket.socket /
+
+  Connection object.
+
+**Returns:**
          None.
       """
       if name not in self.connection_manage_dict.keys():
@@ -160,12 +169,17 @@ class ConnectionManager(Singleton):
 
    def remove_connection(self, connection_name):
       """
-      Remove a connection by name.
+Remove a connection by name.
       
-      Args:
-         connection_name: connection name.
+**Arguments:**   
 
-      Returns:
+* ``connection_name``   
+
+  / *Condition*: require / *Type*: str /
+
+  Connection's name.
+
+**Returns:**
          None.
       """
       if connection_name in self.connection_manage_dict.keys():
@@ -174,13 +188,23 @@ class ConnectionManager(Singleton):
 
    def get_connection_by_name(self, connection_name):
       """
-      Get an exist connection by name.
+Get an exist connection by name.
       
-      Args:
-         connection_name: connection's name.
+**Arguments:**   
 
-      Returns:
-         Connection object.
+* ``connection_name``   
+
+  / *Condition*: require / *Type*: str /
+
+  Connection's name.
+
+**Returns:**
+
+* ``conn``
+
+  / *Type*: socket.socket /
+  
+  Connection object.
       """
       conn = None
       if connection_name in self.connection_manage_dict.keys():
@@ -190,12 +214,17 @@ class ConnectionManager(Singleton):
    @keyword
    def disconnect(self, connection_name):
       """
-      Keyword for disconnecting a connection by name.
+Keyword for disconnecting a connection by name.
       
-      Args:
-         connection_name: Name of connection.
+**Arguments:**   
 
-      Returns:
+* ``connection_name``   
+
+  / *Condition*: require / *Type*: str /
+
+  Connection's name.
+
+**Returns:**
          None.
       """
       if connection_name in self.connection_manage_dict.keys():
@@ -205,14 +234,23 @@ class ConnectionManager(Singleton):
    @keyword
    def connect(self, *args, **kwargs):
       """
-      Keyword for making a connection.
+Keyword for making a connection.
       
-      Args:
-         args:   Non-Keyword Arguments.
-		 
-         kwargs:   Keyword Arguments.
+**Arguments:**   
 
-      Returns:
+* ``args``    
+
+  / *Condition*: require / *Type*: tuple /
+
+  Non-Keyword Arguments.
+
+* ``kwargs``   
+
+  / *Condition*: require / *Type*: dict /
+
+  Keyword Arguments.
+
+**Returns:**
          None.
       """
       if len(args) > 0 and len(kwargs) > 0:
@@ -227,12 +265,17 @@ class ConnectionManager(Singleton):
 
    def connect_named_args(self, **kwargs):
       """
-      Making a connection with name arguments.
+Making a connection with name arguments.
       
-      Args:
-         kwargs: Dictionary of arguments.
+**Arguments:**   
 
-      Returns:
+  * ``kwargs``   
+
+  / *Condition*: require / *Type*: dict /
+  
+  Keyword Arguments.
+
+**Returns:**
          None.
       """
       org_args = ConnectParam.get_attr_list()
@@ -247,18 +290,35 @@ class ConnectionManager(Singleton):
 
    def connect_unnamed_args(self, connection_name, connection_type, mode, config):
       """
-      Making a connection.
+Making a connection.
       
-      Args:
-         connection_name: Name of connection.
-		 
-         connection_type: Type of connection.
-		 
-         mode: Connection mode.
-		 
-         config: Configuration for connection.
+**Arguments:**   
 
-      Returns:
+* ``connection_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Name of connection.
+
+* ``connection_type``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Type of connection.
+
+* ``mode``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Connection mode.
+
+* ``config``    
+
+  / *Condition*: optional / *Type*: json /
+  
+  Configuration for connection.
+
+**Returns:**
          None.
       """
       if connection_type not in self.supported_connection_classes_dict.keys():
@@ -286,14 +346,23 @@ class ConnectionManager(Singleton):
    @keyword
    def send_command(self, *args, **kwargs):
       """
-      Keyword for sending command to a connection.
+Keyword for sending command to a connection.
       
-      Args:
-         args:   Non-Keyword Arguments.
-		 
-         kwargs:   Keyword Arguments.
+**Arguments:**   
 
-      Returns:
+* ``args``    
+
+  / *Condition*: require / *Type*: tuple /
+
+  Non-Keyword Arguments.
+
+* ``kwargs``   
+
+  / *Condition*: require / *Type*: dict /
+
+  Keyword Arguments.
+
+**Returns:**
          None.
       """
       if len(args) > 0 and len(kwargs) > 0:
@@ -308,12 +377,17 @@ class ConnectionManager(Singleton):
 
    def send_command_named_args(self, **args):
       """
-      Send command to a connection with name arguments.
+Send command to a connection with name arguments.
       
-      Args:
-         args: Dictionary of arguments.
+**Arguments:**   
 
-      Returns:
+  * ``kwargs``   
+
+  / *Condition*: require / *Type*: dict /
+  
+  Keyword Arguments.
+
+**Returns:**
          None.
       """
       org_args = SendCommandParam.get_attr_list()
@@ -326,14 +400,23 @@ class ConnectionManager(Singleton):
 
    def send_command_unnamed_args(self, connection_name, command):
       """
-      Send command to a connection.
+Send command to a connection.
       
-      Args:
-         connection_name: connection's name.
-		 
-         command: command.
+**Arguments:**   
 
-      Returns:
+* ``connection_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Name of connection.
+
+* ``command``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Command to be sent.
+  
+**Returns:**
          None.
       """
       if connection_name not in self.connection_manage_dict.keys():
@@ -347,15 +430,29 @@ class ConnectionManager(Singleton):
    @keyword
    def verify(self, *args, **kwargs):
       """
-      Keyword uses to verify a pattern from connection response after sending a command.
+Keyword uses to verify a pattern from connection response after sending a command.
       
-      Args:
-         args:   Non-Keyword Arguments.
-		 
-         kwargs:   Keyword Arguments.
+**Arguments:**   
 
-      Returns:
-         match_res: matched string.
+* ``args``    
+
+  / *Condition*: require / *Type*: tuple /
+
+  Non-Keyword Arguments.
+
+* ``kwargs``   
+
+  / *Condition*: require / *Type*: dict /
+
+  Keyword Arguments.
+
+**Returns:**
+
+* ``match_res``
+
+  / *Type*: str /
+  
+  Matched string.
       """
       if len(args) > 0 and len(kwargs) > 0:
          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
@@ -369,13 +466,23 @@ class ConnectionManager(Singleton):
 
    def verify_named_args(self, **kwargs):
       """
-      Verify a pattern from connection response after sending a command with named arguments.
+Verify a pattern from connection response after sending a command with named arguments.
       
-      Args:
-         kwargs: Dictionary of arguments.
+**Arguments:**   
 
-      Returns:
-         match_res: matched string.
+* ``kwargs``   
+
+  / *Condition*: require / *Type*: dict /
+
+  Keyword Arguments.
+
+**Returns:**
+
+* ``match_res``
+
+  / *Type*: str /
+  
+  Matched string.
       """
       org_args = VerifyParam.get_attr_list()
       if set(kwargs.keys()).issubset(set(org_args)):
@@ -394,23 +501,58 @@ class ConnectionManager(Singleton):
       """
       Verify a pattern from connection response after sending a command.
       
-      Args:
-         connection_name: connection's name.
-		 
-         search_obj: search pattern.
-		 
-         timeout: timeout for waiting result.
-		 
-         fetch_block: use fetch block feature.
-		 
-         end_of_block_pattern: pattern for detecting the end of block.
-		 
-         filter_pattern: line filter pattern.
-		 
-         fct_args: command to be sent.
+**Arguments:**   
 
-      Returns:
-         match_res: matched string.
+* ``connection_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Name of connection.
+		 
+* ``search_obj``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Regular expression all received trace messages are compare to. 
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
+  
+* ``fetch_block``    
+
+  / *Condition*: optional / *Type*: bool /
+  
+  Determine if 'fetch block' feature is used.
+  
+* ``eob_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  The end of block pattern.  
+
+* ``filter_pattern``    
+
+  / *Condition*: optional / *Type*: str /
+  
+  Pattern to filter message line by line.
+  
+* ``timeout``    
+
+  / *Condition*: optional / *Type*: re.Pattern /
+  
+  Timeout parameter specified as a floating point number in the unit 'seconds'.
+  
+* ``fct_args``
+
+  / *Condition*: optional / *Type*: Tuple /
+  
+  List of function arguments passed to be sent.
+  
+**Returns:**
+
+* ``match_res``
+
+  / *Type*: str /
+  
+  Matched string.
       """
       if connection_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % connection_name)

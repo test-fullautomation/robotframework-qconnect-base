@@ -38,7 +38,7 @@ import threading
 
 class TCPConfig(DictToClass):
    """
-   Class to store configurations for TCP connection.
+Class to store configurations for TCP connection.
    """
    address = "localhost"
    port = 12345
@@ -46,7 +46,7 @@ class TCPConfig(DictToClass):
 
 class TCPBase(ConnectionBase, object):
    """
-   Base class for a tcp connection.
+Base class for a tcp connection.
    """
    RECV_MSGS_POLLING_INTERVAL = 0.005
    _socket_instance = 0
@@ -55,11 +55,21 @@ class TCPBase(ConnectionBase, object):
 
    def __init__(self, mode=None, config=None):
       """
-      Constructor for TCPBase class.
+Constructor for TCPBase class.
       
-      Args:
-         mode: TCP mode.
-         config: Configuration for TCP connection in dictionary format.
+**Arguments:**
+
+* ``mode``    
+
+  / *Condition*: required / *Type*: str /
+  
+  TCP mode.
+  
+* ``config``    
+
+  / *Condition*: required / *Type*: dict /
+  
+  Configuration for TCP connection in dictionary format.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       self.config = TCPConfig(**config)
@@ -95,9 +105,9 @@ class TCPBase(ConnectionBase, object):
 
    def __del__(self):
       """
-      Destructor for TCPBase class.
+Destructor for TCPBase class.
       
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -106,14 +116,15 @@ class TCPBase(ConnectionBase, object):
 
    def _send(self, msg, cr=True):
       """
-      >> Should be override in derived class.
-      Actual method to send message to a tcp connection.
+>> Should be override in derived class.
+
+Actual method to send message to a tcp connection.
       
-      Args:
+**Arguments:**   
          msg: Message to be sent.
          cr: Determine if it's necessary to add newline character at the end of command.
 
-      Returns:
+**Returns:**
          None
       """
       pass
@@ -123,7 +134,7 @@ class TCPBase(ConnectionBase, object):
       >> Should be override in derived class.
       Actual method to read message from a tcp connection.
       
-      Returns:
+**Returns:**
          Empty string.
       """
       return ''
@@ -132,7 +143,7 @@ class TCPBase(ConnectionBase, object):
       """
       Close connection.
       
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -166,7 +177,7 @@ class TCPBase(ConnectionBase, object):
       """
       Get connection timeout value.
       
-      Returns:
+**Returns:**
          Value of connection timeout.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -177,10 +188,10 @@ class TCPBase(ConnectionBase, object):
       """
       Set the connection timeout.
       
-      Args:
+**Arguments:**   
          timeout: timeout value in second.
 
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -190,21 +201,21 @@ class TCPBase(ConnectionBase, object):
 
    def _get_conn_timeout(self):
       """
-      Get connection timeout.
+Get connection timeout.
       
-      Returns:
+**Returns:**
          Connection timeout.
       """
       return self._conn_timeout
 
    def _set_conn_timeout(self, timeout):
       """
-      Set connection timeout.
+Set connection timeout.
       
-      Args:
+**Arguments:**   
          timeout: Timeout in second.
 
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -218,7 +229,7 @@ class TCPBase(ConnectionBase, object):
       """
       Get connection address.
       
-      Returns:
+**Returns:**
          Connection address.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -227,12 +238,12 @@ class TCPBase(ConnectionBase, object):
 
    def _set_address(self, address):
       """
-      Set connection address.
+Set connection address.
       
-      Args:
+**Arguments:**   
          address: Address of connection.
 
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -241,9 +252,9 @@ class TCPBase(ConnectionBase, object):
 
    def _get_port(self):
       """
-      Get connection port.
+Get connection port.
       
-      Returns:
+**Returns:**
          Connection port.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -252,12 +263,12 @@ class TCPBase(ConnectionBase, object):
 
    def _set_port(self, port):
       """
-      Set connection port.
+Set connection port.
       
-      Args:
+**Arguments:**   
          port: port number.
 
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -266,9 +277,9 @@ class TCPBase(ConnectionBase, object):
 
    def _is_connected(self):
       """
-      Get connected state.
+Get connected state.
       
-      Returns:
+**Returns:**
          True if connection is connected.
          False if connection is not connected.
       """
@@ -280,7 +291,7 @@ class TCPBase(ConnectionBase, object):
       """
       Get method of socket_instance property.
       
-      Returns:
+**Returns:**
          Value of _socket_instance.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -299,32 +310,34 @@ class TCPBase(ConnectionBase, object):
 
    def quit(self, is_disconnect_all=True):
       """
-      Quit connection.
+Quit connection.
       
-      Args:
+**Arguments:**   
          is_disconnect_all: Determine if it's necessary for disconnect all connection.
 
-      Returns:
+**Returns:**
          None.
       """
       super(TCPBase, self).quit()
 
    def connect(self):
       """
-      >> Should be override in derived class.
-      Establish the connection.
+>> Should be override in derived class.
+
+Establish the connection.
       
-      Returns:
+**Returns:**
          None.
       """
       pass
 
    def disconnect(self, device):
       """
-      >> Should be override in derived class.
-      Disconnect the connection.
+>> Should be override in derived class.
+
+Disconnect the connection.
       
-      Returns:
+**Returns:**
          None.
       """
       super(TCPBase, self).disconnect()
@@ -332,7 +345,7 @@ class TCPBase(ConnectionBase, object):
 
 class TCPBaseServer:
    """
-   Base class for TCP server.
+Base class for TCP server.
    """
    def _bind(self):
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -342,9 +355,9 @@ class TCPBaseServer:
 
    def _listen(self):
       """
-      Listen for client socket.
+Listen for client socket.
       
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -353,9 +366,9 @@ class TCPBaseServer:
 
    def _accept(self):
       """
-      Method for handling socket accept action.
+Method for handling socket accept action.
       
-      Returns:
+**Returns:**
          conn: TCP connection socket object.
          addr: The address bound to the socket on the other end of the connection.
       """
@@ -371,9 +384,9 @@ class TCPBaseServer:
 
    def accept_connection(self):
       """
-      Wrapper method for handling accept action of TCP Server.
+Wrapper method for handling accept action of TCP Server.
       
-      Returns:
+**Returns:**
          None.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -395,7 +408,7 @@ class TCPBaseServer:
 
 class TCPBaseClient:
    """
-   Base class for TCP client.
+Base class for TCP client.
    """
    def connect(self):
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)

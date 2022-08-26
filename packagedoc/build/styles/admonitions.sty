@@ -1,0 +1,160 @@
+% --------------------------------------------------------------------------------------------------------------
+%
+% Copyright 2020-2022 Robert Bosch GmbH
+
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+
+% http://www.apache.org/licenses/LICENSE-2.0
+
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+%
+% --------------------------------------------------------------------------------------------------------------
+%
+% admonitions.sty
+%
+% Defines the following admonitions, based on 'tcolorbox':
+% - boxwarning
+% - boxerror
+% - boxgoodpractice
+% - boxhint
+% - boxtip
+%
+% 29.06.2022
+%
+% --------------------------------------------------------------------------------------------------------------
+
+\usepackage[breakable,skins]{tcolorbox}
+\tcbuselibrary{skins}
+\tcbuselibrary{breakable}
+\usepackage{wasysym} % to enable certain symbols in text mode
+
+\newtcolorbox{boxwarning_template}[1][]{
+  enhanced,
+  before skip=2mm,
+  after skip=3mm,
+  boxrule=2pt,
+  left=12mm,
+  right=2mm,
+  top=1mm,
+  bottom=1mm,
+  colback=red!10,
+  colframe=red!70!white,
+  underlay={%
+    \path[fill=red!70!white,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries \frownie} ([xshift=10mm]interior.north west);
+    },
+   , #1}
+
+\newenvironment{boxwarning}[1]
+{\begin{boxwarning_template}
+{\color{red} \textbf{#1}}
+\vspace{5pt}
+\\
+}{\end{boxwarning_template}}
+
+% --------------------------------------------------------------------------------------------------------------
+
+\newtcolorbox{boxerror_template}[1][]{
+  enhanced,
+  before skip=2mm,
+  after skip=3mm,
+  boxrule=2pt,
+  left=12mm,
+  right=2mm,
+  top=1mm,
+  bottom=1mm,
+  colback=red!30,
+  colframe=red!90!white,
+  underlay={%
+    \path[fill=red!90!white,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries \lightning} ([xshift=10mm]interior.north west);
+    },
+   , #1}
+
+\newenvironment{boxerror}[1]
+{\begin{boxerror_template}
+{\color{red} \textbf{#1}}
+\vspace{5pt}
+\\
+}{\end{boxerror_template}}
+
+% --------------------------------------------------------------------------------------------------------------
+
+\newtcolorbox{boxgoodpractice_template}[1][]{
+  enhanced,
+  before skip=2mm,
+  after skip=3mm,
+  boxrule=2pt,
+  left=12mm,
+  right=2mm,
+  top=1mm,
+  bottom=1mm,
+  colback=green!10,
+  colframe=green!60!black,
+  underlay={%
+    \path[fill=green!60!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries \checkmark} ([xshift=10mm]interior.north west);
+    },
+   , #1}
+
+\newenvironment{boxgoodpractice}[1]
+{\begin{boxgoodpractice_template}
+{\color{green!60!black} \textbf{#1}}
+\vspace{5pt}
+\\
+}{\end{boxgoodpractice_template}}
+
+% --------------------------------------------------------------------------------------------------------------
+
+\newtcolorbox{boxhint_template}[1][]{
+  enhanced,
+  before skip=2mm,
+  after skip=3mm,
+  boxrule=2pt,
+  left=12mm,
+  right=2mm,
+  top=1mm,
+  bottom=1mm,
+  colback=orange!10,
+  colframe=orange!80!white,
+  underlay={%
+    \path[fill=orange!80!white,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=10mm]interior.north west);
+    },
+   , #1}
+
+\newenvironment{boxhint}[1]
+{\begin{boxhint_template}
+{\color{orange!80!white} \textbf{#1}}
+\vspace{5pt}
+\\
+}{\end{boxhint_template}}
+
+% --------------------------------------------------------------------------------------------------------------
+
+\newtcolorbox{boxtip_template}[1][]{
+  enhanced,
+  before skip=2mm,
+  after skip=3mm,
+  boxrule=2pt,
+  left=12mm,
+  right=2mm,
+  top=1mm,
+  bottom=1mm,
+  colback=blue!10,
+  colframe=blue!70!white,
+  underlay={%
+    \path[fill=blue!70!white,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries \smiley} ([xshift=10mm]interior.north west);
+    },
+   , #1}
+
+\newenvironment{boxtip}[1]
+{\begin{boxtip_template}
+{\color{blue!70!white} \textbf{#1}}
+\vspace{5pt}
+\\
+}{\end{boxtip_template}}
+
+% --------------------------------------------------------------------------------------------------------------

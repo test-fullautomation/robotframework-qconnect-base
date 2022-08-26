@@ -1,0 +1,375 @@
+% --------------------------------------------------------------------------------------------------------------
+%
+% Copyright 2020-2022 Robert Bosch GmbH
+
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+
+% http://www.apache.org/licenses/LICENSE-2.0
+
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+%
+% --------------------------------------------------------------------------------------------------------------
+%
+% robotframeworkaio.sty
+%
+% includes:
+% - RobotFramework AIO code and console listings
+% - Python for RobotFramework AIO code
+%
+% 22.08.2022
+%
+% --------------------------------------------------------------------------------------------------------------
+
+\usepackage{listings}
+\usepackage{expl3,xparse}
+
+% ----------------------------------------------------------------------- %
+%
+% framework names
+%
+\newcommand{\rfwcore}{Robot Framework}
+\newcommand{\rfw}{RobotFramework AIO}
+% ----------------------------------------------------------------------- %
+
+
+% ----------------------------------------------------------------------- %
+
+% !!! TODO: After switching von MiKTeX to Texlive it should be checked if the following fix is still needed !!!
+
+%lstlinebgrd needs this fix to run with current listings version provided by MiKTeX
+\makeatletter
+\let\old@lstKV@SwitchCases\lstKV@SwitchCases
+\def\lstKV@SwitchCases#1#2#3{}
+\makeatother
+\usepackage{lstlinebgrd}
+\makeatletter
+\let\lstKV@SwitchCases\old@lstKV@SwitchCases
+
+\lst@Key{numbers}{none}{%
+    \def\lst@PlaceNumber{\lst@linebgrd}%
+    \lstKV@SwitchCases{#1}%
+    {none:\\%
+     left:\def\lst@PlaceNumber{\llap{\normalfont
+                \lst@numberstyle{\thelstnumber}\kern\lst@numbersep}\lst@linebgrd}\\%
+     right:\def\lst@PlaceNumber{\rlap{\normalfont
+                \kern\linewidth \kern\lst@numbersep
+                \lst@numberstyle{\thelstnumber}}\lst@linebgrd}%
+    }{\PackageError{Listings}{Numbers #1 unknown}\@ehc}}
+\makeatother
+% ----------------------------------------------------------------------- %
+
+%
+%  style definitions for Robot syntax description boxes
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%
+% style definitions for interface descriptions
+%
+
+\definecolor{col_section}{RGB}{255,0,0}
+\definecolor{col_syntax}{RGB}{128,0,128}
+\definecolor{col_flowcontrol}{RGB}{165,42,42}
+\definecolor{col_builtin_kw}{RGB}{0,0,255}
+\definecolor{col_user_kw}{RGB}{0,0,255}
+\definecolor{col_test_task}{RGB}{0,0,0}
+\definecolor{col_robot_var}{RGB}{0,100,0}
+\definecolor{col_string}{RGB}{255,0,0}
+\definecolor{col_comment}{RGB}{128,128,128}
+\definecolor{col_argument}{RGB}{128,0,128}
+
+\newcommand{\ifsection}[1]{\textnormal{\textcolor{col_section}{#1}}}
+\newcommand{\ifsyntax}[1]{\textnormal{\textcolor{col_syntax}{#1}}}
+\newcommand{\ifflowcontrol}[1]{\textnormal{\textcolor{col_flowcontrol}{#1}}}
+\newcommand{\ifbuiltinkeyword}[1]{\textnormal{\textcolor{col_builtin_kw}{#1}}}
+\newcommand{\ifuserkeyword}[1]{\textbf{\textcolor{col_user_kw}{#1}}}
+\newcommand{\iftesttask}[1]{\textbf{\textcolor{col_test_task}{#1}}}
+\newcommand{\ifvar}[1]{\textnormal{\textcolor{col_robot_var}{#1}}}
+\newcommand{\ifstring}[1]{\textnormal{\textcolor{col_string}{#1}}}
+\newcommand{\ifcomment}[1]{\textnormal{\textcolor{col_comment}{#1}}}
+\newcommand{\ifargument}[1]{\textnormal{\textcolor{col_argument}{#1}}}
+
+%distance from left side if attribute can have many values which don't
+%fit in one line
+\newcommand{\ifs}[0]{\rule{1.21em}{0em}}
+
+\newtcolorbox{boxsyn_template}[1][]{
+  enhanced,
+  before skip=2mm,
+  after skip=3mm,
+  boxrule=2pt,
+  left=12mm,
+  right=2mm,
+  top=1mm,
+  bottom=1mm,
+  colback=black!1,
+  colframe=black!30!white,
+  breakable,
+   }
+  
+  
+\NewDocumentEnvironment{boxsyn}{ m }
+{
+\begin{boxsyn_template}
+{\color{black!30!white} Robot Syntax}
+\ttfamily #1
+\end{boxsyn_template}
+}
+
+%
+%  style definitions for Robot code listings and log listings
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{color_code_background}{RGB}{255, 239, 222}
+\definecolor{color_code_frame}{RGB}{255, 222, 189}
+\definecolor{color_code_highlight}{RGB}{255, 222, 189}
+
+\definecolor{color_log_background}{RGB}{222, 231, 247}
+\definecolor{color_log_frame}{RGB}{189, 206, 231}
+\definecolor{color_log_highlight}{RGB}{189, 206, 231}
+
+%
+%  \hlcode command and \hllog command
+%  for highlighting specific lines in code and log listings
+%
+\ExplSyntaxOn
+\NewDocumentCommand \hlcode { O{color_code_highlight} O{color_code_background } m }
+{
+ \clist_if_in:nVTF { #3 } { \the\value{lstnumber} }{ \color{#1} }{ \color{#2}  }
+}
+
+\NewDocumentCommand \hllog { O{color_log_highlight} O{color_log_background } m }
+{
+ \clist_if_in:nVTF { #3 } { \the\value{lstnumber} }{ \color{#1} }{ \color{#2}  }
+}
+\ExplSyntaxOff
+
+
+%
+% inline comment layout for code listings
+%
+\newcommand{\inlinecomment}[1]{\color{col_comment}\normalfont$\langle$\textit{#1}$\rangle$}
+
+
+%
+% environment for robot code listings
+%
+\lstdefinelanguage{Robot_code}{
+      alsoletter={-,[,],{,},$,@,\%},
+      basicstyle=\ttfamily\small,
+      columns=fixed,
+      showstringspaces=false,
+      frame=single,
+      framesep=5pt,
+      breaklines=true,
+      breakatwhitespace=true,
+      prebreak=\mbox{\textcolor{Red}{$\hookleftarrow$}\space},
+      postbreak=\mbox{\textcolor{ForestGreen}{$\hookrightarrow$}\space},
+      escapeinside={<}{>},
+      captionpos=b,
+      keywords={
+         Library,
+         Resource,
+         Variables,
+         Metadata,
+         Test,
+         Suite,
+         Setup,
+         Teardown,
+         },%keywords with spaces can not be defined in keywords
+      morekeywords=[1]{
+         \[Documentation],
+         [Tags],[Arguments],
+         [Return],[Teardown],
+         [Precondition],
+         [Postcondition],
+         [Template],
+         [Timeout],
+         [Return]},
+      morekeywords=[2]{
+         Given,
+         When,
+         And,
+         Then,
+         FOR,
+         WITH,
+         NAME,
+         IN,
+         RANGE,
+         END,
+         CONTINUE,
+      },
+      keywordstyle=\color{cyan},
+      keywordstyle=[1]\color{col_syntax},
+      keywordstyle=[2]\color{col_flowcontrol},
+      comment=[l][\color{col_comment}]{\#},
+      commentstyle=\color{col_comment}\upshape,
+      moredelim=[s][\color{col_section}]{***}{***},
+      moredelim=[s][\color{ForestGreen}]{$\{}{\}},
+      moredelim=[s][\color{ForestGreen}]{@\{}{\}},
+      moredelim=[s][\color{ForestGreen}]{\%\{}{\}},
+      morestring=*[b]{"},
+      morestring=[s][\color{gray}]{<}{>},
+      stringstyle=\color{red},
+      identifierstyle=\color{blue},
+      rulesepcolor=\color{color_code_frame},
+      rulecolor=\color{color_code_frame},
+      backgroundcolor=\color{color_code_background},
+      columns=fixed,
+      keepspaces=true,
+      abovecaptionskip=15pt
+}
+
+
+\lstnewenvironment{robotcode}[1][]{%
+   \lstset{%
+      xleftmargin=5pt,
+      xrightmargin=5pt,
+      alsolanguage=Robot_code,
+      #1
+   }
+}{}
+
+\newcommand{\rcode}[1]{
+   \efbox[margin=2pt,
+         linewidth=1pt,
+         linecolor=color_code_frame,
+         backgroundcolor=color_code_background,
+         font=\ttfamily\small]{\lstinline[language=Robot_code]!#1!}
+}
+
+%
+% environment for robot log listings
+%
+\lstdefinelanguage{Robot_log}{
+      alsoletter=-,
+      basicstyle=\ttfamily\small,
+      columns=fixed,
+      showstringspaces=false,
+      commentstyle=\color{gray}\upshape,
+      frame=single,
+      framesep=5pt,
+      breaklines=true,
+      breakatwhitespace=true,
+      prebreak=\mbox{\textcolor{Red}{$\hookleftarrow$}\space},
+      postbreak=\mbox{\textcolor{ForestGreen}{$\hookrightarrow$}\space},
+      escapeinside={<}{>},
+      captionpos=b,
+      moredelim=[is][\bfseries]{[*}{*]},
+      morestring=[m][\color{red}]{'},
+      morestring=[m][\color{red}]{"},
+      stringstyle=\color{red},
+      identifierstyle=\color{black},
+      keywordstyle=\color{darkblue},   
+      morekeywords=[1]{PASS, passed},
+      morekeywords=[2]{FAIL, failed},
+      keywordstyle=[1]\color{ForestGreen},
+      keywordstyle=[2]\color{red},
+      rulesepcolor=\color{color_log_frame},
+      rulecolor=\color{color_log_frame},
+      backgroundcolor=\color{color_log_background},
+      columns=fixed,
+      keepspaces=true,
+      abovecaptionskip=15pt
+}
+
+\lstnewenvironment{robotlog}[1][]{%
+   \lstset{%
+      xleftmargin=5pt,
+      xrightmargin=5pt,
+      alsolanguage=Robot_log,
+      #1
+   }
+}{}
+
+\newcommand{\rlog}[1]{
+   \efbox[margin=2pt,
+         linewidth=1pt,
+         linecolor=color_log_frame,
+         backgroundcolor=color_log_background,
+         font=\ttfamily\small]{\lstinline[language=Robot_log]!#1!}
+}
+
+
+
+\newcommand{\ifalignrcode}{\hspace{2pt}}
+\newcommand{\iftab}{\phantom{x}\hspace{3ex}}
+\newcommand{\ifunknown}[1]{\textcolor{blue}{#1}}
+\newcommand{\ifaborted}[1]{\textcolor{gray}{#1}}
+\newcommand{\ifpassed}[1]{\textcolor{ForestGreen}{#1}}
+\newcommand{\iffailed}[1]{\textcolor{red}{#1}}
+\newcommand{\ifnotice}[1]{\textbf{\textcolor{red}{#1}}}
+\usepackage{multirow}
+
+% use for flowchart drawing
+\usetikzlibrary{shapes.geometric, arrows}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=0.8cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=0.8cm, text centered, draw=black, fill=blue!30, text width=3cm]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=0.8cm, text centered, draw=black, fill=orange!30, text width=4cm]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30, text width=5cm, inner sep=-5pt, aspect=4]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+
+%
+% environment for Python code listings
+%
+\lstdefinelanguage{Python_code}{
+      basicstyle=\ttfamily\small,
+      columns=fixed,
+      showstringspaces=false,
+      frame=single,
+      framesep=5pt,
+      breaklines=true,
+      breakatwhitespace=true,
+      keepspaces=true,
+      abovecaptionskip=15pt,
+      captionpos=b,
+      prebreak=\mbox{\textcolor{Red}{$\hookleftarrow$}\space},
+      postbreak=\mbox{\textcolor{ForestGreen}{$\hookrightarrow$}\space},
+      escapeinside={<}{>},
+      alsoletter={@},
+      keywords={
+                  and, as, assert, async, await, break, class, continue, def, del, elif, else, except, False, finally,
+                  for, from, global, if, import, in, is, lambda, None, nonlocal, not, or, pass, raise, return, self,
+                  True, try, while, with, yield,
+                  __init__, __del__,
+                  @library, @keyword, @not_keyword
+               },%keywords with spaces can not be defined in keywords
+      keywordstyle=\color{ForestGreen},
+      comment=[l][\color{col_comment}]{\#},
+      commentstyle=\color{col_comment}\upshape,
+      morestring=[b][\color{red}]{"},
+      morestring=[b][\color{red}]{'},
+      stringstyle=\color{red},
+      identifierstyle=\color{blue},
+      rulesepcolor=\color{color_code_frame},
+      rulecolor=\color{color_code_frame},
+      backgroundcolor=\color{color_code_background}
+}
+
+\lstnewenvironment{pythoncode}[1][]{%
+   \lstset{%
+      xleftmargin=5pt,
+      xrightmargin=5pt,
+      alsolanguage=Python_code,
+      #1
+   }
+}{}
+
+\newcommand{\pcode}[1]{
+   \efbox[margin=2pt,
+         linewidth=1pt,
+         linecolor=color_code_frame,
+         backgroundcolor=color_code_background,
+         font=\ttfamily\small]{\lstinline[language=Python_code]!#1!}
+}
+
+
+
