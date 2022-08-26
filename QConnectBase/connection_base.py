@@ -490,16 +490,13 @@ Suspend the control flow until a Trace message is received which matches to a sp
 
 **Returns:**
 
-* ``abc``
+* ``match``
 
   / *Type*: re.Match /
   
   If no trace message matched to the specified regular expression and a timeout occurred.
   
-  If a trace message has matched to the specified regular expression, a match object is returned as the result.\
-                    The complete trace message can be accessed by the 'string' attribute of the match object.\
-                    For access to groups within the regular expression, use the group() method.\
-                    For more information, refer to Python documentation for module 're'.\
+  If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -566,10 +563,9 @@ Getting trace log continuously without creating a new trace queue.
 
   / *Type*: re.Match /
   
-  If a trace message has matched to the specified regular expression, a match object is returned as the result.\
-                    The complete trace message can be accessed by the 'string' attribute of the match object.\
-                    For access to groups within the regular expression, use the group() method.\
-                    For more information, refer to Python documentation for module 're'.\
+  If no trace message matched to the specified regular expression and a timeout occurred.
+  
+  If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
