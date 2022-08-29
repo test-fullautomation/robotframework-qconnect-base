@@ -86,7 +86,7 @@ Class for storing parameters for verify action.
 
 class ConnectionManager(Singleton):
    """
-   Class to manage all connections.
+Class to manage all connections.
    """
    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
    ROBOT_AUTO_KEYWORDS = False
@@ -137,7 +137,8 @@ Destructor for ConnectionManager class.
 Quit connection manager.
       
 **Returns:**
-         None.
+
+(*no returns*)
       """
       for connection in self.connection_manage_dict.values():
          connection.quit()
@@ -151,18 +152,19 @@ Add a connection to managed dictionary.
 
 * ``name``   
 
-  / *Condition*: require / *Type*: str /
+  / *Condition*: required / *Type*: str /
 
   Connection's name.
   
 * ``conn``   
 
-  / *Condition*: require / *Type*: socket.socket /
+  / *Condition*: required / *Type*: socket.socket /
 
   Connection object.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       if name not in self.connection_manage_dict.keys():
          self.connection_manage_dict[name] = conn
@@ -175,12 +177,13 @@ Remove a connection by name.
 
 * ``connection_name``   
 
-  / *Condition*: require / *Type*: str /
+  / *Condition*: required / *Type*: str /
 
   Connection's name.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       if connection_name in self.connection_manage_dict.keys():
          del self.connection_manage_dict[connection_name]
@@ -194,7 +197,7 @@ Get an exist connection by name.
 
 * ``connection_name``   
 
-  / *Condition*: require / *Type*: str /
+  / *Condition*: required / *Type*: str /
 
   Connection's name.
 
@@ -220,12 +223,13 @@ Keyword for disconnecting a connection by name.
 
 * ``connection_name``   
 
-  / *Condition*: require / *Type*: str /
+  / *Condition*: required / *Type*: str /
 
   Connection's name.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       if connection_name in self.connection_manage_dict.keys():
          self.connection_manage_dict[connection_name].quit()
@@ -240,18 +244,19 @@ Keyword for making a connection.
 
 * ``args``    
 
-  / *Condition*: require / *Type*: tuple /
+  / *Condition*: required / *Type*: tuple /
 
   Non-Keyword Arguments.
 
 * ``kwargs``   
 
-  / *Condition*: require / *Type*: dict /
+  / *Condition*: required / *Type*: dict /
 
   Keyword Arguments.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       if len(args) > 0 and len(kwargs) > 0:
          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
@@ -271,12 +276,13 @@ Making a connection with name arguments.
 
   * ``kwargs``   
 
-  / *Condition*: require / *Type*: dict /
+  / *Condition*: required / *Type*: dict /
   
   Keyword Arguments.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       org_args = ConnectParam.get_attr_list()
       if set(kwargs.keys()).issubset(set(org_args)):
@@ -302,24 +308,25 @@ Making a connection.
 
 * ``connection_type``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Type of connection.
 
 * ``mode``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Connection mode.
 
 * ``config``    
 
-  / *Condition*: optional / *Type*: json /
+  / *Condition*: required / *Type*: json /
   
   Configuration for connection.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       if connection_type not in self.supported_connection_classes_dict.keys():
          raise AssertionError("The '%s' connection type hasn't been supported" % connection_type)
@@ -363,7 +370,8 @@ Keyword for sending command to a connection.
   Keyword Arguments.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       if len(args) > 0 and len(kwargs) > 0:
          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
@@ -383,12 +391,13 @@ Send command to a connection with name arguments.
 
   * ``kwargs``   
 
-  / *Condition*: require / *Type*: dict /
+  / *Condition*: required / *Type*: dict /
   
   Keyword Arguments.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       org_args = SendCommandParam.get_attr_list()
       if set(args.keys()).issubset(set(org_args)):
@@ -412,12 +421,13 @@ Send command to a connection.
 
 * ``command``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Command to be sent.
   
 **Returns:**
-         None.
+
+(*no returns*)
       """
       if connection_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % connection_name)
@@ -436,13 +446,13 @@ Keyword uses to verify a pattern from connection response after sending a comman
 
 * ``args``    
 
-  / *Condition*: require / *Type*: tuple /
+  / *Condition*: required / *Type*: tuple /
 
   Non-Keyword Arguments.
 
 * ``kwargs``   
 
-  / *Condition*: require / *Type*: dict /
+  / *Condition*: required / *Type*: dict /
 
   Keyword Arguments.
 
@@ -472,7 +482,7 @@ Verify a pattern from connection response after sending a command with named arg
 
 * ``kwargs``   
 
-  / *Condition*: require / *Type*: dict /
+  / *Condition*: required / *Type*: dict /
 
   Keyword Arguments.
 
@@ -511,38 +521,38 @@ Verify a pattern from connection response after sending a command with named arg
 		 
 * ``search_obj``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Regular expression all received trace messages are compare to. 
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
   
 * ``fetch_block``    
 
-  / *Condition*: optional / *Type*: bool /
+  / *Condition*: optional / *Type*: bool / *Default*: False /
   
   Determine if 'fetch block' feature is used.
   
 * ``eob_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: '.*' /
   
   The end of block pattern.  
 
 * ``filter_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: '.*' /
   
   Pattern to filter message line by line.
   
 * ``timeout``    
 
-  / *Condition*: optional / *Type*: re.Pattern /
+  / *Condition*: optional / *Type*: float / *Default*: 0 /
   
   Timeout parameter specified as a floating point number in the unit 'seconds'.
   
 * ``fct_args``
 
-  / *Condition*: optional / *Type*: Tuple /
+  / *Condition*: optional / *Type*: Tuple / *Default*: None /
   
   List of function arguments passed to be sent.
   

@@ -60,7 +60,7 @@ Set the color format for the log.
 
 * ``record``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Log record.
 
@@ -81,9 +81,24 @@ Handler class for user defined file in config.
 Constructor for QFileHandler class.
       
 **Arguments:**   
-         config: connection configurations.
-         _logger_name: unused.
-         formatter: log's formatter.
+
+* ``config``    
+
+  / *Condition*: required / *Type*: DictToClass /
+  
+  Connection configurations.
+  
+* ``_logger_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Unused.
+  
+* ``formatter``    
+
+  / *Condition*: required / *Type*: ColorFormatter /
+  
+  Log's formatter.
       """
       path = self.get_log_path(config)
       super(QFileHandler, self).__init__(path)
@@ -103,7 +118,8 @@ Get the log file path for this handler.
   Connection configurations.
 
 **Returns:**
-         Log file path.
+
+*Log file path.*
       """
       out_dir = BuiltIn()._context.output._settings.output_directory
       dir_log = os.path.dirname(config.logfile)
@@ -166,7 +182,7 @@ Constructor for QDefaultFileHandler class.
 
 **Returns:**
 
-    None.
+(*no returns*)
       """
       path = self.get_log_path(logger_name)
       super(QDefaultFileHandler, self).__init__(path, mode='w')
@@ -243,7 +259,7 @@ Constructor for QDefaultFileHandler class.
   
 **Returns:**
 
-    None.
+(*no returns*)
       """
       super(QConsoleHandler, self).__init__()
       self.setFormatter(ColorFormatter())

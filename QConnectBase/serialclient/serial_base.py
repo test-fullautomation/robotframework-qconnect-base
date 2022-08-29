@@ -41,7 +41,7 @@ import queue
 
 class SerialConfig(DictToClass):
    """
-   Class to store the configuration for Serial connection.
+Class to store the configuration for Serial connection.
    """
    port = 'COM1'
    baudrate = 115200
@@ -54,7 +54,7 @@ class SerialConfig(DictToClass):
 
 class SerialSocket(ConnectionBase):
    """
-   Class for handling serial connection.
+Class for handling serial connection.
    """
    _CONNECTION_TYPE = "SERLL-"
    _socket_instance = 0

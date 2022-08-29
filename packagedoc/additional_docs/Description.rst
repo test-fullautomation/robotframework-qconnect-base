@@ -14,25 +14,6 @@
 
 *QConnectBase*
 
-Table of Contents
------------------
-
--  `Getting Started <#getting-started>`__
--  `Usage <#building-and-testing>`__
--  `Example <#example>`__
--  `Contribution Guidelines <#contribution-guidelines>`__
--  `Configure Git and correct EOL
-   handling <#configure-Git-and-correct-EOL-handling>`__
--  `Sourcecode Documentation <#documentation>`__
--  `Feedback <#feedback>`__
--  `About <#about>`__
-
-   -  `Maintainers <#maintainers>`__
-   -  `Contributors <#contributors>`__
-   -  `3rd Party Licenses <#3rd-party-licenses>`__
-   -  `Used Encryption <#used-encryption>`__
-   -  `License <#license>`__
-
 Getting Started
 ---------------
 
@@ -150,11 +131,13 @@ QConnectBase Library support following keywords for testing connection in RobotF
 
    **send command**
    ``conn_name=[conn_name]   command=[command]`` *(All parameters are
-   assigned by name)* ##### *Arguments*:
+   assigned by name)* 
+   
+  **Arguments**:
 
--  **conn_name**: Name of the connection.
+   **conn_name**: Name of the connection.
 
--  **command**: Command to be sent.
+   **command**: Command to be sent.
 
 **verify**
 ~~~~~~~~~~
