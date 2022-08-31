@@ -242,6 +242,8 @@ Keyword for making a connection.
       
 **Arguments:**   
 
+(*refer to connect_unnamed_args method for details*)
+
 * ``args``    
 
   / *Condition*: required / *Type*: tuple /
@@ -273,6 +275,8 @@ Keyword for making a connection.
 Making a connection with name arguments.
       
 **Arguments:**   
+
+(*refer to connect_unnamed_args method for details*)
 
   * ``kwargs``   
 
@@ -357,6 +361,8 @@ Keyword for sending command to a connection.
       
 **Arguments:**   
 
+(*refer to send_unnamed_args method for details*)
+
 * ``args``    
 
   / *Condition*: require / *Type*: tuple /
@@ -388,6 +394,8 @@ Keyword for sending command to a connection.
 Send command to a connection with name arguments.
       
 **Arguments:**   
+
+(*refer to send_unnamed_args method for details*)
 
   * ``kwargs``   
 
@@ -444,6 +452,8 @@ Keyword uses to verify a pattern from connection response after sending a comman
       
 **Arguments:**   
 
+(*refer to verify_unnamed_args method for details*)
+
 * ``args``    
 
   / *Condition*: required / *Type*: tuple /
@@ -479,6 +489,8 @@ Keyword uses to verify a pattern from connection response after sending a comman
 Verify a pattern from connection response after sending a command with named arguments.
       
 **Arguments:**   
+
+(*refer to verify_unnamed_args method for details*)
 
 * ``kwargs``   
 
