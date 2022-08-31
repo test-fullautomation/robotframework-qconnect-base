@@ -62,7 +62,7 @@ class Singleton(object):  # pylint: disable=R0903
 
 class DictToClass:
    """
-   Class for converting dictionary to class object.
+Class for converting dictionary to class object.
    """
    exclude_list = []
    logfile = None
@@ -89,14 +89,14 @@ class DictToClass:
 
 class Utils:
    """
-   Class to implement utilities for supporting development.
+Class to implement utilities for supporting development.
    """
    LINUX_OS = "linux"
    WINDOWS_OS = "windows"
 
    def __init__(self):
       """
-      Empty constructor.
+Empty constructor.
       """
       pass
 
@@ -109,7 +109,10 @@ Get all descendant classes of a class
          cls: Input class for finding descendants.
 
 **Returns:**
-         Array of descendant classes.
+
+  / *Type*: list /
+  
+  Array of descendant classes.
       """
       trace_class_list = cls.__subclasses__()
       descendant_classes_list = []
@@ -133,7 +136,10 @@ Get all children classes of a class
   Input class for finding children.
 
 **Returns:**
-         Array of children classes.
+
+  / *Type*: list /
+  
+  Array of children classes.
       """
       return set(cls.__subclasses__()).union(
          [s for s in cls.__subclasses__()])
@@ -186,7 +192,10 @@ Get a name of a caller in the format module.class.method
          name. skip=1 means "who calls me", skip=2 "who calls my caller" etc.
          
 **Returns:**
-         An empty string is returned if skipped levels exceed stack height
+
+  / *Type*: str /
+  
+  An empty string is returned if skipped levels exceed stack height
       """
       stack = inspect.stack()
       start = 0 + skip
@@ -218,11 +227,22 @@ Get a name of a caller in the format module.class.method
 Load native library depend on the calling convention.
       
 **Arguments:**   
-         path: library path.
-         is_stdcall: determine if the library's calling convention is stdcall or cdecl.
+
+* ``path``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Library path.
+  
+* ``is_stdcall``    
+
+  / *Condition*: optional / *Type*: bool / *Default*: True /
+  
+  Determine if the library's calling convention is stdcall or cdecl.
 
 **Returns:**
-         Loaded library object.
+
+*Loaded library object.*
       """
       try:
          if is_stdcall:
@@ -245,8 +265,12 @@ Check if the string is ascii or unicode
          codecs: encoding type list
 
 **Returns:**
-         True : if checked string is ascii or unicode
-         False : if checked string is not ascii or unicode
+
+  / *Type*: bool /
+  
+  True : if checked string is ascii or unicode
+  
+  False : if checked string is not ascii or unicode
       """
       res = False
       for i in codecs:
@@ -280,7 +304,7 @@ class Job(threading.Thread):
 
 class ResultType:
    """
-   Result Types.
+Result Types.
    """
    PASS = "pass"
    FAIL = "fail"
@@ -304,7 +328,8 @@ Response message class
 Convert response message to json
 
 **Returns:**
-         Response message in json format
+
+*Response message in json format*
       """
       return json.dumps(collections.OrderedDict(sorted(self.__dict__.items())))
 
@@ -313,7 +338,8 @@ Convert response message to json
 Get string data result
 
 **Returns:**
-         String result
+
+*String result*
       """
       return self.result_data
 

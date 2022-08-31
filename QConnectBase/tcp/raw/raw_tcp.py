@@ -33,7 +33,7 @@ from QConnectBase.tcp.tcp_base import BrokenConnError, TCPBase, TCPBaseServer, T
 
 class RawTCPBase(TCPBase):
    """
-   Base class for a raw tcp connection.
+Base class for a raw tcp connection.
    """
    def _read(self):
       """
@@ -99,17 +99,17 @@ Constructor of RawTCPServer class.
       
 **Arguments:**   
 
-* ``address``    
+* ``mode``    
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: None /
   
-  Address of TCP server.
-
-* ``port``    
-
-  / *Condition*: required / *Type*: int /
+  TCP mode.
   
-  Port number.
+* ``config``    
+
+  / *Condition*: optional / *Type*: dict / *Default*: None /
+  
+  Configuration for TCP connection in dictionary format.
       """
       super(RawTCPServer, self).__init__(mode, config)
       self._bind()
@@ -127,16 +127,16 @@ Constructor of RawTCPClient class.
       
 **Arguments:**   
 
-* ``address``    
+* ``mode``    
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: None /
   
-  Address of TCP server.
-
-* ``port``    
-
-  / *Condition*: required / *Type*: int /
+  TCP mode.
   
-  Port number.
+* ``config``    
+
+  / *Condition*: optional / *Type*: dict / *Default*: None /
+  
+  Configuration for TCP connection in dictionary format.
       """
       super(RawTCPClient, self).__init__(mode, config)

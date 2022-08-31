@@ -65,7 +65,10 @@ Set the color format for the log.
   Log record.
 
 **Returns:**
-         Log with color formatter.
+
+  / *Type*: logging.Formatter /
+  
+  Log with color formatter.
       """
       log_fmt = self.FORMATS.get(record.levelno)
       formatter = logging.Formatter(log_fmt)
@@ -119,7 +122,9 @@ Get the log file path for this handler.
 
 **Returns:**
 
-*Log file path.*
+  / *Type*: str /
+
+  Log file path.
       """
       out_dir = BuiltIn()._context.output._settings.output_directory
       dir_log = os.path.dirname(config.logfile)
@@ -144,9 +149,11 @@ Check if the connection config is supported by this handler.
 
 **Returns:**
 
-         True if the config is supported.
-		 
-         False if the config is not supported.
+  / *Type*: bool /
+  
+  True if the config is supported.
+  
+  False if the config is not supported.
       """
       return config.logfile is not None and config.logfile != 'nonlog' and config.logfile != 'console'
 
@@ -202,7 +209,10 @@ Get the log file path for this handler.
   Name of the logger.
 
 **Returns:**
-         Log file path.
+
+  / *Type*: str /
+
+  Log file path.
       """
       out_dir = BuiltIn()._context.output._settings.output_directory
       return "{0}/{1}.log".format(out_dir, logger_name + "_trace")
@@ -222,9 +232,11 @@ Check if the connection config is supported by this handler.
 
 **Returns:**
 
-         True if the config is supported.
-		 
-         False if the config is not supported.
+  / *Type*: bool /
+  
+  True if the config is supported.
+  
+  False if the config is not supported.
       """
       return config.logfile is None
 
@@ -279,9 +291,11 @@ Check if the connection config is supported by this handler.
 
 **Returns:**
 
-         True if the config is supported.
+  / *Type*: bool /
+  
+  True if the config is supported.
 		 
-         False if the config is not supported.
+  False if the config is not supported.
       """
       return config.logfile == 'console'
 
@@ -335,9 +349,14 @@ Set handler for logger.
 
 **Returns:**
 
-         None if no handler is set.
+* ``handler_ins``
+
+  / *Type*: logging.handler /
+  
+
+  None if no handler is set.
          
-         Handler object.
+  Handler object.
       """
       # noinspection PyBroadException
       try:

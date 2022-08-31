@@ -213,7 +213,10 @@ Send data to serial port.
 Receive data from serial connection.
       
 **Returns:**
-         Data received from connection.
+
+  / *Type*: str /
+  
+  Data received from connection.
       """
       data = ''
       #  usually \r\n or \n is sent to terminate a line,

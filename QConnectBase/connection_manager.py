@@ -509,7 +509,7 @@ Verify a pattern from connection response after sending a command with named arg
 
    def verify_unnamed_args(self, connection_name, search_obj, timeout=0, fetch_block=False, eob_pattern='.*', filter_pattern='.*', *fct_args):
       """
-      Verify a pattern from connection response after sending a command.
+Verify a pattern from connection response after sending a command.
       
 **Arguments:**   
 

@@ -110,8 +110,6 @@ Override creating instance method to check for conditions.
 
 **Returns:**
 
-* ``ConnectionBase instance``
-
   / *Type*: ConnectionBase /
   
   ConnectionBase instance if passing the conditions.\
@@ -129,8 +127,6 @@ Check if current platform is supported.
 
 **Returns:**
 
-* ``is_supported``
-
   / *Type*: bool /
   
   True if platform is supported. 
@@ -146,9 +142,11 @@ Check for precondition.
 	  
 **Returns:**
 
-         True if passing the precondition.
+  / *Type*: bool /
 
-         False if failing the precondition.
+  True if passing the precondition.
+
+  False if failing the precondition.
       """
       return cls._is_precondition_valid
 
@@ -158,7 +156,9 @@ Get the error instruction.
 	  
 **Returns:**
 
-         Error instruction string.
+  / *Type*: str /
+    
+  Error instruction string.
       """
       return self._ERROR_INSTRUCTION
    # endregion
@@ -181,7 +181,7 @@ Abstract method for quiting the connection.
 
 **Returns:**
 
-         None.
+(*no returns*)
       """
       self._logger.removeHandler(self._logger_handler)
 
@@ -200,7 +200,7 @@ Abstract method for quiting the connection.
   
   Device name.
 
-* ``device``    
+* ``files``    
 
   / *Condition*: optional / *Type*: list /
   
@@ -214,7 +214,7 @@ Abstract method for quiting the connection.
 
 **Returns:**
 
-         None.
+(*no returns*)
       """
       pass
 
@@ -236,7 +236,7 @@ Abstract method for disconnecting connection.
 
 **Returns:**
 
-         None.
+(*no returns*)
       """
       pass
    # endregion
@@ -252,7 +252,8 @@ Start a thread which receive message from connection continuously.
          n_thrd_id: thread id.
 
 **Returns:**
-         None
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       self._llrecv_thrd_obj = threading.Thread(target=self._thrd_llrecv_from_connection_interface)
@@ -268,7 +269,7 @@ The thread which receive message from connection continuously.
 	  
 **Returns:**
 
-         None
+(*no returns*)
       """
       pass
 
@@ -298,7 +299,7 @@ Initialize a thread for receiving data from connection.
 
 **Returns:**
 
-         None
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       thread_name = self._CONNECTION_TYPE
@@ -329,7 +330,7 @@ Thread to receive data from connection continuously.
 
 **Returns:**
 
-         None
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       if sync_with_start is True:
@@ -406,7 +407,7 @@ Wrapper method to send message to a tcp connection.
 
 **Returns:**
 
-         None
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -425,7 +426,11 @@ Wrapper method to get the response from connection.
 	  
 **Returns:**
 
-         Responded message.
+* ``msg``
+
+  / *Type*: str /
+  
+  Responded message.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -453,38 +458,38 @@ Suspend the control flow until a Trace message is received which matches to a sp
 
 * ``search_obj``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Regular expression all received trace messages are compare to. 
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
   
 * ``use_fetch_block``    
 
-  / *Condition*: optional / *Type*: bool /
+  / *Condition*: optional / *Type*: bool / *Default*: False /
   
   Determine if 'fetch block' feature is used.
   
 * ``end_of_block_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: '.*' /
   
   The end of block pattern.  
 
 * ``filter_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: '.*' /
   
   Pattern to filter message line by line.
   
 * ``timeout``    
 
-  / *Condition*: optional / *Type*: re.Pattern /
+  / *Condition*: optional / *Type*: int / *Default*: 0 /
   
   Timeout parameter specified as a floating point number in the unit 'seconds'.
   
 * ``fct_args``    
 
-  / *Condition*: optional / *Type*: Tuple /
+  / *Condition*: optional / *Type*: Tuple /  *Default*: None /
   
   List of function arguments passed to be sent.
 
@@ -494,7 +499,7 @@ Suspend the control flow until a Trace message is received which matches to a sp
 
   / *Type*: re.Match /
   
-  If no trace message matched to the specified regular expression and a timeout occurred.
+  If no trace message matched to the specified regular expression and a timeout occurred, return None.
   
   If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
       """
@@ -535,19 +540,19 @@ Getting trace log continuously without creating a new trace queue.
 
 * ``trace_queue``    
 
-  / *Condition*: optional / *Type*: Queue /
+  / *Condition*: required / *Type*: Queue /
   
   Queue to store the traces.
   
 * ``timeout``    
 
-  / *Condition*: optional / *Type*: int /
+  / *Condition*: optional / *Type*: int / *Default*: 0 /
   
   Timeout for waiting a matched log.
 
 * ``fct_args``    
 
-  / *Condition*: optional / *Type*: Tuple /
+  / *Condition*: optional / *Type*: Tuple / *Default*: None /
   
   Arguments to be sent to connection.
 
@@ -562,8 +567,6 @@ Getting trace log continuously without creating a new trace queue.
 * ``match``
 
   / *Type*: re.Match /
-  
-  If no trace message matched to the specified regular expression and a timeout occurred.
   
   If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
       """
@@ -599,7 +602,7 @@ Create Queue and assign it to _trace_queue object and activate the queue with th
 
 * ``search_element``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Regular expression all received trace messages are compare to. 
          
@@ -607,19 +610,19 @@ Create Queue and assign it to _trace_queue object and activate the queue with th
 
 * ``use_fetch_block``    
 
-  / *Condition*: optional / *Type*: bool /
+  / *Condition*: optional / *Type*: bool / *Default*: False /
   
   Determine if 'fetch block' feature is used.
   
 * ``end_of_block_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: '.*' /
   
   The end of block pattern.
   
 * ``regex_line_filter_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: re.Pattern / *Default*: None /
   
   Regular expression object to filter message line by line.
 
@@ -644,19 +647,19 @@ Deactivate trace queue and delete.
 
 * ``trq_handle``    
 
-  / *Condition*: optional / *Type*: int /
+  / *Condition*: required / *Type*: int /
   
   Trace queue handle.
   
 * ``trace_queue``    
 
-  / *Condition*: optional / *Type*: Queue /
+  / *Condition*: required / *Type*: Queue /
   
   Trace queue object.
 
 **Returns:**
 
-         None.
+(*no returns*)
       """
       cls.deactivate_trace_queue(trq_handle)
       del trace_queue
@@ -670,7 +673,7 @@ Activates a trace message filter specified as a regular expression. All matching
 
 * ``search_obj``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Regular expression all received trace messages are compare to. \
          
@@ -678,7 +681,7 @@ Activates a trace message filter specified as a regular expression. All matching
   
 * ``trace_queue``    
 
-  / *Condition*: optional / *Type*: Queue /
+  / *Condition*: required / *Type*: Queue /
   
   A queue object all trace message which matches the regular expression are put in. \
   
@@ -686,19 +689,19 @@ Activates a trace message filter specified as a regular expression. All matching
   
 * ``use_fetch_block``    
 
-  / *Condition*: optional / *Type*: bool /
+  / *Condition*: optional / *Type*: bool /  *Default*: False /
   
   Determine if 'fetch block' feature is used.
   
 * ``end_of_block_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: '.*' /
   
   The end of block pattern.
   
 * ``line_filter_pattern``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: optional / *Type*: re.Pattern / *Default*: None /
   
   Regular expression object to filter message line by line.
           
@@ -735,7 +738,7 @@ Deactivates a trace message filter previously activated by ActivateTraceQ() meth
 
 * ``handle``    
 
-  / *Condition*: optional / *Type*: int /
+  / *Condition*: required / *Type*: int /
   
   Integer object returned by ActivateTraceQ() method.
 
@@ -770,12 +773,13 @@ Check if responded message come in cls._RESPOND_TIMEOUT or we will raise a timeo
 
 * ``timeout``    
 
-  / *Condition*: optional / *Type*: int /
+  / *Condition*: required / *Type*: int /
   
   Timeout in seconds.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       pass
 
@@ -789,12 +793,13 @@ Pre-checking message when receiving it from connection.
 
 * ``msg``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Received message to be checked.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       pass
 
@@ -808,12 +813,13 @@ Post-checking message when receiving it from connection.
 
 * ``msg``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Received message to be checked.
 
 **Returns:**
-         None.
+
+(*no returns*)
       """
       pass
    # endregion
@@ -851,13 +857,13 @@ Filter message by regular expression object.
 
 * ``regex_filter_obj``    
 
-  / *Condition*: optional / *Type*: re.Pattern /
+  / *Condition*: required / *Type*: re.Pattern /
   
   Regular expression object.
   
 * ``msg``    
 
-  / *Condition*: optional / *Type*: str /
+  / *Condition*: required / *Type*: str /
   
   Message string to be filtered.
 

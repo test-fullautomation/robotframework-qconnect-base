@@ -61,13 +61,13 @@ Constructor for TCPBase class.
 
 * ``mode``    
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: None /
   
   TCP mode.
   
 * ``config``    
 
-  / *Condition*: required / *Type*: dict /
+  / *Condition*: optional / *Type*: dict / *Default*: None /
   
   Configuration for TCP connection in dictionary format.
       """
@@ -224,7 +224,10 @@ Set the connection timeout.
 Get connection timeout.
       
 **Returns:**
-         Connection timeout.
+
+  / *Type*: int /
+  
+  Connection timeout.
       """
       return self._conn_timeout
 
@@ -257,7 +260,9 @@ Get connection address.
       
 **Returns:**
 
-         Connection address.
+  / *Type*: str /
+  
+  Connection address.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -288,7 +293,10 @@ Set connection address.
 Get connection port.
       
 **Returns:**
-         Connection port.
+
+  / *Type*: int /
+  
+  Connection port.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)

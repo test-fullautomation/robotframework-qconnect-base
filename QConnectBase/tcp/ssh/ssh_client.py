@@ -46,7 +46,7 @@ class AuthenticationType:
 
 class SSHConfig(TCPConfig):
    """
-   Class to store the configuration for SSH connection.
+Class to store the configuration for SSH connection.
    """
    address = 'localhost'
    port = 22
@@ -268,7 +268,9 @@ Read data from SSH connection.
       
 **Returns:**
 
-         Data from SSH connection.
+  / *Type*: str /
+  
+  Data from SSH connection.
       """
       data = ''
 
