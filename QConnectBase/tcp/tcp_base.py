@@ -38,7 +38,7 @@ import threading
 
 class TCPConfig(DictToClass):
    """
-   Class to store configurations for TCP connection.
+Class to store configurations for TCP connection.
    """
    address = "localhost"
    port = 12345
@@ -46,7 +46,7 @@ class TCPConfig(DictToClass):
 
 class TCPBase(ConnectionBase, object):
    """
-   Base class for a tcp connection.
+Base class for a tcp connection.
    """
    RECV_MSGS_POLLING_INTERVAL = 0.005
    _socket_instance = 0
@@ -55,11 +55,21 @@ class TCPBase(ConnectionBase, object):
 
    def __init__(self, mode=None, config=None):
       """
-      Constructor for TCPBase class.
+Constructor for TCPBase class.
       
-      Args:
-         mode: TCP mode.
-         config: Configuration for TCP connection in dictionary format.
+**Arguments:**
+
+* ``mode``    
+
+  / *Condition*: optional / *Type*: str / *Default*: None /
+  
+  TCP mode.
+  
+* ``config``    
+
+  / *Condition*: optional / *Type*: dict / *Default*: None /
+  
+  Configuration for TCP connection in dictionary format.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       self.config = TCPConfig(**config)
@@ -95,10 +105,11 @@ class TCPBase(ConnectionBase, object):
 
    def __del__(self):
       """
-      Destructor for TCPBase class.
+Destructor for TCPBase class.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log("%s" % _mident)
@@ -106,34 +117,48 @@ class TCPBase(ConnectionBase, object):
 
    def _send(self, msg, cr=True):
       """
-      >> Should be override in derived class.
-      Actual method to send message to a tcp connection.
-      
-      Args:
-         msg: Message to be sent.
-         cr: Determine if it's necessary to add newline character at the end of command.
+>> Should be override in derived class.
 
-      Returns:
-         None
+Actual method to send message to a tcp connection.
+      
+**Arguments:**   
+
+* ``msg``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Message to be sent.
+  
+* ``cr``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Determine if it's necessary to add newline character at the end of command.
+
+**Returns:**
+
+(*no returns*)
       """
       pass
 
    def _read(self):
       """
-      >> Should be override in derived class.
-      Actual method to read message from a tcp connection.
+>> Should be override in derived class.
+
+Actual method to read message from a tcp connection.
       
-      Returns:
+**Returns:**
          Empty string.
       """
       return ''
 
    def close(self):
       """
-      Close connection.
+Close connection.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident)
@@ -164,9 +189,9 @@ class TCPBase(ConnectionBase, object):
 
    def _get_timeout(self):
       """
-      Get connection timeout value.
+Get connection timeout value.
       
-      Returns:
+**Returns:**
          Value of connection timeout.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -175,13 +200,19 @@ class TCPBase(ConnectionBase, object):
 
    def _set_timeout(self, timeout):
       """
-      Set the connection timeout.
+Set the connection timeout.
       
-      Args:
-         timeout: timeout value in second.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``timeout``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Timeout value in second.
+
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log("%s: set timeout to '%d'" % (_mident, timeout), constants.LOG_LEVEL_DEBUG)
@@ -190,22 +221,31 @@ class TCPBase(ConnectionBase, object):
 
    def _get_conn_timeout(self):
       """
-      Get connection timeout.
+Get connection timeout.
       
-      Returns:
-         Connection timeout.
+**Returns:**
+
+  / *Type*: int /
+  
+  Connection timeout.
       """
       return self._conn_timeout
 
    def _set_conn_timeout(self, timeout):
       """
-      Set connection timeout.
+Set connection timeout.
       
-      Args:
-         timeout: Timeout in second.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``timeout``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Timeout value in second.
+
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log("%s: set timeout to '%d'" % (_mident, timeout), constants.LOG_LEVEL_DEBUG)
@@ -216,10 +256,13 @@ class TCPBase(ConnectionBase, object):
 
    def _get_address(self):
       """
-      Get connection address.
+Get connection address.
       
-      Returns:
-         Connection address.
+**Returns:**
+
+  / *Type*: str /
+  
+  Connection address.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -227,13 +270,19 @@ class TCPBase(ConnectionBase, object):
 
    def _set_address(self, address):
       """
-      Set connection address.
+Set connection address.
       
-      Args:
-         address: Address of connection.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``address``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Address of connection.
+
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -241,10 +290,13 @@ class TCPBase(ConnectionBase, object):
 
    def _get_port(self):
       """
-      Get connection port.
+Get connection port.
       
-      Returns:
-         Connection port.
+**Returns:**
+
+  / *Type*: int /
+  
+  Connection port.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -252,13 +304,19 @@ class TCPBase(ConnectionBase, object):
 
    def _set_port(self, port):
       """
-      Set connection port.
+Set connection port.
       
-      Args:
-         port: port number.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``port``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Port number.
+
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -266,9 +324,9 @@ class TCPBase(ConnectionBase, object):
 
    def _is_connected(self):
       """
-      Get connected state.
+Get connected state.
       
-      Returns:
+**Returns:**
          True if connection is connected.
          False if connection is not connected.
       """
@@ -280,7 +338,7 @@ class TCPBase(ConnectionBase, object):
       """
       Get method of socket_instance property.
       
-      Returns:
+**Returns:**
          Value of _socket_instance.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -299,40 +357,50 @@ class TCPBase(ConnectionBase, object):
 
    def quit(self, is_disconnect_all=True):
       """
-      Quit connection.
+Quit connection.
       
-      Args:
-         is_disconnect_all: Determine if it's necessary for disconnect all connection.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``is_disconnect_all``    
+
+  / *Condition*: required / *Type*: bool /
+  
+  Determine if it's necessary for disconnect all connection.
+
+**Returns:**
+
+(*no returns*)
       """
       super(TCPBase, self).quit()
 
    def connect(self):
       """
-      >> Should be override in derived class.
-      Establish the connection.
+>> Should be override in derived class.
+
+Establish the connection.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       pass
 
    def disconnect(self, device):
       """
-      >> Should be override in derived class.
-      Disconnect the connection.
+>> Should be override in derived class.
+
+Disconnect the connection.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       super(TCPBase, self).disconnect()
 
 
 class TCPBaseServer:
    """
-   Base class for TCP server.
+Base class for TCP server.
    """
    def _bind(self):
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -342,10 +410,11 @@ class TCPBaseServer:
 
    def _listen(self):
       """
-      Listen for client socket.
+Listen for client socket.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -353,11 +422,21 @@ class TCPBaseServer:
 
    def _accept(self):
       """
-      Method for handling socket accept action.
+Method for handling socket accept action.
       
-      Returns:
-         conn: TCP connection socket object.
-         addr: The address bound to the socket on the other end of the connection.
+**Returns:**
+
+* ``conn``    
+
+  / *Condition*: required / *Type*: socket /
+  
+  TCP connection socket object.
+  
+* ``addr``    
+
+  / *Condition*: required / *Type*: str /
+  
+  The address bound to the socket on the other end of the connection.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -371,10 +450,11 @@ class TCPBaseServer:
 
    def accept_connection(self):
       """
-      Wrapper method for handling accept action of TCP Server.
+Wrapper method for handling accept action of TCP Server.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -395,7 +475,7 @@ class TCPBaseServer:
 
 class TCPBaseClient:
    """
-   Base class for TCP client.
+Base class for TCP client.
    """
    def connect(self):
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)

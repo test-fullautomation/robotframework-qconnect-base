@@ -62,7 +62,7 @@ class Singleton(object):  # pylint: disable=R0903
 
 class DictToClass:
    """
-   Class for converting dictionary to class object.
+Class for converting dictionary to class object.
    """
    exclude_list = []
    logfile = None
@@ -89,27 +89,30 @@ class DictToClass:
 
 class Utils:
    """
-   Class to implement utilities for supporting development.
+Class to implement utilities for supporting development.
    """
    LINUX_OS = "linux"
    WINDOWS_OS = "windows"
 
    def __init__(self):
       """
-      Empty constructor.
+Empty constructor.
       """
       pass
 
    @staticmethod
    def get_all_descendant_classes(cls):
       """
-      Get all descendant classes of a class
+Get all descendant classes of a class
       
-      Args:
+**Arguments:**   
          cls: Input class for finding descendants.
 
-      Returns:
-         Array of descendant classes.
+**Returns:**
+
+  / *Type*: list /
+  
+  Array of descendant classes.
       """
       trace_class_list = cls.__subclasses__()
       descendant_classes_list = []
@@ -122,13 +125,21 @@ class Utils:
    @staticmethod
    def get_all_sub_classes(cls):
       """
-      Get all children classes of a class
+Get all children classes of a class
       
-      Args:
-         cls: Input class for finding children.
+**Arguments:**   
 
-      Returns:
-         Array of children classes.
+* ``cls``    
+
+  / *Condition*: required / *Type*: class /
+  
+  Input class for finding children.
+
+**Returns:**
+
+  / *Type*: list /
+  
+  Array of children classes.
       """
       return set(cls.__subclasses__()).union(
          [s for s in cls.__subclasses__()])
@@ -169,14 +180,22 @@ class Utils:
    @staticmethod
    def caller_name(skip=2):
       """
-      Get a name of a caller in the format module.class.method
+Get a name of a caller in the format module.class.method
       
-      Args:
-         skip: specifies how many levels of stack to skip while getting caller
-         name. skip=1 means "who calls me", skip=2 "who calls my caller" etc.
+**Arguments:**   
 
-      Returns:
-         An empty string is returned if skipped levels exceed stack height
+* ``skip``    
+
+  / *Condition*: required / *Type*: int /
+  
+  Specifies how many levels of stack to skip while getting caller
+         name. skip=1 means "who calls me", skip=2 "who calls my caller" etc.
+         
+**Returns:**
+
+  / *Type*: str /
+  
+  An empty string is returned if skipped levels exceed stack height
       """
       stack = inspect.stack()
       start = 0 + skip
@@ -205,14 +224,25 @@ class Utils:
    @staticmethod
    def load_library(path, is_stdcall=True):
       """
-      Load native library depend on the calling convention.
+Load native library depend on the calling convention.
       
-      Args:
-         path: library path.
-         is_stdcall: determine if the library's calling convention is stdcall or cdecl.
+**Arguments:**   
 
-      Returns:
-         Loaded library object.
+* ``path``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Library path.
+  
+* ``is_stdcall``    
+
+  / *Condition*: optional / *Type*: bool / *Default*: True /
+  
+  Determine if the library's calling convention is stdcall or cdecl.
+
+**Returns:**
+
+*Loaded library object.*
       """
       try:
          if is_stdcall:
@@ -228,15 +258,19 @@ class Utils:
    @staticmethod
    def is_ascii_or_unicode(str_check, codecs=['utf8', 'utf16', 'utf32', 'ascii']):
       """
-      Check if the string is ascii or unicode
+Check if the string is ascii or unicode
       
-      Args:
+**Arguments:**   
          str_check: string for checking
          codecs: encoding type list
 
-      Returns:
-         True : if checked string is ascii or unicode
-         False : if checked string is not ascii or unicode
+**Returns:**
+
+  / *Type*: bool /
+  
+  True : if checked string is ascii or unicode
+  
+  False : if checked string is not ascii or unicode
       """
       res = False
       for i in codecs:
@@ -270,7 +304,7 @@ class Job(threading.Thread):
 
 class ResultType:
    """
-   Result Types.
+Result Types.
    """
    PASS = "pass"
    FAIL = "fail"
@@ -282,7 +316,7 @@ class ResultType:
 
 class ResponseMessage(object):
    """
-   Response message class
+Response message class
    """
    def __init__(self, request="", result=ResultType.PASS, result_data=""):
       self.request = request
@@ -291,17 +325,21 @@ class ResponseMessage(object):
 
    def get_json(self):
       """
-      Convert response message to json
-      Returns:
-         Response message in json format
+Convert response message to json
+
+**Returns:**
+
+*Response message in json format*
       """
       return json.dumps(collections.OrderedDict(sorted(self.__dict__.items())))
 
    def get_data(self):
       """
-      Get string data result
-      Returns:
-         String result
+Get string data result
+
+**Returns:**
+
+*String result*
       """
       return self.result_data
 

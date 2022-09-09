@@ -150,7 +150,7 @@ in RobotFramework.
 > > required to be in order)* or
 > >
 > > **send command** `conn_name=[conn_name]   command=[command]` *(All
-> > parameters are assigned by name)* ####\# *Arguments*:
+> > parameters are assigned by name)* \##### *Arguments*:
 
 -   **conn_name**: Name of the connection.
 -   **command**: Command to be sent.
@@ -323,7 +323,7 @@ documentation](docs/html/index.html)
 
 A detailed documentation of the QConnectBase package can also be found
 here:
-[QConnectBase.pdf](https://github.com/test-fullautomation/robotframework-qconnect-base/blob/develop/doc/_build/latex/QConnectBase.pdf)
+[QConnectBase.pdf](https://github.com/test-fullautomation/robotframework-qconnect-base/blob/develop/QConnectBase/QConnectBase.pdf)
 
 ## Feedback
 

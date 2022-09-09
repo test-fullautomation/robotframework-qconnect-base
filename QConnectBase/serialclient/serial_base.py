@@ -41,7 +41,7 @@ import queue
 
 class SerialConfig(DictToClass):
    """
-   Class to store the configuration for Serial connection.
+Class to store the configuration for Serial connection.
    """
    port = 'COM1'
    baudrate = 115200
@@ -54,18 +54,28 @@ class SerialConfig(DictToClass):
 
 class SerialSocket(ConnectionBase):
    """
-   Class for handling serial connection.
+Class for handling serial connection.
    """
    _CONNECTION_TYPE = "SERLL-"
    _socket_instance = 0
 
    def __init__(self, _mode, config):
       """
-      Constructor for SerialSocket class.
+Constructor for SerialSocket class.
       
-      Args:
-         _mode: unused.
-         config: Configurations for Serial connection.
+**Arguments:**   
+
+* ``_mode``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Unused
+  
+* ``config``    
+
+  / *Condition*: required / *Type*: DictToClass /
+  
+  Configurations for Serial Client.
       """
       self.config = SerialConfig(**config)
       ConnectionBase.__init__(self)
@@ -98,10 +108,11 @@ class SerialSocket(ConnectionBase):
 
    def _thrd_llrecv_from_connection_interface(self):
       """
-      Receive and process data from serial connection in low-level.
+Receive and process data from serial connection in low-level.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log("%s: lowlevel receiver thread started." % _mident, constants.LOG_LEVEL_INFO)
@@ -136,22 +147,29 @@ class SerialSocket(ConnectionBase):
 
    def connect(self):
       """
-      Connect to serial port.
+Connect to serial port.
 
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       pass
 
    def disconnect(self, _device):
       """
-      Disconnect serial port.
+Disconnect serial port.
       
-      Args:
-         _device: unused.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``_device``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Unused
+
+**Returns:**
+
+(*no returns*)
       """
       self.socket.close()
       self._is_connected = False
@@ -159,14 +177,25 @@ class SerialSocket(ConnectionBase):
 
    def _send(self, msg, _cr):
       """
-      Send data to serial port.
+Send data to serial port.
       
-      Args:
-         msg: Message to be sent.
-         _cr: Unused.
+**Arguments:**   
 
-      Returns:
-         None.
+* ``msg``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Message to be sent.
+  
+* ``_cr``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Unused.
+
+**Returns:**
+
+(*no returns*)
       """
       try:
          _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -181,10 +210,13 @@ class SerialSocket(ConnectionBase):
 
    def _read(self):
       """
-      Receive data from serial connection.
+Receive data from serial connection.
       
-      Returns:
-         Data received from connection.
+**Returns:**
+
+  / *Type*: str /
+  
+  Data received from connection.
       """
       data = ''
       #  usually \r\n or \n is sent to terminate a line,
@@ -226,10 +258,11 @@ class SerialSocket(ConnectionBase):
 
    def quit(self):
       """
-      Quit serial connection.
+Quit serial connection.
       
-      Returns:
-         None
+**Returns:**
+
+(*no returns*)
       """
       self.disconnect(None)
       if self._llrecv_thrd_obj and self._llrecv_thrd_obj.is_alive():
@@ -249,26 +282,37 @@ class SerialSocket(ConnectionBase):
 
 class SerialClient(SerialSocket):
    """
-   Serial client class.
+Serial client class.
    """
    _CONNECTION_TYPE = "SerialClient"
 
    def __init__(self, _mode, config):
       """
-      Constructor for SerialClient class.
+Constructor for SerialClient class.
       
-      Args:
-         _mode: unused.
-         config: Dictionary contains the configurations for serial connection.
+**Arguments:**   
+
+* ``_mode``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Unused
+  
+* ``config``    
+
+  / *Condition*: required / *Type*: DictToClass /
+  
+  Configurations for Serial Client.
       """
       super(SerialClient, self).__init__(_mode, config)
 
    def connect(self):
       """
-      Connect to the Serial port.
+Connect to the Serial port.
       
-      Returns:
-         None.
+**Returns:**
+
+(*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
 

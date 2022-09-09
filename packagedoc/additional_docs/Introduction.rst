@@ -12,6 +12,5 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*QConnectBase*
 
-TO BE CONTINUED
+QConnectBaseLibrary is a connection testing library for `RobotFramework <https://robotframework.org>`__. Library will be supported to downloaded from PyPI soon. It provides a mechanism to handle trace log continously receiving from a connection (such as Raw TCP, SSH, Serial, etc.) besides sending data back to the other side. It’s especially efficient for monitoring the overflood response trace log from an asynchronous trace systems. It is supporting Python 3.7+ and RobotFramework 3.2+.
