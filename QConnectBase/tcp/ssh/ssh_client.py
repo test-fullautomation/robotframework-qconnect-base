@@ -58,7 +58,7 @@ Class to store the configuration for SSH connection.
 
 class SSHClient(TCPBase, TCPBaseClient):
    """
-   SSH client connection class.
+SSH client connection class.
    """
    _CONNECTION_TYPE = "SSHClient"
 
