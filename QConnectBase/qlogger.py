@@ -132,7 +132,7 @@ Get the log file path for this handler.
          dir_log = out_dir + '/' + dir_log
       if not os.path.exists(dir_log):
          os.makedirs(dir_log)
-      return "{0}/{1}.log".format(dir_log, os.path.basename(config.logfile))
+      return "{0}/{1}".format(dir_log, os.path.basename(config.logfile))
 
    @staticmethod
    def get_config_supported(config):
