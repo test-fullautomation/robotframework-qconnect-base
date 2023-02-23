@@ -345,6 +345,9 @@ Making a connection.
          raise AssertionError("Unable to create connection. Exception: %s" % ex)
 
       if connection_obj is not None:
+         setattr(connection_obj, 'connection_name', connection_name)
+         if hasattr(connection_obj, "real_obj"):
+            setattr(connection_obj.real_obj, 'connection_name', connection_name)
          self.add_connection(connection_name, connection_obj)
 
       try:
