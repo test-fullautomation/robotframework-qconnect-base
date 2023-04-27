@@ -78,6 +78,7 @@ Class for storing parameters for verify action.
    conn_name = 'default_conn'
    search_pattern = None
    timeout = 5
+   match_try = 1
    fetch_block = False
    eob_pattern = '.*'
    filter_pattern = '.*'
@@ -515,14 +516,16 @@ Verify a pattern from connection response after sending a command with named arg
          return self.verify_unnamed_args(params.conn_name,
                                          params.search_pattern,
                                          params.timeout,
+                                         params.match_try,
                                          params.fetch_block,
                                          params.eob_pattern,
                                          params.filter_pattern,
-                                         params.send_cmd)
+                                         params.send_cmd
+                                         )
       else:
          raise Exception("Input parameter are invalid.")
 
-   def verify_unnamed_args(self, connection_name, search_obj, timeout=0, fetch_block=False, eob_pattern='.*', filter_pattern='.*', *fct_args):
+   def verify_unnamed_args(self, connection_name, search_obj, timeout=0, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', *fct_args):
       """
 Verify a pattern from connection response after sending a command.
       
@@ -533,13 +536,25 @@ Verify a pattern from connection response after sending a command.
   / *Condition*: required / *Type*: str /
   
   Name of connection.
-		 
+
 * ``search_obj``    
 
   / *Condition*: required / *Type*: str /
   
   Regular expression all received trace messages are compare to. 
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
+
+* ``timeout``
+
+  / *Condition*: optional / *Type*: float / *Default*: 0 /
+
+  Timeout parameter specified as a floating point number in the unit 'seconds'.
+
+* ``match_try``
+
+  / *Condition*: optional / *Type*: int / *Default*: 1 /
+
+  Number of time for trying to match the pattern.
   
 * ``fetch_block``    
 
@@ -558,13 +573,7 @@ Verify a pattern from connection response after sending a command.
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
   
   Pattern to filter message line by line.
-  
-* ``timeout``    
 
-  / *Condition*: optional / *Type*: float / *Default*: 0 /
-  
-  Timeout parameter specified as a floating point number in the unit 'seconds'.
-  
 * ``fct_args``
 
   / *Condition*: optional / *Type*: Tuple / *Default*: None /
@@ -581,10 +590,21 @@ Verify a pattern from connection response after sending a command.
       """
       if connection_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % connection_name)
+      
       connection_obj = self.connection_manage_dict[connection_name]
-      res = connection_obj.wait_4_trace(search_obj, int(timeout), fetch_block, eob_pattern, filter_pattern, *fct_args)
-      if res is None:
-         raise AssertionError("Unable to match the pattern after '%s' seconds." % timeout)
+      if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
+         match_try = 5
+      
+      for i in range(1, match_try+1):
+         res = connection_obj.wait_4_trace(search_obj, int(timeout), fetch_block, eob_pattern, filter_pattern, *fct_args)
+         if res is None:
+            # raise AssertionError("Unable to match the pattern after '%s' seconds." % timeout)
+            BuiltIn().log("Match try %s/%s timed out" % (i, match_try), constants.LOG_LEVEL_WARNING)
+         else:
+            break
+
+      if not res:
+         raise AssertionError("Unable to match the pattern after '%s' time." % timeout)
 
       return res
 
