@@ -590,7 +590,11 @@ Verify a pattern from connection response after sending a command.
       """
       if connection_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % connection_name)
+      
       connection_obj = self.connection_manage_dict[connection_name]
+      if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
+         match_try = 5
+      
       for i in range(1, match_try+1):
          res = connection_obj.wait_4_trace(search_obj, int(timeout), fetch_block, eob_pattern, filter_pattern, *fct_args)
          if res is None:

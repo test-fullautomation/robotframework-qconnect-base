@@ -149,6 +149,19 @@ Check for precondition.
   False if failing the precondition.
       """
       return cls._is_precondition_valid
+      
+   @classmethod
+   def get_connection_type(cls):
+      """
+Get the connection type.
+
+**Returns:**
+
+  / *Type*: str /
+
+  The connection type.
+      """
+      return cls._CONNECTION_TYPE
 
    def error_instruction(self):
       """
