@@ -1,4 +1,4 @@
-name: Publish JsonPreprocessor to PyPI
+name: Publish robotframework-qconnet-base to PyPI
 
 on:
   push:
