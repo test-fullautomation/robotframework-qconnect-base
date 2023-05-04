@@ -1,4 +1,4 @@
-name: Publish robotframework-qconnet-base to PyPI
+name: Publish QConnectBase to PyPI
 
 on:
   push:
@@ -24,7 +24,8 @@ jobs:
           run: |
             sudo apt-get install -y pandoc
             sudo apt-get install -y texlive-latex-*
-            python -m pip install --upgrade build twine colorama pypandoc wheel dotdict GenPackageDoc PythonExtensionsCollection
+            echo "GENDOC_LATEXPATH=$(dirname $(which pdflatex))" >> $GITHUB_ENV
+            python -m pip install --upgrade build twine wheel dotdict GenPackageDoc PythonExtensionsCollection robotframework paramiko pyserial
 
         - name: Build source and wheel distributions
           run: |
@@ -37,16 +38,11 @@ jobs:
             password: ${{ secrets.PYPI_API_TOKEN }} # This token should be created in Settings > Secrets > Actions
             # repository_url: https://test.pypi.org/legacy/ # Use this for testing to upload the distribution to test.pypi
 
-        - name: Get Asset name
-          run: |
-            export PKG=$(ls dist/ | grep tar)
-            set -- $PKG
-            echo "name=$1" >> $GITHUB_ENV
-
         - name: Create/Update GitHub Release
           id: create_update_release
           uses: ncipollo/release-action@v1
           with:
             allowUpdates: true
             omitNameDuringUpdate: true
-            artifacts: dist/${{ env.name }}
+            makeLatest: true
+            artifacts: dist/*
