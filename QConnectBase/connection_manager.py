@@ -69,6 +69,8 @@ Class for storing parameters for send command action.
    """
    conn_name = 'default_conn'
    command = ''
+   element_def = {}
+   args = None
 
 
 class VerifyParam(InputParam):
@@ -83,6 +85,8 @@ Class for storing parameters for verify action.
    eob_pattern = '.*'
    filter_pattern = '.*'
    send_cmd = ''
+   element_def = {}
+   args = None
 
 
 class ConnectionManager(Singleton):
@@ -93,6 +97,8 @@ Class to manage all connections.
    ROBOT_AUTO_KEYWORDS = False
    LIBRARY_EXTENSION_PREFIX = 'robotframework_qconnect'
    LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
+
+   id = 0
 
    def __init__(self):
       """
@@ -236,96 +242,97 @@ Keyword for disconnecting a connection by name.
          self.connection_manage_dict[connection_name].quit()
          del self.connection_manage_dict[connection_name]
 
-   @keyword
-   def connect(self, *args, **kwargs):
-      """
-Keyword for making a connection.
+#    @keyword
+#    def connect(self, *args, **kwargs):
+#       """
+# Keyword for making a connection.
       
-**Arguments:**   
+# **Arguments:**   
 
-(*refer to connect_unnamed_args method for details*)
+# (*refer to connect_unnamed_args method for details*)
 
-* ``args``    
+# * ``args``    
 
-  / *Condition*: required / *Type*: tuple /
+#   / *Condition*: required / *Type*: tuple /
 
-  Non-Keyword Arguments.
+#   Non-Keyword Arguments.
 
-* ``kwargs``   
+# * ``kwargs``   
 
-  / *Condition*: required / *Type*: dict /
+#   / *Condition*: required / *Type*: dict /
 
-  Keyword Arguments.
+#   Keyword Arguments.
 
-**Returns:**
+# **Returns:**
 
-(*no returns*)
-      """
-      if len(args) > 0 and len(kwargs) > 0:
-         raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
+# (*no returns*)
+#       """
+#       if len(args) > 0 and len(kwargs) > 0:
+#          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
 
-      if len(args) > 0:
-         self.connect_unnamed_args(*args)
-      elif len(kwargs) > 0:
-         self.connect_named_args(**kwargs)
-      else:
-         raise Exception("Not received any input param.")
+#       if len(args) > 0:
+#          self.connect_unnamed_args(*args)
+#       elif len(kwargs) > 0:
+#          self.connect_named_args(**kwargs)
+#       else:
+#          raise Exception("Not received any input param.")
 
-   def connect_named_args(self, **kwargs):
-      """
-Making a connection with name arguments.
+#    def connect_named_args(self, **kwargs):
+#       """
+# Making a connection with name arguments.
       
-**Arguments:**   
+# **Arguments:**   
 
-(*refer to connect_unnamed_args method for details*)
+# (*refer to connect_unnamed_args method for details*)
 
-  * ``kwargs``   
+#   * ``kwargs``   
 
-  / *Condition*: required / *Type*: dict /
+#   / *Condition*: required / *Type*: dict /
   
-  Keyword Arguments.
+#   Keyword Arguments.
 
-**Returns:**
+# **Returns:**
 
-(*no returns*)
-      """
-      org_args = ConnectParam.get_attr_list()
-      if set(kwargs.keys()).issubset(set(org_args)):
-         params = ConnectParam(**kwargs)
-         self.connect_unnamed_args(params.conn_name,
-                                   params.conn_type,
-                                   params.conn_mode,
-                                   params.conn_conf)
-      else:
-         raise Exception("Input parameter are invalid.")
+# (*no returns*)
+#       """
+#       org_args = ConnectParam.get_attr_list()
+#       if set(kwargs.keys()).issubset(set(org_args)):
+#          params = ConnectParam(**kwargs)
+#          self.connect_unnamed_args(params.conn_name,
+#                                    params.conn_type,
+#                                    params.conn_mode,
+#                                    params.conn_conf)
+#       else:
+#          raise Exception("Input parameter are invalid.")
 
-   def connect_unnamed_args(self, connection_name, connection_type, mode, config):
+   @keyword
+   def connect(self, conn_name='default_conn', conn_type='TCPIP', conn_mode='', conn_conf={}):
       """
 Making a connection.
       
 **Arguments:**   
 
-* ``connection_name``    
+* ``conn_name``    
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: 'default_conn' /
   
   Name of connection.
 
-* ``connection_type``    
+* ``conn_type``    
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: 'TCPIP' /
   
   Type of connection.
 
-* ``mode``    
+* ``conn_mode``    
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: '' /
   
   Connection mode.
 
-* ``config``    
+* ``conn_conf``    
 
-  / *Condition*: required / *Type*: json /
+  / *Condition*: optional / *Type*: json / *Default*: {} /
   
   Configuration for connection.
 
@@ -333,93 +340,100 @@ Making a connection.
 
 (*no returns*)
       """
-      if connection_type not in self.supported_connection_classes_dict.keys():
-         raise AssertionError("The '%s' connection type hasn't been supported" % connection_type)
+      if conn_type not in self.supported_connection_classes_dict.keys():
+         raise AssertionError("The '%s' connection type hasn't been supported" % conn_type)
 
-      if connection_name in self.connection_manage_dict.keys():
-         raise AssertionError(constants.String.CONNECTION_NAME_EXIST % connection_name)
+      if conn_name in self.connection_manage_dict.keys():
+         raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
+
+      if conn_name == 'default_conn':
+         conn_name += str(ConnectionManager.id)
+         ConnectionManager.id += 1
 
       try:
-         connection_obj = self.supported_connection_classes_dict[connection_type](mode, config)
+         connection_obj = self.supported_connection_classes_dict[conn_type](conn_mode, conn_conf)
       except Exception as ex:
          # BuiltIn().log("Unable to create connection. Exception: %s" % ex, constants.LOG_LEVEL_ERROR)
          raise AssertionError("Unable to create connection. Exception: %s" % ex)
 
       if connection_obj is not None:
-         setattr(connection_obj, 'connection_name', connection_name)
+         setattr(connection_obj, 'connection_name', conn_name)
          if hasattr(connection_obj, "real_obj"):
-            setattr(connection_obj.real_obj, 'connection_name', connection_name)
-         self.add_connection(connection_name, connection_obj)
+            setattr(connection_obj.real_obj, 'connection_name', conn_name)
+         self.add_connection(conn_name, connection_obj)
 
       try:
          connection_obj.connect()
       except Exception as ex:
-         self.remove_connection(connection_name)
+         self.remove_connection(conn_name)
          # BuiltIn().log("Unable to create connection. Exception: %s" % ex, constants.LOG_LEVEL_ERROR)
          raise Exception("Unable to create connection. Exception: %s" % ex)
 
+#    @keyword
+#    def send_command(self, *args, **kwargs):
+#       """
+# Keyword for sending command to a connection.
+#
+# **Arguments:**
+#
+# (*refer to send_unnamed_args method for details*)
+#
+# * ``args``
+#
+#   / *Condition*: require / *Type*: tuple /
+#
+#   Non-Keyword Arguments.
+#
+# * ``kwargs``
+#
+#   / *Condition*: require / *Type*: dict /
+#
+#   Keyword Arguments.
+#
+# **Returns:**
+#
+# (*no returns*)
+#       """
+#       if len(args) > 0 and len(kwargs) > 0:
+#          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
+#
+#       if len(args) > 0:
+#          self.send_command_unnamed_args(*args)
+#       elif len(kwargs) > 0:
+#          self.send_command_named_args(**kwargs)
+#       else:
+#          raise Exception("Not received any input param.")
+#
+#    def send_command_named_args(self, **args):
+#       """
+# Send command to a connection with name arguments.
+#
+# **Arguments:**
+#
+# (*refer to send_unnamed_args method for details*)
+#
+#   * ``kwargs``
+#
+#   / *Condition*: required / *Type*: dict /
+#
+#   Keyword Arguments.
+#
+# **Returns:**
+#
+# (*no returns*)
+#       """
+#       org_args = SendCommandParam.get_attr_list()
+#       if set(args.keys()).issubset(set(org_args)):
+#          params = SendCommandParam(**args)
+#          self.send_command_unnamed_args(params.conn_name,
+#                                         params.command,
+#                                         params.element_def.__dict__,
+#                                         params.args)
+#       else:
+#          raise Exception("Input parameter are invalid.")
+
    @keyword
-   def send_command(self, *args, **kwargs):
-      """
-Keyword for sending command to a connection.
-      
-**Arguments:**   
-
-(*refer to send_unnamed_args method for details*)
-
-* ``args``    
-
-  / *Condition*: require / *Type*: tuple /
-
-  Non-Keyword Arguments.
-
-* ``kwargs``   
-
-  / *Condition*: require / *Type*: dict /
-
-  Keyword Arguments.
-
-**Returns:**
-
-(*no returns*)
-      """
-      if len(args) > 0 and len(kwargs) > 0:
-         raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
-
-      if len(args) > 0:
-         self.send_command_unnamed_args(*args)
-      elif len(kwargs) > 0:
-         self.send_command_named_args(**kwargs)
-      else:
-         raise Exception("Not received any input param.")
-
-   def send_command_named_args(self, **args):
-      """
-Send command to a connection with name arguments.
-      
-**Arguments:**   
-
-(*refer to send_unnamed_args method for details*)
-
-  * ``kwargs``   
-
-  / *Condition*: required / *Type*: dict /
-  
-  Keyword Arguments.
-
-**Returns:**
-
-(*no returns*)
-      """
-      org_args = SendCommandParam.get_attr_list()
-      if set(args.keys()).issubset(set(org_args)):
-         params = SendCommandParam(**args)
-         self.send_command_unnamed_args(params.conn_name,
-                                        params.command)
-      else:
-         raise Exception("Input parameter are invalid.")
-
-   def send_command_unnamed_args(self, connection_name, command):
+   def send_command(self, conn_name, command, **kwargs):
       """
 Send command to a connection.
       
@@ -436,108 +450,115 @@ Send command to a connection.
   / *Condition*: required / *Type*: str /
   
   Command to be sent.
+
+* ``kwargs``
+
+  / *Condition*: optional / *Type*: dict / *Default*: {} /
+
+  Keyword Arguments.
   
 **Returns:**
 
 (*no returns*)
       """
-      if connection_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % connection_name)
-      connection_obj = self.connection_manage_dict[connection_name]
+      if conn_name not in self.connection_manage_dict.keys():
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+      connection_obj = self.connection_manage_dict[conn_name]
       try:
-         connection_obj.send_obj(command)
+         connection_obj.send_obj(command, **kwargs)
       except Exception as ex:
-         BuiltIn().log("Unable to send command to '%s' connection. Exception: %s" % (connection_name, str(ex)))
+         raise Exception("Unable to send command to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+
+#    @keyword
+#    def verify(self, *args, **kwargs):
+#       """
+# Keyword uses to verify a pattern from connection response after sending a command.
+#
+# **Arguments:**
+#
+# (*refer to verify_unnamed_args method for details*)
+#
+# * ``args``
+#
+#   / *Condition*: required / *Type*: tuple /
+#
+#   Non-Keyword Arguments.
+#
+# * ``kwargs``
+#
+#   / *Condition*: required / *Type*: dict /
+#
+#   Keyword Arguments.
+#
+# **Returns:**
+#
+# * ``match_res``
+#
+#   / *Type*: str /
+#
+#   Matched string.
+#       """
+#       if len(args) > 0 and len(kwargs) > 0:
+#          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
+#
+#       if len(args) > 0:
+#          return self.verify_unnamed_args(*args)
+#       elif len(kwargs) > 0:
+#          return self.verify_named_args(**kwargs)
+#       else:
+#          raise Exception("Not received any input param.")
+#
+#    def verify_named_args(self, **kwargs):
+#       """
+# Verify a pattern from connection response after sending a command with named arguments.
+#
+# **Arguments:**
+#
+# (*refer to verify_unnamed_args method for details*)
+#
+# * ``kwargs``
+#
+#   / *Condition*: required / *Type*: dict /
+#
+#   Keyword Arguments.
+#
+# **Returns:**
+#
+# * ``match_res``
+#
+#   / *Type*: str /
+#
+#   Matched string.
+#       """
+#       org_args = VerifyParam.get_attr_list()
+#       if set(kwargs.keys()).issubset(set(org_args)):
+#          params = VerifyParam(**kwargs)
+#          return self.verify_unnamed_args(params.conn_name,
+#                                          params.search_pattern,
+#                                          params.timeout,
+#                                          params.fetch_block,
+#                                          params.eob_pattern,
+#                                          params.filter_pattern,
+#                                          params.send_cmd,
+#                                          params.element_def.__dict__,
+#                                          params.args)
+#       else:
+#          raise Exception("Input parameter are invalid.")
 
    @keyword
-   def verify(self, *args, **kwargs):
-      """
-Keyword uses to verify a pattern from connection response after sending a command.
-      
-**Arguments:**   
-
-(*refer to verify_unnamed_args method for details*)
-
-* ``args``    
-
-  / *Condition*: required / *Type*: tuple /
-
-  Non-Keyword Arguments.
-
-* ``kwargs``   
-
-  / *Condition*: required / *Type*: dict /
-
-  Keyword Arguments.
-
-**Returns:**
-
-* ``match_res``
-
-  / *Type*: str /
-  
-  Matched string.
-      """
-      if len(args) > 0 and len(kwargs) > 0:
-         raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
-
-      if len(args) > 0:
-         return self.verify_unnamed_args(*args)
-      elif len(kwargs) > 0:
-         return self.verify_named_args(**kwargs)
-      else:
-         raise Exception("Not received any input param.")
-
-   def verify_named_args(self, **kwargs):
-      """
-Verify a pattern from connection response after sending a command with named arguments.
-      
-**Arguments:**   
-
-(*refer to verify_unnamed_args method for details*)
-
-* ``kwargs``   
-
-  / *Condition*: required / *Type*: dict /
-
-  Keyword Arguments.
-
-**Returns:**
-
-* ``match_res``
-
-  / *Type*: str /
-  
-  Matched string.
-      """
-      org_args = VerifyParam.get_attr_list()
-      if set(kwargs.keys()).issubset(set(org_args)):
-         params = VerifyParam(**kwargs)
-         return self.verify_unnamed_args(params.conn_name,
-                                         params.search_pattern,
-                                         params.timeout,
-                                         params.match_try,
-                                         params.fetch_block,
-                                         params.eob_pattern,
-                                         params.filter_pattern,
-                                         params.send_cmd
-                                         )
-      else:
-         raise Exception("Input parameter are invalid.")
-
-   def verify_unnamed_args(self, connection_name, search_obj, timeout=0, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', *fct_args):
+   def verify(self, conn_name, search_pattern, timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
       """
 Verify a pattern from connection response after sending a command.
       
 **Arguments:**   
 
-* ``connection_name``    
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
   
   Name of connection.
-
-* ``search_obj``    
+		 
+* ``search_pattern``
 
   / *Condition*: required / *Type*: str /
   
@@ -574,11 +595,23 @@ Verify a pattern from connection response after sending a command.
   
   Pattern to filter message line by line.
 
-* ``fct_args``
+* ``send_cmd``    
 
-  / *Condition*: optional / *Type*: Tuple / *Default*: None /
+  / *Condition*: optional / *Type*: str / *Default*: '' /
   
-  List of function arguments passed to be sent.
+  Command to be sent.
+  
+* ``kwargs``
+
+  / *Condition*: optional / *Type*: Dict / *Default*: None /
+  
+  The optional arguments depend on the connection type used in the 'connect' keyword. Here are the supported options:
+  
+  | Connection Type     | Argument         | Explaination                      |
+  | ------------------- | ---------------- | --------------------------------- |
+  | Winapp              | element_def      | Definition for detecting GUI item |
+  |                     |                  | / *Type*: str / *Default*: '' /   |
+  |                     |                  |                                   |
   
 **Returns:**
 
@@ -588,15 +621,16 @@ Verify a pattern from connection response after sending a command.
   
   Matched string.
       """
-      if connection_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % connection_name)
+      if conn_name not in self.connection_manage_dict.keys():
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
       
-      connection_obj = self.connection_manage_dict[connection_name]
+      connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
       
       for i in range(1, match_try+1):
-         res = connection_obj.wait_4_trace(search_obj, int(timeout), fetch_block, eob_pattern, filter_pattern, *fct_args)
+         kwargs['send_cmd'] = send_cmd
+         res = connection_obj.wait_4_trace(search_pattern, int(timeout), fetch_block, eob_pattern, filter_pattern, **kwargs)
          if res is None:
             # raise AssertionError("Unable to match the pattern after '%s' seconds." % timeout)
             BuiltIn().log("Match try %s/%s timed out" % (i, match_try), constants.LOG_LEVEL_WARNING)
@@ -621,8 +655,6 @@ if __name__ == "__main__":
    test_opt = TestOption.SSH_OPT
    if test_opt == TestOption.DLT_OPT:
       DLT_CONF_SAMPLE = {
-         # 'dltconnector': {
-            'gen3flex@DLTConnector': {
                   'target_ip': '127.0.0.1',
                   'target_port': 3490,
                   'mode': 0,
@@ -631,8 +663,6 @@ if __name__ == "__main__":
                   'baudrate': 115200,
                   'server_ip': 'localhost',
                   'server_port': 1234
-            }
-         # }
       }
       conn_manager.connect("test_dlt", "DLT", "dltconnector", DLT_CONF_SAMPLE)
       test_res = conn_manager.verify_unnamed_args("test_dlt", "get connection", 5, False, ".*", ".*", "TR_TEST_CONNECTION")

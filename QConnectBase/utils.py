@@ -101,7 +101,7 @@ Empty constructor.
       pass
 
    @staticmethod
-   def get_all_descendant_classes(cls):
+   def get_all_descendant_classes(cls, should_include_root_class=False):
       """
 Get all descendant classes of a class
       
@@ -116,6 +116,8 @@ Get all descendant classes of a class
       """
       trace_class_list = cls.__subclasses__()
       descendant_classes_list = []
+      if should_include_root_class:
+         descendant_classes_list.append(cls)
       for subclass in trace_class_list:
          descendant_classes_list.append(subclass)
          if len(subclass.__subclasses__()) > 0:

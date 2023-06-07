@@ -241,11 +241,11 @@ Abstract method for disconnecting connection.
       
 **Arguments:**   
 
-* ``n_thrd_id``    
+* ``device``
 
-  / *Condition*: required / *Type*: int /
+  / *Condition*: required / *Type*: str /
   
-  Thread id.
+  Device's name.
 
 **Returns:**
 
@@ -400,7 +400,7 @@ Thread to receive data from connection continuously.
       BuiltIn().log("%s: receiver thread terminated." % _mident, constants.LOG_LEVEL_DEBUG)
 
 
-   def send_obj(self, obj, cr=True):
+   def send_obj(self, send_cmd, cr=True):
       """
 Wrapper method to send message to a tcp connection.
       
@@ -424,7 +424,7 @@ Wrapper method to send message to a tcp connection.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
-      msg = obj
+      msg = send_cmd
       if self._is_connected:
          # noinspection PyBroadException
          try:
@@ -463,7 +463,7 @@ Wrapper method to get the response from connection.
    # endregion
 
    # region TRACE INFRASTRUCTURE METHODS
-   def wait_4_trace(self, search_obj, timeout=0, use_fetch_block=False, end_of_block_pattern=".*", filter_pattern=".*", *fct_args):
+   def wait_4_trace(self, search_obj, timeout=0, use_fetch_block=False, end_of_block_pattern=".*", filter_pattern=".*", **fct_args):
       """
 Suspend the control flow until a Trace message is received which matches to a specified regular expression.
       
@@ -523,7 +523,7 @@ Suspend the control flow until a Trace message is received which matches to a sp
       trq_handle, trace_queue = self.create_and_activate_trace_queue(search_regex, use_fetch_block, end_of_block_pattern, regex_obj_filter)
 
       try:
-         self.send_obj(*fct_args)
+         self.send_obj(**fct_args)
       except Exception as err_msg:  # pylint: disable=W0703
          BuiltIn().log('%s: An Exception occurred executing function object: %s' % (_mident, repr(self.send_obj)), 'ERROR')
          BuiltIn().log('Function Arguments: %s' % repr(fct_args), 'ERROR')

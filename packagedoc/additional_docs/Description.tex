@@ -34,12 +34,7 @@ in RobotFramework.
 
 \begin{quote}
 \textbf{connect}
-\texttt{{[}conn\_name{]}\ \ \ {[}conn\_type{]}\ \ \ {[}conn\_mode{]}\ \ \ {[}conn\_conf{]}}
-\emph{(All parameters are required to be in order)} or
-
-\textbf{connect}
 \texttt{conn\_name={[}conn\_name{]}\ \ \ conn\_type={[}conn\_type{]}\ \ \ conn\_mode={[}conn\_mode{]}\ \ \ conn\_conf={[}conn\_conf{]}}
-\emph{(All parameters are assigned by name)}
 \end{quote}
 
 \textbf{Arguments}:
@@ -158,12 +153,9 @@ command}}{send command}}\label{description-send-command}}
 \textbf{Syntax}:
 
 \begin{quote}
-\textbf{send command} \texttt{{[}conn\_name{]}\ \ \ {[}command{]}}
-\emph{(All parameters are required to be in order)} or
 
 \textbf{send command}
-\texttt{conn\_name={[}conn\_name{]}\ \ \ command={[}command{]}}
-\emph{(All parameters are assigned by name)}
+\texttt{conn\_name={[}conn\_name{]}\ \ \ command={[}command{]}\ \ {[}argument name{]}={[}argument value{]}}
 \end{quote}
 
 \textbf{Arguments}:
@@ -186,12 +178,7 @@ pattern.}
 
 \begin{quote}
 \textbf{verify}
-\texttt{{[}conn\_name{]}\ \ \ {[}search\_pattern{]}\ \ \ {[}timeout{]}\ \ \ {[}fetch\_block{]}\ \ {[}eob\_pattern{]}\ {[}filter\_pattern{]}\ \ {[}send\_cmd{]}}\emph{(All
-parameters are required to be in order)} or
-
-\textbf{verify}
-\texttt{conn\_name={[}conn\_name{]}\ \ \ search\_pattern={[}search\_pattern{]}\ \ timeout={[}timeout{]}\ \ fetch\_block={[}fetch\_block{]}\ \ eob\_pattern={[}eob\_pattern{]}\ filter\_pattern={[}filter\_pattern{]}\ \ send\_cmd={[}send\_cmd{]}}
-\emph{(All parameters are assigned by name)}
+\texttt{conn\_name={[}conn\_name{]}\ \ \ search\_pattern={[}search\_pattern{]}\ \ timeout={[}timeout{]}\ \ match\_try={[}match try time{]}\ \ fetch\_block={[}is using fetchblock{]}\ \ eob\_pattern={[}end of block pattern{]}\ filter\_pattern={[}filter pattern{]}\ \ send\_cmd={[}send comand{]}\ \ {[}argument name{]}={[}argument value{]}}
 \end{quote}
 
 \textbf{Arguments}:
@@ -199,10 +186,11 @@ parameters are required to be in order)} or
 \begin{quote}
 \textbf{conn\_name}: Name of the connection.
 
-\textbf{search\_pattern}: Regular expression for matching with the
-response.
+\textbf{search\_pattern}: Regular expression for matching with the response.
 
 \textbf{timeout}: Timeout for waiting response matching pattern.
+
+\textbf{match\_try}: Number of time for trying to match the pattern.
 
 \textbf{fetch\_block}: If this value is true, every response line will
 be put into a block untill a line match \textbf{eob\_pattern} pattern.
