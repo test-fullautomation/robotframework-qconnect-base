@@ -1,6 +1,6 @@
 # **************************************************************************************************************
 #
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -413,7 +413,7 @@ The filters are divided into three different types:
 The input string might contain leading and trailing blanks and tabs. This kind of horizontal space is removed from the input string
 before the standard filters start their work (except the regular expression based filters).
 
-The regular expression based filters consider the original input string (including the leading and trailing space). 
+The regular expression based filters consider the original input string (including the leading and trailing space).
 
 The outcome is that in case of the leading and trailing space shall be part of the criterion, the regular expression based filters can be used only.
 
@@ -526,7 +526,7 @@ The following filters are available:
 
   / *Condition*: required / *Type*: str /
 
-  The input string that has to be investigated. 
+  The input string that has to be investigated.
 
 * ``bCaseSensitive``
 

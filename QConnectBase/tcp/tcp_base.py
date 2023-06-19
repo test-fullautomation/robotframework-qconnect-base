@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -56,19 +56,19 @@ Base class for a tcp connection.
    def __init__(self, mode=None, config=None):
       """
 Constructor for TCPBase class.
-      
+
 **Arguments:**
 
-* ``mode``    
+* ``mode``
 
   / *Condition*: optional / *Type*: str / *Default*: None /
-  
+
   TCP mode.
-  
-* ``config``    
+
+* ``config``
 
   / *Condition*: optional / *Type*: dict / *Default*: None /
-  
+
   Configuration for TCP connection in dictionary format.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -106,7 +106,7 @@ Constructor for TCPBase class.
    def __del__(self):
       """
 Destructor for TCPBase class.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -120,19 +120,19 @@ Destructor for TCPBase class.
 >> Should be override in derived class.
 
 Actual method to send message to a tcp connection.
-      
-**Arguments:**   
 
-* ``msg``    
+**Arguments:**
+
+* ``msg``
 
   / *Condition*: required / *Type*: str /
-  
+
   Message to be sent.
-  
-* ``cr``    
+
+* ``cr``
 
   / *Condition*: required / *Type*: str /
-  
+
   Determine if it's necessary to add newline character at the end of command.
 
 **Returns:**
@@ -146,7 +146,7 @@ Actual method to send message to a tcp connection.
 >> Should be override in derived class.
 
 Actual method to read message from a tcp connection.
-      
+
 **Returns:**
          Empty string.
       """
@@ -155,7 +155,7 @@ Actual method to read message from a tcp connection.
    def close(self):
       """
 Close connection.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -190,7 +190,7 @@ Close connection.
    def _get_timeout(self):
       """
 Get connection timeout value.
-      
+
 **Returns:**
          Value of connection timeout.
       """
@@ -201,13 +201,13 @@ Get connection timeout value.
    def _set_timeout(self, timeout):
       """
 Set the connection timeout.
-      
-**Arguments:**   
 
-* ``timeout``    
+**Arguments:**
+
+* ``timeout``
 
   / *Condition*: required / *Type*: int /
-  
+
   Timeout value in second.
 
 **Returns:**
@@ -222,11 +222,11 @@ Set the connection timeout.
    def _get_conn_timeout(self):
       """
 Get connection timeout.
-      
+
 **Returns:**
 
   / *Type*: int /
-  
+
   Connection timeout.
       """
       return self._conn_timeout
@@ -234,13 +234,13 @@ Get connection timeout.
    def _set_conn_timeout(self, timeout):
       """
 Set connection timeout.
-      
-**Arguments:**   
 
-* ``timeout``    
+**Arguments:**
+
+* ``timeout``
 
   / *Condition*: required / *Type*: int /
-  
+
   Timeout value in second.
 
 **Returns:**
@@ -257,11 +257,11 @@ Set connection timeout.
    def _get_address(self):
       """
 Get connection address.
-      
+
 **Returns:**
 
   / *Type*: str /
-  
+
   Connection address.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -271,13 +271,13 @@ Get connection address.
    def _set_address(self, address):
       """
 Set connection address.
-      
-**Arguments:**   
 
-* ``address``    
+**Arguments:**
+
+* ``address``
 
   / *Condition*: required / *Type*: str /
-  
+
   Address of connection.
 
 **Returns:**
@@ -291,11 +291,11 @@ Set connection address.
    def _get_port(self):
       """
 Get connection port.
-      
+
 **Returns:**
 
   / *Type*: int /
-  
+
   Connection port.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -305,13 +305,13 @@ Get connection port.
    def _set_port(self, port):
       """
 Set connection port.
-      
-**Arguments:**   
 
-* ``port``    
+**Arguments:**
+
+* ``port``
 
   / *Condition*: required / *Type*: int /
-  
+
   Port number.
 
 **Returns:**
@@ -325,7 +325,7 @@ Set connection port.
    def _is_connected(self):
       """
 Get connected state.
-      
+
 **Returns:**
          True if connection is connected.
          False if connection is not connected.
@@ -337,7 +337,7 @@ Get connected state.
    def _get_socket_instance(self):
       """
       Get method of socket_instance property.
-      
+
 **Returns:**
          Value of _socket_instance.
       """
@@ -358,13 +358,13 @@ Get connected state.
    def quit(self, is_disconnect_all=True):
       """
 Quit connection.
-      
-**Arguments:**   
 
-* ``is_disconnect_all``    
+**Arguments:**
+
+* ``is_disconnect_all``
 
   / *Condition*: required / *Type*: bool /
-  
+
   Determine if it's necessary for disconnect all connection.
 
 **Returns:**
@@ -378,7 +378,7 @@ Quit connection.
 >> Should be override in derived class.
 
 Establish the connection.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -390,7 +390,7 @@ Establish the connection.
 >> Should be override in derived class.
 
 Disconnect the connection.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -411,7 +411,7 @@ Base class for TCP server.
    def _listen(self):
       """
 Listen for client socket.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -423,19 +423,19 @@ Listen for client socket.
    def _accept(self):
       """
 Method for handling socket accept action.
-      
+
 **Returns:**
 
-* ``conn``    
+* ``conn``
 
   / *Condition*: required / *Type*: socket /
-  
+
   TCP connection socket object.
-  
-* ``addr``    
+
+* ``addr``
 
   / *Condition*: required / *Type*: str /
-  
+
   The address bound to the socket on the other end of the connection.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -451,7 +451,7 @@ Method for handling socket accept action.
    def accept_connection(self):
       """
 Wrapper method for handling accept action of TCP Server.
-      
+
 **Returns:**
 
 (*no returns*)

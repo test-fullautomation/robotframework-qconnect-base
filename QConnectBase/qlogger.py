@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -55,19 +55,19 @@ Custom formatter class for setting log color.
    def format(self, record):
       """
 Set the color format for the log.
-      
-**Arguments:**   
 
-* ``record``    
+**Arguments:**
+
+* ``record``
 
   / *Condition*: required / *Type*: str /
-  
+
   Log record.
 
 **Returns:**
 
   / *Type*: logging.Formatter /
-  
+
   Log with color formatter.
       """
       log_fmt = self.FORMATS.get(record.levelno)
@@ -82,25 +82,25 @@ Handler class for user defined file in config.
    def __init__(self, config, _logger_name, formatter):
       """
 Constructor for QFileHandler class.
-      
-**Arguments:**   
 
-* ``config``    
+**Arguments:**
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Connection configurations.
-  
-* ``_logger_name``    
+
+* ``_logger_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused.
-  
-* ``formatter``    
+
+* ``formatter``
 
   / *Condition*: required / *Type*: ColorFormatter /
-  
+
   Log's formatter.
       """
       path = self.get_log_path(config)
@@ -111,13 +111,13 @@ Constructor for QFileHandler class.
    def get_log_path(config):
       """
 Get the log file path for this handler.
-      
-**Arguments:**   
 
-* ``config``    
+**Arguments:**
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Connection configurations.
 
 **Returns:**
@@ -138,21 +138,21 @@ Get the log file path for this handler.
    def get_config_supported(config):
       """
 Check if the connection config is supported by this handler.
-      
-**Arguments:**   
 
-* ``config``    
+**Arguments:**
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Connection configurations.
 
 **Returns:**
 
   / *Type*: bool /
-  
+
   True if the config is supported.
-  
+
   False if the config is not supported.
       """
       return config.logfile is not None and config.logfile != 'nonlog' and config.logfile != 'console'
@@ -165,25 +165,25 @@ Handler class for default log file path.
    def __init__(self, _config, logger_name, formatter):
       """
 Constructor for QDefaultFileHandler class.
-      
-**Arguments:**   
 
-* ``_config``    
+**Arguments:**
+
+* ``_config``
 
   / *Condition*: required / *Type*: None /
-  
+
   Unused.
-  
-* ``logger_name``    
+
+* ``logger_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of the logger.
-  
-* ``formatter``    
+
+* ``formatter``
 
   / *Condition*: required / *Type*: ColorFormatter /
-  
+
   Log's formatter.
 
 
@@ -199,13 +199,13 @@ Constructor for QDefaultFileHandler class.
    def get_log_path(logger_name):
       """
 Get the log file path for this handler.
-      
-**Arguments:**   
 
-* ``logger_name``    
+**Arguments:**
+
+* ``logger_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of the logger.
 
 **Returns:**
@@ -221,21 +221,21 @@ Get the log file path for this handler.
    def get_config_supported(config):
       """
 Check if the connection config is supported by this handler.
-      
-**Arguments:**   
 
-* ``config``    
+**Arguments:**
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Connection configurations.
 
 **Returns:**
 
   / *Type*: bool /
-  
+
   True if the config is supported.
-  
+
   False if the config is not supported.
       """
       return config.logfile is None
@@ -248,27 +248,27 @@ Handler class for console log.
    def __init__(self, _config, _logger_name, _formatter):
       """
 Constructor for QDefaultFileHandler class.
-      
-**Arguments:**   
 
-* ``_config``    
+**Arguments:**
+
+* ``_config``
 
   / *Condition*: required / *Type*: None /
-  
+
   Unused.
-  
-* ``_logger_name``    
+
+* ``_logger_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused.
-  
-* ``_formatter``    
+
+* ``_formatter``
 
   / *Condition*: required / *Type*: ColorFormatter /
-  
+
   Unused.
-  
+
 **Returns:**
 
 (*no returns*)
@@ -280,21 +280,21 @@ Constructor for QDefaultFileHandler class.
    def get_config_supported(config):
       """
 Check if the connection config is supported by this handler.
-      
-**Arguments:**   
 
-* ``config``    
+**Arguments:**
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Connection configurations.
 
 **Returns:**
 
   / *Type*: bool /
-  
+
   True if the config is supported.
-		 
+
   False if the config is not supported.
       """
       return config.logfile == 'console'
@@ -312,13 +312,13 @@ Logger class for QConnect Libraries.
    def get_logger(self, logger_name):
       """
 Get the logger object.
-      
-**Arguments:**   
 
-* ``logger_name``    
+**Arguments:**
+
+* ``logger_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of the logger.
 
 **Returns:**
@@ -326,7 +326,7 @@ Get the logger object.
 * ``logger``
 
   / *Type*: Logger /
-  
+
   Logger object.         .
       """
       self.logger_name = logger_name
@@ -338,13 +338,13 @@ Get the logger object.
    def set_handler(self, config):
       """
 Set handler for logger.
-      
-**Arguments:**   
 
-* ``config``    
+**Arguments:**
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Connection configurations.
 
 **Returns:**
@@ -352,10 +352,10 @@ Set handler for logger.
 * ``handler_ins``
 
   / *Type*: logging.handler /
-  
+
 
   None if no handler is set.
-         
+
   Handler object.
       """
       # noinspection PyBroadException

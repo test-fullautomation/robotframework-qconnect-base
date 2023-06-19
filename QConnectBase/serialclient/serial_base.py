@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -62,19 +62,19 @@ Class for handling serial connection.
    def __init__(self, _mode, config):
       """
 Constructor for SerialSocket class.
-      
-**Arguments:**   
 
-* ``_mode``    
+**Arguments:**
+
+* ``_mode``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused
-  
-* ``config``    
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Configurations for Serial Client.
       """
       self.config = SerialConfig(**config)
@@ -109,7 +109,7 @@ Constructor for SerialSocket class.
    def _thrd_llrecv_from_connection_interface(self):
       """
 Receive and process data from serial connection in low-level.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -158,13 +158,13 @@ Connect to serial port.
    def disconnect(self, _device):
       """
 Disconnect serial port.
-      
-**Arguments:**   
 
-* ``_device``    
+**Arguments:**
+
+* ``_device``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused
 
 **Returns:**
@@ -178,19 +178,19 @@ Disconnect serial port.
    def _send(self, msg, _cr):
       """
 Send data to serial port.
-      
-**Arguments:**   
 
-* ``msg``    
+**Arguments:**
+
+* ``msg``
 
   / *Condition*: required / *Type*: str /
-  
+
   Message to be sent.
-  
-* ``_cr``    
+
+* ``_cr``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused.
 
 **Returns:**
@@ -211,11 +211,11 @@ Send data to serial port.
    def _read(self):
       """
 Receive data from serial connection.
-      
+
 **Returns:**
 
   / *Type*: str /
-  
+
   Data received from connection.
       """
       data = ''
@@ -259,7 +259,7 @@ Receive data from serial connection.
    def quit(self):
       """
 Quit serial connection.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -289,19 +289,19 @@ Serial client class.
    def __init__(self, _mode, config):
       """
 Constructor for SerialClient class.
-      
-**Arguments:**   
 
-* ``_mode``    
+**Arguments:**
+
+* ``_mode``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused
-  
-* ``config``    
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Configurations for Serial Client.
       """
       super(SerialClient, self).__init__(_mode, config)
@@ -309,7 +309,7 @@ Constructor for SerialClient class.
    def connect(self):
       """
 Connect to the Serial port.
-      
+
 **Returns:**
 
 (*no returns*)
