@@ -2,7 +2,7 @@
 \label{class_q_connection_library_1_1connection__base_1_1_connection_base}\index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 
 
-Base class for all connection classes.  
+Base class for all connection classes.
 
 
 Inheritance diagram for Q\+Connection\+Library.\+connection\+\_\+base.\+Connection\+Base\+:\begin{figure}[H]
@@ -13,63 +13,63 @@ Inheritance diagram for Q\+Connection\+Library.\+connection\+\_\+base.\+Connecti
 \end{figure}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
-\item 
+\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a791d42d5e574871a492103d53d2b6c24}{\+\_\+\+\_\+new\+\_\+\+\_\+}} (cls, $\ast$args, $\ast$$\ast$kwargs)
-\begin{DoxyCompactList}\small\item\em Override creating instance method to check for conditions. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Override creating instance method to check for conditions. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a0797128db03aa3354c9dee1d6328f3b5}{is\+\_\+supported\+\_\+platform}} (cls)
-\begin{DoxyCompactList}\small\item\em Check if current platform is supported. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Check if current platform is supported. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a796183149e3d13a27f3d84db88c649b9}{is\+\_\+precondition\+\_\+pass}} (cls)
-\begin{DoxyCompactList}\small\item\em Check for precondition. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Check for precondition. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_ad2e3e4890d322aa506864449b50095a5}{error\+\_\+instruction}} (self)
-\begin{DoxyCompactList}\small\item\em Get the error instruction. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Get the error instruction. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a7c39d9906a1a619a0f60330fae0087ce}{quit}} (self, is\+\_\+disconnect\+\_\+all=True)
-\item 
+\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a3c917e61460dea2b4b8e6aa89bcab525}{connect}} (self, device, files=None, test\+\_\+connection=False)
-\item 
+\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_ad054cebb02c0a4d84a294e43755c4404}{disconnect}} (self, device)
-\item 
+\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_ac7512d14ccbe41c7e53bda92414909fa}{send\+\_\+obj}} (self, obj, cr=True)
-\begin{DoxyCompactList}\small\item\em Wrapper method to send message to a tcp connection. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Wrapper method to send message to a tcp connection. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a9f81bc82acd21c1522cda2f711fc41bd}{read\+\_\+obj}} (self)
-\begin{DoxyCompactList}\small\item\em Wrapper method to get the response from connection. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Wrapper method to get the response from connection. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_afe0fa48d725779c2baa37da357b2c18d}{wait\+\_\+4\+\_\+trace}} (self, search\+\_\+obj, timeout=0, use\+\_\+fetch\+\_\+block=False, end\+\_\+of\+\_\+block\+\_\+pattern=\char`\"{}.$\ast$\char`\"{}, filter\+\_\+pattern=\char`\"{}.$\ast$\char`\"{}, $\ast$fct\+\_\+args)
-\begin{DoxyCompactList}\small\item\em Suspend the control flow until a Trace message is received which matches to a specified regular expression. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Suspend the control flow until a Trace message is received which matches to a specified regular expression. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a942c660f7984b5f70833818493815d8e}{wait\+\_\+4\+\_\+trace\+\_\+continuously}} (self, trace\+\_\+queue, timeout=0, $\ast$fct\+\_\+args)
-\begin{DoxyCompactList}\small\item\em Getting trace log continuously without creating a new trace queue. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Getting trace log continuously without creating a new trace queue. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a10bace25af70ba235e043ea7956a05bf}{create\+\_\+and\+\_\+activate\+\_\+trace\+\_\+queue}} (cls, search\+\_\+element, use\+\_\+fetch\+\_\+block=False, end\+\_\+of\+\_\+block\+\_\+pattern=\textquotesingle{}.$\ast$\textquotesingle{}, regex\+\_\+line\+\_\+filter\+\_\+pattern=None)
-\begin{DoxyCompactList}\small\item\em Create Queue and assign it to \+\_\+trace\+\_\+queue object and activate the queue with the search element. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Create Queue and assign it to \+\_\+trace\+\_\+queue object and activate the queue with the search element. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a1d9a39b790f54cbf590ac5c9751bd004}{deactivate\+\_\+and\+\_\+delete\+\_\+trace\+\_\+queue}} (cls, trq\+\_\+handle, trace\+\_\+queue)
-\begin{DoxyCompactList}\small\item\em Deactivate trace queue and delete. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Deactivate trace queue and delete. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a1bea110bb74f9b4bd0da46256d51720a}{activate\+\_\+trace\+\_\+queue}} (cls, search\+\_\+obj, trace\+\_\+queue, use\+\_\+fetch\+\_\+block=False, end\+\_\+of\+\_\+block\+\_\+pattern=\textquotesingle{}.$\ast$\textquotesingle{}, line\+\_\+filter\+\_\+pattern=None)
-\begin{DoxyCompactList}\small\item\em Activates a trace message filter specified as a regular expression. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Activates a trace message filter specified as a regular expression. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a33d8c496ddcdb1f2f1047fcabaf0492d}{deactivate\+\_\+trace\+\_\+queue}} (cls, handle)
-\begin{DoxyCompactList}\small\item\em Deactivates a trace message filter previously activated by Activate\+Trace\+Q() method. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Deactivates a trace message filter previously activated by Activate\+Trace\+Q() method. \end{DoxyCompactList}\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_af73c4c874895e0cc029c98ba9f565287}{check\+\_\+timeout}} (self, msg)
-\item 
+\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_af72bf01fe9d0d914b924934af0a55988}{pre\+\_\+msg\+\_\+check}} (self, msg)
-\item 
+\item
 def \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_a105620e7b07a89bd8959429b063d75e6}{post\+\_\+msg\+\_\+check}} (self, msg)
 \end{DoxyCompactItemize}
 \doxysubsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
-\item 
+\item
 int \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_ab2d66c07489721f394038c5dd28c3b70}{M\+A\+X\+\_\+\+L\+E\+N\+\_\+\+B\+A\+C\+K\+T\+R\+A\+CE}} = 500
-\item 
+\item
 float \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_ae67f76f1616346aae228b5972bec56a5}{R\+E\+C\+V\+\_\+\+M\+S\+G\+S\+\_\+\+P\+O\+L\+L\+I\+N\+G\+\_\+\+I\+N\+T\+E\+R\+V\+AL}} = 0.\+005
-\item 
+\item
 list \mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base_aee4cc2ba8d3646ac6973ee9ef312ea86}{supported\+\_\+devices}} = \mbox{[}$\,$\mbox{]}
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-Base class for all connection classes. 
+Base class for all connection classes.
 
 Definition at line 44 of file connection\+\_\+base.\+py.
 
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a791d42d5e574871a492103d53d2b6c24}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a791d42d5e574871a492103d53d2b6c24}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a791d42d5e574871a492103d53d2b6c24}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a791d42d5e574871a492103d53d2b6c24}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!\_\_new\_\_@{\_\_new\_\_}}
 \index{\_\_new\_\_@{\_\_new\_\_}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{\_\_new\_\_()}{\_\_new\_\_()}}
@@ -77,7 +77,7 @@ Definition at line 44 of file connection\+\_\+base.\+py.
 
 
 
-Override creating instance method to check for conditions. 
+Override creating instance method to check for conditions.
 
 
 \begin{DoxyParams}{Parameters}
@@ -87,13 +87,13 @@ Override creating instance method to check for conditions.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-\mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base}{Connection\+Base}} instance if passing the conditions. None if failing the conditions. 
+\mbox{\hyperlink{class_q_connection_library_1_1connection__base_1_1_connection_base}{Connection\+Base}} instance if passing the conditions. None if failing the conditions.
 \end{DoxyReturn}
 
 
 Definition at line 135 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a1bea110bb74f9b4bd0da46256d51720a}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a1bea110bb74f9b4bd0da46256d51720a}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a1bea110bb74f9b4bd0da46256d51720a}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a1bea110bb74f9b4bd0da46256d51720a}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!activate\_trace\_queue@{activate\_trace\_queue}}
 \index{activate\_trace\_queue@{activate\_trace\_queue}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{activate\_trace\_queue()}{activate\_trace\_queue()}}
@@ -101,7 +101,7 @@ Definition at line 135 of file connection\+\_\+base.\+py.
 
 
 
-Activates a trace message filter specified as a regular expression. 
+Activates a trace message filter specified as a regular expression.
 
 All matching trace messages are put in the specified queue object.
 
@@ -119,13 +119,13 @@ All matching trace messages are put in the specified queue object.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-$<$int$>$ \+: Handle to deactivate the message filter. 
+$<$int$>$ \+: Handle to deactivate the message filter.
 \end{DoxyReturn}
 
 
 Definition at line 536 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_af73c4c874895e0cc029c98ba9f565287}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_af73c4c874895e0cc029c98ba9f565287}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_af73c4c874895e0cc029c98ba9f565287}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_af73c4c874895e0cc029c98ba9f565287}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!check\_timeout@{check\_timeout}}
 \index{check\_timeout@{check\_timeout}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{check\_timeout()}{check\_timeout()}}
@@ -135,7 +135,7 @@ Definition at line 536 of file connection\+\_\+base.\+py.
 
 Definition at line 591 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a3c917e61460dea2b4b8e6aa89bcab525}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a3c917e61460dea2b4b8e6aa89bcab525}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a3c917e61460dea2b4b8e6aa89bcab525}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a3c917e61460dea2b4b8e6aa89bcab525}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!connect@{connect}}
 \index{connect@{connect}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{connect()}{connect()}}
@@ -145,7 +145,7 @@ Definition at line 591 of file connection\+\_\+base.\+py.
 
 Definition at line 196 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a10bace25af70ba235e043ea7956a05bf}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a10bace25af70ba235e043ea7956a05bf}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a10bace25af70ba235e043ea7956a05bf}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a10bace25af70ba235e043ea7956a05bf}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!create\_and\_activate\_trace\_queue@{create\_and\_activate\_trace\_queue}}
 \index{create\_and\_activate\_trace\_queue@{create\_and\_activate\_trace\_queue}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{create\_and\_activate\_trace\_queue()}{create\_and\_activate\_trace\_queue()}}
@@ -153,7 +153,7 @@ Definition at line 196 of file connection\+\_\+base.\+py.
 
 
 
-Create Queue and assign it to \+\_\+trace\+\_\+queue object and activate the queue with the search element. 
+Create Queue and assign it to \+\_\+trace\+\_\+queue object and activate the queue with the search element.
 
 
 \begin{DoxyParams}{Parameters}
@@ -167,13 +167,13 @@ Create Queue and assign it to \+\_\+trace\+\_\+queue object and activate the que
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-trq\+\_\+handle, trace\+\_\+queue\+: the handle and search object 
+trq\+\_\+handle, trace\+\_\+queue\+: the handle and search object
 \end{DoxyReturn}
 
 
 Definition at line 502 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a1d9a39b790f54cbf590ac5c9751bd004}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a1d9a39b790f54cbf590ac5c9751bd004}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a1d9a39b790f54cbf590ac5c9751bd004}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a1d9a39b790f54cbf590ac5c9751bd004}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!deactivate\_and\_delete\_trace\_queue@{deactivate\_and\_delete\_trace\_queue}}
 \index{deactivate\_and\_delete\_trace\_queue@{deactivate\_and\_delete\_trace\_queue}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{deactivate\_and\_delete\_trace\_queue()}{deactivate\_and\_delete\_trace\_queue()}}
@@ -181,7 +181,7 @@ Definition at line 502 of file connection\+\_\+base.\+py.
 
 
 
-Deactivate trace queue and delete. 
+Deactivate trace queue and delete.
 
 
 \begin{DoxyParams}{Parameters}
@@ -193,13 +193,13 @@ Deactivate trace queue and delete.
 \begin{DoxyReturn}{Returns}
 
 
-None. 
+None.
 \end{DoxyReturn}
 
 
 Definition at line 517 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a33d8c496ddcdb1f2f1047fcabaf0492d}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a33d8c496ddcdb1f2f1047fcabaf0492d}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a33d8c496ddcdb1f2f1047fcabaf0492d}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a33d8c496ddcdb1f2f1047fcabaf0492d}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!deactivate\_trace\_queue@{deactivate\_trace\_queue}}
 \index{deactivate\_trace\_queue@{deactivate\_trace\_queue}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{deactivate\_trace\_queue()}{deactivate\_trace\_queue()}}
@@ -207,7 +207,7 @@ Definition at line 517 of file connection\+\_\+base.\+py.
 
 
 
-Deactivates a trace message filter previously activated by Activate\+Trace\+Q() method. 
+Deactivates a trace message filter previously activated by Activate\+Trace\+Q() method.
 
 
 \begin{DoxyParams}{Parameters}
@@ -217,15 +217,15 @@ Deactivates a trace message filter previously activated by Activate\+Trace\+Q() 
 \begin{DoxyReturn}{Returns}
 
 
-False No trace message filter active with the specified handle (i.\+e. handle is not in use). 
+False No trace message filter active with the specified handle (i.\+e. handle is not in use).
 
-True Trace message filter successfully deleted. 
+True Trace message filter successfully deleted.
 \end{DoxyReturn}
 
 
 Definition at line 567 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ad054cebb02c0a4d84a294e43755c4404}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ad054cebb02c0a4d84a294e43755c4404}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ad054cebb02c0a4d84a294e43755c4404}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ad054cebb02c0a4d84a294e43755c4404}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!disconnect@{disconnect}}
 \index{disconnect@{disconnect}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{disconnect()}{disconnect()}}
@@ -239,7 +239,7 @@ Reimplemented in \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base
 
 Definition at line 210 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ad2e3e4890d322aa506864449b50095a5}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ad2e3e4890d322aa506864449b50095a5}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ad2e3e4890d322aa506864449b50095a5}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ad2e3e4890d322aa506864449b50095a5}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!error\_instruction@{error\_instruction}}
 \index{error\_instruction@{error\_instruction}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{error\_instruction()}{error\_instruction()}}
@@ -247,16 +247,16 @@ Definition at line 210 of file connection\+\_\+base.\+py.
 
 
 
-Get the error instruction. 
+Get the error instruction.
 
 \begin{DoxyReturn}{Returns}
-Error instruction string. 
+Error instruction string.
 \end{DoxyReturn}
 
 
 Definition at line 166 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a796183149e3d13a27f3d84db88c649b9}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a796183149e3d13a27f3d84db88c649b9}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a796183149e3d13a27f3d84db88c649b9}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a796183149e3d13a27f3d84db88c649b9}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!is\_precondition\_pass@{is\_precondition\_pass}}
 \index{is\_precondition\_pass@{is\_precondition\_pass}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{is\_precondition\_pass()}{is\_precondition\_pass()}}
@@ -264,16 +264,16 @@ Definition at line 166 of file connection\+\_\+base.\+py.
 
 
 
-Check for precondition. 
+Check for precondition.
 
 \begin{DoxyReturn}{Returns}
-True if passing the precondition. False if failing the precondition. 
+True if passing the precondition. False if failing the precondition.
 \end{DoxyReturn}
 
 
 Definition at line 158 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a0797128db03aa3354c9dee1d6328f3b5}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a0797128db03aa3354c9dee1d6328f3b5}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a0797128db03aa3354c9dee1d6328f3b5}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a0797128db03aa3354c9dee1d6328f3b5}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!is\_supported\_platform@{is\_supported\_platform}}
 \index{is\_supported\_platform@{is\_supported\_platform}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{is\_supported\_platform()}{is\_supported\_platform()}}
@@ -281,16 +281,16 @@ Definition at line 158 of file connection\+\_\+base.\+py.
 
 
 
-Check if current platform is supported. 
+Check if current platform is supported.
 
 \begin{DoxyReturn}{Returns}
-True if platform is supported. False if platform is not supported. 
+True if platform is supported. False if platform is not supported.
 \end{DoxyReturn}
 
 
 Definition at line 148 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a105620e7b07a89bd8959429b063d75e6}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a105620e7b07a89bd8959429b063d75e6}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a105620e7b07a89bd8959429b063d75e6}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a105620e7b07a89bd8959429b063d75e6}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!post\_msg\_check@{post\_msg\_check}}
 \index{post\_msg\_check@{post\_msg\_check}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{post\_msg\_check()}{post\_msg\_check()}}
@@ -300,7 +300,7 @@ Definition at line 148 of file connection\+\_\+base.\+py.
 
 Definition at line 615 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_af72bf01fe9d0d914b924934af0a55988}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_af72bf01fe9d0d914b924934af0a55988}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_af72bf01fe9d0d914b924934af0a55988}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_af72bf01fe9d0d914b924934af0a55988}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!pre\_msg\_check@{pre\_msg\_check}}
 \index{pre\_msg\_check@{pre\_msg\_check}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{pre\_msg\_check()}{pre\_msg\_check()}}
@@ -310,7 +310,7 @@ Definition at line 615 of file connection\+\_\+base.\+py.
 
 Definition at line 603 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a7c39d9906a1a619a0f60330fae0087ce}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a7c39d9906a1a619a0f60330fae0087ce}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a7c39d9906a1a619a0f60330fae0087ce}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a7c39d9906a1a619a0f60330fae0087ce}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!quit@{quit}}
 \index{quit@{quit}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{quit()}{quit()}}
@@ -324,7 +324,7 @@ Reimplemented in \mbox{\hyperlink{class_q_connection_library_1_1tcp_1_1tcp__base
 
 Definition at line 181 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a9f81bc82acd21c1522cda2f711fc41bd}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a9f81bc82acd21c1522cda2f711fc41bd}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a9f81bc82acd21c1522cda2f711fc41bd}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a9f81bc82acd21c1522cda2f711fc41bd}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!read\_obj@{read\_obj}}
 \index{read\_obj@{read\_obj}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{read\_obj()}{read\_obj()}}
@@ -332,16 +332,16 @@ Definition at line 181 of file connection\+\_\+base.\+py.
 
 
 
-Wrapper method to get the response from connection. 
+Wrapper method to get the response from connection.
 
 \begin{DoxyReturn}{Returns}
-Responded message. 
+Responded message.
 \end{DoxyReturn}
 
 
 Definition at line 369 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ac7512d14ccbe41c7e53bda92414909fa}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ac7512d14ccbe41c7e53bda92414909fa}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ac7512d14ccbe41c7e53bda92414909fa}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ac7512d14ccbe41c7e53bda92414909fa}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!send\_obj@{send\_obj}}
 \index{send\_obj@{send\_obj}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{send\_obj()}{send\_obj()}}
@@ -349,7 +349,7 @@ Definition at line 369 of file connection\+\_\+base.\+py.
 
 
 
-Wrapper method to send message to a tcp connection. 
+Wrapper method to send message to a tcp connection.
 
 
 \begin{DoxyParams}{Parameters}
@@ -361,13 +361,13 @@ Wrapper method to send message to a tcp connection.
 \begin{DoxyReturn}{Returns}
 
 
-None 
+None
 \end{DoxyReturn}
 
 
 Definition at line 349 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_afe0fa48d725779c2baa37da357b2c18d}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_afe0fa48d725779c2baa37da357b2c18d}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_afe0fa48d725779c2baa37da357b2c18d}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_afe0fa48d725779c2baa37da357b2c18d}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!wait\_4\_trace@{wait\_4\_trace}}
 \index{wait\_4\_trace@{wait\_4\_trace}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{wait\_4\_trace()}{wait\_4\_trace()}}
@@ -375,7 +375,7 @@ Definition at line 349 of file connection\+\_\+base.\+py.
 
 
 
-Suspend the control flow until a Trace message is received which matches to a specified regular expression. 
+Suspend the control flow until a Trace message is received which matches to a specified regular expression.
 
 
 \begin{DoxyParams}{Parameters}
@@ -401,13 +401,13 @@ Disabled py\+Lint Messages\+: \begin{DoxyReturn}{Returns}
 W0703 Catch \textquotesingle{}Exception\textquotesingle{} Used when an except catches Exception instances. \begin{DoxyVerb} There is no specific exception to be handled and script should continue in any case.
  This method calls a function object passes as an argument. So it has no knowledge about possible exception classes.
 \end{DoxyVerb}
- 
+
 \end{DoxyReturn}
 
 
 Definition at line 416 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a942c660f7984b5f70833818493815d8e}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a942c660f7984b5f70833818493815d8e}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_a942c660f7984b5f70833818493815d8e}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_a942c660f7984b5f70833818493815d8e}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!wait\_4\_trace\_continuously@{wait\_4\_trace\_continuously}}
 \index{wait\_4\_trace\_continuously@{wait\_4\_trace\_continuously}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{wait\_4\_trace\_continuously()}{wait\_4\_trace\_continuously()}}
@@ -415,7 +415,7 @@ Definition at line 416 of file connection\+\_\+base.\+py.
 
 
 
-Getting trace log continuously without creating a new trace queue. 
+Getting trace log continuously without creating a new trace queue.
 
 
 \begin{DoxyParams}{Parameters}
@@ -429,7 +429,7 @@ Getting trace log continuously without creating a new trace queue.
 \begin{DoxyReturn}{Returns}
 
 
-None If no trace message matched to the specified regular expression and a timeout occurred. $<$match$>$ \+: If a trace message has matched to the specified regular expression, a match object is returned as the result. The complete trace message can be accessed by the \textquotesingle{}string\textquotesingle{} attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module \textquotesingle{}re\textquotesingle{}. 
+None If no trace message matched to the specified regular expression and a timeout occurred. $<$match$>$ \+: If a trace message has matched to the specified regular expression, a match object is returned as the result. The complete trace message can be accessed by the \textquotesingle{}string\textquotesingle{} attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module \textquotesingle{}re\textquotesingle{}.
 \end{DoxyReturn}
 
 
@@ -438,7 +438,7 @@ Definition at line 462 of file connection\+\_\+base.\+py.
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ab2d66c07489721f394038c5dd28c3b70}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ab2d66c07489721f394038c5dd28c3b70}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ab2d66c07489721f394038c5dd28c3b70}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ab2d66c07489721f394038c5dd28c3b70}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!MAX\_LEN\_BACKTRACE@{MAX\_LEN\_BACKTRACE}}
 \index{MAX\_LEN\_BACKTRACE@{MAX\_LEN\_BACKTRACE}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{MAX\_LEN\_BACKTRACE}{MAX\_LEN\_BACKTRACE}}
@@ -448,7 +448,7 @@ Definition at line 462 of file connection\+\_\+base.\+py.
 
 Definition at line 60 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ae67f76f1616346aae228b5972bec56a5}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ae67f76f1616346aae228b5972bec56a5}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_ae67f76f1616346aae228b5972bec56a5}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_ae67f76f1616346aae228b5972bec56a5}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!RECV\_MSGS\_POLLING\_INTERVAL@{RECV\_MSGS\_POLLING\_INTERVAL}}
 \index{RECV\_MSGS\_POLLING\_INTERVAL@{RECV\_MSGS\_POLLING\_INTERVAL}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{RECV\_MSGS\_POLLING\_INTERVAL}{RECV\_MSGS\_POLLING\_INTERVAL}}
@@ -458,7 +458,7 @@ Definition at line 60 of file connection\+\_\+base.\+py.
 
 Definition at line 62 of file connection\+\_\+base.\+py.
 
-\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_aee4cc2ba8d3646ac6973ee9ef312ea86}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_aee4cc2ba8d3646ac6973ee9ef312ea86}} 
+\mbox{\Hypertarget{class_q_connection_library_1_1connection__base_1_1_connection_base_aee4cc2ba8d3646ac6973ee9ef312ea86}\label{class_q_connection_library_1_1connection__base_1_1_connection_base_aee4cc2ba8d3646ac6973ee9ef312ea86}}
 \index{QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}!supported\_devices@{supported\_devices}}
 \index{supported\_devices@{supported\_devices}!QConnectionLibrary.connection\_base.ConnectionBase@{QConnectionLibrary.connection\_base.ConnectionBase}}
 \doxysubsubsection{\texorpdfstring{supported\_devices}{supported\_devices}}
@@ -471,5 +471,5 @@ Definition at line 108 of file connection\+\_\+base.\+py.
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
-\item 
+\item
 D\+:/\+Project/robot/\+R\+O\+B\+F\+W-\/85/robotframework-\/qconnect-\/base/\+Q\+Connection\+Library/\mbox{\hyperlink{connection__base_8py}{connection\+\_\+base.\+py}}\end{DoxyCompactItemize}

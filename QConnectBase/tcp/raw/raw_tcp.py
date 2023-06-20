@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ Base class for a raw tcp connection.
    def _read(self):
       """
 Actual method to read message from a tcp connection.
-      
+
 **Returns:**
          Empty string.
       """
@@ -60,19 +60,19 @@ Actual method to read message from a tcp connection.
    def _send(self, msg, cr):
       """
 Actual method to send message to a tcp connection.
-      
-**Arguments:**   
 
-* ``obj``    
+**Arguments:**
+
+* ``obj``
 
   / *Condition*: required / *Type*: str /
-  
+
   Data to be sent.
-  
-* ``cr``    
+
+* ``cr``
 
   / *Condition*: optional / *Type*: str /
-  
+
   Determine if it's necessary to add newline character at the end of command.
 
 **Returns:**
@@ -96,19 +96,19 @@ Class for a raw tcp connection server.
    def __init__(self, mode=None, config=None):
       """
 Constructor of RawTCPServer class.
-      
-**Arguments:**   
 
-* ``mode``    
+**Arguments:**
+
+* ``mode``
 
   / *Condition*: optional / *Type*: str / *Default*: None /
-  
+
   TCP mode.
-  
-* ``config``    
+
+* ``config``
 
   / *Condition*: optional / *Type*: dict / *Default*: None /
-  
+
   Configuration for TCP connection in dictionary format.
       """
       super(RawTCPServer, self).__init__(mode, config)
@@ -124,19 +124,19 @@ Class for a raw tcp connection client.
    def __init__(self, mode=None, config=None):
       """
 Constructor of RawTCPClient class.
-      
-**Arguments:**   
 
-* ``mode``    
+**Arguments:**
+
+* ``mode``
 
   / *Condition*: optional / *Type*: str / *Default*: None /
-  
+
   TCP mode.
-  
-* ``config``    
+
+* ``config``
 
   / *Condition*: optional / *Type*: dict / *Default*: None /
-  
+
   Configuration for TCP connection in dictionary format.
       """
       super(RawTCPClient, self).__init__(mode, config)

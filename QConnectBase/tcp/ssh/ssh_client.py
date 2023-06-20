@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -65,19 +65,19 @@ SSH client connection class.
    def __init__(self, _mode, config):
       """
 Constructor for SSHClient class.
-      
-**Arguments:**   
 
-* ``_mode``    
+**Arguments:**
+
+* ``_mode``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused
-  
-* ``config``    
+
+* ``config``
 
   / *Condition*: required / *Type*: DictToClass /
-  
+
   Configurations for SSH Client.
       """
       # paramiko.SSHClient.__init__(self)
@@ -109,7 +109,7 @@ Constructor for SSHClient class.
    def _thrd_llrecv_from_connection_interface(self):
       """
 Implementation the thread for getting data from ssh connection.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -145,7 +145,7 @@ Implementation the thread for getting data from ssh connection.
    def connect(self):
       """
 Implementation for creating a SSH connection.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -234,19 +234,19 @@ Implementation for creating a SSH connection.
    def _send(self, msg, _cr):
       """
 Send message to SSH connection.
-      
-**Arguments:**   
 
-* ``msg``    
+**Arguments:**
+
+* ``msg``
 
   / *Condition*: required / *Type*: str /
-  
+
   Message to be sent.
-  
-* ``_cr``    
+
+* ``_cr``
 
   / *Condition*: required / *Type*: str /
-  
+
   Unused.
 
 **Returns:**
@@ -265,11 +265,11 @@ Send message to SSH connection.
    def _read(self):
       """
 Read data from SSH connection.
-      
+
 **Returns:**
 
   / *Type*: str /
-  
+
   Data from SSH connection.
       """
       data = ''
@@ -295,7 +295,7 @@ Read data from SSH connection.
    def close(self):
       """
 Close SSH connection.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -312,7 +312,7 @@ Close SSH connection.
    def quit(self):
       """
 Quit and stop receiver thread.
-      
+
 **Returns:**
 
 (*no returns*)

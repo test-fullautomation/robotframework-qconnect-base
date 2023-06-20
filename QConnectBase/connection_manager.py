@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -142,7 +142,7 @@ Destructor for ConnectionManager class.
    def quit(self):
       """
 Quit connection manager.
-      
+
 **Returns:**
 
 (*no returns*)
@@ -154,16 +154,16 @@ Quit connection manager.
    def add_connection(self, name, conn):
       """
 Add a connection to managed dictionary.
-      
-**Arguments:**   
 
-* ``name``   
+**Arguments:**
+
+* ``name``
 
   / *Condition*: required / *Type*: str /
 
   Connection's name.
-  
-* ``conn``   
+
+* ``conn``
 
   / *Condition*: required / *Type*: socket.socket /
 
@@ -179,10 +179,10 @@ Add a connection to managed dictionary.
    def remove_connection(self, connection_name):
       """
 Remove a connection by name.
-      
-**Arguments:**   
 
-* ``connection_name``   
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -199,10 +199,10 @@ Remove a connection by name.
    def get_connection_by_name(self, connection_name):
       """
 Get an exist connection by name.
-      
-**Arguments:**   
 
-* ``connection_name``   
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -213,7 +213,7 @@ Get an exist connection by name.
 * ``conn``
 
   / *Type*: socket.socket /
-  
+
   Connection object.
       """
       conn = None
@@ -225,10 +225,10 @@ Get an exist connection by name.
    def disconnect(self, connection_name):
       """
 Keyword for disconnecting a connection by name.
-      
-**Arguments:**   
 
-* ``connection_name``   
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -246,18 +246,18 @@ Keyword for disconnecting a connection by name.
 #    def connect(self, *args, **kwargs):
 #       """
 # Keyword for making a connection.
-      
-# **Arguments:**   
+
+# **Arguments:**
 
 # (*refer to connect_unnamed_args method for details*)
 
-# * ``args``    
+# * ``args``
 
 #   / *Condition*: required / *Type*: tuple /
 
 #   Non-Keyword Arguments.
 
-# * ``kwargs``   
+# * ``kwargs``
 
 #   / *Condition*: required / *Type*: dict /
 
@@ -280,15 +280,15 @@ Keyword for disconnecting a connection by name.
 #    def connect_named_args(self, **kwargs):
 #       """
 # Making a connection with name arguments.
-      
-# **Arguments:**   
+
+# **Arguments:**
 
 # (*refer to connect_unnamed_args method for details*)
 
-#   * ``kwargs``   
+#   * ``kwargs``
 
 #   / *Condition*: required / *Type*: dict /
-  
+
 #   Keyword Arguments.
 
 # **Returns:**
@@ -309,31 +309,31 @@ Keyword for disconnecting a connection by name.
    def connect(self, conn_name='default_conn', conn_type='TCPIP', conn_mode='', conn_conf={}):
       """
 Making a connection.
-      
-**Arguments:**   
 
-* ``conn_name``    
+**Arguments:**
+
+* ``conn_name``
 
   / *Condition*: optional / *Type*: str / *Default*: 'default_conn' /
-  
+
   Name of connection.
 
-* ``conn_type``    
+* ``conn_type``
 
   / *Condition*: optional / *Type*: str / *Default*: 'TCPIP' /
-  
+
   Type of connection.
 
-* ``conn_mode``    
+* ``conn_mode``
 
   / *Condition*: optional / *Type*: str / *Default*: '' /
-  
+
   Connection mode.
 
-* ``conn_conf``    
+* ``conn_conf``
 
   / *Condition*: optional / *Type*: json / *Default*: {} /
-  
+
   Configuration for connection.
 
 **Returns:**
@@ -436,19 +436,19 @@ Making a connection.
    def send_command(self, conn_name, command, **kwargs):
       """
 Send command to a connection.
-      
-**Arguments:**   
 
-* ``connection_name``    
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of connection.
 
-* ``command``    
+* ``command``
 
   / *Condition*: required / *Type*: str /
-  
+
   Command to be sent.
 
 * ``kwargs``
@@ -456,7 +456,7 @@ Send command to a connection.
   / *Condition*: optional / *Type*: dict / *Default*: {} /
 
   Keyword Arguments.
-  
+
 **Returns:**
 
 (*no returns*)
@@ -549,20 +549,20 @@ Send command to a connection.
    def verify(self, conn_name, search_pattern, timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
       """
 Verify a pattern from connection response after sending a command.
-      
-**Arguments:**   
+
+**Arguments:**
 
 * ``conn_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of connection.
-		 
+
 * ``search_pattern``
 
   / *Condition*: required / *Type*: str /
-  
-  Regular expression all received trace messages are compare to. 
+
+  Regular expression all received trace messages are compare to.
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
 
 * ``timeout``
@@ -576,58 +576,58 @@ Verify a pattern from connection response after sending a command.
   / *Condition*: optional / *Type*: int / *Default*: 1 /
 
   Number of time for trying to match the pattern.
-  
-* ``fetch_block``    
+
+* ``fetch_block``
 
   / *Condition*: optional / *Type*: bool / *Default*: False /
-  
+
   Determine if 'fetch block' feature is used.
-  
-* ``eob_pattern``    
+
+* ``eob_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
-  
-  The end of block pattern.  
 
-* ``filter_pattern``    
+  The end of block pattern.
+
+* ``filter_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
-  
+
   Pattern to filter message line by line.
 
-* ``send_cmd``    
+* ``send_cmd``
 
   / *Condition*: optional / *Type*: str / *Default*: '' /
-  
+
   Command to be sent.
-  
+
 * ``kwargs``
 
   / *Condition*: optional / *Type*: Dict / *Default*: None /
-  
+
   The optional arguments depend on the connection type used in the 'connect' keyword. Here are the supported options:
-  
+
   | Connection Type     | Argument         | Explaination                      |
   | ------------------- | ---------------- | --------------------------------- |
   | Winapp              | element_def      | Definition for detecting GUI item |
   |                     |                  | / *Type*: str / *Default*: '' /   |
   |                     |                  |                                   |
-  
+
 **Returns:**
 
 * ``match_res``
 
   / *Type*: str /
-  
+
   Matched string.
       """
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
-      
+
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
-      
+
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
          res = connection_obj.wait_4_trace(search_pattern, int(timeout), fetch_block, eob_pattern, filter_pattern, **kwargs)

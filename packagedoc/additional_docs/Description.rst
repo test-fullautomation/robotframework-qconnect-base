@@ -1,4 +1,4 @@
-.. Copyright 2020-2022 Robert Bosch GmbH
+.. Copyright 2020-2023 Robert Bosch GmbH
 
 .. Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -131,8 +131,8 @@ QConnectBase Library support following keywords for testing connection in RobotF
 
    **send command**
    ``conn_name=[conn_name]   command=[command]`` *(All parameters are
-   assigned by name)* 
-   
+   assigned by name)*
+
   **Arguments**:
 
    **conn_name**: Name of the connection.
@@ -321,7 +321,7 @@ Contributors
 License
 -------
 
-Copyright 2020-2022 Robert Bosch GmbH
+Copyright 2020-2023 Robert Bosch GmbH
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -104,14 +104,14 @@ Empty constructor.
    def get_all_descendant_classes(cls, should_include_root_class=False):
       """
 Get all descendant classes of a class
-      
-**Arguments:**   
+
+**Arguments:**
          cls: Input class for finding descendants.
 
 **Returns:**
 
   / *Type*: list /
-  
+
   Array of descendant classes.
       """
       trace_class_list = cls.__subclasses__()
@@ -128,19 +128,19 @@ Get all descendant classes of a class
    def get_all_sub_classes(cls):
       """
 Get all children classes of a class
-      
-**Arguments:**   
 
-* ``cls``    
+**Arguments:**
+
+* ``cls``
 
   / *Condition*: required / *Type*: class /
-  
+
   Input class for finding children.
 
 **Returns:**
 
   / *Type*: list /
-  
+
   Array of children classes.
       """
       return set(cls.__subclasses__()).union(
@@ -183,20 +183,20 @@ Get all children classes of a class
    def caller_name(skip=2):
       """
 Get a name of a caller in the format module.class.method
-      
-**Arguments:**   
 
-* ``skip``    
+**Arguments:**
+
+* ``skip``
 
   / *Condition*: required / *Type*: int /
-  
+
   Specifies how many levels of stack to skip while getting caller
          name. skip=1 means "who calls me", skip=2 "who calls my caller" etc.
-         
+
 **Returns:**
 
   / *Type*: str /
-  
+
   An empty string is returned if skipped levels exceed stack height
       """
       stack = inspect.stack()
@@ -227,19 +227,19 @@ Get a name of a caller in the format module.class.method
    def load_library(path, is_stdcall=True):
       """
 Load native library depend on the calling convention.
-      
-**Arguments:**   
 
-* ``path``    
+**Arguments:**
+
+* ``path``
 
   / *Condition*: required / *Type*: str /
-  
+
   Library path.
-  
-* ``is_stdcall``    
+
+* ``is_stdcall``
 
   / *Condition*: optional / *Type*: bool / *Default*: True /
-  
+
   Determine if the library's calling convention is stdcall or cdecl.
 
 **Returns:**
@@ -261,17 +261,17 @@ Load native library depend on the calling convention.
    def is_ascii_or_unicode(str_check, codecs=['utf8', 'utf16', 'utf32', 'ascii']):
       """
 Check if the string is ascii or unicode
-      
-**Arguments:**   
+
+**Arguments:**
          str_check: string for checking
          codecs: encoding type list
 
 **Returns:**
 
   / *Type*: bool /
-  
+
   True : if checked string is ascii or unicode
-  
+
   False : if checked string is not ascii or unicode
       """
       res = False

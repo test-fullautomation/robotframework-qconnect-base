@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Robert Bosch GmbH
+#  Copyright 2020-2023 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -93,16 +93,16 @@ Base class for all connection classes.
    def __new__(cls, *args, **kwargs):
       """
 Override creating instance method to check for conditions.
-      
+
 **Arguments:**
 
-* ``args``    
+* ``args``
 
   / *Condition*: require / *Type*: tuple /
 
   Non-Keyword Arguments.
 
-* ``kwargs``   
+* ``kwargs``
 
   / *Condition*: require / *Type*: dict /
 
@@ -111,7 +111,7 @@ Override creating instance method to check for conditions.
 **Returns:**
 
   / *Type*: ConnectionBase /
-  
+
   ConnectionBase instance if passing the conditions.\
   None if failing the conditions.
       """
@@ -128,9 +128,9 @@ Check if current platform is supported.
 **Returns:**
 
   / *Type*: bool /
-  
-  True if platform is supported. 
-  
+
+  True if platform is supported.
+
   False if platform is not supported.
       """
       return _platform in cls._SUPPORTED_PLATFORM_LIST
@@ -139,7 +139,7 @@ Check if current platform is supported.
    def is_precondition_pass(cls):
       """
 Check for precondition.
-	  
+
 **Returns:**
 
   / *Type*: bool /
@@ -149,7 +149,7 @@ Check for precondition.
   False if failing the precondition.
       """
       return cls._is_precondition_valid
-      
+
    @classmethod
    def get_connection_type(cls):
       """
@@ -166,11 +166,11 @@ Get the connection type.
    def error_instruction(self):
       """
 Get the error instruction.
-	  
+
 **Returns:**
 
   / *Type*: str /
-    
+
   Error instruction string.
       """
       return self._ERROR_INSTRUCTION
@@ -180,16 +180,16 @@ Get the error instruction.
    @abc.abstractmethod
    def quit(self, is_disconnect_all=True):
       """
->> This method MUST be overridden in derived class << 
+>> This method MUST be overridden in derived class <<
 
 Abstract method for quiting the connection.
-      
+
 **Arguments:**
 
-* ``is_disconnect_all``    
+* ``is_disconnect_all``
 
   / *Condition*: optional / *Type*: bool /
-  
+
   Determine if it's necessary to disconnect all connections.
 
 **Returns:**
@@ -201,28 +201,28 @@ Abstract method for quiting the connection.
    @abc.abstractmethod
    def connect(self, device, files=None, test_connection=False):
       """
->> This method MUST be overridden in derived class << 
+>> This method MUST be overridden in derived class <<
 
 Abstract method for quiting the connection.
-      
+
 **Arguments:**
 
-* ``device``    
+* ``device``
 
   / *Condition*: required / *Type*: str /
-  
+
   Device name.
 
-* ``files``    
+* ``files``
 
   / *Condition*: optional / *Type*: list /
-  
+
   Trace file list if using dlt connection.
 
-* ``test_connection``    
+* ``test_connection``
 
   / *Condition*: optional / *Type*: bool /
-  
+
   Deternmine if it's necessary for testing the connection.
 
 **Returns:**
@@ -235,16 +235,16 @@ Abstract method for quiting the connection.
    @abc.abstractmethod
    def disconnect(self, device):
       """
->> This method MUST be overridden in derived class << 
+>> This method MUST be overridden in derived class <<
 
 Abstract method for disconnecting connection.
-      
-**Arguments:**   
+
+**Arguments:**
 
 * ``device``
 
   / *Condition*: required / *Type*: str /
-  
+
   Device's name.
 
 **Returns:**
@@ -258,8 +258,8 @@ Abstract method for disconnecting connection.
    def _init_thrd_llrecv(self, n_thrd_id):
       """
 Start a thread which receive message from connection continuously.
-      
-**Arguments:**   
+
+**Arguments:**
 
 
          n_thrd_id: thread id.
@@ -279,7 +279,7 @@ Start a thread which receive message from connection continuously.
       """
 >> This method will be override in derived class << \
 The thread which receive message from connection continuously.
-	  
+
 **Returns:**
 
 (*no returns*)
@@ -289,25 +289,25 @@ The thread which receive message from connection continuously.
    def _init_thread_receiver(self, thread_id, mode=None, sync_with_start=False):
       """
 Initialize a thread for receiving data from connection.
-      
+
 **Arguments:**
 
-* ``thread_id``    
+* ``thread_id``
 
   / *Condition*: required / *Type*: int /
-  
+
   Thread ID number.
 
-* ``mode``    
+* ``mode``
 
   / *Condition*: optional / *Type*: str /
-  
+
   Connection's mode.
 
-* ``sync_with_start``    
+* ``sync_with_start``
 
   / *Condition*: optional / *Type*: bool /
-  
+
   Determine if receiving thread needs to wait for start event.
 
 **Returns:**
@@ -332,13 +332,13 @@ Initialize a thread for receiving data from connection.
    def _thread_receive_from_connection(self, sync_with_start=False):
       """
 Thread to receive data from connection continuously.
-      
-**Arguments:**   
 
-* ``sync_with_start``    
+**Arguments:**
+
+* ``sync_with_start``
 
   / *Condition*: optional / *Type*: bool /
-  
+
   Determine if receiving thread needs to wait for start event.
 
 **Returns:**
@@ -403,19 +403,19 @@ Thread to receive data from connection continuously.
    def send_obj(self, send_cmd, cr=True):
       """
 Wrapper method to send message to a tcp connection.
-      
+
 **Arguments:**
 
-* ``obj``    
+* ``obj``
 
   / *Condition*: required / *Type*: str /
-  
+
   Data to be sent.
-  
-* ``cr``    
+
+* ``cr``
 
   / *Condition*: optional / *Type*: str /
-  
+
   Determine if it's necessary to add newline character at the end of command.
 
 **Returns:**
@@ -436,13 +436,13 @@ Wrapper method to send message to a tcp connection.
    def read_obj(self):
       """
 Wrapper method to get the response from connection.
-	  
+
 **Returns:**
 
 * ``msg``
 
   / *Type*: str /
-  
+
   Responded message.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -466,44 +466,44 @@ Wrapper method to get the response from connection.
    def wait_4_trace(self, search_obj, timeout=0, use_fetch_block=False, end_of_block_pattern=".*", filter_pattern=".*", **fct_args):
       """
 Suspend the control flow until a Trace message is received which matches to a specified regular expression.
-      
-**Arguments:**   
 
-* ``search_obj``    
+**Arguments:**
+
+* ``search_obj``
 
   / *Condition*: required / *Type*: str /
-  
-  Regular expression all received trace messages are compare to. 
+
+  Regular expression all received trace messages are compare to.
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
-  
-* ``use_fetch_block``    
+
+* ``use_fetch_block``
 
   / *Condition*: optional / *Type*: bool / *Default*: False /
-  
+
   Determine if 'fetch block' feature is used.
-  
-* ``end_of_block_pattern``    
+
+* ``end_of_block_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
-  
-  The end of block pattern.  
 
-* ``filter_pattern``    
+  The end of block pattern.
+
+* ``filter_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
-  
+
   Pattern to filter message line by line.
-  
-* ``timeout``    
+
+* ``timeout``
 
   / *Condition*: optional / *Type*: int / *Default*: 0 /
-  
+
   Timeout parameter specified as a floating point number in the unit 'seconds'.
-  
-* ``fct_args``    
+
+* ``fct_args``
 
   / *Condition*: optional / *Type*: Tuple /  *Default*: None /
-  
+
   List of function arguments passed to be sent.
 
 **Returns:**
@@ -511,9 +511,9 @@ Suspend the control flow until a Trace message is received which matches to a sp
 * ``match``
 
   / *Type*: re.Match /
-  
+
   If no trace message matched to the specified regular expression and a timeout occurred, return None.
-  
+
   If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -547,26 +547,26 @@ Suspend the control flow until a Trace message is received which matches to a sp
    def wait_4_trace_continuously(self, trace_queue, timeout=0, *fct_args):
       """
 Getting trace log continuously without creating a new trace queue.
-      
-**Arguments:**   
+
+**Arguments:**
 
 
-* ``trace_queue``    
+* ``trace_queue``
 
   / *Condition*: required / *Type*: Queue /
-  
+
   Queue to store the traces.
-  
-* ``timeout``    
+
+* ``timeout``
 
   / *Condition*: optional / *Type*: int / *Default*: 0 /
-  
+
   Timeout for waiting a matched log.
 
-* ``fct_args``    
+* ``fct_args``
 
   / *Condition*: optional / *Type*: Tuple / *Default*: None /
-  
+
   Arguments to be sent to connection.
 
 **Returns:**
@@ -574,13 +574,13 @@ Getting trace log continuously without creating a new trace queue.
 * ``None``
 
   / *Type*: None /
-  
+
   If no trace message matched to the specified regular expression and a timeout occurred.
-  
+
 * ``match``
 
   / *Type*: re.Match /
-  
+
   If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
@@ -610,33 +610,33 @@ Getting trace log continuously without creating a new trace queue.
    def create_and_activate_trace_queue(cls, search_element, use_fetch_block=False, end_of_block_pattern='.*', regex_line_filter_pattern=None):
       """
 Create Queue and assign it to _trace_queue object and activate the queue with the search element.
-      
-**Arguments:**   
 
-* ``search_element``    
+**Arguments:**
+
+* ``search_element``
 
   / *Condition*: required / *Type*: str /
-  
-  Regular expression all received trace messages are compare to. 
-         
+
+  Regular expression all received trace messages are compare to.
+
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.#
 
-* ``use_fetch_block``    
+* ``use_fetch_block``
 
   / *Condition*: optional / *Type*: bool / *Default*: False /
-  
+
   Determine if 'fetch block' feature is used.
-  
-* ``end_of_block_pattern``    
+
+* ``end_of_block_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
-  
+
   The end of block pattern.
-  
-* ``regex_line_filter_pattern``    
+
+* ``regex_line_filter_pattern``
 
   / *Condition*: optional / *Type*: re.Pattern / *Default*: None /
-  
+
   Regular expression object to filter message line by line.
 
 **Returns:**
@@ -644,7 +644,7 @@ Create Queue and assign it to _trace_queue object and activate the queue with th
 * ``trq_handle, trace_queue``
 
   / *Type*: tuple /
-  
+
   The handle and search object
       """
       trace_queue = queue.Queue()
@@ -655,19 +655,19 @@ Create Queue and assign it to _trace_queue object and activate the queue with th
    def deactivate_and_delete_trace_queue(cls, trq_handle, trace_queue):
       """
 Deactivate trace queue and delete.
-      
-**Arguments:**   
 
-* ``trq_handle``    
+**Arguments:**
+
+* ``trq_handle``
 
   / *Condition*: required / *Type*: int /
-  
+
   Trace queue handle.
-  
-* ``trace_queue``    
+
+* ``trace_queue``
 
   / *Condition*: required / *Type*: Queue /
-  
+
   Trace queue object.
 
 **Returns:**
@@ -681,49 +681,49 @@ Deactivate trace queue and delete.
    def activate_trace_queue(cls, search_obj, trace_queue, use_fetch_block=False, end_of_block_pattern='.*', line_filter_pattern=None):
       """
 Activates a trace message filter specified as a regular expression. All matching trace messages are put in the specified queue object.
-      
-**Arguments:**   
 
-* ``search_obj``    
+**Arguments:**
+
+* ``search_obj``
 
   / *Condition*: required / *Type*: str /
-  
+
   Regular expression all received trace messages are compare to. \
-         
+
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
-  
-* ``trace_queue``    
+
+* ``trace_queue``
 
   / *Condition*: required / *Type*: Queue /
-  
+
   A queue object all trace message which matches the regular expression are put in. \
-  
+
   The using application must assure, that the queue is emptied or deleted.
-  
-* ``use_fetch_block``    
+
+* ``use_fetch_block``
 
   / *Condition*: optional / *Type*: bool /  *Default*: False /
-  
+
   Determine if 'fetch block' feature is used.
-  
-* ``end_of_block_pattern``    
+
+* ``end_of_block_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
-  
+
   The end of block pattern.
-  
-* ``line_filter_pattern``    
+
+* ``line_filter_pattern``
 
   / *Condition*: optional / *Type*: re.Pattern / *Default*: None /
-  
+
   Regular expression object to filter message line by line.
-          
+
 **Returns:**
 
 * ``handle_id``
 
   / *Type*: int /
-  
+
   Handle to deactivate the message filter.
       """
       _mident = '%s.%s()' % (cls.__class__.__name__, currentframe().f_code.co_name)
@@ -746,13 +746,13 @@ Activates a trace message filter specified as a regular expression. All matching
    def deactivate_trace_queue(cls, handle):
       """
 Deactivates a trace message filter previously activated by ActivateTraceQ() method.
-      
+
 **Arguments:**
 
-* ``handle``    
+* ``handle``
 
   / *Condition*: required / *Type*: int /
-  
+
   Integer object returned by ActivateTraceQ() method.
 
 **Returns:**
@@ -761,8 +761,8 @@ Deactivates a trace message filter previously activated by ActivateTraceQ() meth
 
   / *Type*: bool /
  .
-  False : No trace message filter active with the specified handle (i.e. handle is not in use). 
-  
+  False : No trace message filter active with the specified handle (i.e. handle is not in use).
+
   True :  Trace message filter successfully deleted.
       """
       _mident = '%s.%s()' % (cls.__class__.__name__, currentframe().f_code.co_name)
@@ -778,16 +778,16 @@ Deactivates a trace message filter previously activated by ActivateTraceQ() meth
 
    def check_timeout(self, timeout):
       """
->> This method will be override in derived class << 
+>> This method will be override in derived class <<
 
 Check if responded message come in cls._RESPOND_TIMEOUT or we will raise a timeout event.
-      
-**Arguments:**   
 
-* ``timeout``    
+**Arguments:**
+
+* ``timeout``
 
   / *Condition*: required / *Type*: int /
-  
+
   Timeout in seconds.
 
 **Returns:**
@@ -801,13 +801,13 @@ Check if responded message come in cls._RESPOND_TIMEOUT or we will raise a timeo
 >> This method will be override in derived class <<
 
 Pre-checking message when receiving it from connection.
-      
-**Arguments:**   
 
-* ``msg``    
+**Arguments:**
+
+* ``msg``
 
   / *Condition*: required / *Type*: str /
-  
+
   Received message to be checked.
 
 **Returns:**
@@ -821,13 +821,13 @@ Pre-checking message when receiving it from connection.
 >> This method will be override in derived class <<
 
 Post-checking message when receiving it from connection.
-      
-**Arguments:**   
 
-* ``msg``    
+**Arguments:**
+
+* ``msg``
 
   / *Condition*: required / *Type*: str /
-  
+
   Received message to be checked.
 
 **Returns:**
@@ -865,19 +865,19 @@ Post-checking message when receiving it from connection.
    def _filter_msg(self, regex_filter_obj, msg):
       """
 Filter message by regular expression object.
-      
-**Arguments:**   
 
-* ``regex_filter_obj``    
+**Arguments:**
+
+* ``regex_filter_obj``
 
   / *Condition*: required / *Type*: re.Pattern /
-  
+
   Regular expression object.
-  
-* ``msg``    
+
+* ``msg``
 
   / *Condition*: required / *Type*: str /
-  
+
   Message string to be filtered.
 
 **Returns:**
@@ -885,9 +885,9 @@ Filter message by regular expression object.
 * ``is_hit, matched_obj``
 
   / *Type*: tuple /
-  
+
   is_hit: Determine if there is any matched.
-		 
+
   matched_obj: Matched object if exists.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
