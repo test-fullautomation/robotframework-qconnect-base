@@ -231,6 +231,56 @@ Implementation for creating a SSH connection.
       time.sleep(0.05)
 
 
+   def transfer_file(self, src, dest, type):
+      """
+Transfer file from local to remote and vice versa.
+      
+**Arguments:**   
+
+* ``connection_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Name of connection.
+
+* ``src``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Source file path.
+
+* ``dest``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Destination file path.
+
+* ``type``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Transfer file type. 
+
+      'get' - Copy a remote file from the SFTP server to the local host 
+      
+      'put' - Copy a local file to the SFTP server
+
+**Returns:**
+
+(*no returns*)
+      """   
+      try:
+         sftp = self.client.open_sftp()
+         method_dict = {
+            'put': sftp.put,
+            'get': sftp.get
+         }
+         method_dict[type](src, dest)
+         sftp.close()
+      except Exception as ex:
+         raise Exception("Exception occurs while transferring file. Details: %s" % str(ex))
+
+
    def _send(self, msg, _cr):
       """
 Send message to SSH connection.

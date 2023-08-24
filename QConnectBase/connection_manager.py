@@ -469,6 +469,55 @@ Send command to a connection.
       except Exception as ex:
          raise Exception("Unable to send command to '%s' connection. Exception: %s" % (conn_name, str(ex)))
 
+   @keyword
+   def transfer_file(self, conn_name, src, dest, type):
+      """
+Transfer file from local to remote and vice versa.
+      
+**Arguments:**   
+
+* ``connection_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Name of connection.
+
+* ``src``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Source file path.
+
+* ``dest``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Destination file path.
+
+* ``type``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Transfer file type. 
+
+      'get' - Copy a remote file from the SFTP server to the local host.
+      
+      'put' - Copy a local file to the SFTP server.
+
+**Returns:**
+
+(*no returns*)
+      """
+      if conn_name not in self.connection_manage_dict.keys():
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+      connection_obj = self.connection_manage_dict[conn_name]
+      try:
+         connection_obj.transfer_file(src, dest, type)
+      except AttributeError as attrErr:
+         raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
+      except Exception as ex:
+         raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+
 #    @keyword
 #    def verify(self, *args, **kwargs):
 #       """
