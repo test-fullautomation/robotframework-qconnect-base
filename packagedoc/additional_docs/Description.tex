@@ -167,12 +167,38 @@ command}}{send command}}\label{description-send-command}}
 \end{quote}
 \end{quote}
 
+\hypertarget{description-transfer-file}{%
+\subsection{\texorpdfstring{\textbf{transfer file}}{transfer file}}\label{description-transfer-file}}
+
+\begin{quote}
+\textbf{Use for transfering file from local to remote and vice versa. (Only available for SSHClient connection type)}
+
+\textbf{Syntax}:
+
+\begin{quote}
+
+\textbf{transfer file}
+\texttt{conn\_name={[}conn\_name{]}\ \ \ src={[}source{]}\ \ \ dest={[}destination{]}\ \ \ type={[}transfer type{]}}
+\end{quote}
+
+\textbf{Arguments}:
+
+\begin{quote}
+\textbf{conn\_name}: Name of the connection.
+
+\textbf{src}: Your source file's path.
+
+\textbf{dest}: The destination path on the remote side.
+
+\textbf{type}: 'put' to send from local to remote, 'get' to bring it back.
+\end{quote}
+\end{quote}
+
 \hypertarget{description-verify}{%
 \subsection{\texorpdfstring{\textbf{verify}}{verify}}\label{description-verify}}
 
 \begin{quote}
-\textbf{Use for verifying a response from the connection if it matched a
-pattern.}
+\textbf{Use for verifying a response from the connection if it matched a pattern.}
 
 \textbf{Syntax}:
 
@@ -192,17 +218,13 @@ pattern.}
 
 \textbf{match\_try}: Number of time for trying to match the pattern.
 
-\textbf{fetch\_block}: If this value is true, every response line will
-be put into a block untill a line match \textbf{eob\_pattern} pattern.
+\textbf{fetch\_block}: If this value is true, every response line will be put into a block untill a line match \textbf{eob\_pattern} pattern.
 
-\textbf{eob\_pattern}: Regular expression for matching the endline when
-using \textbf{fetch\_block}.
+\textbf{eob\_pattern}: Regular expression for matching the endline when using \textbf{fetch\_block}.
 
-\textbf{filter\_pattern}: Regular expression for filtering every line of
-block when using \textbf{fetch\_block}.
+\textbf{filter\_pattern}: Regular expression for filtering every line of block when using \textbf{fetch\_block}.
 
-\textbf{send\_cmd}: Command to be sent to the other side of connection
-and waiting for response.
+\textbf{send\_cmd}: Command to be sent to the other side of connection and waiting for response.
 \end{quote}
 
 \textbf{Return value}:
@@ -266,14 +288,34 @@ Test SSH Connection
     send command                conn_name=test_ssh
     ...                         command=cd ..
 
-    ${res}=     verify                  conn_name=test_ssh
-    ...                                 search_pattern=.*
-    ...                                 send_cmd=ls
-    log to console     ${res}
+    ${res}=     Verify        conn_name=${CONNECTION_NAME}
+    ...                       send_cmd=echo ~~START~~;ls -la;echo ~~END$?~~\r\n
+    ...                       search_pattern=\~\~START\~\~\r\n([\\s\\S]*?)\~\~END(\\d+)\~\~
+    ...                       fetch_block=True
+    ...                       eob_pattern=^\~\~END(\\d*)\~\~
+   
+    Log To Console    ${res}[1]
+
 
     # Disconnect
     disconnect  test_ssh
 \end{robotcode}
+
+\textbf{Explanation:}
+
+In the example above, we will establish an SSH connection to the remote host 127.0.0.1:8002 and then navigate back one directory level to list all files/folders within that directory.
+
+To achieve this, we utilize the following steps:
+
+1. First, we use the \rcode{send command} keyword, which is designed to send commands to the server and immediately return without waiting for a response. In this case, we send the command "cd .." to the remote host.
+
+2. Next, we employ the \rcode{verify} keyword, specifically designed for verifying the response from the server after sending a command. The command sent is specified by the \textbf{send\_cmd} argument (here, it is the "ls -la" command). We use a regular expression defined by the \textbf{search\_pattern} argument to verify the response and extract the list of files/folders after executing the "ls -la" command.
+
+However, by default, if no additional arguments are provided, only the first line of the response after running the command will be captured. To address this limitation, we introduce two additional arguments: \textbf{fetch\_block} and \textbf{eob\_pattern}.
+
+When \textbf{fetch\_block} is set to "True", the \rcode{Verify} keyword will capture all lines returned from the server until it encounters a line that matches the pattern defined by \textbf{eob\_pattern} (End of Block pattern). This extended functionality ensures that we can effectively capture multi-line returns from the server.
+
+To handle variable-length output, the \textbf{send\_cmd} parameter encapsulates the command between "START" and "END\$?". By setting \textbf{fetch\_block} to "True" and specifying the \textbf{eob\_pattern}, we can accurately capture the entire list returned by the server between "START" and "END\$?".
 
 \hypertarget{description-contribution-guidelines}{%
 \section{Contribution Guidelines}\label{description-contribution-guidelines}}
