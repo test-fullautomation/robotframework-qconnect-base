@@ -169,7 +169,9 @@ Send message to rabbitmq connection.
       try:
          _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
          BuiltIn().log("%s: sending: '%s'" % (_mident, msg), constants.LOG_LEVEL_DEBUG)
-         self.channel.basic_publish(
+         connection = pika.BlockingConnection(pika.ConnectionParameters(host=self._host, port=self._port))
+         channel = connection.channel()
+         channel.basic_publish(
             exchange=self.exchange_name,
             routing_key=self._routing_key,
             properties=pika.BasicProperties(
@@ -178,6 +180,7 @@ Send message to rabbitmq connection.
             ),
             body=msg
          )
+         connection.close()
       except Exception as _reason:
          self._is_connected = False
 
