@@ -51,7 +51,7 @@ Class to store the configuration for SSH connection.
 
 class RabbitmqClient(ConnectionBase):
    """
-SSH client connection class.
+Rabbitmq client connection class.
    """
    _CONNECTION_TYPE = "RabbitmqClient"
 
@@ -59,7 +59,7 @@ SSH client connection class.
 
    def __init__(self, _mode, config):
       """
-Constructor for SSHClient class.
+Constructor for RabbitmqClient class.
 
 **Arguments:**
 
@@ -83,7 +83,7 @@ Constructor for SSHClient class.
       self._host = self.config.address
       self._port = self.config.port
       self._routing_key = self.config.routing_key
-      self.respQueue = queue.Queue()
+      self.resp_queue = queue.Queue()
       self._is_connected = False
       self.callback_queue = None
       # configure and initialize the low-level receiver thread
@@ -114,7 +114,7 @@ Constructor for SSHClient class.
       # print(program_information)
       if isinstance(body, bytes):
             body = body.decode('utf-8')
-      self.respQueue.put(body)
+      self.resp_queue.put(body)
 
    def connect(self):
       """
@@ -196,7 +196,7 @@ Read data from rabbitmq connection.
       """
       response = None
       try:
-         response = self.respQueue.get(block=False)
+         response = self.resp_queue.get(block=False)
       except queue.Empty:
          time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
       return response
@@ -255,3 +255,362 @@ if __name__ == "__main__":
    while True:
       time.sleep(10)
 
+
+class RMQSignal:
+   """
+RMQSignal class.
+   """
+   _BROADCAST_EXCHANGE = 'signal_exchange'
+   _DIRECT_EXCHANGE = 'direct_signal_exchange'
+   _BROADCAST_ROUTING_KEY = 'broadcast'
+   
+   def __init__(self, host='localhost'):
+      """
+Constructor for RMQSignal class.
+
+**Arguments:**
+
+* ``host``
+
+  / *Condition*: optional / *Type*: str / *Default*: 'localhost' /
+
+  Unused
+      """
+      self.host = host
+      self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
+      self.channel = self.connection.channel()
+      self.signal_receiver_name = ''
+      # self.broadcast_queue_name = "broadcast_signal_queue" + str(uuid.uuid4())
+      self.channel.exchange_declare(exchange=RMQSignal._DIRECT_EXCHANGE, exchange_type='direct')
+      self.channel.exchange_declare(exchange=RMQSignal._BROADCAST_EXCHANGE, exchange_type='fanout')
+
+   def __del__(self):
+      """
+Destructor for RMQSignal class.
+      """
+      self.unset_signal_receiver_name()
+      if self.channel.is_open:
+         self.channel.close()
+      if self.connection.is_open:
+         self.connection.close()
+
+   def send_signal(self, signal_name, payload, receiver=None):
+      """
+Send sinal to other processes.
+
+**Arguments:**
+
+* ``signal_name``
+
+  / *Condition*: required / *Type*: str /
+
+  Signal to be sent.
+
+* ``payload``
+
+  / *Condition*: required / *Type*: str /
+
+  Payloads for signal.
+
+* ``receiver``
+
+  / *Condition*: optional / *Type*: str / *Default*: None /
+
+  Specific the signal receiver to send signal to.
+
+**Returns:**
+
+(*no returns*)
+      """
+      send_channel = self.connection.channel()
+      send_data = {
+         signal_name: payload
+      }
+
+      if receiver is not None:
+         send_channel.basic_publish(exchange=RMQSignal._DIRECT_EXCHANGE, routing_key=receiver, body=json.dumps(send_data))
+      else:
+         send_channel.basic_publish(exchange=RMQSignal._BROADCAST_EXCHANGE, routing_key='', body=json.dumps(send_data))
+
+      send_channel.close()
+
+   def unset_signal_receiver_name(self):     
+      """
+Unset siganl receiver.
+
+**Returns:**
+
+(*no returns*)
+      """
+      if self.signal_receiver_name:
+         self.channel.queue_delete(self.signal_receiver_name)
+         self.signal_receiver_name = ''
+
+   def set_signal_receiver_name(self, receiver='', force=True):     
+      """
+Set the signal receiver to be received signal.
+
+**Arguments:**
+
+* ``receiver``
+
+  / *Condition*: optional / *Type*: str / *Default*: '' /
+
+  Name a signal receiver to receive signal.
+
+* ``force``
+
+  / *Condition*: optional / *Type*: bool / *Default*: True /
+
+  Force create the signal receiver (delete the exist signal receiver with the same name).
+
+
+**Returns:**
+
+(*no returns*)
+      """
+      if force:
+         try:
+            self.channel.queue_delete(receiver)
+            self.channel.queue_declare(queue=receiver, passive=False)
+         except Exception as ex:
+             print(ex)
+         self.signal_receiver_name = receiver
+      else:
+         import logging
+         logging.getLogger("pika").setLevel(logging.ERROR) 
+         try:
+         # Attempt to declare the queue
+            connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
+            channel = connection.channel()
+            channel.queue_declare(queue=receiver, passive=True)
+            raise Exception(f"Signal '{receiver}' receiver already exists.")
+         except pika.exceptions.ChannelClosedByBroker as e:
+            if e.reply_code == 404:
+               try:
+                  self.channel.queue_declare(queue=receiver, passive=False)
+               except Exception as ex:
+                  # print(ex)
+                  pass
+               
+               print(f"Queue '{receiver}' created.")
+               self.signal_receiver_name = receiver
+            else:
+               raise Exception("Unable to create signal receiver. Exception: %s" % (e)) 
+         
+      
+   def consume_channel(self, exchange, queue_name, routing_key, stop_event, signal_name, messages, queue_delete=False):
+      """
+Consume the message from specific queue.
+
+**Arguments:**
+
+* ``exchange``
+
+  / *Condition*: required / *Type*: str /
+
+  Name of the exchange.
+
+* ``queue_name``
+
+  / *Condition*: required / *Type*: str /
+
+  Name of the queue.
+
+* ``routing_key``
+
+  / *Condition*: required / *Type*: str /
+
+  Routing key string.
+
+* ``stop_event``
+
+  / *Condition*: required / *Type*: Event /
+
+  Event to notify stopping consumming.
+
+* ``signal_name``
+
+  / *Condition*: required / *Type*: str or list /
+
+  Name of the signal to be wait for.
+
+* ``messages``
+
+  / *Condition*: required / *Type*: list or dict /
+
+  Storage for received messages.
+
+* ``queue_delete``
+
+  / *Condition*: optional / *Type*: bool / *Default*: False /
+
+  Determine if we should delete the queue at the end.
+
+
+**Returns:**
+
+(*no returns*)
+      """
+      def callback(ch, method, properties, body):
+         print(f"Received message from {queue_name}: {body}")
+         # Set the event when a message is received
+         # Process the received message
+         data = json.loads(body.decode())
+         if isinstance(signal_name, str):
+            if signal_name in data:
+               messages.append(data[signal_name])
+               stop_event.set() 
+               ch.stop_consuming()
+         elif isinstance(signal_name, list):
+            intersection = set(signal_name).intersection(set(data.keys()))
+            if intersection:
+               try:
+                  sig = intersection.pop()
+                  messages[sig] = data[sig]
+                  if all(messages.values()):
+                     stop_event.set() 
+                     ch.stop_consuming()
+               except Exception as ex:
+                  print(ex)
+
+      connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
+      
+      channel = connection.channel()
+      if queue_name=='':
+         result = channel.queue_declare(queue='', exclusive=True)
+         queue_name = result.method.queue
+      channel.queue_bind(  exchange=exchange, 
+                           queue=queue_name, 
+                           routing_key=routing_key)
+      channel.basic_consume(queue=queue_name, on_message_callback=callback)
+      # channel.start_consuming()
+      while not stop_event.is_set():
+        channel.connection.process_data_events() 
+      
+      if queue_delete:
+         channel.queue_delete(queue_name)
+      channel.close()
+      connection.close()
+
+   def wait_for_signal(self, signal_name, timeout=10):
+      """
+Wait for specific signal in timeout.
+
+**Arguments:**
+
+* ``signal_name``
+
+  / *Condition*: optional / *Type*: str /
+
+  Name of the signal to wait for.
+
+* ``timeout``
+
+  / *Condition*: optional / *Type*: int / *Default*: 10 /
+
+  Timeout for waitting the signal. Default is 10 seconds.
+
+
+**Returns:**
+
+  / *Type*: str /
+
+  Payloads of the watting signal if received.
+      """
+      messages = []
+      stop_event = threading.Event()
+      thread_broadcast_consume = threading.Thread( target=self.consume_channel, 
+                                                   args=(   RMQSignal._BROADCAST_EXCHANGE, 
+                                                            '', 
+                                                            RMQSignal._BROADCAST_ROUTING_KEY, 
+                                                            stop_event, 
+                                                            signal_name, 
+                                                            messages, 
+                                                            True),
+                                                   daemon=True)
+      if self.signal_receiver_name:
+         thread_direct_comsume = threading.Thread( target=self.consume_channel, 
+                                                   args=(   RMQSignal._DIRECT_EXCHANGE, 
+                                                            self.signal_receiver_name, 
+                                                            self.signal_receiver_name, 
+                                                            stop_event, 
+                                                            signal_name, 
+                                                            messages),
+                                                   daemon=True)
+
+      # Start threads to consume messages concurrently
+      thread_broadcast_consume.start()
+      if self.signal_receiver_name:
+         thread_direct_comsume.start()
+
+      stop_event.wait(timeout=timeout) 
+      message_received = stop_event.is_set()
+      stop_event.set()
+
+      if not message_received:
+         raise TimeoutError(f"Timeout waiting for signal '{signal_name}'")
+      elif messages:
+         return messages[0]
+
+   def wait_for_signals(self, signal_names, timeout=10):
+      """
+Wait for multiple specific signals in timeout.
+
+**Arguments:**
+
+* ``signal_name``
+
+  / *Condition*: optional / *Type*: list /
+
+  List of the signals to wait for.
+
+* ``timeout``
+
+  / *Condition*: optional / *Type*: int / *Default*: 10 /
+
+  Timeout for waitting the signal. Default is 10 seconds.
+
+
+**Returns:**
+
+  / *Type*: str /
+
+  List of payloads of the watting signals if received.
+      """
+      # queues = [f"{name}_queue" for name in signal_names]
+      messages = {name: None for name in signal_names}
+
+      stop_event = threading.Event()
+      thread_broadcast_consume = threading.Thread( target=self.consume_channel, 
+                                                   args=(   RMQSignal._BROADCAST_EXCHANGE, 
+                                                            '', 
+                                                            RMQSignal._BROADCAST_ROUTING_KEY, 
+                                                            stop_event, 
+                                                            signal_names, 
+                                                            messages, 
+                                                            True),
+                                                   daemon=True)
+      if self.signal_receiver_name:
+         thread_direct_comsume = threading.Thread( target=self.consume_channel, 
+                                                   args=(   RMQSignal._DIRECT_EXCHANGE, 
+                                                            self.signal_receiver_name, 
+                                                            self.signal_receiver_name, 
+                                                            stop_event, 
+                                                            signal_names, 
+                                                            messages),
+                                                   daemon=True)
+
+      # Start threads to consume messages concurrently
+      thread_broadcast_consume.start()
+      if self.signal_receiver_name:
+         thread_direct_comsume.start()
+
+      stop_event.wait(timeout=timeout) 
+      message_received = stop_event.is_set()
+      stop_event.set()
+
+      if not message_received:
+         raise TimeoutError(f"Timeout waiting for signal '{signal_names}'")
+      elif messages:
+         return [messages[name] for name in signal_names]
