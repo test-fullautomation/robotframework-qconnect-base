@@ -203,6 +203,7 @@ setuptools.setup(
                 str(oRepositoryConfig.Get('PACKAGENAME')) + ".tcp.raw",
                 str(oRepositoryConfig.Get('PACKAGENAME')) + ".tcp.ssh"],
     package_dir = {str(oRepositoryConfig.Get('REPOSITORYNAME')) : str(oRepositoryConfig.Get('PACKAGENAME'))},
+    include_package_data=True,
     classifiers = [
         str(oRepositoryConfig.Get('PROGRAMMINGLANGUAGE')),
         str(oRepositoryConfig.Get('LICENCE')),

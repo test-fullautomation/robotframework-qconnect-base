@@ -317,6 +317,142 @@ When \textbf{fetch\_block} is set to "True", the \rcode{Verify} keyword will cap
 
 To handle variable-length output, the \textbf{send\_cmd} parameter encapsulates the command between "START" and "END\$?". By setting \textbf{fetch\_block} to "True" and specifying the \textbf{eob\_pattern}, we can accurately capture the entire list returned by the server between "START" and "END\$?".
 
+
+\hypertarget{auxiliary-utilities}{%
+\section{Auxiliary Utilities}\label{auxiliary-utilities}}
+\subsection{Introduction to RMQSignal}
+\label{subsec:auxiliary-intro}
+
+The \emph{RMQSignal} class serves as an extension to the core functionalities, providing support for Inter-Process Communication (IPC) based on the RabbitMQ infrastructure. This utility module is designed to facilitate the exchange of signals accompanied by payloads between various processes, enhancing the overall communication mechanism.
+
+\subsection{Prerequisites}
+\label{subsubsec:prerequisites-details}
+
+\textbf{For Windows:}
+
+To use this library, installing RabbitMQ is required. For RabbitMQ installation on Windows, Earlang needs to be installed beforehand.
+
+For user convenience, we have created a .bat file to install all necessary components. Users simply need to run the file tools/setup\_rabbitmq.bat to install the entire infrastructure required for these Auxiliary Utilities.
+
+\textbf{For Ubuntu:}
+
+1. Update the system. First, ensure your system is up to date by running the command:
+
+\begin{verbatim}
+sudo apt update && sudo apt upgrade -y
+\end{verbatim}
+
+2. Add the required repositories. Add the official RabbitMQ signing key and repository by running the following commands:
+
+\begin{verbatim}
+sudo apt install curl gnupg -y
+curl -fsSL https://packages.rabbitmq.com/gpg | sudo apt-key add -
+sudo add-apt-repository 'deb https://dl.bintray.com/rabbitmq/debian focal main'
+\end{verbatim}
+
+3. Install RabbitMQ Server. Now, proceed with installing RabbitMQ:
+
+\begin{verbatim}
+sudo apt update && sudo apt install rabbitmq-server -y
+\end{verbatim}
+
+4. Enable and start the RabbitMQ Service. After installation, enable and start the RabbitMQ service:
+
+\begin{verbatim}
+sudo systemctl enable rabbitmq-server
+sudo systemctl start rabbitmq-server
+\end{verbatim}
+
+\subsection{Library Keywords and Usage}
+\label{subsec:keyword-usage}
+
+The keywords provided by this library offer a range of functionalities designed to streamline various tasks and processes. Below are some of the key functionalities along with their usage:
+
+\subsubsection{Send Signal Keyword}
+\textbf{Usage}: Used to send a signal to other processes. \\
+\textbf{Syntax}: \texttt{Send Signal [signal\_name] [payloads] [Receiver]} \\
+\textbf{Arguments}:
+\begin{itemize}
+    \item \texttt{signal\_name} (string): Defines the name of the signal.
+    \item \texttt{payloads}: Specifies the payloads of the signal.
+    \item \texttt{Receiver} (optional, default is None): Specifies the receiver. If defined, the signal will be sent only to that specified receiver. If not defined, it sends a broadcast to all receivers.
+\end{itemize}
+
+\subsubsection{Wait For Signal Keyword}
+\textbf{Usage}: Used to wait for a specific signal within a timeout. \\
+\textbf{Syntax}: \texttt{Wait For Signal [signal\_name] [timeout]} \\
+\textbf{Arguments}:
+\begin{itemize}
+    \item \texttt{signal\_name} (string): Defines the name of the signal to wait for.
+    \item \texttt{timeout} (optional, default is 10): Specifies the timeout in seconds to wait for the specific signal.
+\end{itemize}
+\textbf{Return}: Returns the payloads of the received signal, if received within the timeout.
+
+\subsubsection{Wait For Signals Keyword}
+\textbf{Usage}: Used to wait for multiple specific signals within a timeout. \\
+\textbf{Syntax}: \texttt{Wait For Signals [signal\_names] [timeout]} \\
+\textbf{Arguments}:
+\begin{itemize}
+    \item \texttt{signal\_names} (list of strings): Defines the list of signal names to wait for.
+    \item \texttt{timeout} (optional, default is 10): Specifies the timeout in seconds to wait for the full set of specific signals.
+\end{itemize}
+\textbf{Return}: Returns a list of payloads of the signals in the same order if the full set of signals is received within the timeout.
+
+\subsubsection{Set Signal Receiver Name Keyword}
+\textbf{Usage}: Used to set a specific name for the Signal Receiver, which defines a unique name for the current process. Other processes can send signals directly to the current process using this receiver name. \\
+\textbf{Syntax}: \texttt{Set Signal Receiver Name [receiver] [force]} \\
+\textbf{Arguments}:
+\begin{itemize}
+    \item \texttt{receiver} (string): Specifies the name to set for the current process signal receiver.
+    \item \texttt{force} (optional, default is True): Determines whether to force-create the signal receiver. If \texttt{force} is set to False, an exception will be raised if any process has already defined this name as a signal receiver.
+\end{itemize}
+
+\subsubsection{Unset Signal Receiver Name Keyword}
+\textbf{Usage}: Used to unset the current Signal Receiver name of the current process. \\
+\textbf{Syntax}: \texttt{Unset Signal Receiver Name}
+
+\subsection{Example of Inter-Process Communication}
+
+\textbf{Content of ProcessA.robot file:}
+\begin{verbatim}
+*** Settings ***
+Library        QConnectBase.message.RMQSignal
+
+*** Test Cases ***
+Test signal
+   Log To Console    Process A start
+   Send Signal    HelloFromProcA    Hello, I'm A        receiverB
+   Sleep    1s
+   Send Signal    Hello2FromProcA    Hello 2nd time, I'm A        receiverB
+   ${res}=    Wait For Signal    HelloFromProcB    ${20}
+   Log To Console    Get resp signal from ProcB: ${res}
+\end{verbatim}
+
+\textbf{Content of ProcessB.robot file:}
+\begin{verbatim}
+*** Settings ***
+Library        QConnectBase.message.RMQSignal
+
+*** Test Cases ***
+Receiving Multiple Signals
+   Log To Console    message
+   Set Signal Receiver Name    receiverB
+   ${list_of_signal} =    Create List    HelloFromProcA    Hello2FromProcAfull
+   ${res}=    Wait For Signals    ${list_of_signal}    ${15}
+   Sleep    2s
+   Log To Console    Get signal from ProcA: ${res}
+   Send Signal    HelloFromProcB      Hello A, I'm B. Got your signal:${res}
+\end{verbatim}
+
+\textbf{Explanation:}
+In the above test cases, two separate Robot Framework test files, ProcessA.robot, and ProcessB.robot are used for inter-process communication.
+
+In ProcessB.robot, the test case 'Receiving Multiple Signals' starts by setting up a signal receiver 'receiverB'. It then waits for a set of signals (HelloFromProcA and Hello2FromProcA) from ProcessA. Once both signals are received within 15 seconds, it logs to console the received signals' payloads and waits for 2 seconds before sending a response signal 'HelloFromProcB' to ProcessA.
+
+In ProcessA.robot, the test case 'Sending Multiple Signals' sends HelloFromProcA signal to 'receiverB' in ProcessB. After a 1-second pause, it sends another signal 'Hello2FromProcA' to 'receiverB'. Then, it waits for a response, expecting signal 'HelloFromProcB' from ProcessB within 20 seconds. Upon receiving signal, it logs the received payloads to console.
+
+
+
 \hypertarget{description-contribution-guidelines}{%
 \section{Contribution Guidelines}\label{description-contribution-guidelines}}
 
