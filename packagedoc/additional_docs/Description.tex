@@ -414,7 +414,7 @@ The keywords provided by this library offer a range of functionalities designed 
 \subsection{Example of Inter-Process Communication}
 
 \textbf{Content of ProcessA.robot file:}
-\begin{verbatim}
+\begin{robotcode}
 *** Settings ***
 Library        QConnectBase.message.RMQSignal
 
@@ -426,10 +426,10 @@ Test signal
    Send Signal    Hello2FromProcA    Hello 2nd time, I'm A        receiverB
    ${res}=    Wait For Signal    HelloFromProcB    ${20}
    Log To Console    Get resp signal from ProcB: ${res}
-\end{verbatim}
+\end{robotcode}
 
 \textbf{Content of ProcessB.robot file:}
-\begin{verbatim}
+\begin{robotcode}
 *** Settings ***
 Library        QConnectBase.message.RMQSignal
 
@@ -442,7 +442,7 @@ Receiving Multiple Signals
    Sleep    2s
    Log To Console    Get signal from ProcA: ${res}
    Send Signal    HelloFromProcB      Hello A, I'm B. Got your signal:${res}
-\end{verbatim}
+\end{robotcode}
 
 \textbf{Explanation:}
 In the above test cases, two separate Robot Framework test files, ProcessA.robot, and ProcessB.robot are used for inter-process communication.
@@ -507,7 +507,7 @@ self._llrecv_thrd_obj = None
  self._init_thrd_llrecv(cls._socket_instance)
 \end{verbatim}
 \item
-  Incase you use the lowlevel receiver thread. You should implement the
+  Incase you use the lowlevel receiver thread for receiving data byte by byte. You should implement the
   \textbf{thrd\_llrecv\_from\_connection\_interface()} method. This
   method is a mediate layer which will receive the data from connection
   at the very beginning, do some process then put them in a queue for
