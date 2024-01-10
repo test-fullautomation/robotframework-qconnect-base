@@ -236,8 +236,8 @@ command}}{send command}}\label{description-send-command}}
 
 \begin{verbatim}
 ${result} = verify  conn_name=SSH_Connection
-                     search_pattern=(?<=\s).*([0-9]..).*(command).$
-                     send_cmd=*echo This is the 1st test command.*
+...                 search_pattern=(?<=\s).*([0-9]..).*(command).$
+...                 send_cmd=echo This is the 1st test command.
 \end{verbatim}
 
 \begin{itemize}
@@ -332,36 +332,36 @@ The \emph{RMQSignal} class serves as an extension to the core functionalities, p
 
 To use this library, installing RabbitMQ is required. For RabbitMQ installation on Windows, Earlang needs to be installed beforehand.
 
-For user convenience, we have created a .bat file to install all necessary components. Users simply need to run the file tools/setup\_rabbitmq.bat to install the entire infrastructure required for these Auxiliary Utilities.
+For user convenience, we have created a .bat file to install all necessary components. Users simply need to run the file QConnectBase/tools/setup\_rabbitmq.bat to install the entire infrastructure required for these Auxiliary Utilities.
 
 \textbf{For Ubuntu:}
 
 1. Update the system. First, ensure your system is up to date by running the command:
 
-\begin{verbatim}
+\begin{robotcode}
 sudo apt update && sudo apt upgrade -y
-\end{verbatim}
+\end{robotcode}
 
 2. Add the required repositories. Add the official RabbitMQ signing key and repository by running the following commands:
 
-\begin{verbatim}
+\begin{robotcode}
 sudo apt install curl gnupg -y
 curl -fsSL https://packages.rabbitmq.com/gpg | sudo apt-key add -
 sudo add-apt-repository 'deb https://dl.bintray.com/rabbitmq/debian focal main'
-\end{verbatim}
+\end{robotcode}
 
 3. Install RabbitMQ Server. Now, proceed with installing RabbitMQ:
 
-\begin{verbatim}
+\begin{robotcode}
 sudo apt update && sudo apt install rabbitmq-server -y
-\end{verbatim}
+\end{robotcode}
 
 4. Enable and start the RabbitMQ Service. After installation, enable and start the RabbitMQ service:
 
-\begin{verbatim}
+\begin{robotcode}
 sudo systemctl enable rabbitmq-server
 sudo systemctl start rabbitmq-server
-\end{verbatim}
+\end{robotcode}
 
 \subsection{Library Keywords and Usage}
 \label{subsec:keyword-usage}
@@ -414,7 +414,7 @@ The keywords provided by this library offer a range of functionalities designed 
 \subsection{Example of Inter-Process Communication}
 
 \textbf{Content of ProcessA.robot file:}
-\begin{verbatim}
+\begin{robotcode}
 *** Settings ***
 Library        QConnectBase.message.RMQSignal
 
@@ -426,10 +426,10 @@ Test signal
    Send Signal    Hello2FromProcA    Hello 2nd time, I'm A        receiverB
    ${res}=    Wait For Signal    HelloFromProcB    ${20}
    Log To Console    Get resp signal from ProcB: ${res}
-\end{verbatim}
+\end{robotcode}
 
 \textbf{Content of ProcessB.robot file:}
-\begin{verbatim}
+\begin{robotcode}
 *** Settings ***
 Library        QConnectBase.message.RMQSignal
 
@@ -442,7 +442,7 @@ Receiving Multiple Signals
    Sleep    2s
    Log To Console    Get signal from ProcA: ${res}
    Send Signal    HelloFromProcB      Hello A, I'm B. Got your signal:${res}
-\end{verbatim}
+\end{robotcode}
 
 \textbf{Explanation:}
 In the above test cases, two separate Robot Framework test files, ProcessA.robot, and ProcessB.robot are used for inter-process communication.
@@ -507,7 +507,7 @@ self._llrecv_thrd_obj = None
  self._init_thrd_llrecv(cls._socket_instance)
 \end{verbatim}
 \item
-  Incase you use the lowlevel receiver thread. You should implement the
+  Incase you use the lowlevel receiver thread for receiving data byte by byte. You should implement the
   \textbf{thrd\_llrecv\_from\_connection\_interface()} method. This
   method is a mediate layer which will receive the data from connection
   at the very beginning, do some process then put them in a queue for

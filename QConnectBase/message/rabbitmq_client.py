@@ -264,7 +264,7 @@ RMQSignal class.
    _DIRECT_EXCHANGE = 'direct_signal_exchange'
    _BROADCAST_ROUTING_KEY = 'broadcast'
    
-   def __init__(self, host='localhost'):
+   def __init__(self, host='localhost', port="5672"):
       """
 Constructor for RMQSignal class.
 
@@ -277,9 +277,11 @@ Constructor for RMQSignal class.
   Unused
       """
       self.host = host
-      self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
-      self.channel = self.connection.channel()
+      self._port = port
       self.signal_receiver_name = ''
+      self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
+      self.channel = self.connection.channel()
+      
       # self.broadcast_queue_name = "broadcast_signal_queue" + str(uuid.uuid4())
       self.channel.exchange_declare(exchange=RMQSignal._DIRECT_EXCHANGE, exchange_type='direct')
       self.channel.exchange_declare(exchange=RMQSignal._BROADCAST_EXCHANGE, exchange_type='fanout')
@@ -381,7 +383,7 @@ Set the signal receiver to be received signal.
          logging.getLogger("pika").setLevel(logging.ERROR) 
          try:
          # Attempt to declare the queue
-            connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
+            connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
             channel = connection.channel()
             channel.queue_declare(queue=receiver, passive=True)
             raise Exception(f"Signal '{receiver}' receiver already exists.")
@@ -457,6 +459,7 @@ Consume the message from specific queue.
          # Set the event when a message is received
          # Process the received message
          data = json.loads(body.decode())
+         ch.basic_ack(delivery_tag=method.delivery_tag)
          if isinstance(signal_name, str):
             if signal_name in data:
                messages.append(data[signal_name])
@@ -474,12 +477,13 @@ Consume the message from specific queue.
                except Exception as ex:
                   print(ex)
 
-      connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host))
+      connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
       
       channel = connection.channel()
       if queue_name=='':
          result = channel.queue_declare(queue='', exclusive=True)
          queue_name = result.method.queue
+         
       channel.queue_bind(  exchange=exchange, 
                            queue=queue_name, 
                            routing_key=routing_key)
