@@ -45,15 +45,9 @@
 # ------------------------------------------
 
    "RELEASES"  : {
-                   "0.9." : [
-                              "QConnectBase change 0.9 A",
-                              "QConnectBase change 0.9 B",
-                              "QConnectBase change 0.9 X"
-                            ],
-                   "0.10." : [
-                               "QConnectBase change 0.10 A",
-                               "QConnectBase change 0.10 B",
-                               "QConnectBase change 0.10 X"
+                   "0.x.y" : [
+                               "0.x.y",
+                               "0.x.y"
                              ]
                  }
 }
