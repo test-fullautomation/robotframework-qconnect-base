@@ -45,9 +45,18 @@
 # ------------------------------------------
 
    "RELEASES"  : {
-                   "0.x.y" : [
-                               "0.x.y",
-                               "0.x.y"
+                   "0.10." : [
+"
+**RMQSignal**
+ 
+* RMQSignal provides a synchronization mechanism designed to facilitate inter-process communication (IPC) between Robot Framework test processes using RabbitMQ as the underlying message broker. 
+  This module leverages RabbitMQ's message queues to enable communication and coordination between different test processes, allowing them to exchange signals, notifications, or other relevant information.
+ 
+**Environment/Installation**
+ 
+* For using RMQSignal, required to run the
+  file QConnectBase/tools/setup rabbitmq.bat to install the entire infrastructure required for these Auxiliary Utilities.
+"
                              ]
                  }
 }
