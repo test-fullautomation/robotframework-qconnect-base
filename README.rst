@@ -222,7 +222,7 @@ Example
 
    *** Settings ***
    Documentation    Suite description
-   Library     QConnectionLibrary.ConnectionManager
+   Library     QConnectBase.ConnectionManager
 
    *** Test Cases ***
    Test SSH Connection
@@ -265,7 +265,7 @@ steps.
 
 1.  Create a library package which have the prefix name is **robotframework-qconnect-**\ *[your specific name]*.
 
-2.  Your hadling connection class should be derived from **QConnectionLibrary.connection_base.ConnectionBase**  class.
+2.  Your hadling connection class should be derived from **QConnectBase.connection_base.ConnectionBase**  class.
 
 3.  In your *Connection Class*, override below attributes and methods:
 
