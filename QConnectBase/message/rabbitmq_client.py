@@ -210,10 +210,20 @@ Close rabbitmq connection.
 (*no returns*)
       """
       if self.channel is not None:
-         self.channel.stop_consuming()
-         if self.callback_queue is not None:
-            self.channel.queue_delete(queue=self.callback_queue)
-         self.channel.close()
+         try:
+            self.channel.stop_consuming()
+            if self.callback_queue is not None:
+               try:
+                  time.sleep(0.5)
+                  self.channel.queue_declare(queue=self.callback_queue, passive=True)
+                  self.channel.queue_delete(queue=self.callback_queue)
+               except ChannelClosedByBroker:
+                  pass
+               # self.channel.queue_delete(queue=self.callback_queue)
+            
+            self.channel.close()
+         except:
+            pass
 
       # Execute parents close()
       # super(RabbitmqClient, self).close()
