@@ -517,6 +517,40 @@ Transfer file from local to remote and vice versa.
          raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
       except Exception as ex:
          raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+         
+   
+   @keyword
+   def execute_script(self, conn_name, script_path):
+      """
+Executes a script file by sending commands to a device through the provided connection.
+      
+**Arguments:**   
+
+* ``connection_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Name of connection.
+
+* ``script_path``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Script file path.
+
+**Returns:**
+
+(*no returns*)
+      """
+      if conn_name not in self.connection_manage_dict.keys():
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+      connection_obj = self.connection_manage_dict[conn_name]
+      try:
+         connection_obj.execute_script(script_path)
+      except AttributeError as attrErr:
+         raise Exception("'%s' connection type has not been supported for execute script." % connection_obj._CONNECTION_TYPE)
+      except Exception as ex:
+         raise Exception("Unable to execute script path '%s'. Exception: %s" % (script_path, str(ex)))
 
 #    @keyword
 #    def verify(self, *args, **kwargs):
