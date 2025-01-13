@@ -462,7 +462,7 @@ Send command to a connection.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.send_obj(command, **kwargs)
@@ -509,7 +509,7 @@ Transfer file from local to remote and vice versa.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_file(src, dest, type)
@@ -671,7 +671,7 @@ Verify a pattern from connection response after sending a command.
   Matched string.
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
 
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
