@@ -11,15 +11,15 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-#################################################################################
-
+#
 # --------------------------------------------------------------------------------------------------------------
 #
 # test server for component 'QConnectBase'
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-# v. 0.1.0 / 13.01.2025
+VERSION = "v. 0.2.0 / 16.01.2025"
+#
 # --------------------------------------------------------------------------------------------------------------
 
 import sys
@@ -27,6 +27,8 @@ import os
 import psutil
 import socket
 import threading
+
+from rf_log import rf_log # interface to Robot Framework logging
 
 from PythonExtensionsCollection.String.CString import CString
 
@@ -43,7 +45,7 @@ char_end_of_message = "*" # TODO: command line parameter
 stop_event = threading.Event()
 
 def handle_client(client_socket, client_address):
-    print(f"Client connected: {client_address}")
+    rf_log.info(f"Client connected: {client_address}")
     try:
         while True:
             # data received from client1
@@ -51,11 +53,11 @@ def handle_client(client_socket, client_address):
             while True:
                 byte_received = client_socket.recv(1).decode("utf-8")
                 if not byte_received:
-                    print(f"[WARN] not 'byte_received'")        # TODO: usecase?
+                    rf_log.warn(f"[WARN] not 'byte_received'")        # TODO: usecase?
                     break
                 data_received = f"{data_received}{byte_received}"
                 if data_received == "":
-                    print(f"[WARN] empty 'data_received' (1)")        # TODO: usecase?
+                    rf_log.warn(f"[WARN] empty 'data_received' (1)")        # TODO: usecase?
                     break
                 if ( (data_received[-1] == "\n") or (data_received[-1] == "\r") ):
                     # received standard 'end of message' character
@@ -69,14 +71,14 @@ def handle_client(client_socket, client_address):
             if data_received == "":
                 continue
 
-            print(f"[{client_address}] (REC) '{data_received}'")
+            rf_log.info(f"[{client_address}] (REC) '{data_received}'")
 
             # send answer to client
             if data_received in dict_answers:
                 response = dict_answers[data_received] # specific answer
             else:
                 response = f"{data_received} ACK" # common answer
-            print(f"[{client_address}] (SEND) '{response}'")
+            rf_log.info(f"[{client_address}] (SEND) '{response}'")
             response = f"{response}\n"
             client_socket.send(response.encode('utf-8'))
 
@@ -88,23 +90,24 @@ def handle_client(client_socket, client_address):
                 break
 
     except ConnectionResetError:
-        print(f"TCP/IP testserver detected broken client connection: {client_address}")      # TODO: print this to Robot Framework log (use rf_log.py)
+        rf_log.info(f"TCP/IP testserver detected broken client connection: {client_address}")
     finally:
         client_socket.close()
-        print(f"TCP/IP testserver closed client connection: {client_address}")      # TODO: print this to Robot Framework log (use rf_log.py)
+        rf_log.info(f"TCP/IP testserver closed client connection: {client_address}")
 
 def start_server(host="localhost", port=4000): # TODO: host/port: command line parameter
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((host, port))
     except Exception as ex:
-        print(f"Exception: Socket already in use: {host}:{port}\n{ex}")      # TODO: print this to Robot Framework log (use rf_log.py)
+        rf_log.error(f"Exception: Socket already in use: {host}:{port}\n{ex}")
         server_socket.close()
         return # TODO: introduce error code
 
     server_socket.settimeout(1.0)
     server_socket.listen(5)  # maximum number of connections  # TODO: command line parameter
-    print(f"<<< TCP/IP testserver running on {host}:{port} >>>")      # TODO: print this to Robot Framework log (use rf_log.py)
+    rf_log.info(f"<<< TCP/IP testserver {VERSION} is running on {host}:{port} >>>")
+
     while not stop_event.is_set():
         try:
             # wait for incoming connections
@@ -118,7 +121,7 @@ def start_server(host="localhost", port=4000): # TODO: host/port: command line p
 
     stop_event.clear()
     server_socket.close()
-    print(f"\nTCP/IP testserver closed socket\n")
+    rf_log.info(f"\nTCP/IP testserver closed socket\n")
     return 0
 
 if __name__ == "__main__":
@@ -130,7 +133,7 @@ if __name__ == "__main__":
             stored_pid = lock_file_handle.read()
             list_pids = psutil.pids()
             if stored_pid in list_pids:
-                print("TCP/IP testserver is already running!")
+                rf_log.warn("TCP/IP testserver is already running!")
                 sys.exit(1)
             else:
                 # stored pid not in pid list; seems to be an outdated one and process not running any more
@@ -148,5 +151,5 @@ if __name__ == "__main__":
     # TODO: In case of a crash 'tcp_ip_testserver.lock' remains. But also PID is checked.
     # Also the socket is checked. Do we need the lock file?
 
-    print(f"<<< TCP/IP testserver finished>>>\n")
+    rf_log.info(f"<<< TCP/IP testserver finished>>>\n")
     sys.exit(0)
