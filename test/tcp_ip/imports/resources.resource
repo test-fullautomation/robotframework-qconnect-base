@@ -37,18 +37,30 @@ ${PORT}=    4000
 
 *** Keywords ***
 
-cconnectbase_suite_setup
-    [Documentation]    CConnectBase Suite Setup
+qconnectbase_suite_setup
+    [Documentation]    QConnectBase Suite Setup
 
-    log    executing CConnectBase Suite Setup
+    log    executing QConnectBase Suite Setup
 
     tcpip.selftest.start_tcpip_testserver
 
 
-cconnectbase_suite_teardown
-    [Documentation]    CConnectBase Suite Teardown
+qconnectbase_suite_teardown
+    [Documentation]    QConnectBase Suite Teardown
 
-    log     executing CConnectBase Suite Teardown
+    log     executing QConnectBase Suite Teardown
 
     tcpip.selftest.quit_tcpip_testserver
+
+
+qconnectbase_test_setup
+    [Documentation]    QConnectBase Test Setup
+
+    log    executing QConnectBase Test Setup
+
+
+qconnectbase_test_teardown
+    [Documentation]    QConnectBase Test Teardown
+
+    log    executing QConnectBase Test Teardown
 

@@ -24,6 +24,8 @@ import time
 import shlex
 import subprocess
 
+# from threadlog import threadlog
+
 # -- import Robotframework API
 from robot.api.deco import keyword, library # required when using @keyword, @library decorators
 from robot.libraries.BuiltIn import BuiltIn
@@ -34,8 +36,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 sThisModuleName    = "tcp_ip_selftest_lib.py"
-sThisModuleVersion = "0.1.0"
-sThisModuleDate    = "13.01.2025"
+sThisModuleVersion = "0.2.0"
+sThisModuleDate    = "16.01.2025"
 sThisModule        = f"{sThisModuleName} v. {sThisModuleVersion} / {sThisModuleDate}"
 
 # --------------------------------------------------------------------------------------------------------------
@@ -58,7 +60,11 @@ class tcp_ip_selftest_lib():
         self.__process_testserver = None
         self.__can_be_connected   = False
 
+        # output_dir = CString.NormalizePath(BuiltIn().get_variable_value('${OUTPUT DIR}'))
+        # self.__threadlog = threadlog(f"{output_dir}/test_overview")
+
     def __del__(self):
+        # del self.__threadlog
         pass
 
     def _close(self):
