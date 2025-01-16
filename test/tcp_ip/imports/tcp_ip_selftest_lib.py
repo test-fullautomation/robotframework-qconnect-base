@@ -97,6 +97,7 @@ class tcp_ip_selftest_lib():
                 BuiltIn().log(f"TCP/IP testserver '{tcpip_testserver}' is ready for being connected.", "INFO", console=True)
                 break
             except Exception as ex:
+                conn_manager.disconnect(connection_name)
                 exception = f"[connect] try {cnt_tries}/{max_tries} : '{ex}'"
                 BuiltIn().log(exception, "INFO", console=True)
                 time.sleep(max_try_wait_time)
