@@ -42,7 +42,7 @@ cconnectbase_suite_setup
 
     log    executing CConnectBase Suite Setup
 
-    start_tcpip_testserver
+    tcpip.selftest.start_tcpip_testserver
 
 
 cconnectbase_suite_teardown
@@ -50,12 +50,5 @@ cconnectbase_suite_teardown
 
     log     executing CConnectBase Suite Teardown
 
-    conn_manager.connect    conn_name=QCB-TCPIP-TESTSERVER-EXIT
-    ...                     conn_type=TCPIPClient
-    ...                     conn_conf=${TCPIPClientParam}
+    tcpip.selftest.quit_tcpip_testserver
 
-    conn_manager.send_command    conn_name=QCB-TCPIP-TESTSERVER-EXIT    command=QUIT_TESTSERVER
-
-    conn_manager.disconnect    QCB-TCPIP-TESTSERVER-EXIT
-
-    tcpip.selftest.terminate_tcpip_testserver

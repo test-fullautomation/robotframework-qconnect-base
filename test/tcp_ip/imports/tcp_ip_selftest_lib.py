@@ -11,10 +11,16 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+# --------------------------------------------------------------------------------------------------------------
+#
+# XC-HWP/ESW3-Queckenstedt
+#
+# --------------------------------------------------------------------------------------------------------------
 
 # -- import standard Python modules
 import os
 import sys
+import time
 import shlex
 import subprocess
 
@@ -50,6 +56,7 @@ class tcp_ip_selftest_lib():
 
         self.__sThisModule = sThisModule
         self.__process_testserver = None
+        self.__can_be_connected   = False
 
     def __del__(self):
         pass
@@ -75,10 +82,42 @@ class tcp_ip_selftest_lib():
         list_cmd_line_parts = shlex.split(cmd_line)
         self.__process_testserver = subprocess.Popen(list_cmd_line_parts) # do not wait for process finished
 
+        # wait for TCP/IP testserver is ready (= accepts a connection)
+        TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
+        conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        max_tries         = 5
+        max_try_wait_time = 1
+        cnt_tries         = 0
+        for cnt_tries in range(1, max_tries+1):
+            connection_name = f"WAIT_FOR_TESTSERVER_READY_{cnt_tries}"
+            try:
+                conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
+                conn_manager.disconnect(connection_name)
+                self.__can_be_connected = True
+                BuiltIn().log(f"TCP/IP testserver '{tcpip_testserver}' is ready for being connected.", "INFO", console=True)
+                break
+            except Exception as ex:
+                exception = f"[connect] try {cnt_tries}/{max_tries} : '{ex}'"
+                BuiltIn().log(exception, "INFO", console=True)
+                time.sleep(max_try_wait_time)
+        if self.__can_be_connected is False:
+            BuiltIn().log(f"Not possible to connect to test server '{tcpip_testserver}' within {max_tries} tries ({max_tries} seconds).", "ERROR")
+            raise Exception("Test execution aborted because of failed precondition.")
+
+
     @keyword
-    def terminate_tcpip_testserver(self):
-        # mostly to get the command prompt back when executed in console
-        # (usually executed in suite teardown)
-        self.__process_testserver.terminate()
+    def quit_tcpip_testserver(self):
+        TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
+        conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        connection_name = "TESTSERVER_QUIT"
+        try:
+            conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
+            conn_manager.send_command(conn_name=connection_name, command="QUIT_TESTSERVER")
+            conn_manager.disconnect(connection_name)
+            # to get the command prompt back when executed in console
+            self.__process_testserver.terminate()
+        except:
+            pass
+
 
 
