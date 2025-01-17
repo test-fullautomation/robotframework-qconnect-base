@@ -14,10 +14,13 @@
 
 *** Settings ***
 
-Documentation    Common settings for TCP/IP self tests of component 'CConnectBase'
+Documentation    Common settings for TCP/IP self tests of component 'QConnectBase'
 
 Resource    ./imports/resources.resource
 
-Suite Setup       cconnectbase_suite_setup
-Suite Teardown    cconnectbase_suite_teardown
+Suite Setup       qconnectbase_suite_setup
+Suite Teardown    qconnectbase_suite_teardown
+
+Test Setup       qconnectbase_test_setup
+Test Teardown    qconnectbase_test_teardown
 
