@@ -34,6 +34,7 @@ from inspect import currentframe
 import QConnectBase.constants as constants
 import socket
 import threading
+import time
 
 
 class TCPConfig(DictToClass):
@@ -371,6 +372,12 @@ Quit connection.
 
 (*no returns*)
       """
+      self.close()
+      if self._recv_thrd_obj and self._recv_thrd_obj.is_alive():
+         self._recv_thrd_term.set()
+         while self._recv_thrd_obj.is_alive():
+            time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
+         self._recv_thrd_obj = None
       super(TCPBase, self).quit()
 
    def connect(self):
@@ -385,7 +392,7 @@ Establish the connection.
       """
       pass
 
-   def disconnect(self, device):
+   def disconnect(self, device=None):
       """
 >> Should be override in derived class.
 
@@ -395,7 +402,9 @@ Disconnect the connection.
 
 (*no returns*)
       """
-      super(TCPBase, self).disconnect()
+      # super(TCPBase, self).disconnect()
+      if self.conn is not None:
+         self.conn.close()
 
 
 class TCPBaseServer:
