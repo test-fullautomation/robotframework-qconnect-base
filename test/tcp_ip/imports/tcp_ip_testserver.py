@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.2.0 / 16.01.2025"
+VERSION = "v. 0.3.0 / 21.01.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -53,12 +53,12 @@ def handle_client(client_socket, client_address):
             while True:
                 byte_received = client_socket.recv(1).decode("utf-8")
                 if not byte_received:
-                    rf_log.warn(f"[WARN] not 'byte_received'")        # TODO: usecase?
-                    break
+                    rf_log.warn(f"[WARN] 'not byte_received'")
+                    continue
                 data_received = f"{data_received}{byte_received}"
                 if data_received == "":
-                    rf_log.warn(f"[WARN] empty 'data_received' (1)")        # TODO: usecase?
-                    break
+                    rf_log.warn(f"[WARN] empty 'data_received'")
+                    continue
                 if ( (data_received[-1] == "\n") or (data_received[-1] == "\r") ):
                     # received standard 'end of message' character
                     break
