@@ -50,6 +50,7 @@ def handle_client(client_socket, client_address):
     rf_log.info(msg)
     tcp_ip_testserver_log.tlog("handle_client", msg)
     try:
+        end_of_communication = False
         while True: # next incoming message
             data_received = ""
             while True: # next byte of current message
@@ -57,18 +58,26 @@ def handle_client(client_socket, client_address):
                 byte_received = client_socket.recv(1).decode("utf-8")
                 if not byte_received:
                     # possibly caused by a broken connection (empty byte b""?), or end of message?
-                    msg = f"[WARN] 'not byte_received'"
-                    rf_log.warn(msg)
+                    msg = f"'not byte_received'"
+                    # not really needed: rf_log.warn(msg)
                     tcp_ip_testserver_log.tlog("handle_client", msg)
-                    raise BrokenConnError("socket connection broken (1)")
-                    # previous versin: break # continue with computing the current message (before getting bytes of next message)
+                    # # raise ConnectionResetError("socket connection broken (1)")
+                    # # previous versin: break # continue with computing the current message (before getting bytes of next message)
+                    # >> to be verified:
+                    end_of_communication = True
+                    break
+                    # continue
                 data_received = f"{data_received}{byte_received}"
                 if data_received == "":
-                    msg = f"[WARN] empty 'data_received'"
-                    rf_log.warn(msg)
+                    msg = f"empty 'data_received'"
+                    # not really needed: rf_log.warn(msg)
                     tcp_ip_testserver_log.tlog("handle_client", msg)
-                    raise BrokenConnError("socket connection broken (2)") # maybe same as (1)
-                    # previous versin: continue # get next byte of current message
+                    # # raise ConnectionResetError("socket connection broken (2)") # maybe same as (1)
+                    # # previous versin: continue # get next byte of current message
+                    # >> to be verified:
+                    end_of_communication = True
+                    break
+                    # continue
                 if ( (data_received[-1] == "\n") or (data_received[-1] == "\r") ):
                     # received standard 'end of message' character
                     break # continue with computing the current message (before getting bytes of next message)
@@ -77,6 +86,11 @@ def handle_client(client_socket, client_address):
                         # received specific 'end of message' character
                         break # continue with computing the current message (before getting bytes of next message)
             # eof while True: # next byte of current message
+
+            if end_of_communication is True:
+                msg = f"end of communication with this client"
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                break # break outer loop => end of communication with this client
 
             data_received = data_received.strip() # remove trailing and leading blanks and line breaks
             if data_received == "":
@@ -108,9 +122,15 @@ def handle_client(client_socket, client_address):
     # eof try:
 
     except ConnectionResetError:
-        msg = f"TCP/IP testserver detected broken client connection: {client_address}"
+        msg = f"TCP/IP testserver detected ConnectionResetError ({client_address})"
         rf_log.info(msg)
         tcp_ip_testserver_log.tlog("handle_client", msg)
+
+    except ConnectionAbortedError:
+        msg = f"TCP/IP testserver detected ConnectionAbortedError ({client_address})"
+        rf_log.info(msg)
+        tcp_ip_testserver_log.tlog("handle_client", msg)
+
     finally:
         client_socket.close()
         msg = f"TCP/IP testserver closed client connection: {client_address}"
