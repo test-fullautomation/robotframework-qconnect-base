@@ -64,3 +64,4 @@ qconnectbase_test_teardown
 
     log    executing QConnectBase Test Teardown
 
+    tcpip.selftest.add_test_to_overview
