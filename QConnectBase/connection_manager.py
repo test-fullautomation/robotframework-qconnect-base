@@ -463,7 +463,7 @@ Send command to a connection.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.send_obj(command, **kwargs)
