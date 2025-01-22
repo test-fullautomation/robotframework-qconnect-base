@@ -56,7 +56,7 @@ class SerialSocket(ConnectionBase):
    """
 Class for handling serial connection.
    """
-   _CONNECTION_TYPE = "SERLL-"
+   _CONNECTION_TYPE = "SerialBase"
    _socket_instance = 0
 
    def __init__(self, _mode, config):

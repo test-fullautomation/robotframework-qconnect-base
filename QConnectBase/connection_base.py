@@ -378,12 +378,19 @@ Thread to receive data from connection continuously.
                            matchObj = regex_line_filter.search(msg)
                            if matchObj is not None:
                               back_trace_queue.append(msg)
-                              (is_hit, result_obj) = self._filter_msg(regex_end_block_pattern, msg)
+                              # BuiltIn().log_to_console(msg)
+                              if regex_end_block_pattern and regex_end_block_pattern.pattern != ".*":
+                                (is_hit, result_obj) = self._filter_msg(regex_end_block_pattern, msg)
+                              else:
+                                # BuiltIn().log_to_console(regex_filter.pattern)
+                                # BuiltIn().log_to_console(msg)
+                                # BuiltIn().log_to_console("\r\n".join(back_trace_queue))
+                                (is_hit, result_obj) = self._filter_msg(regex_filter, "\n".join(back_trace_queue))
                         else:
                            (is_hit, result_obj) = self._filter_msg(regex_filter, msg)
                         if is_hit:
                            now = time.time()
-                           if use_fetch_block is True:
+                           if use_fetch_block is True and regex_end_block_pattern.pattern != ".*":
                               result_obj = regex_filter.search("\r\n".join(back_trace_queue))
                               back_trace_queue.clear()
                            msg_queue.put((now, result_obj), False)
@@ -430,8 +437,10 @@ Wrapper method to send message to a tcp connection.
          try:
             BuiltIn().log("%s: sending: '%s'" % (_mident, msg), constants.LOG_LEVEL_DEBUG)
             self._send(msg, cr)
-         except:
+         except Exception as ex:
             self._is_connected = False
+            raise Exception(f"Connection has been broken. Details: {ex}")
+            
 
    def read_obj(self):
       """

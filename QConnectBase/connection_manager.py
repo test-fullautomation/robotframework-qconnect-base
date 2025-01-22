@@ -37,6 +37,7 @@ import importlib
 import pkgutil
 import QConnectBase.constants as constants
 import site
+import inspect
 
 
 class InputParam(DictToClass):
@@ -341,7 +342,7 @@ Making a connection.
 (*no returns*)
       """
       if conn_type not in self.supported_connection_classes_dict.keys():
-         raise AssertionError("The '%s' connection type hasn't been supported" % conn_type)
+         raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." % (conn_type, ', '.join(self.supported_connection_classes_dict.keys())))
 
       if conn_name in self.connection_manage_dict.keys():
          raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
@@ -509,7 +510,7 @@ Transfer file from local to remote and vice versa.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_file(src, dest, type)
@@ -517,6 +518,41 @@ Transfer file from local to remote and vice versa.
          raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
       except Exception as ex:
          raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+         
+   
+   @keyword
+   def execute_script(self, conn_name, script_path):
+      """
+Executes a script file by sending commands to a device through the provided connection.
+      
+**Arguments:**   
+
+* ``connection_name``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Name of connection.
+
+* ``script_path``    
+
+  / *Condition*: required / *Type*: str /
+  
+  Script file path.
+
+**Returns:**
+
+(*no returns*)
+      """
+      if conn_name not in self.connection_manage_dict.keys():
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+      connection_obj = self.connection_manage_dict[conn_name]
+      try:
+         connection_obj.execute_script(script_path)
+      except AttributeError as attrErr:
+         test = inspect.getfile(connection_obj.__class__)
+         raise Exception("'%s' connection type has not been supported for execute script." % connection_obj._CONNECTION_TYPE)
+      except Exception as ex:
+         raise Exception("Unable to execute script path '%s'. Exception: %s" % (script_path, str(ex)))
 
 #    @keyword
 #    def verify(self, *args, **kwargs):
@@ -671,7 +707,7 @@ Verify a pattern from connection response after sending a command.
   Matched string.
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
 
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
@@ -687,7 +723,7 @@ Verify a pattern from connection response after sending a command.
             break
 
       if not res:
-         raise AssertionError("Unable to match the pattern after '%s' time." % timeout)
+         raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
 
       return res
 
