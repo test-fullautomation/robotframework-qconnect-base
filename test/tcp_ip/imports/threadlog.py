@@ -1,7 +1,7 @@
 # --------------------------------------------------------------------------------------------------------------
 # threadlog
 # XC-HWP/ESW3-Queckenstedt
-# 22.01.2025
+# 23.01.2025
 # --------------------------------------------------------------------------------------------------------------
 
 import os, sys, time
@@ -28,7 +28,7 @@ class threadlog:
         del handle_dest_folder
         self.__dict_logfile_handles = {}
         self.__dict_print_count     = {}
-        print(f"thread log files will be written to '{self.__dest_folder}'")
+        print(f"Log files will be written to '{self.__dest_folder}'")
 
     def __del__(self):
         for file_handle in self.__dict_logfile_handles.values():

@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.4.0 / 22.01.2025"
+VERSION = "v. 0.5.0 / 23.01.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -35,15 +35,15 @@ from PythonExtensionsCollection.String.CString import CString
 
 DICT_ANSWERS = {}
 # >> used later do define specific answers deviating from standard (used e.g. for badcase tests)
-# DICT_ANSWERS['VERIFY PING 1']    = "VERIFY PING 1 ACK"
-# DICT_ANSWERS['VERIFY PING 2']    = "VERIFY PING 2 ACK"
-# DICT_ANSWERS['CLOSE_CONNECTION'] = "CLOSE_CONNECTION ACK"
-# DICT_ANSWERS['QUIT_TESTSERVER']  = "QUIT_TESTSERVER ACK"
+# DICT_ANSWERS['VERIFY PING 1'] = "VERIFY PING 1 ACK"
+# DICT_ANSWERS['VERIFY PING 2'] = "VERIFY PING 2 ACK"
 # DICT_ANSWERS[''] = ""
 
 CHAR_END_OF_MESSAGE = "*" # TODO: command line parameter
 
 STOP_EVENT = threading.Event()
+
+# --------------------------------------------------------------------------------------------------------------
 
 def handle_client(client_socket, client_address):
     msg = f"Client connected: {client_address}"
@@ -59,22 +59,14 @@ def handle_client(client_socket, client_address):
                 if not byte_received:
                     # possibly caused by a broken connection (empty byte b""?), or end of message?
                     msg = f"'not byte_received'"
-                    # not really needed: rf_log.warn(msg)
                     tcp_ip_testserver_log.tlog("handle_client", msg)
-                    # # raise ConnectionResetError("socket connection broken (1)")
-                    # # previous versin: break # continue with computing the current message (before getting bytes of next message)
-                    # >> to be verified:
                     end_of_communication = True
                     break
                     # continue
                 data_received = f"{data_received}{byte_received}"
                 if data_received == "":
                     msg = f"empty 'data_received'"
-                    # not really needed: rf_log.warn(msg)
                     tcp_ip_testserver_log.tlog("handle_client", msg)
-                    # # raise ConnectionResetError("socket connection broken (2)") # maybe same as (1)
-                    # # previous versin: continue # get next byte of current message
-                    # >> to be verified:
                     end_of_communication = True
                     break
                     # continue
@@ -103,6 +95,9 @@ def handle_client(client_socket, client_address):
             # send answer to client
             if data_received in DICT_ANSWERS:
                 response = DICT_ANSWERS[data_received] # specific answer
+            elif data_received == "GET_SERVER_PID":
+                current_pid = str(os.getpid())
+                response = f"PID={current_pid}"
             else:
                 response = f"{data_received} ACK" # common answer
             msg = f"[{client_address}] (SEND) '{response}'"
@@ -112,11 +107,16 @@ def handle_client(client_socket, client_address):
             client_socket.send(response.encode('utf-8'))
 
             # special comands
-            if data_received == "CLOSE_CONNECTION":
+            if data_received.startswith("CLOSE_CONNECTION"):
                 break
-            elif data_received == "QUIT_TESTSERVER":
+            elif data_received.startswith("QUIT_TESTSERVER"):
                 STOP_EVENT.set()
                 break
+            # >> currently not used
+            # elif data_received.startswith("SET_TEST_NAME="):
+                # current_test_name = data_received[len("SET_TEST_NAME="):]
+                # current_test_name = current_test_name.replace(" ", "_")
+                # tcp_ip_testserver_log.tlog("handle_client", current_test_name)
 
         # eof while True: # next incoming message
     # eof try:
@@ -179,12 +179,20 @@ def start_server(host="localhost", port=4000): # TODO: host/port: command line p
 # --------------------------------------------------------------------------------------------------------------
 
 # This module is independent from Robot Framework; no access to Robot Framework Output_Dir.
-# Therefore the reference for all further files and folders is the position of this file.
-tcp_ip_testserver_file_path = os.path.dirname(CString.NormalizePath(__file__))
-tcp_ip_testserver_log_file_path = os.path.dirname(os.path.dirname(tcp_ip_testserver_file_path))
-tcp_ip_testserver_log = threadlog(f"{tcp_ip_testserver_log_file_path}/aiotestlogfiles")
-tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"This is TCP/IP testserver v. {VERSION}")
+# Therefore the reference for all further files and folders is per default the position of this file.
+# In command line this can be changed.
 
+tcp_ip_testserver_file_path = os.path.dirname(CString.NormalizePath(__file__))
+arguments = sys.argv
+if len(arguments) > 1:
+    tcp_ip_testserver_log_files = f"{arguments[1]}/testserver_logfiles"
+else:
+    tcp_ip_testserver_log_files = f"{tcp_ip_testserver_file_path}/testserver_logfiles"
+
+# activate logging
+tcp_ip_testserver_log = threadlog(tcp_ip_testserver_log_files)
+tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"This is TCP/IP testserver v. {VERSION}")
+tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"Log files: '{tcp_ip_testserver_log_files}'")
 lock_file = f"{tcp_ip_testserver_file_path}/tcp_ip_testserver.lock"
 tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"Lock file '{lock_file}'")
 

@@ -44,6 +44,10 @@ qconnectbase_suite_setup
 
     tcpip.selftest.start_tcpip_testserver
 
+    # >> used later
+    # ${server_pid}=    tcpip.selftest.get_server_pid
+    # log    PID of TCP/IP testserver: ${server_pid}
+
 
 qconnectbase_suite_teardown
     [Documentation]    QConnectBase Suite Teardown
@@ -57,6 +61,9 @@ qconnectbase_test_setup
     [Documentation]    QConnectBase Test Setup
 
     log    executing QConnectBase Test Setup
+
+    # >> currently not used
+    # tcpip.selftest.set_test_name
 
 
 qconnectbase_test_teardown

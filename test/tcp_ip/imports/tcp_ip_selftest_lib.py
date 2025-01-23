@@ -16,6 +16,12 @@
 # XC-HWP/ESW3-Queckenstedt
 #
 # --------------------------------------------------------------------------------------------------------------
+#
+# Already in this file we use keywords of component QConnectBase. These keywords are tested 'officially' durig the execution of
+# robot files. Nevertheless we need to use them here too. In case they do not work properly, already the code within this file fails.
+# This is also a test result.
+#
+# --------------------------------------------------------------------------------------------------------------
 
 # -- import standard Python modules
 import os
@@ -23,6 +29,7 @@ import sys
 import time
 import shlex
 import subprocess
+import psutil
 
 from threadlog import threadlog
 
@@ -36,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.3.0"
-THISMODULEDATE    = "22.01.2025"
+THISMODULEVERSION = "0.4.0"
+THISMODULEDATE    = "23.01.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -72,6 +79,35 @@ class tcp_ip_selftest_lib():
     def _close(self):
         pass
 
+    # --------------------------------------------------------------------------------------------------------------
+    #TM***
+
+    # == non keyword methods
+
+    def __get_server_pid(self):
+        TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
+        conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        connection_name = "GET_SERVER_PID_CONNECTION"
+        server_pid = None
+        try:
+            conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
+            command = f"GET_SERVER_PID"
+            response = conn_manager.verify(conn_name=connection_name, search_pattern="PID=(.+)", send_cmd=command)
+            server_pid = response[1]
+            BuiltIn().log(f"received PID of TCP/IP testserver: {server_pid}", level="INFO")
+            conn_manager.disconnect(connection_name)
+        except Exception as ex:
+            msg = f"Not able to get the TCP/IP server pid. Reason: {ex}"
+            self.__testoverviewlog.tlog("test_overview", msg)
+            BuiltIn().log(msg, level="ERROR", console=True)
+            raise Exception("Test execution aborted because of failed information exchange.")
+        return server_pid
+
+    # --------------------------------------------------------------------------------------------------------------
+    #TM***
+
+    # == keyword methods
+
     @keyword
     def start_tcpip_testserver(self):
         BuiltIn().log(f"This is '{self.__sThisModule}'", level="INFO", console=True)
@@ -83,10 +119,13 @@ class tcp_ip_selftest_lib():
         BuiltIn().log(f"TCP/IP testserver is '{tcpip_testserver}'", level="INFO", console=True)
         if not os.path.isfile(tcpip_testserver):
             raise Exception(f"Exception: TCP/IP testserver '{tcpip_testserver}' not found.")
+        output_dir = CString.NormalizePath(BuiltIn().get_variable_value('${OUTPUT DIR}'))
         list_cmd_line_parts = []
         list_cmd_line_parts.append(f"'{python}'")
         list_cmd_line_parts.append(f"'{tcpip_testserver}'")
+        list_cmd_line_parts.append(f"'{output_dir}'")
         cmd_line = " ".join(list_cmd_line_parts)
+        BuiltIn().log(f"cmd_line '{cmd_line}'", level="INFO", console=True)
         list_cmd_line_parts = shlex.split(cmd_line)
         self.__process_testserver = subprocess.Popen(list_cmd_line_parts) # do not wait for process finished
 
@@ -116,19 +155,46 @@ class tcp_ip_selftest_lib():
 
     @keyword
     def quit_tcpip_testserver(self):
-        TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
-        conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
-        connection_name = "TESTSERVER_QUIT"
+        TCPIPClientParam  = BuiltIn().get_variable_value('${TCPIPClientParam}')
+        conn_manager      = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        connection_name   = "TESTSERVER_QUIT_CONNECTION"
+        pid               = self.__get_server_pid() # the PID of the current active TCP/IP testserver we want to quit here
+        server_pid        = int(pid)
+        max_tries         = 8
+        max_try_wait_time = 1
+        cnt_tries         = 0
+        is_testserver     = True
         try:
             conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
             conn_manager.send_command(conn_name=connection_name, command="QUIT_TESTSERVER")
-            time.sleep(TESTSERVER_TIME_TO_QUIT) # give the TCP/IP testserver some time to quit (send confirmation, disconnect, write final log file entries)
+            # Now the TCP/IP testserver needs some time to quit (send confirmation, disconnect, write final log file entries).
+            # We need to wait a bit before we disconnect.
+            # This is also to get the command prompt back when the entire test is executed in console.
+            # And 'self.__process_testserver.terminate()' should be an emergency fallback solution only
+            # (because this causes missing log entries, if sent too early).
+            # We use the PID of the testserver to get to know about his status.
+            for cnt_tries in range(1, max_tries+1):
+                msg = f"testserver quit try {cnt_tries}/{max_tries}"
+                BuiltIn().log(msg, level="INFO", console=True)
+                list_pids = psutil.pids()
+                if not server_pid in list_pids:
+                    # no testserver any more
+                    is_testserver = False
+                    break
+                time.sleep(max_try_wait_time)
+            if is_testserver is True:
+                BuiltIn().log(f"Not possible to quit the TCP/IP testserver within {max_tries} tries ({max_tries} seconds).", level="WARN", console=True)
+                BuiltIn().log(f"Now terminating process with PID {server_pid}.", level="WARN", console=True)
+                self.__process_testserver.terminate()
             conn_manager.disconnect(connection_name)
-            # >> because of the sleep time before it's not necessary to terminate the testserver process explicitly
-            # to get the command prompt back when executed in console
-            # self.__process_testserver.terminate()
-        except:
-            pass
+        except Exception as ex:
+            msg = f"Not able to send command 'QUIT_TESTSERVER'. Reason: {ex}"
+            self.__testoverviewlog.tlog("test_overview", msg)
+            BuiltIn().log(msg, level="ERROR", console=True)
+            msg = f"Now terminating process with PID {server_pid}."
+            self.__testoverviewlog.tlog("test_overview", msg)
+            BuiltIn().log(msg, level="WARN", console=True)
+            self.__process_testserver.terminate()
 
 
     @keyword
@@ -138,4 +204,30 @@ class tcp_ip_selftest_lib():
         test_status        = BuiltIn().get_variable_value('${TEST STATUS}')
         self.__testoverviewlog.tlog("test_overview", f"* Test '{test_name}' : {test_status}")
         self.__testoverviewlog.tlog("test_overview", f"  {test_documentation}\n")
+
+
+    @keyword
+    def get_server_pid(self):
+        return self.__get_server_pid()
+
+
+    # # >> currently not used
+    # @keyword
+    # def set_test_name(self):
+        # test_name        = BuiltIn().get_variable_value('${TEST NAME}')
+        # TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
+        # conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        # connection_name = "SET_TEST_NAME_CONNECTION"
+        # try:
+            # conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
+            # command = f"SET_TEST_NAME={test_name}"
+            # conn_manager.send_command(conn_name=connection_name, command=command)              # TODO: verify instead of send_command
+            # conn_manager.disconnect(connection_name)
+        # except Exception as ex:
+            # msg = f"Not able to send the Robot Framework test name to testserver. Reason: {ex}"
+            # self.__testoverviewlog.tlog("test_overview", msg)
+            # BuiltIn().log(msg, level="ERROR", console=True)
+            # raise Exception("Test execution aborted because of failed information exchange.")
+
+
 
