@@ -21,7 +21,7 @@ Resource    ./imports/resources.resource
 QCB-TCPIP-BC-001
     [Documentation]    Send command without connection
 
-    ${status}    ${result}=    Run Keyword And Ignore Error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-001-Connection    command=PING
+    ${status}    ${result}=    Run Keyword And Ignore Error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-001-Connection    command=BC-001
     log    result: '${result}'    console=yes
     should_be_equal    ${status}    FAIL
     should_be_equal    ${result}    The 'QCB-TCPIP-BC-001-Connection' connection hasn't been established. Please connect first.

@@ -25,7 +25,7 @@ QCB-TCPIP-GC-003
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}
 
-    conn_manager.send_command    conn_name=QCB-TCPIP-GC-003-Connection    command=CLOSE_CONNECTION
+    conn_manager.send_command    conn_name=QCB-TCPIP-GC-003-Connection    command=CLOSE_CONNECTION-GC-003
 
     conn_manager.disconnect    QCB-TCPIP-GC-003-Connection
 

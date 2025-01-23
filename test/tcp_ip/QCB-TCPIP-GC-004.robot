@@ -25,7 +25,7 @@ QCB-TCPIP-GC-004
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}
 
-    conn_manager.verify    conn_name=QCB-TCPIP-GC-004-Connection    search_pattern=TCPIP PING ACK    send_cmd=TCPIP PING
+    conn_manager.verify    conn_name=QCB-TCPIP-GC-004-Connection    search_pattern=GC-004 ACK    send_cmd=GC-004
 
     conn_manager.disconnect    QCB-TCPIP-GC-004-Connection
 
