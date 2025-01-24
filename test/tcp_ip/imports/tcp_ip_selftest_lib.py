@@ -99,7 +99,7 @@ class tcp_ip_selftest_lib():
         except Exception as ex:
             msg = f"Not able to get the TCP/IP server pid. Reason: {ex}"
             self.__testoverviewlog.tlog("test_overview", msg)
-            BuiltIn().log(msg, level="ERROR", console=True)
+            BuiltIn().log(msg, level="ERROR")
             raise Exception("Test execution aborted because of failed information exchange.")
         return server_pid
 
@@ -160,7 +160,7 @@ class tcp_ip_selftest_lib():
         connection_name   = "TESTSERVER_QUIT_CONNECTION"
         pid               = self.__get_server_pid() # the PID of the current active TCP/IP testserver we want to quit here
         server_pid        = int(pid)
-        max_tries         = 8
+        max_tries         = 20 # previously 8 (20 is a try only / 8 is not enough under Linux (why does it take so much time to get the current pid removed from sytem?))
         max_try_wait_time = 1
         cnt_tries         = 0
         is_testserver     = True
@@ -178,31 +178,36 @@ class tcp_ip_selftest_lib():
                 BuiltIn().log(msg, level="INFO", console=True)
                 list_pids = psutil.pids()
                 if not server_pid in list_pids:
-                    # no testserver any more
+                    # no testserver is running any more
                     is_testserver = False
                     break
                 time.sleep(max_try_wait_time)
             if is_testserver is True:
-                BuiltIn().log(f"Not possible to quit the TCP/IP testserver within {max_tries} tries ({max_tries} seconds).", level="WARN", console=True)
-                BuiltIn().log(f"Now terminating process with PID {server_pid}.", level="WARN", console=True)
+                BuiltIn().log(f"Not possible to quit the TCP/IP testserver within {max_tries} tries ({max_tries} seconds).", level="WARN")
+                BuiltIn().log(f"Now terminating process with PID {server_pid}.", level="WARN")
                 self.__process_testserver.terminate()
+                conn_manager.disconnect(connection_name)
+                raise Exception("The TCP/IP testserver had to be terminated forcibly.")
             conn_manager.disconnect(connection_name)
         except Exception as ex:
-            msg = f"Not able to send command 'QUIT_TESTSERVER'. Reason: {ex}"
+            msg = f"Problems with command 'QUIT_TESTSERVER'. Reason: {ex}"
             self.__testoverviewlog.tlog("test_overview", msg)
-            BuiltIn().log(msg, level="ERROR", console=True)
+            BuiltIn().log(msg, level="ERROR")
             msg = f"Now terminating process with PID {server_pid}."
             self.__testoverviewlog.tlog("test_overview", msg)
-            BuiltIn().log(msg, level="WARN", console=True)
+            BuiltIn().log(msg, level="WARN")
             self.__process_testserver.terminate()
+            raise Exception("The TCP/IP testserver had to be terminated forcibly.")
 
 
     @keyword
     def add_test_to_overview(self):
+        suite_source       = BuiltIn().get_variable_value('${SUITE SOURCE}')
         test_name          = BuiltIn().get_variable_value('${TEST NAME}')
         test_documentation = BuiltIn().get_variable_value('${TEST DOCUMENTATION}')
         test_status        = BuiltIn().get_variable_value('${TEST STATUS}')
-        self.__testoverviewlog.tlog("test_overview", f"* Test '{test_name}' : {test_status}")
+        self.__testoverviewlog.tlog("test_overview", f"* {suite_source}")
+        self.__testoverviewlog.tlog("test_overview", f"  Test '{test_name}' : {test_status}")
         self.__testoverviewlog.tlog("test_overview", f"  {test_documentation}\n")
 
 
@@ -226,7 +231,7 @@ class tcp_ip_selftest_lib():
         # except Exception as ex:
             # msg = f"Not able to send the Robot Framework test name to testserver. Reason: {ex}"
             # self.__testoverviewlog.tlog("test_overview", msg)
-            # BuiltIn().log(msg, level="ERROR", console=True)
+            # BuiltIn().log(msg, level="ERROR")
             # raise Exception("Test execution aborted because of failed information exchange.")
 
 
