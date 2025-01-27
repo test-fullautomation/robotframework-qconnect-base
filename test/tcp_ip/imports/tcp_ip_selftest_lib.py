@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.4.0"
-THISMODULEDATE    = "23.01.2025"
+THISMODULEVERSION = "0.5.0"
+THISMODULEDATE    = "27.01.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -155,40 +155,14 @@ class tcp_ip_selftest_lib():
 
     @keyword
     def quit_tcpip_testserver(self):
+        pid               = self.__get_server_pid() # the PID of the current active TCP/IP testserver we want to quit here
+        server_pid        = int(pid)
         TCPIPClientParam  = BuiltIn().get_variable_value('${TCPIPClientParam}')
         conn_manager      = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
         connection_name   = "TESTSERVER_QUIT_CONNECTION"
-        pid               = self.__get_server_pid() # the PID of the current active TCP/IP testserver we want to quit here
-        server_pid        = int(pid)
-        max_tries         = 20 # previously 8 (20 is a try only / 8 is not enough under Linux (why does it take so much time to get the current pid removed from sytem?))
-        max_try_wait_time = 1
-        cnt_tries         = 0
-        is_testserver     = True
         try:
             conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
             conn_manager.send_command(conn_name=connection_name, command="QUIT_TESTSERVER")
-            # Now the TCP/IP testserver needs some time to quit (send confirmation, disconnect, write final log file entries).
-            # We need to wait a bit before we disconnect.
-            # This is also to get the command prompt back when the entire test is executed in console.
-            # And 'self.__process_testserver.terminate()' should be an emergency fallback solution only
-            # (because this causes missing log entries, if sent too early).
-            # We use the PID of the testserver to get to know about his status.
-            for cnt_tries in range(1, max_tries+1):
-                msg = f"testserver quit try {cnt_tries}/{max_tries}"
-                BuiltIn().log(msg, level="INFO", console=True)
-                list_pids = psutil.pids()
-                if not server_pid in list_pids:
-                    # no testserver is running any more
-                    is_testserver = False
-                    break
-                time.sleep(max_try_wait_time)
-            if is_testserver is True:
-                BuiltIn().log(f"Not possible to quit the TCP/IP testserver within {max_tries} tries ({max_tries} seconds).", level="WARN")
-                BuiltIn().log(f"Now terminating process with PID {server_pid}.", level="WARN")
-                self.__process_testserver.terminate()
-                conn_manager.disconnect(connection_name)
-                raise Exception("The TCP/IP testserver had to be terminated forcibly.")
-            conn_manager.disconnect(connection_name)
         except Exception as ex:
             msg = f"Problems with command 'QUIT_TESTSERVER'. Reason: {ex}"
             self.__testoverviewlog.tlog("test_overview", msg)
@@ -198,6 +172,49 @@ class tcp_ip_selftest_lib():
             BuiltIn().log(msg, level="WARN")
             self.__process_testserver.terminate()
             raise Exception("The TCP/IP testserver had to be terminated forcibly.")
+
+        # Now the TCP/IP testserver needs some time to quit (send confirmation, disconnect, write final log file entries).
+        # We need to wait a bit before we disconnect.
+        # This is also to get the command prompt back when the entire test is executed in console.
+        # And 'self.__process_testserver.terminate()' should be an emergency fallback solution only
+        # (because this causes missing log entries, if sent too early).
+        # We use the PID of the testserver to get to know about his status.
+
+        max_tries         = 8
+        max_try_wait_time = 1
+        cnt_tries         = 0
+        is_testserver     = True
+
+        for cnt_tries in range(1, max_tries+1):
+            finished_pid = None
+            if hasattr(os, 'WNOHANG'): # not available in all os, but on Linux this avoids zombie processes, because it forces to catch the status
+                try:
+                    finished_pid, status = os.waitpid(server_pid, os.WNOHANG)
+                    msg = f"process {finished_pid} finished with status {status}"
+                    BuiltIn().log(msg, level="INFO", console=True)
+                except ChildProcessError as ex:
+                    BuiltIn().log(f"{ex}", level="INFO", console=True)
+                    break
+
+            # confirmation
+            list_pids = psutil.pids()
+            if not server_pid in list_pids:
+                # no testserver is running any more
+                is_testserver = False
+                break
+
+            msg = f"testserver quit try {cnt_tries}/{max_tries}"
+            BuiltIn().log(msg, level="INFO", console=True)
+            time.sleep(max_try_wait_time)
+        # eof for cnt_tries in range(1, max_tries+1):
+
+        if is_testserver is True:
+            BuiltIn().log(f"Not possible to quit the TCP/IP testserver within {max_tries} tries ({max_tries} seconds).", level="WARN")
+            BuiltIn().log(f"Now terminating process with PID {server_pid}.", level="WARN")
+            self.__process_testserver.terminate()
+            conn_manager.disconnect(connection_name)
+            raise Exception("The TCP/IP testserver had to be terminated forcibly.")
+        conn_manager.disconnect(connection_name)
 
 
     @keyword
