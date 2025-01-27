@@ -18,12 +18,13 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.5.0 / 23.01.2025"
+VERSION = "v. 0.6.0 / 24.01.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
 import sys
 import os
+import time
 import psutil
 import socket
 import threading
@@ -98,6 +99,18 @@ def handle_client(client_socket, client_address):
             elif data_received == "GET_SERVER_PID":
                 current_pid = str(os.getpid())
                 response = f"PID={current_pid}"
+            elif data_received.startswith("DELAY10"):
+                msg = "Now TCP/IP testserver is waiting for 10 seconds until sending the answer"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                time.sleep(10)
+                response = f"{data_received} ACK" # common answer
+            elif data_received.startswith("DELAY20"):
+                msg = "Now TCP/IP testserver is waiting for 20 seconds until sending the answer"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                time.sleep(20)
+                response = f"{data_received} ACK" # common answer
             else:
                 response = f"{data_received} ACK" # common answer
             msg = f"[{client_address}] (SEND) '{response}'"
