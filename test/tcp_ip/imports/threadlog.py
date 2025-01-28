@@ -1,7 +1,7 @@
 # --------------------------------------------------------------------------------------------------------------
 # threadlog
 # XC-HWP/ESW3-Queckenstedt
-# 23.01.2025
+# 28.01.2025
 # --------------------------------------------------------------------------------------------------------------
 
 import os, sys, time
@@ -39,7 +39,7 @@ class threadlog:
 
     # --------------------------------------------------------------------------------------------------------------
 
-    def tlog(self, ident=None, message=None):
+    def tlog(self, ident=None, message=None, log_prefix=True):
         ident = str(ident) # integers are accepted as input, but internally we only work with strings
         thread_id = threading.get_ident()
         full_ident = f"{ident}_{thread_id}"
@@ -55,7 +55,10 @@ class threadlog:
         log_timestamp = f"{timestamp}-{current_time_milliseconds_high_res}"
         self.__dict_print_count[full_ident] = self.__dict_print_count[full_ident] + 1
         tlog_count = str(self.__dict_print_count[full_ident]).rjust(3, '0')
-        out = f"{log_timestamp} [{thread_id}] [{ident}] ({tlog_count}) : {message}"
+        if log_prefix is True:
+            out = f"{log_timestamp} [{thread_id}] [{ident}] ({tlog_count}) : {message}"
+        else:
+            out = f"{message}"
         self.__dict_logfile_handles[full_ident].write(f"{out}\n")
         self.__dict_logfile_handles[full_ident].flush()
     # eof def tlog(self, ident=None, message=None):

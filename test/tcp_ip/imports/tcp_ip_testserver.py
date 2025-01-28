@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.6.0 / 24.01.2025"
+VERSION = "v. 0.7.0 / 28.01.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -175,12 +175,24 @@ def start_server(host="localhost", port=4000): # TODO: host/port: command line p
         try:
             # wait for incoming connections
             client_socket, client_address = server_socket.accept()
+            msg = f"Accepted connection from {client_address}"
+            rf_log.info(msg)
+            tcp_ip_testserver_log.tlog("start_server", msg)
             # create new thread for new client
             client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
             client_thread.daemon = True  # automatically end thread at quit of testserver
             client_thread.start()
+            msg = f"Started thread {client_thread.name} for {client_address}"
+            rf_log.info(msg)
+            tcp_ip_testserver_log.tlog("start_server", msg)
         except socket.timeout:
             continue
+        except Exception as ex:
+            msg = f"Exception in main loop: {ex}"
+            rf_log.info(msg)
+            tcp_ip_testserver_log.tlog("start_server", msg)
+            continue # TODO: verify
+    # eof while not STOP_EVENT.is_set():
 
     STOP_EVENT.clear()
     server_socket.close()

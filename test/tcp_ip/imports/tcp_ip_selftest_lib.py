@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.5.0"
-THISMODULEDATE    = "27.01.2025"
+THISMODULEVERSION = "0.5.2"
+THISMODULEDATE    = "28.01.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -189,8 +189,8 @@ class tcp_ip_selftest_lib():
             finished_pid = None
             if hasattr(os, 'WNOHANG'): # not available in all os, but on Linux this avoids zombie processes, because it forces to catch the status
                 try:
-                    finished_pid, status = os.waitpid(server_pid, os.WNOHANG)
-                    msg = f"process {finished_pid} finished with status {status}"
+                    finished_pid, status = os.waitpid(server_pid, os.WNOHANG) # (why is finished_pid = 0?)
+                    msg = f"process {server_pid} finished with status {status}"
                     BuiltIn().log(msg, level="INFO", console=True)
                 except ChildProcessError as ex:
                     BuiltIn().log(f"{ex}", level="INFO", console=True)
@@ -223,9 +223,9 @@ class tcp_ip_selftest_lib():
         test_name          = BuiltIn().get_variable_value('${TEST NAME}')
         test_documentation = BuiltIn().get_variable_value('${TEST DOCUMENTATION}')
         test_status        = BuiltIn().get_variable_value('${TEST STATUS}')
-        self.__testoverviewlog.tlog("test_overview", f"* {suite_source}")
-        self.__testoverviewlog.tlog("test_overview", f"  Test '{test_name}' : {test_status}")
-        self.__testoverviewlog.tlog("test_overview", f"  {test_documentation}\n")
+        self.__testoverviewlog.tlog("test_overview", f"* Test '{test_name}' : {test_status}", log_prefix=False)
+        self.__testoverviewlog.tlog("test_overview", f"{test_documentation}", log_prefix=False)
+        self.__testoverviewlog.tlog("test_overview", f"{suite_source}\n", log_prefix=False)
 
 
     @keyword
