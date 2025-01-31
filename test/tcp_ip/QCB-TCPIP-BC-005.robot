@@ -22,11 +22,12 @@ QCB-TCPIP-BC-005
     [Documentation]    Invalid connection type in keyword 'connect'
     ...                !!! The 'Please choose one of' list differs in every test execution. Rework required. !!!
 
-    ${status}    ${result}=    Run Keyword And Ignore Error    conn_manager.connect    conn_name=QCB-TCPIP-BC-005-Connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-005-Connection
                                                                ...                     conn_type=INVALID_CONNECTION_TYPE
                                                                ...                     conn_conf=${TCPIPClientParam}
 
-    log    result: '${result}'    console=yes
+    log    TCPIP-BC-005 'connect' status: ${status}    console=yes
+    log    TCPIP-BC-005 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
 

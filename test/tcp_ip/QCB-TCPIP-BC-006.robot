@@ -22,9 +22,10 @@ QCB-TCPIP-BC-006
     [Documentation]    Unknown connection name in keyword 'disconnect' (no corresponding 'connect')
     ...                !!! The 'UNKNOWN_CONNECTION_NAME' is ignored. No error thrown. Rework required !!!
 
-    ${status}    ${result}=    Run Keyword And Ignore Error    conn_manager.disconnect    conn_name=UNKNOWN_CONNECTION_NAME
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=UNKNOWN_CONNECTION_NAME
 
-    log    result: '${result}'    console=yes
+    log    TCPIP-BC-006 'disconnect' status: ${status}    console=yes
+    log    TCPIP-BC-006 'disconnect' result: ${result}    console=yes
 
     # this curtrently fails
     should_be_equal    ${status}    FAIL

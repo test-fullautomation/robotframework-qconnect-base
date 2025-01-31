@@ -29,11 +29,12 @@ QCB-TCPIP-BC-004
     conn_manager.verify    conn_name=QCB-TCPIP-BC-004-Connection    search_pattern=BC-004 ACK    send_cmd=BC-004
 
     # same connection name again
-    ${status}    ${result}=    Run Keyword And Ignore Error    conn_manager.connect    conn_name=QCB-TCPIP-BC-004-Connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-004-Connection
                                                                ...                     conn_type=TCPIPClient
                                                                ...                     conn_conf=${TCPIPClientParam}
 
-    log    result: '${result}'    console=yes
+    log    TCPIP-BC-004 'connect' status: ${status}    console=yes
+    log    TCPIP-BC-004 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
     should_be_equal    ${result}    The connection name 'QCB-TCPIP-BC-004-Connection' has already existed! Please use other name
