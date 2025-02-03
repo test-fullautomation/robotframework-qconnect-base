@@ -18,14 +18,14 @@ Resource    ./imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-BC-001
+QCB-TCPIP-BC-003
     [Documentation]    Send command without connection
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-001-Connection    command=BC-001
+    # try to send a command without connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-003-Connection    command=BC-003
 
-    log    TCPIP-BC-001 'send_command' status: ${status}    console=yes
-    log    TCPIP-BC-001 'send_command' result: ${result}    console=yes
+    log    TCPIP-BC-003 'send_command' status: ${status}    console=yes
+    log    TCPIP-BC-003 'send_command' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    The 'QCB-TCPIP-BC-001-Connection' connection hasn't been established. Please connect first.
-
+    should_be_equal    ${result}    The 'QCB-TCPIP-BC-003-Connection' connection hasn't been established. Please connect first.

@@ -18,14 +18,17 @@ Resource    ./imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-BC-001
-    [Documentation]    Send command without connection
+QCB-TCPIP-BC-006
+    [Documentation]    Unknown connection name in keyword 'disconnect' (no corresponding 'connect')
+    ...                !!! The 'UNKNOWN_CONNECTION_NAME' is ignored. No error thrown. Rework required !!!
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-001-Connection    command=BC-001
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=UNKNOWN_CONNECTION_NAME
 
-    log    TCPIP-BC-001 'send_command' status: ${status}    console=yes
-    log    TCPIP-BC-001 'send_command' result: ${result}    console=yes
+    log    TCPIP-BC-006 'disconnect' status: ${status}    console=yes
+    log    TCPIP-BC-006 'disconnect' result: ${result}    console=yes
 
+    # this curtrently fails
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    The 'QCB-TCPIP-BC-001-Connection' connection hasn't been established. Please connect first.
+    # after fix: # should_be_equal    ${result}    ....
+
 

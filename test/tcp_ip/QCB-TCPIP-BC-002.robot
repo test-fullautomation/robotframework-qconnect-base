@@ -29,8 +29,10 @@ QCB-TCPIP-BC-002
     conn_manager.send_command    conn_name=QCB-TCPIP-BC-002-Connection    command=CLOSE_CONNECTION-BC-002
 
     # try to send a command without connection
-    ${status}    ${result}=    Run Keyword And Ignore Error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-002-Connection    command=BC-002
-    log    result: '${result}'    console=yes
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-002-Connection    command=BC-002
+
+    log    TCPIP-BC-002 'send_command' status: ${status}    console=yes
+    log    TCPIP-BC-002 'send_command' result: ${result}    console=yes
 
     # (does this make a difference in this case? -> extra testcase)
     # conn_manager.disconnect    QCB-TCPIP-BC-002-Connection
