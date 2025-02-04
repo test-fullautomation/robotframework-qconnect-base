@@ -19,6 +19,7 @@ Resource    ./imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-GC-101
+    [Tags]    threading
     [Documentation]    Communication in two threads.
     ...                Answer from server in thread 2 has a delay of 10 seconds
     ...                while thread 1 verifies several messages in a loop.

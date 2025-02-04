@@ -21,6 +21,8 @@ Resource    ./imports/resources.resource
 QCB-TCPIP-BC-005
     [Documentation]    Invalid connection type in keyword 'connect'
     ...                !!! The 'Please choose one of' list differs in every test execution. Rework required. !!!
+    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/92
+    ...                !!! test not in final version !!!
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-005-Connection
                                                                ...                     conn_type=INVALID_CONNECTION_TYPE
@@ -31,6 +33,7 @@ QCB-TCPIP-BC-005
 
     should_be_equal    ${status}    FAIL
 
+    # !!! need to be implemented and activated after fix !!!
     # The 'Please choose one of' list differs in every test execution!
     # should_be_equal    ${result}    The connection type 'INVALID_CONNECTION_TYPE' is not supported. Please choose one of: SerialClient, Winapp, RabbitmqClient, TCPIPBase, SerialBase, TCPIPClient, TCPIPServer, SSHClient.
 
