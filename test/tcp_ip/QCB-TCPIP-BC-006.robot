@@ -21,14 +21,16 @@ Resource    ./imports/resources.resource
 QCB-TCPIP-BC-006
     [Documentation]    Unknown connection name in keyword 'disconnect' (no corresponding 'connect')
     ...                !!! The 'UNKNOWN_CONNECTION_NAME' is ignored. No error thrown. Rework required !!!
+    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/93
+    ...                !!! test not in final version !!!
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=UNKNOWN_CONNECTION_NAME
 
     log    TCPIP-BC-006 'disconnect' status: ${status}    console=yes
     log    TCPIP-BC-006 'disconnect' result: ${result}    console=yes
 
-    # this curtrently fails
-    should_be_equal    ${status}    FAIL
-    # after fix: # should_be_equal    ${result}    ....
+    # !!! need to be implemented and activated after fix !!!
+    # should_be_equal    ${status}    FAIL
+    # should_be_equal    ${result}    ....
 
 

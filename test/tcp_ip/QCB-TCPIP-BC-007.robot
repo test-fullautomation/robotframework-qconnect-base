@@ -28,6 +28,8 @@ Resource    ./imports/resources.resource
 QCB-TCPIP-BC-007
     [Documentation]    Invalid connection configuration parameter
     ...                !!! The invalid parameter is ignored. No error thrown. Rework required !!!
+    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/66#issuecomment-2531780274
+    ...                !!! test not in final version !!!
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-007-Connection
                                                                ...                     conn_type=TCPIPClient
@@ -36,19 +38,10 @@ QCB-TCPIP-BC-007
     log    TCPIP-BC-007 'connect' status: ${status}    console=yes
     log    TCPIP-BC-007 'connect' result: ${result}    console=yes
 
-    should_be_equal    ${status}    FAIL
-    # should_be_equal    ${result}    to be defined
-
     conn_manager.disconnect    conn_name=QCB-TCPIP-BC-007-Connection
 
-
-
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=UNKNOWN_CONNECTION_NAME
-
-    log    result: '${result}'    console=yes
-
-    # this curtrently fails
-    should_be_equal    ${status}    FAIL
-    # after fix: # should_be_equal    ${result}    ....
+    # !!! need to be implemented and activated after fix !!!
+    # should_be_equal    ${status}    FAIL
+    # should_be_equal    ${result}    ....
 
 

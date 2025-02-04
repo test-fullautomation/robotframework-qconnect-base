@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.7.0 / 28.01.2025"
+VERSION = "v. 0.8.0 / 03.02.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -93,31 +93,96 @@ def handle_client(client_socket, client_address):
             rf_log.info(msg)
             tcp_ip_testserver_log.tlog("handle_client", msg)
 
-            # send answer to client
+            # ----------------------------------------------------------------------------------
+            # send answer(s) to client
+            # ----------------------------------------------------------------------------------
             if data_received in DICT_ANSWERS:
-                response = DICT_ANSWERS[data_received] # specific answer
-            elif data_received == "GET_SERVER_PID":
+                #
+                # specific answer (currently not used)
+                #
+                response = DICT_ANSWERS[data_received]
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                response = f"{response}\n"
+                client_socket.send(response.encode('utf-8'))
+            elif data_received.startswith("GET_SERVER_PID"):
+                #
+                # send the pid of this server
+                #
                 current_pid = str(os.getpid())
                 response = f"PID={current_pid}"
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                response = f"{response}\n"
+                client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("DELAY10"):
+                #
+                # send standard answer with delay of 10 seconds
+                #
                 msg = "Now TCP/IP testserver is waiting for 10 seconds until sending the answer"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("handle_client", msg)
                 time.sleep(10)
-                response = f"{data_received} ACK" # common answer
+                response = f"{data_received} ACK"
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                response = f"{response}\n"
+                client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("DELAY20"):
+                #
+                # send standard answer with delay of 20 seconds
+                #
                 msg = "Now TCP/IP testserver is waiting for 20 seconds until sending the answer"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("handle_client", msg)
                 time.sleep(20)
-                response = f"{data_received} ACK" # common answer
+                response = f"{data_received} ACK"
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                response = f"{response}\n"
+                client_socket.send(response.encode('utf-8'))
+            elif data_received.startswith("FETCHBLOCK"):
+                #
+                # send several answers (test of 'fetch_block' parameter of keyxword 'verify')
+                #
+                msg = "Now TCP/IP testserver sends several answers ('fetch_block' test)"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                list_messages = [f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-1] [FETCHBLOCK_START]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-2] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-4] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-5] [FETCHBLOCK_END]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-6] [OUTSIDE_FETCHBLOCK]",
+                                 f"{data_received} ACK"]
+                for index, message in enumerate(list_messages):
+                    time.sleep(1)
+                    response = f"{message} ({index+1})"
+                    msg = f"[{client_address}] (SEND) '{response}'"
+                    rf_log.info(msg)
+                    tcp_ip_testserver_log.tlog("handle_client", msg)
+                    response = f"{response}\n"
+                    client_socket.send(response.encode('utf-8'))
             else:
-                response = f"{data_received} ACK" # common answer
-            msg = f"[{client_address}] (SEND) '{response}'"
-            rf_log.info(msg)
-            tcp_ip_testserver_log.tlog("handle_client", msg)
-            response = f"{response}\n"
-            client_socket.send(response.encode('utf-8'))
+                #
+                # send standard answer (default)
+                #
+                response = f"{data_received} ACK"
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                response = f"{response}\n"
+                client_socket.send(response.encode('utf-8'))
 
             # special comands
             if data_received.startswith("CLOSE_CONNECTION"):
