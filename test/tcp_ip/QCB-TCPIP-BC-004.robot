@@ -20,7 +20,9 @@ Resource    ./imports/resources.resource
 
 QCB-TCPIP-BC-004
     [Documentation]    Duplicate connection name
-    ...                Wording of error message needs to be maintained!
+    ...                !!! Wording of error message needs to be maintained !!! 
+    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/57
+    ...                !!! test not in final version !!!
 
     conn_manager.connect    conn_name=QCB-TCPIP-BC-004-Connection
     ...                     conn_type=TCPIPClient
@@ -37,6 +39,7 @@ QCB-TCPIP-BC-004
     log    TCPIP-BC-004 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
+    # !!! Wording of error message needs to be maintained !!! 
     should_be_equal    ${result}    The connection name 'QCB-TCPIP-BC-004-Connection' has already existed! Please use other name
 
 
