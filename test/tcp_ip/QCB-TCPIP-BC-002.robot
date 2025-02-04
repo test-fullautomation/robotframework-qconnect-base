@@ -19,7 +19,10 @@ Resource    ./imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-BC-002
-    [Documentation]    Send command after testserver closed the connection !!! needs to be adapted after bugfix !!!
+    [Documentation]    Send command after testserver closed the connection
+    ...                !!! needs to be adapted after bugfix !!!
+    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/72
+    ...                !!! test not in final version !!!
 
     conn_manager.connect    conn_name=QCB-TCPIP-BC-002-Connection
     ...                     conn_type=TCPIPClient
