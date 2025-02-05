@@ -24,6 +24,9 @@ QCB-TCPIP-BC-005
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/92
     ...                !!! test not in final version !!!
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    BADCASE
+
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-005-Connection
                                                                ...                     conn_type=INVALID_CONNECTION_TYPE
                                                                ...                     conn_conf=${TCPIPClientParam}

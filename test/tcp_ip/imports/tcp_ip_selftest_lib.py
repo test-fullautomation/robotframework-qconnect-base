@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.6.0"
-THISMODULEDATE    = "30.01.2025"
+THISMODULEVERSION = "0.7.0"
+THISMODULEDATE    = "05.02.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -69,11 +69,15 @@ class tcp_ip_selftest_lib():
         self.__process_testserver = None
         self.__can_be_connected   = False
 
+        self.__testcounter = 0
+
         output_dir = CString.NormalizePath(BuiltIn().get_variable_value('${OUTPUT DIR}'))
-        self.__testoverviewlog = threadlog(f"{output_dir}/test_overview")
+        self.__testresultsoverview  = threadlog(f"{output_dir}/overview_tables")
+        self.__testcasesoverview = threadlog(f"{output_dir}/overview_tables", extension="html")
 
     def __del__(self):
-        del self.__testoverviewlog
+        del self.__testresultsoverview
+        del self.__testcasesoverview
         pass
 
     def _close(self):
@@ -98,7 +102,7 @@ class tcp_ip_selftest_lib():
             conn_manager.disconnect(connection_name)
         except Exception as ex:
             msg = f"Not able to get the TCP/IP server pid. Reason: {ex}"
-            self.__testoverviewlog.tlog("test_overview", msg)
+            self.__testresultsoverview.tlog("testresults_overview", msg)
             BuiltIn().log(msg, level="ERROR")
             raise Exception("Test execution aborted because of failed information exchange.")
         return server_pid
@@ -165,10 +169,10 @@ class tcp_ip_selftest_lib():
             conn_manager.send_command(conn_name=connection_name, command="QUIT_TESTSERVER")
         except Exception as ex:
             msg = f"Problems with command 'QUIT_TESTSERVER'. Reason: {ex}"
-            self.__testoverviewlog.tlog("test_overview", msg)
+            self.__testresultsoverview.tlog("testresults_overview", msg)
             BuiltIn().log(msg, level="ERROR")
             msg = f"Now terminating process with PID {server_pid}."
-            self.__testoverviewlog.tlog("test_overview", msg)
+            self.__testresultsoverview.tlog("testresults_overview", msg)
             BuiltIn().log(msg, level="WARN")
             self.__process_testserver.terminate()
             raise Exception("The TCP/IP testserver had to be terminated forcibly.")
@@ -218,17 +222,117 @@ class tcp_ip_selftest_lib():
 
 
     @keyword
+    def write_html_header_of_overview_file(self):
+
+        html_header = """<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+   <meta name="QConnectBase" content="QConnectBase">
+   <title>QConnectBase Test Overview</title>
+</head>
+<body vlink="#000000" text="#000000" link="#000000" bgcolor="#FFFFFF" alink="#000000">
+<hr width="100%" color="#FF8C00" align="center">
+<div align="center">
+<font size="6" face="Arial" color="#595959">
+<b>
+QConnectBase<br>Test Cases
+</b></font>
+</div>
+<hr width="100%" color="#FF8C00" align="center">
+
+<div>&nbsp;</div>
+
+<div align="center">
+
+<table frame="box" rules="all" valign="middle" width="1100" cellspacing="0" cellpadding="6" border="1" align="center">
+<colgroup>
+   <col width="4%" span="1">
+   <col width="16%" span="1">
+   <col width="8%" span="1">
+   <col width="9%" span="1">
+   <col width="63%" span="1">
+</colgroup>
+<tbody>"""
+        self.__testcasesoverview.tlog("testcases_overview", f"{html_header}", log_prefix=False)
+
+    @keyword
+    def write_html_footer_of_overview_file(self):
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        html_footer = f"""</tbody></table></div>
+<div>&nbsp;</div>
+<hr width="100%" color="#FF8C00" align="center">
+<div align="center"><font size="2" color="#27408B">Generated: {timestamp}</font></div>
+<div>&nbsp;</div>
+</body></html>"""
+        self.__testcasesoverview.tlog("testcases_overview", f"{html_footer}", log_prefix=False)
+
+
+    @keyword
     def add_test_to_overview(self):
         suite_source       = BuiltIn().get_variable_value('${SUITE SOURCE}')
         test_name          = BuiltIn().get_variable_value('${TEST NAME}')
+        test_tags          = BuiltIn().get_variable_value('${TEST TAGS}')
         test_documentation = BuiltIn().get_variable_value('${TEST DOCUMENTATION}')
         test_status        = BuiltIn().get_variable_value('${TEST STATUS}')
         test_message       = BuiltIn().get_variable_value('${TEST MESSAGE}')
-        self.__testoverviewlog.tlog("test_overview", f"* Test '{test_name}' : {test_status}", log_prefix=False)
-        self.__testoverviewlog.tlog("test_overview", f"{test_documentation}", log_prefix=False)
+        # own ones
+        connection_type    = BuiltIn().get_variable_value('${connection_type}')
+        test_category = BuiltIn().get_variable_value('${test_category}')
+
+        self.__testcounter = self.__testcounter + 1
+
+        # 1. test results overview
+        self.__testresultsoverview.tlog("testresults_overview", f"* [{self.__testcounter}] Test '{test_name}' : {test_status}", log_prefix=False)
+        self.__testresultsoverview.tlog("testresults_overview", f"{test_documentation}", log_prefix=False)
         if test_status != "PASS":
-            self.__testoverviewlog.tlog("test_overview", f"!!! {test_message} !!!", log_prefix=False)
-        self.__testoverviewlog.tlog("test_overview", f"{suite_source}\n", log_prefix=False)
+            self.__testresultsoverview.tlog("testresults_overview", f"!!! {test_message} !!!", log_prefix=False)
+        self.__testresultsoverview.tlog("testresults_overview", f"{suite_source}\n", log_prefix=False)
+
+        # 2. testcases overview
+
+        github_basepath = "https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test"
+        github_link = f"{github_basepath}/{connection_type}/{test_name}.robot"
+        if test_category == "GOODCASE":
+            textcolor = "#008000"
+        elif test_category == "BADCASE":
+            textcolor = "#FF0000"
+        else:
+            textcolor = "#000000"
+
+        list_lines_stripped = []
+        list_lines = test_documentation.splitlines()
+        for line in list_lines:
+            list_lines_stripped.append(line.strip())
+        test_documentation_info = "<br>\n".join(list_lines_stripped)
+
+        test_tag_info = ""
+        if len(test_tags) > 0:
+            test_tag_info = f"<br>Test tags: {test_tags}"
+
+        html_table_row = f"""<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+{self.__testcounter}
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="{github_link}">{test_name}</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+{connection_type}
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="{textcolor}">
+{test_category}
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>{test_documentation_info}</b>{test_tag_info}
+</i></font></td>
+</tr>"""
+        self.__testcasesoverview.tlog("testcases_overview", f"{html_table_row}", log_prefix=False)
 
 
     @keyword
@@ -250,7 +354,7 @@ class tcp_ip_selftest_lib():
             # conn_manager.disconnect(connection_name)
         # except Exception as ex:
             # msg = f"Not able to send the Robot Framework test name to testserver. Reason: {ex}"
-            # self.__testoverviewlog.tlog("test_overview", msg)
+            # self.__testresultsoverview.tlog("testresults_overview", msg)
             # BuiltIn().log(msg, level="ERROR")
             # raise Exception("Test execution aborted because of failed information exchange.")
 

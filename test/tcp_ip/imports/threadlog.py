@@ -1,7 +1,7 @@
 # --------------------------------------------------------------------------------------------------------------
 # threadlog
 # XC-HWP/ESW3-Queckenstedt
-# 28.01.2025
+# 05.02.2025
 # --------------------------------------------------------------------------------------------------------------
 
 import os, sys, time
@@ -17,7 +17,7 @@ class threadlog:
     """Simple class to write content to thread specific log files
     """
    
-    def __init__(self, dest_folder=None):
+    def __init__(self, dest_folder=None, extension="log"):
         if dest_folder is None:
             self.__dest_folder = CString.NormalizePath(os.path.dirname(os.path.abspath(__file__)))
         else:
@@ -26,6 +26,7 @@ class threadlog:
         handle_dest_folder = CFolder(self.__dest_folder)
         handle_dest_folder.Create(bOverwrite=False, bRecursive=True)
         del handle_dest_folder
+        self.__extension = extension
         self.__dict_logfile_handles = {}
         self.__dict_print_count     = {}
         print(f"Log files will be written to '{self.__dest_folder}'")
@@ -44,7 +45,7 @@ class threadlog:
         thread_id = threading.get_ident()
         full_ident = f"{ident}_{thread_id}"
         if full_ident not in self.__dict_logfile_handles:
-            file = f"{self.__dest_folder}/{self.__execution_timestamp}_[{thread_id}]_[{ident}].log"
+            file = f"{self.__dest_folder}/{self.__execution_timestamp}_[{thread_id}]_[{ident}].{self.__extension}"
             file_handle = open(file, 'w', encoding='utf-8')
             self.__dict_logfile_handles[full_ident] = file_handle
             self.__dict_print_count[full_ident] = 0

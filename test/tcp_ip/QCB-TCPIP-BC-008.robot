@@ -27,6 +27,9 @@ Resource    ./imports/resources.resource
 QCB-TCPIP-BC-008
     [Documentation]    Invalid type of connection configuration parameter
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    BADCASE
+
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-008-Connection
                                                                ...                     conn_type=TCPIPClient
                                                                ...                     conn_conf=${TCPIPClientParam_err}

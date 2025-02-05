@@ -43,6 +43,7 @@ qconnectbase_suite_setup
     log    executing QConnectBase Suite Setup
 
     tcpip.selftest.start_tcpip_testserver
+    tcpip.selftest.write_html_header_of_overview_file
 
     # >> used later
     # ${server_pid}=    tcpip.selftest.get_server_pid
@@ -55,6 +56,7 @@ qconnectbase_suite_teardown
     log     executing QConnectBase Suite Teardown
 
     tcpip.selftest.quit_tcpip_testserver
+    tcpip.selftest.write_html_footer_of_overview_file
 
 
 qconnectbase_test_setup

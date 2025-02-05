@@ -21,6 +21,9 @@ Resource    ./imports/resources.resource
 QCB-TCPIP-GC-001
     [Documentation]    Connect to testserver and disconnect from testserver
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    GOODCASE
+
     conn_manager.connect    conn_name=QCB-TCPIP-GC-001-Connection
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}

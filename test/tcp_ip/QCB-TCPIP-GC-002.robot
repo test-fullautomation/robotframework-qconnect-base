@@ -21,6 +21,9 @@ Resource    ./imports/resources.resource
 QCB-TCPIP-GC-002
     [Documentation]    Send simple command to testserver (send_command)
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    GOODCASE
+
     conn_manager.connect    conn_name=QCB-TCPIP-GC-002-Connection
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}

@@ -25,6 +25,9 @@ QCB-TCPIP-GC-100
     ...                but explicitly waiting for an incoming message that is triggered
     ...                by a command sent from thread 2.
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    GOODCASE
+
     conn_manager.connect    conn_name=QCB-TCPIP-GC-100-Connection
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}
