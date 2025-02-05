@@ -24,6 +24,9 @@ QCB-TCPIP-BC-002
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/72
     ...                !!! test not in final version !!!
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    BADCASE
+
     conn_manager.connect    conn_name=QCB-TCPIP-BC-002-Connection
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}

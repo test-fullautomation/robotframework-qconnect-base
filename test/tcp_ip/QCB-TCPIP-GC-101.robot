@@ -24,6 +24,9 @@ QCB-TCPIP-GC-101
     ...                Answer from server in thread 2 has a delay of 10 seconds
     ...                while thread 1 verifies several messages in a loop.
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    GOODCASE
+
     conn_manager.connect    conn_name=QCB-TCPIP-GC-101-Connection
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}

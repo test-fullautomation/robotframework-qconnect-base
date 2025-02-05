@@ -24,6 +24,9 @@ QCB-TCPIP-BC-006
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/93
     ...                !!! test not in final version !!!
 
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    BADCASE
+
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=UNKNOWN_CONNECTION_NAME
 
     log    TCPIP-BC-006 'disconnect' status: ${status}    console=yes
