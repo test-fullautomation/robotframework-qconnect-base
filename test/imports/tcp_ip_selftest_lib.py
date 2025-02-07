@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.7.0"
-THISMODULEDATE    = "05.02.2025"
+THISMODULEVERSION = "0.8.0"
+THISMODULEDATE    = "07.02.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -138,7 +138,6 @@ class tcp_ip_selftest_lib():
         conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
         max_tries         = 5
         max_try_wait_time = 1
-        cnt_tries         = 0
         for cnt_tries in range(1, max_tries+1):
             connection_name = f"WAIT_FOR_TESTSERVER_READY_{cnt_tries}"
             try:
@@ -186,7 +185,6 @@ class tcp_ip_selftest_lib():
 
         max_tries         = 8
         max_try_wait_time = 1
-        cnt_tries         = 0
         is_testserver     = True
 
         for cnt_tries in range(1, max_tries+1):

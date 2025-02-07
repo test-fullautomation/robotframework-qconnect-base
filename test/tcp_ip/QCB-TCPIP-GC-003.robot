@@ -20,6 +20,8 @@ Resource    ../imports/resources.resource
 
 QCB-TCPIP-GC-003
     [Documentation]    Let the testserver close the connection
+    ...                and send a disconnect of the connection that has already been closed
+    ...                by the testserver
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    GOODCASE
