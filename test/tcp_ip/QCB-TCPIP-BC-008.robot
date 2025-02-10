@@ -14,7 +14,7 @@
 
 *** Settings ***
 
-Resource    ./imports/resources.resource
+Resource    ../imports/resources.resource
 
 *** Variables ***
 

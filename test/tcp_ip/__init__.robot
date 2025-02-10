@@ -16,7 +16,7 @@
 
 Documentation    Common settings for TCP/IP self tests of component 'QConnectBase'
 
-Resource    ./imports/resources.resource
+Resource    ../imports/resources.resource
 
 Suite Setup       qconnectbase_suite_setup
 Suite Teardown    qconnectbase_suite_teardown
