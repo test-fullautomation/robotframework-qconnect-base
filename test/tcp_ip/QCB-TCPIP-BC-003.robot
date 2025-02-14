@@ -48,6 +48,6 @@ QCB-TCPIP-BC-003
     should_be_equal    ${status}    FAIL
     # TODO: !!! needs to be adapted after bugfix !!!
     # Should be something like 'Connection has been broken while trying to match the pattern.'
-    should_contain    ${result}    Unable to match the pattern after '11' tries
+    should_contain    ${result}    Unable to match the pattern 'NEVER_WILL_BE_RECEIVED' after '11' tries
 
 
