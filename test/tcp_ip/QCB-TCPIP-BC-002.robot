@@ -19,10 +19,8 @@ Resource    ../imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-BC-002
-    [Documentation]    Send command after testserver closed the connection
-    ...                !!! needs to be adapted after bugfix !!!
-    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/72
-    ...                !!! test not in final version !!!
+    [Documentation]    A command is sent that forces the testserver to close the connection. After this the test tries to send another command
+    ...                (that uses the connection that has already been closed by the testserver).
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    BADCASE
@@ -32,22 +30,26 @@ QCB-TCPIP-BC-002
     ...                     conn_conf=${TCPIPClientParam}
 
     # let the testserver close the connection
-    conn_manager.send_command    conn_name=QCB-TCPIP-BC-002-Connection    command=CLOSE_CONNECTION-BC-002
+    conn_manager.verify    conn_name=QCB-TCPIP-BC-002-Connection
+    ...                    search_pattern=QCB-TCPIP-BC-002 ACK
+    ...                    timeout=2
+    ...                    match_try=4
+    ...                    send_cmd=CLOSE_CONNECTION-QCB-TCPIP-BC-002
 
-    # try to send a command without connection
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-002-Connection    command=BC-002
+    # give the testserver some time to send the answer 'QCB-TCPIP-BC-002 ACK' and close the connection
+    Sleep    4s
+
+    # try to send a command with the already closed connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command
+    ...                                                        conn_name=QCB-TCPIP-BC-002-Connection
+    ...                                                        command=TCPIP-BC-002-SHOULDNOTBESENT
 
     log    TCPIP-BC-002 'send_command' status: ${status}    console=yes
     log    TCPIP-BC-002 'send_command' result: ${result}    console=yes
 
-    # (does this make a difference in this case? -> extra testcase)
-    # conn_manager.disconnect    QCB-TCPIP-BC-002-Connection
+    conn_manager.disconnect    QCB-TCPIP-BC-002-Connection
 
-    ## current issue: QConnectBase does not react on this; status is PASS
-    ## should_be_equal    ${status}    FAIL
-
-    ## current issue: result is None
-    # should_be_equal    ${result}    Unable to send command to 'QCB-TCPIP-BC-002-Connection' connection. Exception: Connection has been broken. Details: [WinError 10054] Eine vorhandene Verbindung wurde vom Remotehost geschlossen
-
+    should_be_equal    ${status}    FAIL
+    should_contain    ${result}    Unable to send command to 'QCB-TCPIP-BC-002-Connection' connection. Exception: Connection has been broken.
 
 

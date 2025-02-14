@@ -19,12 +19,8 @@ Resource    ../imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-GC-020
-    [Documentation]    Fetch block
-    ...                !!! several clarifications required !!!
-    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/99
-    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/100
-    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/101
-    ...                !!! test not in final version !!!
+    [Documentation]    Let the testserver close the connection and send a disconnect using the connection
+    ...                that has already been closed by the testserver.
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    GOODCASE
@@ -33,27 +29,10 @@ QCB-TCPIP-GC-020
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=QCB-TCPIP-GC-020-Connection
-                                                               ...                    search_pattern=.+(\\[COND-\\d+?\\])
-                                                             # ...                    filter_pattern=COND            # !!! meaning unclear !!!
-                                                               ...                    eob_pattern=FETCHBLOCK_END
-                                                               ...                    fetch_block=${True}
-                                                               ...                    timeout=2
-                                                               ...                    match_try=20
-                                                               ...                    send_cmd=FETCHBLOCK-QUICKTEST
+    conn_manager.send_command    conn_name=QCB-TCPIP-GC-020-Connection    command=CLOSE_CONNECTION-GC-020
 
-    log    TCPIP-GC-020 'verify' status: ${status}    console=yes
-    log    TCPIP-GC-020 'verify' result: ${result}    console=yes
-    log    TCPIP-GC-020 'verify' result[0]: ${result}[0]    console=yes
-    log    TCPIP-GC-020 'verify' result[1]: ${result}[1]    console=yes
+    Sleep    2s
 
-    should_be_equal    ${status}    PASS
-
-    # !! not final version !!
-    should_be_equal    ${result[0]}    FETCHBLOCK-QUICKTEST ACK [COND-5]
-    should_be_equal    ${result[1]}    [COND-5]
-
+    # this shouldn't matter:
     conn_manager.disconnect    QCB-TCPIP-GC-020-Connection
-
-
 

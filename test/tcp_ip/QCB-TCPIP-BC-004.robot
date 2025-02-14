@@ -38,6 +38,8 @@ QCB-TCPIP-BC-004
                                                                ...                     conn_type=TCPIPClient
                                                                ...                     conn_conf=${TCPIPClientParam}
 
+    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-004-Connection
+
     log    TCPIP-BC-004 'connect' status: ${status}    console=yes
     log    TCPIP-BC-004 'connect' result: ${result}    console=yes
 

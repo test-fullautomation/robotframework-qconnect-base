@@ -18,13 +18,14 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.8.0 / 03.02.2025"
+VERSION = "v. 0.9.0 / 14.02.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
 import sys
 import os
 import time
+import argparse
 import psutil
 import socket
 import threading
@@ -41,6 +42,8 @@ DICT_ANSWERS = {}
 # DICT_ANSWERS[''] = ""
 
 CHAR_END_OF_MESSAGE = "*" # TODO: command line parameter
+
+TIME_WAIT_BEFORE_CLOSE_SOCKET = 2
 
 STOP_EVENT = threading.Event()
 
@@ -117,29 +120,22 @@ def handle_client(client_socket, client_address):
                 tcp_ip_testserver_log.tlog("handle_client", msg)
                 response = f"{response}\n"
                 client_socket.send(response.encode('utf-8'))
-            elif data_received.startswith("DELAY10"):
+            elif data_received.startswith("DELAY"):
                 #
-                # send standard answer with delay of 10 seconds
+                # send standard answer with delay
                 #
-                msg = "Now TCP/IP testserver is waiting for 10 seconds until sending the answer"
+                list_data_received = data_received.split()
+                delay = 6
+                idend = "DELAY"
+                if len(list_data_received) > 1:
+                    delay = int(list_data_received[1])
+                if len(list_data_received) > 2:
+                    idend = list_data_received[2]
+                msg = f"Now TCP/IP testserver is waiting for {delay} seconds until sending the answer"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("handle_client", msg)
-                time.sleep(10)
-                response = f"{data_received} ACK"
-                msg = f"[{client_address}] (SEND) '{response}'"
-                rf_log.info(msg)
-                tcp_ip_testserver_log.tlog("handle_client", msg)
-                response = f"{response}\n"
-                client_socket.send(response.encode('utf-8'))
-            elif data_received.startswith("DELAY20"):
-                #
-                # send standard answer with delay of 20 seconds
-                #
-                msg = "Now TCP/IP testserver is waiting for 20 seconds until sending the answer"
-                rf_log.info(msg)
-                tcp_ip_testserver_log.tlog("handle_client", msg)
-                time.sleep(20)
-                response = f"{data_received} ACK"
+                time.sleep(delay)
+                response = f"DELAY {delay} {idend} ACK"
                 msg = f"[{client_address}] (SEND) '{response}'"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("handle_client", msg)
@@ -173,6 +169,72 @@ def handle_client(client_socket, client_address):
                     tcp_ip_testserver_log.tlog("handle_client", msg)
                     response = f"{response}\n"
                     client_socket.send(response.encode('utf-8'))
+            elif data_received.startswith("FETCHNESTEDBLOCKS"):
+                #
+                # send nested blocks of messages
+                #
+                msg = "Now TCP/IP testserver sends nested blocks of messages"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                list_messages = [f"{data_received} ACK",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_START]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_START]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_START]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_END]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_END]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_END]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [BLOCK-1] [OUTSIDE_FETCHBLOCK]",
+                                 f"{data_received} ACK [BLOCK-2] [OUTSIDE_FETCHBLOCK]",
+                                 f"{data_received} ACK [BLOCK-3] [OUTSIDE_FETCHBLOCK]",
+                                 f"{data_received} ACK"]
+                for index, message in enumerate(list_messages):
+                    time.sleep(1)
+                    response = f"{message} ({index+1})"
+                    msg = f"[{client_address}] (SEND) '{response}'"
+                    rf_log.info(msg)
+                    tcp_ip_testserver_log.tlog("handle_client", msg)
+                    response = f"{response}\n"
+                    client_socket.send(response.encode('utf-8'))
+            elif data_received.startswith("GETNOTIFICATIONS"):
+                #
+                # send notifications back to client
+                #
+                msg = "Now TCP/IP testserver sends notifications back to client"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                list_data_received = data_received.split()
+                max_notifications = 10
+                idend = "NOTIFICATION"
+                if len(list_data_received) > 1:
+                    max_notifications = int(list_data_received[1])
+                if len(list_data_received) > 2:
+                    idend = list_data_received[2]
+                for iteration_number in range(1, max_notifications+1):
+                    time.sleep(1)
+                    response = f"NOTIFICATION ACK [{idend}-{iteration_number}/{max_notifications}]"
+                    msg = f"[{client_address}] (SEND) '{response}'"
+                    rf_log.info(msg)
+                    tcp_ip_testserver_log.tlog("handle_client", msg)
+                    response = f"{response}\n"
+                    client_socket.send(response.encode('utf-8'))
+                if len(list_data_received) > 3:
+                    if list_data_received[3] == "CLOSE_CONNECTION":
+                        time.sleep(TIME_WAIT_BEFORE_CLOSE_SOCKET) # giving the client a chance to receive the response before the socket is closed
+                        break
             else:
                 #
                 # send standard answer (default)
@@ -186,15 +248,11 @@ def handle_client(client_socket, client_address):
 
             # special comands
             if data_received.startswith("CLOSE_CONNECTION"):
+                time.sleep(TIME_WAIT_BEFORE_CLOSE_SOCKET) # giving the client a chance to receive the response before the socket is closed
                 break
             elif data_received.startswith("QUIT_TESTSERVER"):
                 STOP_EVENT.set()
                 break
-            # >> currently not used
-            # elif data_received.startswith("SET_TEST_NAME="):
-                # current_test_name = data_received[len("SET_TEST_NAME="):]
-                # current_test_name = current_test_name.replace(" ", "_")
-                # tcp_ip_testserver_log.tlog("handle_client", current_test_name)
 
         # eof while True: # next incoming message
     # eof try:
@@ -219,7 +277,7 @@ def handle_client(client_socket, client_address):
 
 # --------------------------------------------------------------------------------------------------------------
 
-def start_server(host="localhost", port=4000): # TODO: host/port: command line parameter
+def start_server(host, port, max_connections):
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((host, port))
@@ -231,7 +289,7 @@ def start_server(host="localhost", port=4000): # TODO: host/port: command line p
         return # TODO: introduce error code
 
     server_socket.settimeout(1.0)
-    server_socket.listen(5)  # maximum number of connections  # TODO: command line parameter
+    server_socket.listen(MAX_CONNECTIONS)
     msg = f"<<< TCP/IP testserver {VERSION} is running on {host}:{port} >>>"
     rf_log.info(msg)
     tcp_ip_testserver_log.tlog("start_server", msg)
@@ -268,24 +326,40 @@ def start_server(host="localhost", port=4000): # TODO: host/port: command line p
 
 # --------------------------------------------------------------------------------------------------------------
 
-# This module is independent from Robot Framework; no access to Robot Framework Output_Dir.
-# Therefore the reference for all further files and folders is per default the position of this file.
-# In command line this can be changed.
-
-tcp_ip_testserver_file_path = os.path.dirname(CString.NormalizePath(__file__))
-arguments = sys.argv
-if len(arguments) > 1:
-    tcp_ip_testserver_log_files = f"{arguments[1]}/testserver_logfiles"
-else:
-    tcp_ip_testserver_log_files = f"{tcp_ip_testserver_file_path}/testserver_logfiles"
+# get command line
+OUTPUT_DIR      = None
+HOST            = None
+PORT            = None
+MAX_CONNECTIONS = 1
+cmdline_parser = argparse.ArgumentParser()
+cmdline_parser.add_argument('--output_dir', required=True, type=str, help='TCP/IP test server logfiles folder')
+cmdline_parser.add_argument('--host', required=True, type=str, help='TCP/IP host name')
+cmdline_parser.add_argument('--port', required=True, type=int, help='port number of TCP/IP host')
+cmdline_parser.add_argument('--max_connections', required=False, type=int, default=MAX_CONNECTIONS, help='maximum number of connections')
+cmdline_args = cmdline_parser.parse_args()
+if cmdline_args.output_dir != None:
+   OUTPUT_DIR = cmdline_args.output_dir
+if cmdline_args.host != None:
+   HOST = cmdline_args.host
+if cmdline_args.port != None:
+   PORT = cmdline_args.port
+if cmdline_args.max_connections != None:
+   MAX_CONNECTIONS = cmdline_args.max_connections
 
 # activate logging
-tcp_ip_testserver_log = threadlog(tcp_ip_testserver_log_files)
+tcp_ip_testserver_log = threadlog(OUTPUT_DIR)
 tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"This is TCP/IP testserver v. {VERSION}")
-tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"Log files: '{tcp_ip_testserver_log_files}'")
-lock_file = f"{tcp_ip_testserver_file_path}/tcp_ip_testserver.lock"
+tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"Log files: '{OUTPUT_DIR}'")
+lock_file = f"{OUTPUT_DIR}/tcp_ip_testserver.lock"
 tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"Lock file '{lock_file}'")
 
+# log command line
+tcp_ip_testserver_log.tlog("command_line", f"OUTPUT_DIR: {OUTPUT_DIR}")
+tcp_ip_testserver_log.tlog("command_line", f"HOST: {HOST}")
+tcp_ip_testserver_log.tlog("command_line", f"PORT: {PORT}")
+tcp_ip_testserver_log.tlog("command_line", f"MAX_CONNECTIONS: {MAX_CONNECTIONS}")
+
+# check lock file
 stored_pid = None
 if os.path.exists(lock_file): # TODO: maybe lock file is not required, because already socket is checked if in use
     with open(lock_file, "r") as lock_file_handle:
@@ -307,7 +381,7 @@ with open(lock_file, "w") as lock_file_handle:
 tcp_ip_testserver_log.tlog("tcp_ip_testserver", f"current PID: {current_pid}")
 
 try:
-    start_server()
+    start_server(host=HOST, port=PORT, max_connections=MAX_CONNECTIONS)
 finally:
     if os.path.exists(lock_file):
         os.remove(lock_file)

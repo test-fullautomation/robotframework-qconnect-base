@@ -20,10 +20,8 @@ Resource    ../imports/resources.resource
 
 QCB-TCPIP-GC-100
     [Tags]    threading
-    [Documentation]    Communication in two threads.
-    ...                Thread 1 this is an observer thread not sending an own command
-    ...                but explicitly waiting for an incoming message that is triggered
-    ...                by a command sent from thread 2.
+    [Documentation]    Communication in two threads. The first thread waits for an incoming message
+    ...                that is triggered by a command sent within the second thread.
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    GOODCASE

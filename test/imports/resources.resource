@@ -42,12 +42,8 @@ qconnectbase_suite_setup
 
     log    executing QConnectBase Suite Setup
 
-    tcpip.selftest.start_tcpip_testserver
+    tcpip.selftest.start_tcpip_testserver    host="localhost"    port=${4000}    max_connections=${1}
     tcpip.selftest.write_html_header_of_overview_file
-
-    # >> used later
-    # ${server_pid}=    tcpip.selftest.get_server_pid
-    # log    PID of TCP/IP testserver: ${server_pid}
 
 
 qconnectbase_suite_teardown
@@ -63,9 +59,6 @@ qconnectbase_test_setup
     [Documentation]    QConnectBase Test Setup
 
     log    executing QConnectBase Test Setup
-
-    # >> currently not used
-    # tcpip.selftest.set_test_name
 
 
 qconnectbase_test_teardown

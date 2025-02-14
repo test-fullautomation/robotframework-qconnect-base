@@ -24,6 +24,7 @@ QCB-TCPIP-BC-001
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    BADCASE
 
+    # try to send a command without connection
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-001-Connection    command=BC-001
 
     log    TCPIP-BC-001 'send_command' status: ${status}    console=yes

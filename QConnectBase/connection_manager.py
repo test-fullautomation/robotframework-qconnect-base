@@ -718,13 +718,16 @@ Verify a pattern from connection response after sending a command.
          res = connection_obj.wait_4_trace(search_pattern, int(timeout), fetch_block, eob_pattern, filter_pattern, **kwargs)
          if res is None:
             # raise AssertionError("Unable to match the pattern after '%s' seconds." % timeout)
+            # 14.02.2025 qth2hi changed
             # original # BuiltIn().log("Match try %s/%s timed out" % (i, match_try), constants.LOG_LEVEL_WARNING)
-            BuiltIn().log(f"[{conn_name}] Match try {i}/{match_try} timed out", constants.LOG_LEVEL_WARNING)
+            BuiltIn().log(f"[{conn_name}] Match try {i}/{match_try} timed out ('{search_pattern}')", constants.LOG_LEVEL_WARNING)
          else:
             break
 
       if not res:
-         raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
+         # 14.02.2025 qth2hi changed
+         # raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
+         raise AssertionError(f"Unable to match the pattern '{search_pattern}' after '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
       return res
 
