@@ -44,10 +44,12 @@ QCB-TCPIP-BC-002
     ...                                                        conn_name=QCB-TCPIP-BC-002-Connection
     ...                                                        command=TCPIP-BC-002-SHOULDNOTBESENT
 
-    log    TCPIP-BC-002 'send_command' status: ${status}    console=yes
-    log    TCPIP-BC-002 'send_command' result: ${result}    console=yes
+    Sleep    1s
 
     conn_manager.disconnect    QCB-TCPIP-BC-002-Connection
+
+    log    TCPIP-BC-002 'send_command' status: ${status}    console=yes
+    log    TCPIP-BC-002 'send_command' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
     should_contain    ${result}    Unable to send command to 'QCB-TCPIP-BC-002-Connection' connection. Exception: Connection has been broken.

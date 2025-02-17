@@ -28,5 +28,7 @@ QCB-TCPIP-GC-001
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}
 
+    Sleep    1s
+
     conn_manager.disconnect    QCB-TCPIP-GC-001-Connection
 

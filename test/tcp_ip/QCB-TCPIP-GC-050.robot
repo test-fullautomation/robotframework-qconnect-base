@@ -41,12 +41,15 @@ QCB-TCPIP-GC-050
                                                                ...                    match_try=20
                                                                ...                    send_cmd=FETCHBLOCK QCB-TCPIP-GC-050
 
+    # testserver sends a fix sequence; wait until sequence has been finished
+    Sleep    4s
+
+    conn_manager.disconnect    QCB-TCPIP-GC-050-Connection
+
     log    TCPIP-GC-050 'verify' status: ${status}    console=yes
     log    TCPIP-GC-050 'verify' result: ${result}    console=yes
     log    TCPIP-GC-050 'verify' result[0]: ${result}[0]    console=yes
     log    TCPIP-GC-050 'verify' result[1]: ${result}[1]    console=yes
-
-    conn_manager.disconnect    QCB-TCPIP-GC-050-Connection
 
     should_be_equal    ${status}    PASS
 

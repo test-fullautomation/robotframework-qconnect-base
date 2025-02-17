@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.9.0 / 14.02.2025"
+VERSION = "v. 0.10.0 / 17.02.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -177,29 +177,29 @@ def handle_client(client_socket, client_address):
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("handle_client", msg)
                 list_messages = [f"{data_received} ACK",
-                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_START]",
-                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_START]",
-                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_START]",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHNESTEDBLOCKS_START]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHNESTEDBLOCKS_START]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHNESTEDBLOCKS_START]",
                                  f"{data_received} ACK",
-                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHNESTEDBLOCKS_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHNESTEDBLOCKS_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHNESTEDBLOCKS_MIDDLE]",
                                  f"{data_received} ACK",
-                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHNESTEDBLOCKS_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHNESTEDBLOCKS_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHNESTEDBLOCKS_MIDDLE]",
                                  f"{data_received} ACK",
-                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHNESTEDBLOCKS_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHNESTEDBLOCKS_MIDDLE]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHNESTEDBLOCKS_MIDDLE]",
                                  f"{data_received} ACK",
-                                 f"{data_received} ACK [BLOCK-1] [FETCHBLOCK_END]",
-                                 f"{data_received} ACK [BLOCK-2] [FETCHBLOCK_END]",
-                                 f"{data_received} ACK [BLOCK-3] [FETCHBLOCK_END]",
+                                 f"{data_received} ACK [BLOCK-1] [FETCHNESTEDBLOCKS_END]",
+                                 f"{data_received} ACK [BLOCK-2] [FETCHNESTEDBLOCKS_END]",
+                                 f"{data_received} ACK [BLOCK-3] [FETCHNESTEDBLOCKS_END]",
                                  f"{data_received} ACK",
-                                 f"{data_received} ACK [BLOCK-1] [OUTSIDE_FETCHBLOCK]",
-                                 f"{data_received} ACK [BLOCK-2] [OUTSIDE_FETCHBLOCK]",
-                                 f"{data_received} ACK [BLOCK-3] [OUTSIDE_FETCHBLOCK]",
+                                 f"{data_received} ACK [BLOCK-1] [OUTSIDE_FETCHNESTEDBLOCKS]",
+                                 f"{data_received} ACK [BLOCK-2] [OUTSIDE_FETCHNESTEDBLOCKS]",
+                                 f"{data_received} ACK [BLOCK-3] [OUTSIDE_FETCHNESTEDBLOCKS]",
                                  f"{data_received} ACK"]
                 for index, message in enumerate(list_messages):
                     time.sleep(1)

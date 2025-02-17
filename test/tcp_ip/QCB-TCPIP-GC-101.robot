@@ -38,7 +38,7 @@ QCB-TCPIP-GC-101
         # listening only; no command sent to server
         ${result_1}=    conn_manager.verify    conn_name=QCB-TCPIP-GC-101-Connection
                         ...                    search_pattern=(\\[BLOCK-1\\])
-                        ...                    eob_pattern=FETCHBLOCK_END
+                        ...                    eob_pattern=FETCHNESTEDBLOCKS_END
                         ...                    fetch_block=${True}
                         ...                    timeout=3
                         ...                    match_try=40
@@ -50,7 +50,7 @@ QCB-TCPIP-GC-101
         # listening only; no command sent to server
         ${result_2}=    conn_manager.verify    conn_name=QCB-TCPIP-GC-101-Connection
                         ...                    search_pattern=(\\[BLOCK-2\\])
-                        ...                    eob_pattern=FETCHBLOCK_END
+                        ...                    eob_pattern=FETCHNESTEDBLOCKS_END
                         ...                    fetch_block=${True}
                         ...                    timeout=3
                         ...                    match_try=40
@@ -62,7 +62,7 @@ QCB-TCPIP-GC-101
         # listening only; no command sent to server
         ${result_3}=    conn_manager.verify    conn_name=QCB-TCPIP-GC-101-Connection
                         ...                    search_pattern=(\\[BLOCK-3\\])
-                        ...                    eob_pattern=FETCHBLOCK_END
+                        ...                    eob_pattern=FETCHNESTEDBLOCKS_END
                         ...                    fetch_block=${True}
                         ...                    timeout=3
                         ...                    match_try=40
@@ -87,6 +87,9 @@ QCB-TCPIP-GC-101
 
     wait_thread_notification    OBSERVER-THREAD-3-DONE    timeout=160
     set_test_variable    ${thread_3_return}    ${payloads}[0]
+
+    # testserver sends a fix sequence; wait until sequence has been finished
+    Sleep    6s
 
     conn_manager.disconnect    QCB-TCPIP-GC-101-Connection
 
