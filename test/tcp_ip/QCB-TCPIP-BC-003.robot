@@ -19,16 +19,35 @@ Resource    ../imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-BC-003
-    [Documentation]    Send command without connection
+    [Documentation]    Testserver stops sending notifications and closes the socket while the test still waits for a certain notification ('verify')
+    ...                that not yet has been sent.
+    ...                !!! needs to be adapted after bugfix !!!
+    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/85
+    ...                !!! test not in final version !!!
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    BADCASE
 
-    # try to send a command without connection
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-003-Connection    command=BC-003
+    conn_manager.connect    conn_name=QCB-TCPIP-BC-003-Connection
+    ...                     conn_type=TCPIPClient
+    ...                     conn_conf=${TCPIPClientParam}
 
-    log    TCPIP-BC-003 'send_command' status: ${status}    console=yes
-    log    TCPIP-BC-003 'send_command' result: ${result}    console=yes
+    # 'verify' waits 11 seconds for a 'search_pattern' that never will be received.
+    # Testserver sends 3 notifications (within 3 seconds), then closes the connection while verify is still waiting.
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=QCB-TCPIP-BC-003-Connection
+                                                               ...                    search_pattern=NEVER_WILL_BE_RECEIVED
+                                                               ...                    timeout=1
+                                                               ...                    match_try=11
+                                                               ...                    send_cmd=GETNOTIFICATIONS 3 TCPIP-BC-003 CLOSE_CONNECTION
+
+    log    TCPIP-BC-003 'verify' status: ${status}    console=yes
+    log    TCPIP-BC-003 'verify' result: ${result}    console=yes
+
+    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-003-Connection
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    The 'QCB-TCPIP-BC-003-Connection' connection hasn't been established. Please connect first.
+    # TODO: !!! needs to be adapted after bugfix !!!
+    # Should be something like 'Connection has been broken while trying to match the pattern.'
+    should_contain    ${result}    Unable to match the pattern 'NEVER_WILL_BE_RECEIVED' after '11' tries
+
+

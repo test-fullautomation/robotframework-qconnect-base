@@ -37,8 +37,8 @@ QCB-TCPIP-BC-008
     log    TCPIP-BC-008 'connect' status: ${status}    console=yes
     log    TCPIP-BC-008 'connect' result: ${result}    console=yes
 
+    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-008-Connection
+
     should_be_equal    ${status}    FAIL
     should_be_equal    ${result}    Unable to create connection. Exception: invalid literal for int() with base 10: 'INVALID'
-
-    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-008-Connection
 

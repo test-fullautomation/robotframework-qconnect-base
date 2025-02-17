@@ -17,7 +17,7 @@ QConnectBase<br>Test Cases
 
 <div align="center">
 
-<table frame="box" rules="all" valign="middle" width="1100" cellspacing="0" cellpadding="6" border="1" align="center">
+<table frame="box" rules="all" valign="middle" width="100%" cellspacing="0" cellpadding="6" border="1" align="center">
 <colgroup>
    <col width="4%" span="1">
    <col width="16%" span="1">
@@ -71,10 +71,8 @@ BADCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Send command after testserver closed the connection<br>
-!!! needs to be adapted after bugfix !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/72<br>
-!!! test not in final version !!!</b>
+<b>A command is sent that forces the testserver to close the connection. After this the test tries to send another command<br>
+(that uses the connection that has already been closed by the testserver).</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -98,7 +96,11 @@ BADCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Send command without connection</b>
+<b>Testserver stops sending notifications and closes the socket while the test still waits for a certain notification ('verify')<br>
+that not yet has been sent.<br>
+!!! needs to be adapted after bugfix !!!<br>
+https://github.com/test-fullautomation/robotframework-qconnect-base/issues/85<br>
+!!! test not in final version !!!</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -290,7 +292,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-003.robot">QCB-TCPIP-GC-003</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-020.robot">QCB-TCPIP-GC-020</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
@@ -302,9 +304,8 @@ GOODCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Let the testserver close the connection<br>
-and send a disconnect of the connection that has already been closed<br>
-by the testserver</b>
+<b>Let the testserver close the connection and send a disconnect using the connection<br>
+that has already been closed by the testserver.</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -316,7 +317,7 @@ by the testserver</b>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-004.robot">QCB-TCPIP-GC-004</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-030.robot">QCB-TCPIP-GC-030</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
@@ -340,7 +341,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-005.robot">QCB-TCPIP-GC-005</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-040.robot">QCB-TCPIP-GC-040</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
@@ -365,7 +366,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-006.robot">QCB-TCPIP-GC-006</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-041.robot">QCB-TCPIP-GC-041</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
@@ -390,7 +391,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-020.robot">QCB-TCPIP-GC-020</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-050.robot">QCB-TCPIP-GC-050</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
@@ -431,10 +432,8 @@ GOODCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Communication in two threads.<br>
-Thread 1 this is an observer thread not sending an own command<br>
-but explicitly waiting for an incoming message that is triggered<br>
-by a command sent from thread 2.</b><br>Test tags: ['threading']
+<b>Communication in two threads. The first thread waits for an incoming message<br>
+that is triggered by a command sent within the second thread.</b><br>Test tags: ['threading']
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -458,14 +457,17 @@ GOODCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Communication in two threads.<br>
-Answer from server in thread 2 has a delay of 10 seconds<br>
-while thread 1 verifies several messages in a loop.</b><br>Test tags: ['threading']
+<b>Communication in three threads. Three observer threads wait for certain blocks of incoming messages.<br>
+These messages are triggered by a command that is sent to the testserver after the observer threads<br>
+have been started.<br>
+!!! return values need to be defined after bugfix !!!<br>
+https://github.com/test-fullautomation/robotframework-qconnect-base/issues/101<br>
+!!! test not in final version !!!</b><br>Test tags: ['threading']
 </i></font></td>
 </tr>
 </tbody></table></div>
 <div>&nbsp;</div>
 <hr width="100%" color="#FF8C00" align="center">
-<div align="center"><font size="2" color="#27408B">Generated: 07.02.2025 - 18:08:51</font></div>
+<div align="center"><font size="2" color="#27408B">Generated: 14.02.2025 - 18:11:11</font></div>
 <div>&nbsp;</div>
 </body></html>

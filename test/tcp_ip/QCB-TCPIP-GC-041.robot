@@ -18,23 +18,25 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-GC-005
+QCB-TCPIP-GC-041
     [Documentation]    Subsequent connections, commands (verify) and disconnections to same server
-    ...                (always the same connection name)
+    ...                (different connection names)
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    GOODCASE
 
     FOR    ${connection_count}    IN RANGE    1    6
-        log    TCPIP-GC-005 connection count ${connection_count}    console=yes
+        log    TCPIP-GC-041 connection count ${connection_count}    console=yes
 
-        conn_manager.connect    conn_name=QCB-TCPIP-GC-005-Connection
+        conn_manager.connect    conn_name=QCB-TCPIP-GC-041-Connection-${connection_count}
         ...                     conn_type=TCPIPClient
         ...                     conn_conf=${TCPIPClientParam}
 
-        conn_manager.verify    conn_name=QCB-TCPIP-GC-005-Connection    search_pattern=TCPIP-GC-005 ACK    send_cmd=TCPIP-GC-005
+        conn_manager.verify    conn_name=QCB-TCPIP-GC-041-Connection-${connection_count}
+        ...                    search_pattern=TCPIP-GC-041-${connection_count} ACK
+        ...                    send_cmd=TCPIP-GC-041-${connection_count}
 
-        conn_manager.disconnect    QCB-TCPIP-GC-005-Connection
+        conn_manager.disconnect    QCB-TCPIP-GC-041-Connection-${connection_count}
 
         Sleep    1s
 

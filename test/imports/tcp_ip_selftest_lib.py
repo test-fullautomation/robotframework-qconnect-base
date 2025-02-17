@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.8.0"
-THISMODULEDATE    = "07.02.2025"
+THISMODULEVERSION = "0.9.0"
+THISMODULEDATE    = "11.02.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -113,7 +113,7 @@ class tcp_ip_selftest_lib():
     # == keyword methods
 
     @keyword
-    def start_tcpip_testserver(self):
+    def start_tcpip_testserver(self, host="localhost", port=4000, max_connections=1):
         BuiltIn().log(f"This is '{self.__sThisModule}'", level="INFO", console=True)
         python = sys.executable
         this_library_file_path = os.path.dirname(CString.NormalizePath(__file__))
@@ -127,11 +127,17 @@ class tcp_ip_selftest_lib():
         list_cmd_line_parts = []
         list_cmd_line_parts.append(f"'{python}'")
         list_cmd_line_parts.append(f"'{tcpip_testserver}'")
-        list_cmd_line_parts.append(f"'{output_dir}'")
+        list_cmd_line_parts.append(f"--output_dir='{output_dir}/testserver_logfiles'") # currently not a keyword parameter
+        list_cmd_line_parts.append(f"--host={host}")
+        list_cmd_line_parts.append(f"--port={port}")
+        list_cmd_line_parts.append(f"--max_connections={max_connections}")
         cmd_line = " ".join(list_cmd_line_parts)
         BuiltIn().log(f"cmd_line '{cmd_line}'", level="INFO", console=True)
         list_cmd_line_parts = shlex.split(cmd_line)
         self.__process_testserver = subprocess.Popen(list_cmd_line_parts) # do not wait for process finished
+        # !!! TODO: PID is replacement for '__get_server_pid()' !!!
+        PID = self.__process_testserver.pid
+        BuiltIn().log(f"PID '{PID}'", level="INFO", console=True)
 
         # wait for TCP/IP testserver is ready (= accepts a connection)
         TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
@@ -241,7 +247,7 @@ QConnectBase<br>Test Cases
 
 <div align="center">
 
-<table frame="box" rules="all" valign="middle" width="1100" cellspacing="0" cellpadding="6" border="1" align="center">
+<table frame="box" rules="all" valign="middle" width="100%" cellspacing="0" cellpadding="6" border="1" align="center">
 <colgroup>
    <col width="4%" span="1">
    <col width="16%" span="1">
@@ -332,29 +338,6 @@ QConnectBase<br>Test Cases
 </tr>"""
         self.__testcasesoverview.tlog("testcases_overview", f"{html_table_row}", log_prefix=False)
 
-
-    @keyword
-    def get_server_pid(self):
-        return self.__get_server_pid()
-
-
-    # # >> currently not used
-    # @keyword
-    # def set_test_name(self):
-        # test_name        = BuiltIn().get_variable_value('${TEST NAME}')
-        # TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
-        # conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
-        # connection_name = "SET_TEST_NAME_CONNECTION"
-        # try:
-            # conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
-            # command = f"SET_TEST_NAME={test_name}"
-            # conn_manager.send_command(conn_name=connection_name, command=command)              # TODO: verify instead of send_command
-            # conn_manager.disconnect(connection_name)
-        # except Exception as ex:
-            # msg = f"Not able to send the Robot Framework test name to testserver. Reason: {ex}"
-            # self.__testresultsoverview.tlog("testresults_overview", msg)
-            # BuiltIn().log(msg, level="ERROR")
-            # raise Exception("Test execution aborted because of failed information exchange.")
 
 
 

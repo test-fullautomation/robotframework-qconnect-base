@@ -18,19 +18,17 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-GC-003
-    [Documentation]    Let the testserver close the connection
-    ...                and send a disconnect of the connection that has already been closed
-    ...                by the testserver
+QCB-TCPIP-GC-030
+    [Documentation]    Verify answer from testserver (verify)
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    GOODCASE
 
-    conn_manager.connect    conn_name=QCB-TCPIP-GC-003-Connection
+    conn_manager.connect    conn_name=QCB-TCPIP-GC-030-Connection
     ...                     conn_type=TCPIPClient
     ...                     conn_conf=${TCPIPClientParam}
 
-    conn_manager.send_command    conn_name=QCB-TCPIP-GC-003-Connection    command=CLOSE_CONNECTION-GC-003
+    conn_manager.verify    conn_name=QCB-TCPIP-GC-030-Connection    search_pattern=GC-030 ACK    send_cmd=GC-030
 
-    conn_manager.disconnect    QCB-TCPIP-GC-003-Connection
+    conn_manager.disconnect    QCB-TCPIP-GC-030-Connection
 
