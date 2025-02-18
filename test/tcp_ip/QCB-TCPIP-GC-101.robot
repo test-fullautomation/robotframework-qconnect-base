@@ -80,10 +80,10 @@ QCB-TCPIP-GC-101
                     # ...                    timeout=1
                     # ...                    match_try=12
                     # ...                    send_cmd=FETCHNESTEDBLOCKS
+    # log    QCB-TCPIP-GC-101 FETCHNESTEDBLOCKS trigger result: ${result_4}[0]    console=yes
+
     # alternative version:
     conn_manager.send_command    conn_name=QCB-TCPIP-GC-101-Connection    command=FETCHNESTEDBLOCKS
-
-    log    QCB-TCPIP-GC-101 FETCHNESTEDBLOCKS trigger result: ${result_4}[0]    console=yes
 
     wait_thread_notification    OBSERVER-THREAD-1-DONE    timeout=160
     set_test_variable    ${thread_1_return}    ${payloads}[0]
