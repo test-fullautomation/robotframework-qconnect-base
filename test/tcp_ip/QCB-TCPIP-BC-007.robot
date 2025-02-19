@@ -38,10 +38,12 @@ QCB-TCPIP-BC-007
                                                                ...                     conn_type=TCPIPClient
                                                                ...                     conn_conf=${TCPIPClientParam_err}
 
-    log    TCPIP-BC-007 'connect' status: ${status}    console=yes
-    log    TCPIP-BC-007 'connect' result: ${result}    console=yes
+    Sleep    1s
 
     conn_manager.disconnect    conn_name=QCB-TCPIP-BC-007-Connection
+
+    log    TCPIP-BC-007 'connect' status: ${status}    console=yes
+    log    TCPIP-BC-007 'connect' result: ${result}    console=yes
 
     # !!! need to be implemented and activated after fix !!!
     # should_be_equal    ${status}    FAIL

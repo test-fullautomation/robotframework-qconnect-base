@@ -30,5 +30,7 @@ QCB-TCPIP-GC-002
 
     conn_manager.send_command    conn_name=QCB-TCPIP-GC-002-Connection    command=GC-002
 
+    Sleep    2s
+
     conn_manager.disconnect    QCB-TCPIP-GC-002-Connection
 

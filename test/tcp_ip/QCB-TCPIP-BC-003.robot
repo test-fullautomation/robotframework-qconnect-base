@@ -40,10 +40,10 @@ QCB-TCPIP-BC-003
                                                                ...                    match_try=11
                                                                ...                    send_cmd=GETNOTIFICATIONS 3 TCPIP-BC-003 CLOSE_CONNECTION
 
+    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-003-Connection
+
     log    TCPIP-BC-003 'verify' status: ${status}    console=yes
     log    TCPIP-BC-003 'verify' result: ${result}    console=yes
-
-    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-003-Connection
 
     should_be_equal    ${status}    FAIL
     # TODO: !!! needs to be adapted after bugfix !!!
