@@ -278,6 +278,7 @@ QConnectBase<br>Test Cases
         test_documentation = BuiltIn().get_variable_value('${TEST DOCUMENTATION}')
         test_status        = BuiltIn().get_variable_value('${TEST STATUS}')
         test_message       = BuiltIn().get_variable_value('${TEST MESSAGE}')
+        output_dir         = BuiltIn().get_variable_value('${OUTPUT DIR}')
         # own ones
         connection_type    = BuiltIn().get_variable_value('${connection_type}')
         test_category = BuiltIn().get_variable_value('${test_category}')
@@ -289,6 +290,12 @@ QConnectBase<br>Test Cases
         self.__testresultsoverview.tlog("testresults_overview", f"{test_documentation}", log_prefix=False)
         if test_status != "PASS":
             self.__testresultsoverview.tlog("testresults_overview", f"!!! {test_message} !!!", log_prefix=False)
+            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"* [{self.__testcounter}] Test '{test_name}' : {test_status}", log_prefix=False)
+            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"{test_documentation}", log_prefix=False)
+            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"!!! {test_message} !!!", log_prefix=False)
+            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"{suite_source}", log_prefix=False)
+            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"{output_dir}\n", log_prefix=False)
+
         self.__testresultsoverview.tlog("testresults_overview", f"{suite_source}\n", log_prefix=False)
 
         # 2. testcases overview
