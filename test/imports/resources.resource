@@ -67,3 +67,5 @@ qconnectbase_test_teardown
     log    executing QConnectBase Test Teardown
 
     tcpip.selftest.add_test_to_overview
+
+    log    TEST '${TEST NAME}' finished with result ${TEST STATUS}, ${TEST MESSAGE}

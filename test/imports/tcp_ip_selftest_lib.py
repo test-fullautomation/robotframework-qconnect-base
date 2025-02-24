@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.9.0"
-THISMODULEDATE    = "11.02.2025"
+THISMODULEVERSION = "0.10.0"
+THISMODULEDATE    = "24.02.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -72,13 +72,17 @@ class tcp_ip_selftest_lib():
         self.__testcounter = 0
 
         output_dir = CString.NormalizePath(BuiltIn().get_variable_value('${OUTPUT DIR}'))
-        self.__testresultsoverview  = threadlog(f"{output_dir}/overview_tables")
-        self.__testcasesoverview = threadlog(f"{output_dir}/overview_tables", extension="html")
+        self.__testresultsoverview = threadlog(f"{output_dir}/overview_tables")
+        self.__testcasesoverview   = threadlog(f"{output_dir}/overview_tables", extension="html")
+
+        # failed only (this summary file is independent from '${OUTPUT DIR}')
+        this_library_file_path = os.path.dirname(CString.NormalizePath(__file__))
+        self.__testresultsoverview_failedonly = threadlog(f"{this_library_file_path}/../aiotestlogfiles/failed")
 
     def __del__(self):
         del self.__testresultsoverview
         del self.__testcasesoverview
-        pass
+        del self.__testresultsoverview_failedonly
 
     def _close(self):
         pass
@@ -290,11 +294,11 @@ QConnectBase<br>Test Cases
         self.__testresultsoverview.tlog("testresults_overview", f"{test_documentation}", log_prefix=False)
         if test_status != "PASS":
             self.__testresultsoverview.tlog("testresults_overview", f"!!! {test_message} !!!", log_prefix=False)
-            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"* [{self.__testcounter}] Test '{test_name}' : {test_status}", log_prefix=False)
-            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"{test_documentation}", log_prefix=False)
-            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"!!! {test_message} !!!", log_prefix=False)
-            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"{suite_source}", log_prefix=False)
-            self.__testresultsoverview.tlog("testresults_overview_failedonly", f"{output_dir}\n", log_prefix=False)
+            self.__testresultsoverview_failedonly.tlog("testresults_overview_failedonly", f"* [{self.__testcounter}] Test '{test_name}' : {test_status}", log_prefix=False)
+            self.__testresultsoverview_failedonly.tlog("testresults_overview_failedonly", f"{test_documentation}", log_prefix=False)
+            self.__testresultsoverview_failedonly.tlog("testresults_overview_failedonly", f"!!! {test_message} !!!", log_prefix=False)
+            self.__testresultsoverview_failedonly.tlog("testresults_overview_failedonly", f"{suite_source}", log_prefix=False)
+            self.__testresultsoverview_failedonly.tlog("testresults_overview_failedonly", f"{output_dir}\n", log_prefix=False)
 
         self.__testresultsoverview.tlog("testresults_overview", f"{suite_source}\n", log_prefix=False)
 

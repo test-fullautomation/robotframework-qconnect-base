@@ -27,7 +27,7 @@
 #
 # --------------------------------------------------------------------------------------------------------------
 #
-# 17.02.2025
+# 24.02.2025
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ nMaxIterations = 9999
 # --------------------------------------------------------------------------------------------------------------
 # TM***
 
-bSomethingWentWrong = False
+nCntSomethingWentWrong = 0
 
 sCtrlFile = None
 
@@ -174,8 +174,7 @@ for nCntIteration in range(1, nMaxIterations+1):
        print(COLBG + f"{sThisScriptName} done")
     else:
        printerror(f"[{sThisScriptName}] : Subprocess ROBOT has not returned expected value {SUCCESS}")
-       # obsolete: # nReturn = -nReturn
-       bSomethingWentWrong = True
+       nCntSomethingWentWrong = nCntSomethingWentWrong + 1
 
     print()
 
@@ -194,10 +193,10 @@ if sCtrlFile is not None:
     oCtrlFile.Delete()
     del oCtrlFile
 
-if bSomethingWentWrong is False:
-    sys.exit(SUCCESS)
+if nCntSomethingWentWrong > 0:
+    sys.exit(nCntSomethingWentWrong)
 else:
-    sys.exit(ERROR)
+    sys.exit(SUCCESS)
 
 # --------------------------------------------------------------------------------------------------------------
 
