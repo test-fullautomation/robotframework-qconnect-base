@@ -68,4 +68,8 @@ qconnectbase_test_teardown
 
     tcpip.selftest.add_test_to_overview
 
-    log    TEST '${TEST NAME}' finished with result ${TEST STATUS}, ${TEST MESSAGE}
+    IF    $TEST_STATUS == 'PASS'
+        log    TEST '${TEST_NAME}' finished with result '${TEST_STATUS}'    console=True
+    ELSE
+        log    TEST '${TEST_NAME}' finished with result '${TEST_STATUS}', reason: ${TEST_MESSAGE}    console=True
+    END
