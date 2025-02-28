@@ -30,6 +30,7 @@
 from robot.libraries.BuiltIn import BuiltIn
 from QConnectBase.connection_base import ConnectionBase, BrokenConnError
 from QConnectBase.utils import DictToClass
+from QConnectBase.utils import Utils
 from inspect import currentframe
 import QConnectBase.constants as constants
 import socket
@@ -42,7 +43,13 @@ class TCPConfig(DictToClass):
 Class to store configurations for TCP connection.
    """
    address = "localhost"
-   port = 12345
+   port = 0
+
+   def validate(self):
+      if not self.port:
+         raise Exception(f"Port number is not provided")
+      if not Utils.is_valid_host(self.address, self.port):
+         raise Exception(f"There is no available server at {self.address}:{self.port}")
 
 
 class TCPBase(ConnectionBase, object):
@@ -493,9 +500,12 @@ Base class for TCP client.
          self.socket.connect((self.address, self.port))
          self.conn = self.socket
          self._is_connected = True
+      except socket.error as e:
+         raise BrokenConnError(f"Socket error: {e}")
       except Exception as reason:
          BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_ERROR)
-         raise BrokenConnError("Not possible to connect.")
+         # raise BrokenConnError(f"There is no possible server at {address}:{port}'")
+         raise reason
 
       BuiltIn().log("%s: connected to '%s':'%d' " % (_mident, self.address, self.port))
 

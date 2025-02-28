@@ -342,7 +342,7 @@ Making a connection.
 (*no returns*)
       """
       if conn_type not in self.supported_connection_classes_dict.keys():
-         raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." % (conn_type, ', '.join(self.supported_connection_classes_dict.keys())))
+         raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." % (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
 
       if conn_name in self.connection_manage_dict.keys():
          raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
@@ -355,7 +355,7 @@ Making a connection.
          connection_obj = self.supported_connection_classes_dict[conn_type](conn_mode, conn_conf)
       except Exception as ex:
          # BuiltIn().log("Unable to create connection. Exception: %s" % ex, constants.LOG_LEVEL_ERROR)
-         raise AssertionError("Unable to create connection. Exception: %s" % ex)
+         raise Exception("Connection Error: %s" % ex)
 
       if connection_obj is not None:
          setattr(connection_obj, 'connection_name', conn_name)
@@ -368,7 +368,7 @@ Making a connection.
       except Exception as ex:
          self.remove_connection(conn_name)
          # BuiltIn().log("Unable to create connection. Exception: %s" % ex, constants.LOG_LEVEL_ERROR)
-         raise Exception("Unable to create connection. Exception: %s" % ex)
+         raise Exception("Connection Error: %s" % ex)
 
 #    @keyword
 #    def send_command(self, *args, **kwargs):
