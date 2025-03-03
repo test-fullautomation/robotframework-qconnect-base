@@ -62,4 +62,5 @@ class SocketType:
 class String:
    CONNECTION_NAME_EXIST = "The connection name '%s' has already existed! Please use other name"
    CONNECTION_TYPE_UNSUPPORTED = "The %s connection type hasn't been supported"
+   CONNECTION_TYPE_CONFUSED = "Mismatch: 'conn_type' (%s) and 'con_conf[\"conn_type\"]' (%s) both set but differ. Expected: set in only one or identical in both."
 
