@@ -27,7 +27,7 @@
 #
 # --------------------------------------------------------------------------------------------------------------
 #
-# 17.02.2025
+# 26.02.2025
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -93,20 +93,31 @@ nMaxIterations = 9999
 # --------------------------------------------------------------------------------------------------------------
 # TM***
 
-bSomethingWentWrong = False
+nCntSomethingWentWrong = 0
+sAIOTestLogfilesPath = CString.NormalizePath(f"./aiotestlogfiles", sReferencePathAbs=sThisScriptPath)
+oAIOTestLogfilesPath = CFolder(sAIOTestLogfilesPath)
+bSuccess, sResult = oAIOTestLogfilesPath.Create(bOverwrite=False, bRecursive=True)
+if bSuccess is not True:
+    printerror(CString.FormatResult(sThisScriptName, bSuccess, sResult))
+    sys.exit(ERROR)
+sThiscriptLogFile = f"{sAIOTestLogfilesPath}/{sThisScriptName}.log"
+oThiscriptLogFile = CFile(sThiscriptLogFile) # at least to know, when the RF returned something different than 0
+sStartTimestamp = time.strftime('%Y.%m.%d %H-%M-%S')
+oThiscriptLogFile.Write(f"This is {sThisScript}\n")
+oThiscriptLogFile.Write(f"Loop execution started at '{sStartTimestamp}'\n")
 
 sCtrlFile = None
 
 for nCntIteration in range(1, nMaxIterations+1):
     print(f"==================================================")
-    print(f"=== iteration {nCntIteration}/{nMaxIterations}")
+    print(f"=== iteration '{nCntIteration}/{nMaxIterations}'")
     print(f"==================================================")
 
     # --- loop version
 
     sRobotCommandLine = "--exclude quicktest"
-    sTimestamp = time.strftime('%Y.%m.%d_%H-%M-%S')
-    sLogFile = CString.NormalizePath(f"./aiotestlogfiles/{sTimestamp}/aiotestlooplog.xml", sReferencePathAbs=sThisScriptPath)
+    sIterationTimestamp = time.strftime('%Y.%m.%d_%H-%M-%S')
+    sLogFile = CString.NormalizePath(f"./aiotestlogfiles/{sIterationTimestamp}/aiotestlooplog.xml", sReferencePathAbs=sThisScriptPath)
     sCtrlFile = CString.NormalizePath(f"./aiotestlogfiles/loopinproccess.ctrl", sReferencePathAbs=sThisScriptPath)
 
     # -- create the log file folder
@@ -122,7 +133,10 @@ for nCntIteration in range(1, nMaxIterations+1):
     bSuccess, sResult = oLogFilePath.Create(bOverwrite=False, bRecursive=True)
     del oLogFilePath
     if bSuccess is not True:
-       printerror(CString.FormatResult(sThisScriptName, bSuccess, sResult))
+       error = CString.FormatResult(sThisScriptName, bSuccess, sResult)
+       printerror(error)
+       oThiscriptLogFile.Write(f"{error}\n")
+       del oThiscriptLogFile
        sys.exit(ERROR)
     print(sResult)
     print()
@@ -165,6 +179,8 @@ for nCntIteration in range(1, nMaxIterations+1):
        print()
        printexception(str(ex))
        print()
+       oThiscriptLogFile.Write(f"{ex}\n")
+       del oThiscriptLogFile
        sys.exit(ERROR)
     print()
 
@@ -173,31 +189,38 @@ for nCntIteration in range(1, nMaxIterations+1):
        print()
        print(COLBG + f"{sThisScriptName} done")
     else:
+       nCntSomethingWentWrong = nCntSomethingWentWrong + 1
        printerror(f"[{sThisScriptName}] : Subprocess ROBOT has not returned expected value {SUCCESS}")
-       # obsolete: # nReturn = -nReturn
-       bSomethingWentWrong = True
+       oThiscriptLogFile.Write(f"Iteration '{nCntIteration}/{nMaxIterations}' at '{sIterationTimestamp}':")
+       oThiscriptLogFile.Write(f"Subprocess ROBOT has returned not expected value {nReturn}")
+       oThiscriptLogFile.Write(f"Total number of iterations with errors: {nCntSomethingWentWrong}\n")
 
     print()
 
     # -- check the control file
     if os.path.isfile(sCtrlFile) is False:
         print(f"==================================================")
-        print(f"=== premature end of loop in iteration {nCntIteration}/{nMaxIterations}")
+        print(f"=== premature end of loop in iteration '{nCntIteration}/{nMaxIterations}'")
         print(f"==================================================")
+        oThiscriptLogFile.Write(f"Premature end of loop in iteration '{nCntIteration}/{nMaxIterations}'\n")
 
         break
 
 # eof for nCntIteration in range(1, nMaxIterations+1):
+
+sEndTimestamp = time.strftime('%Y.%m.%d %H-%M-%S')
+oThiscriptLogFile.Write(f"Loop execution ended at '{sEndTimestamp}'")
+del oThiscriptLogFile
 
 if sCtrlFile is not None:
     oCtrlFile = CFile(sCtrlFile)
     oCtrlFile.Delete()
     del oCtrlFile
 
-if bSomethingWentWrong is False:
-    sys.exit(SUCCESS)
+if nCntSomethingWentWrong > 0:
+    sys.exit(nCntSomethingWentWrong)
 else:
-    sys.exit(ERROR)
+    sys.exit(SUCCESS)
 
 # --------------------------------------------------------------------------------------------------------------
 

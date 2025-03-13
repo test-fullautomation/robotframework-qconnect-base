@@ -29,7 +29,7 @@ Library    ./tcp_ip_selftest_lib.py    WITH NAME    tcpip.selftest
 *** Variables ***
 
 ${HOST}=    localhost
-${PORT}=    4000
+${PORT}=    ${4000}
 
 &{TCPIPClientParam}    address=${HOST}
 ...                    port=${PORT}
@@ -42,7 +42,7 @@ qconnectbase_suite_setup
 
     log    executing QConnectBase Suite Setup
 
-    tcpip.selftest.start_tcpip_testserver    host="localhost"    port=${4000}    max_connections=${1}
+    tcpip.selftest.start_tcpip_testserver    host=${HOST}    port=${PORT}    max_connections=${1}
     tcpip.selftest.write_html_header_of_overview_file
 
 
@@ -67,3 +67,9 @@ qconnectbase_test_teardown
     log    executing QConnectBase Test Teardown
 
     tcpip.selftest.add_test_to_overview
+
+    IF    $TEST_STATUS == 'PASS'
+        log    TEST '${TEST_NAME}' finished with result '${TEST_STATUS}'    console=True
+    ELSE
+        log    TEST '${TEST_NAME}' finished with result '${TEST_STATUS}', reason: ${TEST_MESSAGE}    console=True
+    END

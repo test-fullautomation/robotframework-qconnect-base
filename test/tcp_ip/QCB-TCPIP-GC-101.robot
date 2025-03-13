@@ -41,8 +41,8 @@ QCB-TCPIP-GC-101
                         ...                    search_pattern=(\\[BLOCK-1\\])
                         ...                    eob_pattern=FETCHNESTEDBLOCKS_END
                         ...                    fetch_block=${True}
-                        ...                    timeout=3
-                        ...                    match_try=40
+                        ...                    timeout=4     # value rather high; test only; should be reduced later
+                        ...                    match_try=50  # value rather high; test only; should be reduced later
         log    QCB-TCPIP-GC-101 OBSERVER-THREAD-1 result: ${result_1}[0]    console=yes
         send_thread_notification    OBSERVER-THREAD-1-DONE    params=${result_1}
     END
@@ -53,8 +53,8 @@ QCB-TCPIP-GC-101
                         ...                    search_pattern=(\\[BLOCK-2\\])
                         ...                    eob_pattern=FETCHNESTEDBLOCKS_END
                         ...                    fetch_block=${True}
-                        ...                    timeout=3
-                        ...                    match_try=40
+                        ...                    timeout=4     # value rather high; test only; should be reduced later
+                        ...                    match_try=50  # value rather high; test only; should be reduced later
         log    QCB-TCPIP-GC-101 OBSERVER-THREAD-2 result: ${result_2}[0]    console=yes
         send_thread_notification    OBSERVER-THREAD-2-DONE    params=${result_2}
     END
@@ -65,8 +65,8 @@ QCB-TCPIP-GC-101
                         ...                    search_pattern=(\\[BLOCK-3\\])
                         ...                    eob_pattern=FETCHNESTEDBLOCKS_END
                         ...                    fetch_block=${True}
-                        ...                    timeout=3
-                        ...                    match_try=40
+                        ...                    timeout=4     # value rather high; test only; should be reduced later
+                        ...                    match_try=50  # value rather high; test only; should be reduced later
         log    QCB-TCPIP-GC-101 OBSERVER-THREAD-3 result: ${result_3}[0]    console=yes
         send_thread_notification    OBSERVER-THREAD-3-DONE    params=${result_3}
     END
@@ -85,14 +85,17 @@ QCB-TCPIP-GC-101
     # alternative version:
     conn_manager.send_command    conn_name=QCB-TCPIP-GC-101-Connection    command=FETCHNESTEDBLOCKS
 
-    wait_thread_notification    OBSERVER-THREAD-1-DONE    timeout=160
-    set_test_variable    ${thread_1_return}    ${payloads}[0]
+    # previous solution # wait_thread_notification    OBSERVER-THREAD-1-DONE    timeout=160
+    # previous solution # set_test_variable    ${thread_1_return}    ${payloads}[0]
+    # previous solution # wait_thread_notification    OBSERVER-THREAD-2-DONE    timeout=160
+    # previous solution # set_test_variable    ${thread_2_return}    ${payloads}[0]
+    # previous solution # wait_thread_notification    OBSERVER-THREAD-3-DONE    timeout=160
+    # previous solution # set_test_variable    ${thread_3_return}    ${payloads}[0]
 
-    wait_thread_notification    OBSERVER-THREAD-2-DONE    timeout=160
-    set_test_variable    ${thread_2_return}    ${payloads}[0]
-
-    wait_thread_notification    OBSERVER-THREAD-3-DONE    timeout=160
-    set_test_variable    ${thread_3_return}    ${payloads}[0]
+    # return values are not documented for 'wait_thread_notification', but seem to work
+    ${thread_1_return}=    wait_thread_notification    OBSERVER-THREAD-1-DONE    timeout=160
+    ${thread_2_return}=    wait_thread_notification    OBSERVER-THREAD-2-DONE    timeout=160
+    ${thread_3_return}=    wait_thread_notification    OBSERVER-THREAD-3-DONE    timeout=160
 
     # testserver sends a fix sequence; wait until sequence has been finished
     Sleep    6s
@@ -103,9 +106,9 @@ QCB-TCPIP-GC-101
     # (currently a single value is returned only; but expected is a list of values)
     # !!! To be clarified: Is it allowed to access ${payloads} outside the notification also? !!!
 
-    log    QCB-TCPIP-GC-101 thread_1_return: ${thread_1_return}    console=yes
-    log    QCB-TCPIP-GC-101 thread_2_return: ${thread_2_return}    console=yes
-    log    QCB-TCPIP-GC-101 thread_3_return: ${thread_3_return}    console=yes
+    log    QCB-TCPIP-GC-101 thread_1_return: ${thread_1_return}[0]    console=yes
+    log    QCB-TCPIP-GC-101 thread_2_return: ${thread_2_return}[0]    console=yes
+    log    QCB-TCPIP-GC-101 thread_3_return: ${thread_3_return}[0]    console=yes
 
     # TODO:
     # should_be_equal    ${thread_1_return}    ...
