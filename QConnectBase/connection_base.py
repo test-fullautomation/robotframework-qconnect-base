@@ -72,10 +72,7 @@ Base class for all connection classes.
    _force_seq_lock = threading.RLock()
    _start_dlt_lock = threading.RLock()
 
-   _traceq_handle = 0
-   _traceq_obj = {}
-   _traceq_lock = threading.Lock()
-
+   _traceq_handle = 0   
    supported_devices = []
 
    # # for continuous processing
@@ -196,7 +193,8 @@ Abstract method for quiting the connection.
 
 (*no returns*)
       """
-      self._logger.removeHandler(self._logger_handler)
+      if self._logger:
+         self._logger.removeHandler(self._logger_handler)
 
    @abc.abstractmethod
    def connect(self, device, files=None, test_connection=False):
@@ -321,6 +319,11 @@ Initialize a thread for receiving data from connection.
       conn_id_name = str(thread_name) + str(thread_id)
       self._logger = QLogger().get_logger(conn_id_name)
       self._logger_handler = QLogger().set_handler(self.config)
+
+      self._traceq_obj = {}
+      self._traceq_lock = threading.Lock()
+
+
       self._recv_thrd_term = threading.Event()
       self._recv_thrd_obj = threading.Thread(target=self._thread_receive_from_connection, kwargs=dict(sync_with_start=sync_with_start))
       self._recv_thrd_obj.setDaemon(True)
@@ -369,9 +372,9 @@ Thread to receive data from connection continuously.
                #    for q in self._msgq_c_obj.values():
                #       q.put((now, msg), False)
 
-               with self.__class__._traceq_lock:
-                  if self.__class__._traceq_obj:
-                     for (regex_filter, msg_queue, back_trace_queue, use_fetch_block, regex_end_block_pattern, regex_line_filter) in self.__class__._traceq_obj.values():
+               with self._traceq_lock:
+                  if self._traceq_obj:
+                     for (regex_filter, msg_queue, back_trace_queue, use_fetch_block, regex_end_block_pattern, regex_line_filter) in self._traceq_obj.values():
                         is_hit = False
                         result_obj = None
                         if use_fetch_block is True:
@@ -615,8 +618,8 @@ Getting trace log continuously without creating a new trace queue.
       else:
          return None
 
-   @classmethod
-   def create_and_activate_trace_queue(cls, search_element, use_fetch_block=False, end_of_block_pattern='.*', regex_line_filter_pattern=None):
+   # @classmethod
+   def create_and_activate_trace_queue(self, search_element, use_fetch_block=False, end_of_block_pattern='.*', regex_line_filter_pattern=None):
       """
 Create Queue and assign it to _trace_queue object and activate the queue with the search element.
 
@@ -657,11 +660,11 @@ Create Queue and assign it to _trace_queue object and activate the queue with th
   The handle and search object
       """
       trace_queue = queue.Queue()
-      trq_handle = cls.activate_trace_queue(search_element, trace_queue, use_fetch_block, end_of_block_pattern, regex_line_filter_pattern)
+      trq_handle = self.activate_trace_queue(search_element, trace_queue, use_fetch_block, end_of_block_pattern, regex_line_filter_pattern)
       return trq_handle, trace_queue
 
-   @classmethod
-   def deactivate_and_delete_trace_queue(cls, trq_handle, trace_queue):
+   # @classmethod
+   def deactivate_and_delete_trace_queue(self, trq_handle, trace_queue):
       """
 Deactivate trace queue and delete.
 
@@ -683,11 +686,11 @@ Deactivate trace queue and delete.
 
 (*no returns*)
       """
-      cls.deactivate_trace_queue(trq_handle)
+      self.deactivate_trace_queue(trq_handle)
       del trace_queue
 
-   @classmethod
-   def activate_trace_queue(cls, search_obj, trace_queue, use_fetch_block=False, end_of_block_pattern='.*', line_filter_pattern=None):
+   # @classmethod
+   def activate_trace_queue(self, search_obj, trace_queue, use_fetch_block=False, end_of_block_pattern='.*', line_filter_pattern=None):
       """
 Activates a trace message filter specified as a regular expression. All matching trace messages are put in the specified queue object.
 
@@ -735,24 +738,24 @@ Activates a trace message filter specified as a regular expression. All matching
 
   Handle to deactivate the message filter.
       """
-      _mident = '%s.%s()' % (cls.__class__.__name__, currentframe().f_code.co_name)
+      _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
-      with cls._traceq_lock:
-         cls._traceq_handle += 1
-         back_trace_queue = deque(maxlen=cls.MAX_LEN_BACKTRACE)
+      with self._traceq_lock:
+         self.__class__._traceq_handle += 1
+         back_trace_queue = deque(maxlen=self.__class__.MAX_LEN_BACKTRACE)
          search_regex_obj = re.compile(search_obj)
-         cls._traceq_obj[cls._traceq_handle] = (search_regex_obj,
+         self._traceq_obj[self.__class__._traceq_handle] = (search_regex_obj,
                                                 trace_queue,
                                                 back_trace_queue,
                                                 use_fetch_block,
                                                 re.compile(end_of_block_pattern, re.M | re.S | re.U),
                                                 line_filter_pattern)
-         handle_id = cls._traceq_handle
+         handle_id = self.__class__._traceq_handle
       BuiltIn().log('Completed %s' % _mident, constants.LOG_LEVEL_DEBUG)
       return handle_id
 
-   @classmethod
-   def deactivate_trace_queue(cls, handle):
+   # @classmethod
+   def deactivate_trace_queue(self, handle):
       """
 Deactivates a trace message filter previously activated by ActivateTraceQ() method.
 
@@ -774,11 +777,11 @@ Deactivates a trace message filter previously activated by ActivateTraceQ() meth
 
   True :  Trace message filter successfully deleted.
       """
-      _mident = '%s.%s()' % (cls.__class__.__name__, currentframe().f_code.co_name)
+      _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
-      with cls._traceq_lock:
-         if handle in cls._traceq_obj:
-            del cls._traceq_obj[handle]
+      with self._traceq_lock:
+         if handle in self._traceq_obj:
+            del self._traceq_obj[handle]
             is_success = True
          else:
             is_success = False
