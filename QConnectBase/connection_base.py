@@ -443,7 +443,6 @@ Wrapper method to send message to a tcp connection.
          except Exception as ex:
             self._is_connected = False
             raise Exception(f"Connection has been broken. Details: {ex}")
-            
 
    def read_obj(self):
       """
@@ -470,7 +469,7 @@ Wrapper method to get the response from connection.
             self._is_connected = False
             raise reason
          except Exception as reason:
-            BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_WARNING)
+            BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_DEBUG)
       return msg
    # endregion
 
