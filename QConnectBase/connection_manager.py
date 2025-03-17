@@ -242,6 +242,8 @@ Keyword for disconnecting a connection by name.
       if connection_name in self.connection_manage_dict.keys():
          self.connection_manage_dict[connection_name].quit()
          del self.connection_manage_dict[connection_name]
+      else:
+         raise Exception(f"Invalid operation: Attempted to disconnect 'f{connection_name}', but no such connection exists.")
 
 #    @keyword
 #    def connect(self, *args, **kwargs):
@@ -341,19 +343,19 @@ Making a connection.
 
 (*no returns*)
       """
-      if 'conn_type' not in conn_conf:
-         if conn_type == '':
-            conn_type = "TCPIPClient"
-
-         if conn_type not in self.supported_connection_classes_dict.keys():
-            raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
-                                 (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
-      else:
+      if 'conn_type' in conn_conf:
          if conn_conf['conn_type'] != conn_type and conn_type != '':
             raise Exception(constants.String.CONNECTION_TYPE_CONFUSED % (conn_type, conn_conf['conn_type']))
          else:
             conn_type = conn_conf['conn_type']
             conn_conf.pop('conn_type', None)
+
+      if conn_type == '':
+         conn_type = "TCPIPClient"
+
+      if conn_type not in self.supported_connection_classes_dict.keys():
+         raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
+                              (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
 
       if conn_name in self.connection_manage_dict.keys():
          raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
