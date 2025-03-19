@@ -243,7 +243,7 @@ Keyword for disconnecting a connection by name.
          self.connection_manage_dict[connection_name].quit()
          del self.connection_manage_dict[connection_name]
       else:
-         raise Exception(f"Invalid operation: Attempted to disconnect 'f{connection_name}', but no such connection exists.")
+         raise Exception(f"Invalid operation: Attempted to disconnect '{connection_name}', but no such connection exists.")
 
 #    @keyword
 #    def connect(self, *args, **kwargs):
