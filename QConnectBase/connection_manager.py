@@ -335,7 +335,7 @@ Making a connection.
 
 * ``conn_conf``
 
-  / *Condition*: optional / *Type*: json / *Default*: {} /
+  / *Condition*: required / *Type*: dict /
 
   Configuration for connection.
 
@@ -343,6 +343,9 @@ Making a connection.
 
 (*no returns*)
       """
+      if not conn_conf:
+         raise Exception("The configurations 'conn_conf' for connection have to be provided")
+
       if 'conn_type' in conn_conf:
          if conn_conf['conn_type'] != conn_type and conn_type != '':
             raise Exception(constants.String.CONNECTION_TYPE_CONFUSED % (conn_type, conn_conf['conn_type']))
@@ -721,6 +724,12 @@ Verify a pattern from connection response after sending a command.
       """
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
+
+      if search_pattern is None:
+         raise Exception("The 'search_pattern' have to be a regex string instead of None.")
+
+      if send_cmd is None:
+         send_cmd = ''
 
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
