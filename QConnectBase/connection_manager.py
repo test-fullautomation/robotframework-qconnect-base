@@ -725,6 +725,12 @@ Verify a pattern from connection response after sending a command.
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
 
+      if search_pattern is None:
+         raise Exception("The 'search_pattern' have to be a regex string instead of None.")
+
+      if send_cmd is None:
+         send_cmd = ''
+
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
