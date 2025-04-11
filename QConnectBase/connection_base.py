@@ -316,7 +316,12 @@ Initialize a thread for receiving data from connection.
       thread_name = self._CONNECTION_TYPE
       if mode is not None:
          thread_name = mode
-      conn_id_name = str(thread_name) + str(thread_id)
+
+      if hasattr(self, 'connection_name'):
+         thread_name = self.connection_name
+
+
+      conn_id_name = str(thread_name) + '-' + str(thread_id)
       self._logger = QLogger().get_logger(conn_id_name)
       self._logger_handler = QLogger().set_handler(self.config)
 

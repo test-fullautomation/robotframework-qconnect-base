@@ -356,6 +356,8 @@ Making a connection.
       if conn_type == '':
          conn_type = "TCPIPClient"
 
+      conn_conf['connection_name'] = conn_name
+
       if conn_type not in self.supported_connection_classes_dict.keys():
          raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
                               (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
@@ -723,7 +725,7 @@ Verify a pattern from connection response after sending a command.
   Matched string.
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
 
       if search_pattern is None:
          raise Exception("The 'search_pattern' have to be a regex string instead of None.")
