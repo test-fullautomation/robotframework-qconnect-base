@@ -356,6 +356,8 @@ Making a connection.
       if conn_type == '':
          conn_type = "TCPIPClient"
 
+      conn_conf['connection_name'] = conn_name
+
       if conn_type not in self.supported_connection_classes_dict.keys():
          raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
                               (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))

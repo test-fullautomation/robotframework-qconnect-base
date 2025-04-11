@@ -92,6 +92,8 @@ Constructor for TCPBase class.
       self._port = port
       self._mode = mode
       self.conn = None
+      if 'connection_name' in config:
+         self.connection_name = config['connection_name']
 
       # default timeout for send/receive is 10 seconds
       self._conn_timeout = 10

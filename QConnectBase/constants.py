@@ -38,7 +38,7 @@ LOG_LEVEL_DEBUG = 'DEBUG'
 LOG_LEVEL_ERROR = 'ERROR'
 LOG_LEVEL_WARNING = 'WARN'
 
-LOG_FORMATTER = "%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s"
+LOG_FORMATTER = "%(asctime)s [%(threadName)-.128s] [%(levelname)-5.5s]  %(message)s"
 platform_ = platform.system().lower()
 if platform_.startswith(OS_WINDOWS_STR):
    SLASH = "\\"
