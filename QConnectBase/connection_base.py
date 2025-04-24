@@ -534,6 +534,8 @@ Suspend the control flow until a Trace message is received which matches to a sp
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
+      if search_obj is None:
+         raise Exception("The 'search_pattern' have to be a regex string instead of None.")
       search_regex = re.compile(search_obj, re.M | re.S | re.U)
       regex_obj_filter = re.compile(filter_pattern)
       trq_handle, trace_queue = self.create_and_activate_trace_queue(search_regex, use_fetch_block, end_of_block_pattern, regex_obj_filter)
