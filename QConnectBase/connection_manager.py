@@ -38,6 +38,9 @@ import pkgutil
 import QConnectBase.constants as constants
 import site
 import inspect
+import importlib.util
+import pkgutil
+import sys
 
 
 class InputParam(DictToClass):
@@ -118,13 +121,22 @@ Constructor for ConnectionManager class.
       all_libs = [main_lib_path]
       all_libs.extend(extension_lib_paths)
       all_libs = list(set(all_libs))
+      for path in all_libs:
+         if path not in sys.path:
+            sys.path.append(path)
       for module_loader, name, is_pkg in pkgutil.walk_packages(all_libs):
          # noinspection PyBroadException
          try:
             if not is_pkg and not name.startswith("setup"):
                importlib.import_module(name)
             else:
-               _module = module_loader.find_module(name).load_module(name)
+               # _module = module_loader.find_module(name).load_module(name)
+               spec = importlib.util.find_spec(name)
+               if spec and spec.loader:
+                  module = importlib.util.module_from_spec(spec)
+                  spec.loader.exec_module(module)
+               else:
+                  print(f"⚠️ Could not load module: {name}")
          except Exception as _ex:
             pass
 
@@ -791,7 +803,15 @@ if __name__ == "__main__":
       }
       conn_manager.connect("test_ssh", "SSHClient", None, SSH_CONF_SAMPLE)
       # conn_manager.send_command("test_ssh", "cd ..")
-      test = conn_manager.verify_unnamed_args("test_ssh", "(?<=\s).*([0-9]..).*(command).$", 5, False, ".*", ".*", "echo This is the 1st test command.")
+      test = conn_manager.verify_unnamed_args(
+         "test_ssh",
+         r"(?<=\s).*([0-9]..).*(command).$",
+         5,
+         False,
+         ".*",
+         ".*",
+         "echo This is the 1st test command."
+      )
       print(test[0])
       print(test[1])
       print(test[2])
