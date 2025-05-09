@@ -862,8 +862,8 @@ Post-checking message when receiving it from connection.
    def _rm_q_dollar(input_):
       # noinspection PyBroadException
       try:
-         output = input_.replace("\$(", "$(")
-         output = output.replace("\${", "${")
+         output = input_.replace(r"\$(", "$(")
+         output = output.replace(r"\${", "${")
       except:
          # in case of any issue return input as it is
          output = input_
@@ -874,8 +874,8 @@ Post-checking message when receiving it from connection.
    def _q_dollar(input_):
       # noinspection PyBroadException
       try:
-         output = input_.replace("$(", "\$(")
-         output = output.replace("${", "\${")
+         output = input_.replace("$(", r"\$(")
+         output = output.replace("${", r"\${")
       except:
          # in case of any issue return input as it is
          output = input_
