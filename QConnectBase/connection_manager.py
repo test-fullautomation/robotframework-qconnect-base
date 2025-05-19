@@ -675,7 +675,7 @@ Verify a pattern from connection response after sending a command.
 
 * ``search_pattern``
 
-  / *Condition*: optional / *Type*: str / *Default*: 0 /
+  / *Condition*: optional / *Type*: str / *Default*: .* /
 
   Regular expression all received trace messages are compare to.
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
