@@ -661,7 +661,7 @@ Executes a script file by sending commands to a device through the provided conn
 #          raise Exception("Input parameter are invalid.")
 
    @keyword
-   def verify(self, conn_name, search_pattern, timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
+   def verify(self, conn_name, search_pattern='.*', timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
       """
 Verify a pattern from connection response after sending a command.
 
@@ -675,7 +675,7 @@ Verify a pattern from connection response after sending a command.
 
 * ``search_pattern``
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: 0 /
 
   Regular expression all received trace messages are compare to.
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
