@@ -101,6 +101,8 @@ Class to manage all connections.
    ROBOT_AUTO_KEYWORDS = False
    LIBRARY_EXTENSION_PREFIX = 'robotframework_qconnect'
    LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
+   DEFAULT_VERIFY_TIMEOUT = 5
+   DEFAULT_EMERGENCY_TIMEOUT = 50
 
    id = 0
 
@@ -142,6 +144,9 @@ Constructor for ConnectionManager class.
 
       supported_connection_classes_list = Utils.get_all_descendant_classes(ConnectionBase)
       self.supported_connection_classes_dict = {cls._CONNECTION_TYPE: cls for cls in supported_connection_classes_list}
+
+      self.set_default_verify_timeout(ConnectionManager.DEFAULT_VERIFY_TIMEOUT)
+      self.set_default_emergency_timeout(ConnectionManager.DEFAULT_EMERGENCY_TIMEOUT)
 
    def __del__(self):
       """
@@ -661,6 +666,14 @@ Executes a script file by sending commands to a device through the provided conn
 #          raise Exception("Input parameter are invalid.")
 
    @keyword
+   def set_default_verify_timeout(self, time_out):
+      self.default_verify_timeout = time_out
+   
+   @keyword
+   def set_default_emergency_timeout(self, time_out):
+      self.default_emergency_timeout = time_out
+
+   @keyword
    def verify(self, conn_name, search_pattern='.*', timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
       """
 Verify a pattern from connection response after sending a command.
@@ -748,6 +761,12 @@ Verify a pattern from connection response after sending a command.
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
+      
+      if 'verify_timeout' not in kwargs:
+         kwargs['verify_timeout'] = self.default_verify_timeout
+      
+      if 'emergency_timeout' not in kwargs:
+         kwargs['emergency_timeout'] = self.default_emergency_timeout
 
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
