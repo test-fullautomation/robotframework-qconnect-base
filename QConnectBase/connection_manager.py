@@ -762,8 +762,11 @@ Verify a pattern from connection response after sending a command.
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
       
-      kwargs['verify_timeout'] = self.default_verify_timeout
-      kwargs['emergency_timeout'] = self.default_emergency_timeout
+      if 'verify_timeout' not in kwargs:
+         kwargs['verify_timeout'] = self.default_verify_timeout
+      
+      if 'emergency_timeout' not in kwargs:
+         kwargs['emergency_timeout'] = self.default_emergency_timeout
 
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
