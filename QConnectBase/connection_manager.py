@@ -32,6 +32,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from os.path import dirname
 from QConnectBase.utils import DictToClass
 from robot.api.deco import keyword
+from robot.utils import timestr_to_secs
 import os
 import importlib
 import pkgutil
@@ -667,11 +668,11 @@ Executes a script file by sending commands to a device through the provided conn
 
    @keyword
    def set_default_verify_timeout(self, time_out):
-      self.default_verify_timeout = time_out
+      self.default_verify_timeout = timestr_to_secs(time_out)
    
    @keyword
    def set_default_emergency_timeout(self, time_out):
-      self.default_emergency_timeout = time_out
+      self.default_emergency_timeout = timestr_to_secs(time_out)
 
    @keyword
    def verify(self, conn_name, search_pattern='.*', timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
@@ -695,7 +696,7 @@ Verify a pattern from connection response after sending a command.
 
 * ``timeout``
 
-  / *Condition*: optional / *Type*: float / *Default*: 0 /
+  / *Condition*: optional / *Type*: float / *Default*: 5 /
 
   Timeout parameter specified as a floating point number in the unit 'seconds'.
 
