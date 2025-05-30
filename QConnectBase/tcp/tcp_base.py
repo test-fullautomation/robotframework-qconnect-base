@@ -385,7 +385,10 @@ Quit connection.
       if self._recv_thrd_obj and self._recv_thrd_obj.is_alive():
          self._recv_thrd_term.set()
          while self._recv_thrd_obj.is_alive():
-            time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
+            try:
+               time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
+            except Exception as ex:
+               break
          self._recv_thrd_obj = None
       super(TCPBase, self).quit()
 
