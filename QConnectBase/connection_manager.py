@@ -103,7 +103,7 @@ Class to manage all connections.
    LIBRARY_EXTENSION_PREFIX = 'robotframework_qconnect'
    LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
    DEFAULT_VERIFY_TIMEOUT = 5
-   DEFAULT_EMERGENCY_TIMEOUT = 50
+   DEFAULT_EMERGENCY_TIMEOUT = 60 * 30
 
    id = 0
 
@@ -668,11 +668,56 @@ Executes a script file by sending commands to a device through the provided conn
 
    @keyword
    def set_default_verify_timeout(self, time_out):
+      """
+Set the default verify timeout value for the connection.
+
+Supports flexible input formats such as:
+- Duration with units (e.g. '1h 10s', '2m30s', '500ms')
+- HH:MM:SS format (e.g. '01:00:10' for 1 hour, 0 minutes, 10 seconds)
+- Plain numeric values (e.g. '42') interpreted as seconds
+
+**Arguments:**
+
+* `time_str`
+
+  / *Condition*: required / *Type*: str or float or int /
+
+  A string representing the duration. Units supported include:
+    - `h`  for hours
+    - `m`  for minutes (or `ms` for milliseconds)
+    - `s`  for seconds
+    - `ms` for milliseconds
+  If no unit is specified, the value is interpreted as seconds.
+      """
       self.default_verify_timeout = timestr_to_secs(time_out)
    
    @keyword
    def set_default_emergency_timeout(self, time_out):
-      self.default_emergency_timeout = timestr_to_secs(time_out)
+      """
+Set the default emergency timeout value for the connection.
+
+Supports flexible input formats such as:
+- Duration with units (e.g. '1h 10s', '2m30s', '500ms')
+- HH:MM:SS format (e.g. '01:00:10' for 1 hour, 0 minutes, 10 seconds)
+- Plain numeric values (e.g. '42') interpreted as seconds
+
+**Arguments:**
+
+* `time_out`
+
+  / *Condition*: required / *Type*: str or float or int /
+
+  A string representing the duration. Units supported include:
+    - `h`  for hours
+    - `m`  for minutes (or `ms` for milliseconds)
+    - `s`  for seconds
+    - `ms` for milliseconds
+  If no unit is specified, the value is interpreted as seconds.
+      """
+      time_second = timestr_to_secs(time_out)
+      if time_second > (60 * 60) or time_second < 60:
+         raise Exception(f"Emergency timeout must be >= 1 minute and <= 1 hour!")
+      self.default_emergency_timeout = time_second
 
    @keyword
    def verify(self, conn_name, search_pattern='.*', timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
@@ -763,11 +808,10 @@ Verify a pattern from connection response after sending a command.
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
       
-      if 'verify_timeout' not in kwargs:
-         kwargs['verify_timeout'] = self.default_verify_timeout
+      # if 'verify_timeout' not in kwargs:
+      kwargs['default_verify_timeout'] = self.default_verify_timeout
       
-      if 'emergency_timeout' not in kwargs:
-         kwargs['emergency_timeout'] = self.default_emergency_timeout
+      kwargs['emergency_timeout'] = self.default_emergency_timeout
 
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
