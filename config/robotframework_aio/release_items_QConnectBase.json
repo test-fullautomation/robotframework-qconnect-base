@@ -57,6 +57,27 @@
 * For using RMQSignal, required to run the
   file QConnectBase/tools/setup rabbitmq.bat to install the entire infrastructure required for these Auxiliary Utilities.
 "
+                             ],
+                   "0.14.1." : [
+"
+**Timeout Handling Enhancements (For Goepel only)**
+
+* Introduced support for `verify_timeout` and `emergency_timeout` to improve timeout management logic.
+* Added time string parsing following Robot Framework time syntax (e.g., `1s`, `2ms`, `1min 10s`, `01:00:10`).
+* Included new keywords: `set_default_verify_timeout` and `set_default_emergency_timeout` for flexible default timeout configuration.
+
+**Improved Compatibility & Error Handling**
+
+* Ensured compatibility with Python 3.11 (e.g., `find_module` replacement).
+* Fixed improper handling of closed sockets and infinite wait scenarios in SSH connections.
+* Enhanced error messages for confirmation messages containing errors (non-zero error codes).
+* Made `search_pattern` parameter optional and adapted internal infrastructure to support it.
+
+**Maintenance and Compatibility**
+
+* Updated internal logic to raise clearer exceptions when parameters like `conn_name` or `search_pattern` are invalid.
+* Applied various bug fixes and improved logging, especially for disconnected or invalid connections.
+"
                              ]
                  }
 }
