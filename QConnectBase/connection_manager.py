@@ -146,8 +146,9 @@ Constructor for ConnectionManager class.
       supported_connection_classes_list = Utils.get_all_descendant_classes(ConnectionBase)
       self.supported_connection_classes_dict = {cls._CONNECTION_TYPE: cls for cls in supported_connection_classes_list}
 
-      self.set_default_verify_timeout(ConnectionManager.DEFAULT_VERIFY_TIMEOUT)
       self.set_default_emergency_timeout(ConnectionManager.DEFAULT_EMERGENCY_TIMEOUT)
+      self.set_default_verify_timeout(ConnectionManager.DEFAULT_VERIFY_TIMEOUT)
+      
 
    def __del__(self):
       """
@@ -689,7 +690,10 @@ Supports flexible input formats such as:
     - `ms` for milliseconds
   If no unit is specified, the value is interpreted as seconds.
       """
-      self.default_verify_timeout = timestr_to_secs(time_out)
+      time_second = timestr_to_secs(time_out)
+      if time_second > self.default_emergency_timeout:
+         raise Exception(f"Default verify timeout must not exceed the emergency timeout of {self.default_emergency_timeout} seconds!")
+      self.default_verify_timeout = time_out
    
    @keyword
    def set_default_emergency_timeout(self, time_out):
