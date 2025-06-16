@@ -38,6 +38,8 @@ import pkgutil
 import QConnectBase.constants as constants
 import site
 import inspect
+import importlib.util
+import sys
 
 
 class InputParam(DictToClass):
@@ -118,13 +120,22 @@ Constructor for ConnectionManager class.
       all_libs = [main_lib_path]
       all_libs.extend(extension_lib_paths)
       all_libs = list(set(all_libs))
+      for path in all_libs:
+         if path not in sys.path:
+            sys.path.append(path)
       for module_loader, name, is_pkg in pkgutil.walk_packages(all_libs):
          # noinspection PyBroadException
          try:
             if not is_pkg and not name.startswith("setup"):
                importlib.import_module(name)
             else:
-               _module = module_loader.find_module(name).load_module(name)
+               # _module = module_loader.find_module(name).load_module(name)
+               spec = importlib.util.find_spec(name)
+               if spec and spec.loader:
+                  module = importlib.util.module_from_spec(spec)
+                  spec.loader.exec_module(module)
+               else:
+                  print(f"⚠️ Could not load module: {name}")
          except Exception as _ex:
             pass
 
