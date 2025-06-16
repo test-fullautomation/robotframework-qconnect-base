@@ -485,35 +485,35 @@ Send command to a connection.
    def transfer_file(self, conn_name, src, dest, type):
       """
 Transfer file from local to remote and vice versa.
-      
-**Arguments:**   
 
-* ``connection_name``    
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of connection.
 
-* ``src``    
+* ``src``
 
   / *Condition*: required / *Type*: str /
-  
+
   Source file path.
 
-* ``dest``    
+* ``dest``
 
   / *Condition*: required / *Type*: str /
-  
+
   Destination file path.
 
-* ``type``    
+* ``type``
 
   / *Condition*: required / *Type*: str /
-  
-  Transfer file type. 
+
+  Transfer file type.
 
       'get' - Copy a remote file from the SFTP server to the local host.
-      
+
       'put' - Copy a local file to the SFTP server.
 
 **Returns:**
@@ -529,25 +529,25 @@ Transfer file from local to remote and vice versa.
          raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
       except Exception as ex:
          raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
-         
-   
+
+
    @keyword
    def execute_script(self, conn_name, script_path):
       """
 Executes a script file by sending commands to a device through the provided connection.
-      
-**Arguments:**   
 
-* ``connection_name``    
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of connection.
 
-* ``script_path``    
+* ``script_path``
 
   / *Condition*: required / *Type*: str /
-  
+
   Script file path.
 
 **Returns:**
@@ -774,7 +774,16 @@ if __name__ == "__main__":
       }
       conn_manager.connect("test_ssh", "SSHClient", None, SSH_CONF_SAMPLE)
       # conn_manager.send_command("test_ssh", "cd ..")
-      test = conn_manager.verify_unnamed_args("test_ssh", "(?<=\s).*([0-9]..).*(command).$", 5, False, ".*", ".*", "echo This is the 1st test command.")
+      # test = conn_manager.verify_unnamed_args("test_ssh", "(?<=\s).*([0-9]..).*(command).$", 5, False, ".*", ".*", "echo This is the 1st test command.")
+      test = conn_manager.verify_unnamed_args(
+         "test_ssh",
+         r"(?<=\s).*([0-9]..).*(command).$",
+         5,
+         False,
+         ".*",
+         ".*",
+         "echo This is the 1st test command."
+      )
       print(test[0])
       print(test[1])
       print(test[2])
