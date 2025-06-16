@@ -234,41 +234,41 @@ Implementation for creating a SSH connection.
    def transfer_file(self, src, dest, type):
       """
 Transfer file from local to remote and vice versa.
-      
-**Arguments:**   
 
-* ``connection_name``    
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of connection.
 
-* ``src``    
+* ``src``
 
   / *Condition*: required / *Type*: str /
-  
+
   Source file path.
 
-* ``dest``    
+* ``dest``
 
   / *Condition*: required / *Type*: str /
-  
+
   Destination file path.
 
-* ``type``    
+* ``type``
 
   / *Condition*: required / *Type*: str /
-  
-  Transfer file type. 
 
-      'get' - Copy a remote file from the SFTP server to the local host 
-      
+  Transfer file type.
+
+      'get' - Copy a remote file from the SFTP server to the local host
+
       'put' - Copy a local file to the SFTP server
 
 **Returns:**
 
 (*no returns*)
-      """   
+      """
       try:
          sftp = self.client.open_sftp()
          method_dict = {
@@ -367,6 +367,7 @@ Quit and stop receiver thread.
 
 (*no returns*)
       """
+
       # stop the low-level receiver thread
       if self._llrecv_thrd_obj and self._llrecv_thrd_obj.is_alive():
          self._llrecv_thrd_term.set()
