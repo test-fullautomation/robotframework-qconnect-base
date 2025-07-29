@@ -409,7 +409,7 @@ as needed.
                   dest_item_path = f"{dest_folder_path}{os.sep}{item}".replace('\\', '/')
                   sftp.get(src_item_path, dest_item_path)
          else:
-            sftp.get(sftp, src, dest)
+            sftp.get(src, dest)
 
    def _send(self, msg, _cr):
       """

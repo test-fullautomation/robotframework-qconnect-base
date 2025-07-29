@@ -572,9 +572,9 @@ Transfer folder from local to remote and vice versa.
 
   Transfer folder type.
 
-      'get' - Copy a remote file from the SFTP server to the local host.
+      'get' - Copy a remote folder from the SFTP server to the local host.
 
-      'put' - Copy a local file to the SFTP server.
+      'put' - Copy a local folder to the SFTP server.
 
 **Returns:**
 
@@ -586,9 +586,9 @@ Transfer folder from local to remote and vice versa.
       try:
          connection_obj.transfer_folder(src, dest, type)
       except AttributeError as attrErr:
-         raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
+         raise Exception("'%s' connection type has not been supported for transferring folder." % connection_obj._CONNECTION_TYPE)
       except Exception as ex:
-         raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+         raise Exception("Unable to transfer folder to '%s' connection. Exception: %s" % (conn_name, str(ex)))
 
 
    @keyword
