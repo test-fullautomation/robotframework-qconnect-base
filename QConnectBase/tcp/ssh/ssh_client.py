@@ -360,7 +360,8 @@ as needed.
       """
       if transfer_type not in ['get', 'put']:
          raise Exception("Unknown transfer type '%s'." % transfer_type)
-
+      stat_ifmt = 0o170000  # File type mask
+      stat_ifdir = 0o040000  # Directory type
       folder_name_pattern = r'[^/\\]+(?=[/\\]*$)'
       folder_name = ''
       BuiltIn().log(f"Transfer from '{src}' to '{dest}' with transfer type '{transfer_type}'", constants.LOG_LEVEL_DEBUG)
@@ -391,7 +392,7 @@ as needed.
             sftp.put(src, dest)
       elif transfer_type == 'get':
          # Check if it's a directory
-         if sftp.stat(src).st_mode & 0o170000 == 0o040000:
+         if sftp.stat(src).st_mode & stat_ifmt == stat_ifdir:
             match = re.search(folder_name_pattern, src)
             if match:
                folder_name = match.group(0)
@@ -401,7 +402,7 @@ as needed.
                os.makedirs(dest_folder_path, exist_ok=True)
             for item in sftp.listdir(src):
                src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
-               if sftp.stat(src_item_path).st_mode & 0o170000 == 0o040000:
+               if sftp.stat(src_item_path).st_mode & stat_ifmt == stat_ifdir:
                   BuiltIn().log(f"Transferring folder: {src_item_path} to {dest_folder_path}", constants.LOG_LEVEL_DEBUG)
                   self._transfer(sftp, src_item_path, dest_folder_path, transfer_type)
                else:
