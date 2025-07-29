@@ -541,6 +541,55 @@ Transfer file from local to remote and vice versa.
       except Exception as ex:
          raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
 
+   @keyword
+   def transfer_folder(self, conn_name, src, dest, type):
+      """
+Transfer folder from local to remote and vice versa.
+
+**Arguments:**
+
+* ``connection_name``
+
+  / *Condition*: required / *Type*: str /
+
+  Name of connection.
+
+* ``src``
+
+  / *Condition*: required / *Type*: str /
+
+  Source folder path.
+
+* ``dest``
+
+  / *Condition*: required / *Type*: str /
+
+  Destination folder path.
+
+* ``type``
+
+  / *Condition*: required / *Type*: str /
+
+  Transfer folder type.
+
+      'get' - Copy a remote file from the SFTP server to the local host.
+
+      'put' - Copy a local file to the SFTP server.
+
+**Returns:**
+
+(*no returns*)
+      """
+      if conn_name not in self.connection_manage_dict.keys():
+         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+      connection_obj = self.connection_manage_dict[conn_name]
+      try:
+         connection_obj.transfer_folder(src, dest, type)
+      except AttributeError as attrErr:
+         raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
+      except Exception as ex:
+         raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+
 
    @keyword
    def execute_script(self, conn_name, script_path):
