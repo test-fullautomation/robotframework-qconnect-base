@@ -188,6 +188,58 @@ QConnectBase Library support following keywords for testing connection in RobotF
    - ${result}[1] will be **"1st"** which is the first captured string.
    - ${result}[2] will be **"command"** which is the second captured string.
 
+**transfer file/transfer folder (SSH connection only)**
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  **Transfers a single file from the local system to the remote system over an active SSH connection.**
+
+  **Syntax**:
+
+   **transfer file**
+   ``[conn_name]   [src]   [dest]   [type]``
+   *(All parameters are required to be in order)*
+
+  **Arguments**:
+
+   **conn_name**: Name of the connection.
+
+   **src**: Source file path.
+
+   **dest**: Destination file path.
+
+   **transfer_type**: Type of transfer.
+
+     'get' - Copy a remote file/folder from the SFTP server to the local host
+
+     'put' - Copy a local file/folder to the SFTP server
+
+  **E.g.**
+
+
+   Copy a local file to the SFTP server
+
+    ::
+
+      transfer file    conn_name=test_ssh    src=${src_put}    dest=${dest_put}    transfer_type=put
+
+   Copy a remote file from the SFTP server to the local host
+
+    ::
+
+      transfer file    conn_name=test_ssh    src=${src_get}    dest=${dest_get}    transfer_type=get
+
+   Copy a local folder to the SFTP server
+
+    ::
+
+      transfer folder    conn_name=test_ssh    src=${src_get}    dest=${dest_get}    transfer_type=put
+
+   Copy a remote folder from the SFTP server to the local host
+
+    ::
+
+      transfer folder    conn_name=test_ssh    src=${src_get}    dest=${dest_get}    transfer_type=get
+
 Example
 -------
 
@@ -225,6 +277,18 @@ Example
        ...                                 search_pattern=.*
        ...                                 send_cmd=ls
        log to console     ${res}
+
+       # Copy a local file to the SFTP server
+       transfer file             conn_name=test_ssh
+       ...                       src=${src_put}
+       ...                       dest=${dest_put}
+       ...                       transfer_type=put
+
+       # Copy a remote folder from the SFTP server to the local host
+       transfer folder             conn_name=test_ssh
+       ...                         src=${src_get}
+       ...                         dest=${dest_get}
+       ...                         transfer_type=get
 
        # Disconnect
        disconnect  test_ssh
