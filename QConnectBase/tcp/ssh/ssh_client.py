@@ -322,7 +322,7 @@ Performs the actual file transfer between the local file system and the SFTP ser
          }
          method_dict[transfer_type](src, dest)
       except Exception as ex:
-         raise Exception(f"Exception occurs while transferring {src}. Details: %s" % str(ex))
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: %s" % str(ex))
 
    def transfer_folder(self, src, dest, transfer_type):
       """
@@ -428,7 +428,7 @@ It ensures that files are copied correctly and directories are created as needed
                   # Create destination directory on the remote server
                   sftp.mkdir(dest_folder_path)
                except Exception as ex:
-                  raise Exception(f"Failed to create destination folder '{dest_folder_path}': {ex}")
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}': '{ex}'")
             for item in os.listdir(src):
                src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
                if os.path.isdir(src_item_path):
@@ -457,7 +457,7 @@ It ensures that files are copied correctly and directories are created as needed
                   # Create destination directory on the local
                   os.makedirs(dest_folder_path, exist_ok=True)
                except Exception as ex:
-                  raise Exception(f"Failed to create destination folder '{dest_folder_path}': {ex}")
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}': '{ex}'")
             for item in sftp.listdir(src):
                src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
                if sftp.stat(src_item_path).st_mode & stat_ifmt == stat_ifdir:
