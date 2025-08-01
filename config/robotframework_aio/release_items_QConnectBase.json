@@ -57,6 +57,14 @@
 * For using RMQSignal, required to run the
   file QConnectBase/tools/setup rabbitmq.bat to install the entire infrastructure required for these Auxiliary Utilities.
 "
-                             ]
+                             ],
+                      "0.14.2.;0.15.0." : [
+"
+**Folder Transfer Support (For SSH connection only)**
+
+* Introduced the `transfer_folder` feature to enable seamless transfer of entire directories between local and remote.
+* Handles nested folder structures and transfers all files and subdirectories recursively.
+"
+                                          ]
                  }
 }
