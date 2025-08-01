@@ -601,9 +601,9 @@ Transfer folder from local to remote and vice versa.
       try:
          connection_obj.transfer_folder(src, dest, type)
       except AttributeError as attrErr:
-         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.")
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring folder.")
       except Exception as ex:
-         raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'")
+         raise Exception(f"Unable to transfer folder to '{conn_name}' connection. Exception: '{ex}'")
 
 
    @keyword
