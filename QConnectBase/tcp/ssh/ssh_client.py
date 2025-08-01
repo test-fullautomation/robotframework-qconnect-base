@@ -82,6 +82,9 @@ Constructor for SSHClient class.
       """
       # paramiko.SSHClient.__init__(self)
       # CVirtualSocket.__init__(self, address, port)
+      self._llrecv_thrd_obj = None
+      self.chan = None
+
       self.config = SSHConfig(**config)
       config_tcp = {
          'address': self.config.address,
@@ -90,7 +93,6 @@ Constructor for SSHClient class.
       }
 
       self.client = None
-      self.chan = None
       self._username = self.config.username
       self._password = self.config.password
       self._key_filename = self.config.key_filename
@@ -100,7 +102,6 @@ Constructor for SSHClient class.
       self.SSHq = queue.Queue()
 
       # configure and initialize the low-level receiver thread
-      self._llrecv_thrd_obj = None
       self._llrecv_thrd_term = threading.Event()
       super(SSHClient, self).__init__(_mode, config_tcp)
       self._init_thrd_llrecv(TCPBase._socket_instance)
