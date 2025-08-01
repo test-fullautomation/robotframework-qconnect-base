@@ -511,35 +511,35 @@ Send command to a connection.
    def transfer_file(self, conn_name, src, dest, type):
       """
 Transfer file from local to remote and vice versa.
-      
-**Arguments:**   
 
-* ``connection_name``    
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of connection.
 
-* ``src``    
+* ``src``
 
   / *Condition*: required / *Type*: str /
-  
+
   Source file path.
 
-* ``dest``    
+* ``dest``
 
   / *Condition*: required / *Type*: str /
-  
+
   Destination file path.
 
-* ``type``    
+* ``type``
 
   / *Condition*: required / *Type*: str /
-  
-  Transfer file type. 
+
+  Transfer file type.
 
       'get' - Copy a remote file from the SFTP server to the local host.
-      
+
       'put' - Copy a local file to the SFTP server.
 
 **Returns:**
@@ -547,16 +547,65 @@ Transfer file from local to remote and vice versa.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
+         raise AssertionError(f"The '{conn_name}' connection  hasn't been established. Please connect first.")
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_file(src, dest, type)
       except AttributeError as attrErr:
-         raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.")
       except Exception as ex:
-         raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
-         
-   
+         raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'")
+
+   @keyword
+   def transfer_folder(self, conn_name, src, dest, type):
+      """
+Transfer folder from local to remote and vice versa.
+
+**Arguments:**
+
+* ``connection_name``
+
+  / *Condition*: required / *Type*: str /
+
+  Name of connection.
+
+* ``src``
+
+  / *Condition*: required / *Type*: str /
+
+  Source folder path.
+
+* ``dest``
+
+  / *Condition*: required / *Type*: str /
+
+  Destination folder path.
+
+* ``type``
+
+  / *Condition*: required / *Type*: str /
+
+  Transfer folder type.
+
+      'get' - Copy a remote folder from the SFTP server to the local host.
+
+      'put' - Copy a local folder to the SFTP server.
+
+**Returns:**
+
+(*no returns*)
+      """
+      if conn_name not in self.connection_manage_dict.keys():
+         raise AssertionError(f"The '{conn_name}' connection  hasn't been established. Please connect first.")
+      connection_obj = self.connection_manage_dict[conn_name]
+      try:
+         connection_obj.transfer_folder(src, dest, type)
+      except AttributeError as attrErr:
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.")
+      except Exception as ex:
+         raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'")
+
+
    @keyword
    def execute_script(self, conn_name, script_path):
       """
