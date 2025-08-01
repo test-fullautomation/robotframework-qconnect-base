@@ -32,12 +32,16 @@ from robot.libraries.BuiltIn import BuiltIn
 from os.path import dirname
 from QConnectBase.utils import DictToClass
 from robot.api.deco import keyword
+from robot.utils import timestr_to_secs
 import os
 import importlib
 import pkgutil
 import QConnectBase.constants as constants
 import site
 import inspect
+import importlib.util
+import pkgutil
+import sys
 
 
 class InputParam(DictToClass):
@@ -98,6 +102,8 @@ Class to manage all connections.
    ROBOT_AUTO_KEYWORDS = False
    LIBRARY_EXTENSION_PREFIX = 'robotframework_qconnect'
    LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
+   DEFAULT_VERIFY_TIMEOUT = 5
+   DEFAULT_EMERGENCY_TIMEOUT = 60 * 30
 
    id = 0
 
@@ -118,18 +124,31 @@ Constructor for ConnectionManager class.
       all_libs = [main_lib_path]
       all_libs.extend(extension_lib_paths)
       all_libs = list(set(all_libs))
+      for path in all_libs:
+         if path not in sys.path:
+            sys.path.append(path)
       for module_loader, name, is_pkg in pkgutil.walk_packages(all_libs):
          # noinspection PyBroadException
          try:
             if not is_pkg and not name.startswith("setup"):
                importlib.import_module(name)
             else:
-               _module = module_loader.find_module(name).load_module(name)
+               # _module = module_loader.find_module(name).load_module(name)
+               spec = importlib.util.find_spec(name)
+               if spec and spec.loader:
+                  module = importlib.util.module_from_spec(spec)
+                  spec.loader.exec_module(module)
+               else:
+                  print(f"⚠️ Could not load module: {name}")
          except Exception as _ex:
             pass
 
       supported_connection_classes_list = Utils.get_all_descendant_classes(ConnectionBase)
       self.supported_connection_classes_dict = {cls._CONNECTION_TYPE: cls for cls in supported_connection_classes_list}
+
+      self.set_default_emergency_timeout(ConnectionManager.DEFAULT_EMERGENCY_TIMEOUT)
+      self.set_default_verify_timeout(ConnectionManager.DEFAULT_VERIFY_TIMEOUT)
+      
 
    def __del__(self):
       """
@@ -242,6 +261,8 @@ Keyword for disconnecting a connection by name.
       if connection_name in self.connection_manage_dict.keys():
          self.connection_manage_dict[connection_name].quit()
          del self.connection_manage_dict[connection_name]
+      else:
+         raise Exception(f"Invalid operation: Attempted to disconnect '{connection_name}', but no such connection exists.")
 
 #    @keyword
 #    def connect(self, *args, **kwargs):
@@ -333,7 +354,7 @@ Making a connection.
 
 * ``conn_conf``
 
-  / *Condition*: optional / *Type*: json / *Default*: {} /
+  / *Condition*: required / *Type*: dict /
 
   Configuration for connection.
 
@@ -341,19 +362,24 @@ Making a connection.
 
 (*no returns*)
       """
-      if 'conn_type' not in conn_conf:
-         if conn_type == '':
-            conn_type = "TCPIPClient"
+      if not conn_conf:
+         raise Exception("The configurations 'conn_conf' for connection have to be provided")
 
-         if conn_type not in self.supported_connection_classes_dict.keys():
-            raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
-                                 (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
-      else:
+      if 'conn_type' in conn_conf:
          if conn_conf['conn_type'] != conn_type and conn_type != '':
             raise Exception(constants.String.CONNECTION_TYPE_CONFUSED % (conn_type, conn_conf['conn_type']))
          else:
             conn_type = conn_conf['conn_type']
             conn_conf.pop('conn_type', None)
+
+      if conn_type == '':
+         conn_type = "TCPIPClient"
+
+      conn_conf['connection_name'] = conn_name
+
+      if conn_type not in self.supported_connection_classes_dict.keys():
+         raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
+                              (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
 
       if conn_name in self.connection_manage_dict.keys():
          raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
@@ -474,7 +500,7 @@ Send command to a connection.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.send_obj(command, **kwargs)
@@ -521,7 +547,7 @@ Transfer file from local to remote and vice versa.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_file(src, dest, type)
@@ -555,7 +581,7 @@ Executes a script file by sending commands to a device through the provided conn
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.execute_script(script_path)
@@ -642,7 +668,63 @@ Executes a script file by sending commands to a device through the provided conn
 #          raise Exception("Input parameter are invalid.")
 
    @keyword
-   def verify(self, conn_name, search_pattern, timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
+   def set_default_verify_timeout(self, time_out):
+      """
+Set the default verify timeout value for the connection.
+
+Supports flexible input formats such as:
+- Duration with units (e.g. '1h 10s', '2m30s', '500ms')
+- HH:MM:SS format (e.g. '01:00:10' for 1 hour, 0 minutes, 10 seconds)
+- Plain numeric values (e.g. '42') interpreted as seconds
+
+**Arguments:**
+
+* `time_str`
+
+  / *Condition*: required / *Type*: str or float or int /
+
+  A string representing the duration. Units supported include:
+    - `h`  for hours
+    - `m`  for minutes (or `ms` for milliseconds)
+    - `s`  for seconds
+    - `ms` for milliseconds
+  If no unit is specified, the value is interpreted as seconds.
+      """
+      time_second = timestr_to_secs(time_out)
+      if time_second > self.default_emergency_timeout:
+         raise Exception(f"Default verify timeout must not exceed the emergency timeout of {self.default_emergency_timeout} seconds!")
+      self.default_verify_timeout = time_out
+   
+   @keyword
+   def set_default_emergency_timeout(self, time_out):
+      """
+Set the default emergency timeout value for the connection.
+
+Supports flexible input formats such as:
+- Duration with units (e.g. '1h 10s', '2m30s', '500ms')
+- HH:MM:SS format (e.g. '01:00:10' for 1 hour, 0 minutes, 10 seconds)
+- Plain numeric values (e.g. '42') interpreted as seconds
+
+**Arguments:**
+
+* `time_out`
+
+  / *Condition*: required / *Type*: str or float or int /
+
+  A string representing the duration. Units supported include:
+    - `h`  for hours
+    - `m`  for minutes (or `ms` for milliseconds)
+    - `s`  for seconds
+    - `ms` for milliseconds
+  If no unit is specified, the value is interpreted as seconds.
+      """
+      time_second = timestr_to_secs(time_out)
+      if time_second > (60 * 60) or time_second < 60:
+         raise Exception(f"Emergency timeout must be >= 1 minute and <= 1 hour!")
+      self.default_emergency_timeout = time_second
+
+   @keyword
+   def verify(self, conn_name, search_pattern='.*', timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
       """
 Verify a pattern from connection response after sending a command.
 
@@ -656,14 +738,14 @@ Verify a pattern from connection response after sending a command.
 
 * ``search_pattern``
 
-  / *Condition*: required / *Type*: str /
+  / *Condition*: optional / *Type*: str / *Default*: .* /
 
   Regular expression all received trace messages are compare to.
   Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
 
 * ``timeout``
 
-  / *Condition*: optional / *Type*: float / *Default*: 0 /
+  / *Condition*: optional / *Type*: float / *Default*: 5 /
 
   Timeout parameter specified as a floating point number in the unit 'seconds'.
 
@@ -718,23 +800,38 @@ Verify a pattern from connection response after sending a command.
   Matched string.
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
+
+      # if search_pattern is None:
+      #    raise Exception("The 'search_pattern' have to be a regex string instead of None.")
+
+      if send_cmd is None:
+         send_cmd = ''
 
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
+      
+      # if 'verify_timeout' not in kwargs:
+      kwargs['default_verify_timeout'] = self.default_verify_timeout
+      
+      kwargs['emergency_timeout'] = self.default_emergency_timeout
 
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
          res = connection_obj.wait_4_trace(search_pattern, int(timeout), fetch_block, eob_pattern, filter_pattern, **kwargs)
          if res is None:
             # raise AssertionError("Unable to match the pattern after '%s' seconds." % timeout)
-            BuiltIn().log("Match try %s/%s timed out" % (i, match_try), constants.LOG_LEVEL_WARNING)
+            # 14.02.2025 qth2hi changed
+            # original # BuiltIn().log("Match try %s/%s timed out" % (i, match_try), constants.LOG_LEVEL_WARNING)
+            BuiltIn().log(f"[{conn_name}] Match try {i}/{match_try} timed out ('{search_pattern}')", constants.LOG_LEVEL_WARNING)
          else:
             break
 
       if not res:
-         raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
+         # 14.02.2025 qth2hi changed
+         # raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
+         raise AssertionError(f"Unable to match the pattern '{search_pattern}' after '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
       return res
 
@@ -774,7 +871,15 @@ if __name__ == "__main__":
       }
       conn_manager.connect("test_ssh", "SSHClient", None, SSH_CONF_SAMPLE)
       # conn_manager.send_command("test_ssh", "cd ..")
-      test = conn_manager.verify_unnamed_args("test_ssh", "(?<=\s).*([0-9]..).*(command).$", 5, False, ".*", ".*", "echo This is the 1st test command.")
+      test = conn_manager.verify_unnamed_args(
+         "test_ssh",
+         r"(?<=\s).*([0-9]..).*(command).$",
+         5,
+         False,
+         ".*",
+         ".*",
+         "echo This is the 1st test command."
+      )
       print(test[0])
       print(test[1])
       print(test[2])

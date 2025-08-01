@@ -367,15 +367,13 @@ Quit and stop receiver thread.
 
 (*no returns*)
       """
-      # Execute parents Quit() first
-      super(SSHClient, self).quit()
-
       # stop the low-level receiver thread
       if self._llrecv_thrd_obj and self._llrecv_thrd_obj.is_alive():
          self._llrecv_thrd_term.set()
 
       self._llrecv_thrd_obj = None
       self.close()
+      super(SSHClient, self).quit()
 
 
 

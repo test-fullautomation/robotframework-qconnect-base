@@ -92,6 +92,8 @@ Constructor for TCPBase class.
       self._port = port
       self._mode = mode
       self.conn = None
+      if 'connection_name' in config:
+         self.connection_name = config['connection_name']
 
       # default timeout for send/receive is 10 seconds
       self._conn_timeout = 10
@@ -383,7 +385,10 @@ Quit connection.
       if self._recv_thrd_obj and self._recv_thrd_obj.is_alive():
          self._recv_thrd_term.set()
          while self._recv_thrd_obj.is_alive():
-            time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
+            try:
+               time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
+            except Exception as ex:
+               break
          self._recv_thrd_obj = None
       super(TCPBase, self).quit()
 

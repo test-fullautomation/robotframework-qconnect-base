@@ -69,18 +69,21 @@ Class for converting dictionary to class object.
    encoding = 'utf-8'
 
    def __init__(self, **dictionary):
-      for k, v in dictionary.items():
-         if isinstance(v, dict) and k not in self.__class__.exclude_list:
-            self.__dict__[k] = DictToClass(**v)
-         else:
-            type_obj = type(None)
-            if k in self.__class__.__dict__:
-               type_obj = type(self.__class__.__dict__[k])
-
-            if type_obj is not type(None):
-               self.__dict__[k] = type_obj(v)
+      try:
+         for k, v in dictionary.items():
+            if isinstance(v, dict) and k not in self.__class__.exclude_list:
+               self.__dict__[k] = DictToClass(**v)
             else:
-               self.__dict__[k] = v
+               type_obj = type(None)
+               if k in self.__class__.__dict__:
+                  type_obj = type(self.__class__.__dict__[k])
+
+               if type_obj is not type(None):
+                  self.__dict__[k] = type_obj(v)
+               else:
+                  self.__dict__[k] = v
+      except Exception as ex:
+         raise Exception(f"The configuration 'conn_conf' is invalid. Details: {ex}")
       self.validate()
 
    def validate(self):

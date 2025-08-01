@@ -316,7 +316,12 @@ Initialize a thread for receiving data from connection.
       thread_name = self._CONNECTION_TYPE
       if mode is not None:
          thread_name = mode
-      conn_id_name = str(thread_name) + str(thread_id)
+
+      if hasattr(self, 'connection_name'):
+         thread_name = self.connection_name
+
+
+      conn_id_name = str(thread_name) + '-' + str(thread_id)
       self._logger = QLogger().get_logger(conn_id_name)
       self._logger_handler = QLogger().set_handler(self.config)
 
@@ -442,8 +447,7 @@ Wrapper method to send message to a tcp connection.
             self._send(msg, cr)
          except Exception as ex:
             self._is_connected = False
-            raise Exception(f"Connection has been broken. Details: {ex}")
-            
+            raise BrokenConnError(f"Connection has been broken. Details: {ex}")
 
    def read_obj(self):
       """
@@ -470,7 +474,7 @@ Wrapper method to get the response from connection.
             self._is_connected = False
             raise reason
          except Exception as reason:
-            BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_WARNING)
+            BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_DEBUG)
       return msg
    # endregion
 
@@ -530,12 +534,16 @@ Suspend the control flow until a Trace message is received which matches to a sp
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
+      if search_obj is None:
+         raise Exception("The 'search_pattern' have to be a regex string instead of None.")
       search_regex = re.compile(search_obj, re.M | re.S | re.U)
       regex_obj_filter = re.compile(filter_pattern)
       trq_handle, trace_queue = self.create_and_activate_trace_queue(search_regex, use_fetch_block, end_of_block_pattern, regex_obj_filter)
 
       try:
          self.send_obj(**fct_args)
+      except BrokenConnError:
+         raise Exception("Connection has been broken while trying to match the pattern.")
       except Exception as err_msg:  # pylint: disable=W0703
          BuiltIn().log('%s: An Exception occurred executing function object: %s' % (_mident, repr(self.send_obj)), 'ERROR')
          BuiltIn().log('Function Arguments: %s' % repr(fct_args), 'ERROR')
@@ -854,8 +862,8 @@ Post-checking message when receiving it from connection.
    def _rm_q_dollar(input_):
       # noinspection PyBroadException
       try:
-         output = input_.replace("\$(", "$(")
-         output = output.replace("\${", "${")
+         output = input_.replace(r"\$(", "$(")
+         output = output.replace(r"\${", "${")
       except:
          # in case of any issue return input as it is
          output = input_
@@ -866,8 +874,8 @@ Post-checking message when receiving it from connection.
    def _q_dollar(input_):
       # noinspection PyBroadException
       try:
-         output = input_.replace("$(", "\$(")
-         output = output.replace("${", "\${")
+         output = input_.replace("$(", r"\$(")
+         output = output.replace("${", r"\${")
       except:
          # in case of any issue return input as it is
          output = input_
