@@ -275,7 +275,8 @@ Transfer file from local to remote and vice versa.
          self._transfer_file(sftp, src, dest, transfer_type)
          sftp.close()
       except Exception as ex:
-         raise Exception("Exception occurs while transferring file. Details: %s" % str(ex))
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
+
    def _transfer_file(self, sftp, src, dest, transfer_type):
       """
 Performs the actual file transfer between the local file system and the SFTP server.
@@ -321,7 +322,7 @@ Performs the actual file transfer between the local file system and the SFTP ser
          }
          method_dict[transfer_type](src, dest)
       except Exception as ex:
-         raise Exception(f"Exception occurs while transferring '{src}'. Details: %s" % str(ex))
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
 
    def transfer_folder(self, src, dest, transfer_type):
       """
@@ -359,7 +360,7 @@ Transfer folder from local to remote and vice versa.
          sftp = self.client.open_sftp()
          self._transfer(sftp, src, dest, transfer_type)
       except Exception as ex:
-         raise Exception("Exception occurs while transferring folder. Details: %s" % str(ex))
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
       finally:
          sftp.close()
 
@@ -406,7 +407,8 @@ It ensures that files are copied correctly and directories are created as needed
 (*no returns*)
       """
       if transfer_type not in ['get', 'put']:
-         raise Exception("Unknown transfer type '%s'." % transfer_type)
+         raise Exception(f"Unknown transfer type '{transfer_type}'.")
+
       stat_ifmt = 0o170000  # File type mask
       stat_ifdir = 0o040000  # Directory type
       folder_name_pattern = r'[^/\\]+(?=[/\\]*$)'
@@ -422,26 +424,26 @@ It ensures that files are copied correctly and directories are created as needed
             try:
                sftp.stat(dest_folder_path)
             except FileNotFoundError:
-               BuiltIn().log(f"Creating destination folder: {dest_folder_path}", constants.LOG_LEVEL_DEBUG)
+               BuiltIn().log(f"Creating destination folder: '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
                try:
                   # Create destination directory on the remote server
                   sftp.mkdir(dest_folder_path)
                except Exception as ex:
-                  raise Exception(f"Failed to create destination folder '{dest_folder_path}': '{ex}'")
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details: '{ex}'")
             for item in os.listdir(src):
                src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
                if os.path.isdir(src_item_path):
-                  BuiltIn().log(f"Transferring folder: {src_item_path} to {dest_folder_path}", constants.LOG_LEVEL_DEBUG)
+                  BuiltIn().log(f"Transferring folder: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
                   self._transfer(sftp, src_item_path, dest_folder_path, transfer_type)
                else:
-                  BuiltIn().log(f"Transferring file: {src_item_path} to {dest_folder_path}", constants.LOG_LEVEL_DEBUG)
+                  BuiltIn().log(f"Transferring file: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
                   dest_item_path = f"{dest_folder_path}{os.sep}{item}".replace('\\', '/')
                   self._transfer_file(sftp, src_item_path, dest_item_path, transfer_type)
          else:
             # Transfer a single file
             item = folder_name
             dest_item_path = f"{dest}{os.sep}{item}".replace('\\', '/')
-            BuiltIn().log(f"Transferring file: {src} to {dest}", constants.LOG_LEVEL_DEBUG)
+            BuiltIn().log(f"Transferring file: '{src}' to '{dest}'", constants.LOG_LEVEL_DEBUG)
             self._transfer_file(sftp, src, dest_item_path, transfer_type)
       elif transfer_type == 'get':
          # Check if it's a directory
@@ -451,25 +453,25 @@ It ensures that files are copied correctly and directories are created as needed
                folder_name = match.group(0)
             dest_folder_path = os.path.normpath(f"{dest}{os.sep}{folder_name}").replace('\\', '/')
             if not os.path.exists(dest_folder_path):
-               BuiltIn().log(f"Creating destination folder: {dest_folder_path}", constants.LOG_LEVEL_DEBUG)
+               BuiltIn().log(f"Creating destination folder: '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
                try:
                   # Create destination directory on the local
                   os.makedirs(dest_folder_path, exist_ok=True)
                except Exception as ex:
-                  raise Exception(f"Failed to create destination folder '{dest_folder_path}': '{ex}'")
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details '{ex}'")
             for item in sftp.listdir(src):
                src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
                if sftp.stat(src_item_path).st_mode & stat_ifmt == stat_ifdir:
-                  BuiltIn().log(f"Transferring folder: {src_item_path} to {dest_folder_path}", constants.LOG_LEVEL_DEBUG)
+                  BuiltIn().log(f"Transferring folder: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
                   self._transfer(sftp, src_item_path, dest_folder_path, transfer_type)
                else:
-                  BuiltIn().log(f"Transferring file: {src_item_path} to {dest_folder_path}", constants.LOG_LEVEL_DEBUG)
+                  BuiltIn().log(f"Transferring file: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
                   dest_item_path = f"{dest_folder_path}{os.sep}{item}".replace('\\', '/')
                   self._transfer_file(sftp, src_item_path, dest_item_path, transfer_type)
          else:
             item = folder_name
             dest_item_path = f"{dest}{os.sep}{item}".replace('\\', '/')
-            BuiltIn().log(f"Transferring file: {src} to {dest}", constants.LOG_LEVEL_DEBUG)
+            BuiltIn().log(f"Transferring file: '{src}' to '{dest}'", constants.LOG_LEVEL_DEBUG)
             self._transfer_file(sftp, src, dest_item_path, transfer_type)
 
    def _send(self, msg, _cr):

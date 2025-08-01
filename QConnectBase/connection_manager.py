@@ -521,14 +521,14 @@ Transfer file from local to remote and vice versa.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError(f"The '{conn_name}' connection  hasn't been established. Please connect first.")
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_file(src, dest, type)
       except AttributeError as attrErr:
-         raise Exception("'%s' connection type has not been supported for transferring file." % connection_obj._CONNECTION_TYPE)
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.")
       except Exception as ex:
-         raise Exception("Unable to transfer file to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+         raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'")
 
    @keyword
    def transfer_folder(self, conn_name, src, dest, type):
@@ -570,14 +570,14 @@ Transfer folder from local to remote and vice versa.
 (*no returns*)
       """
       if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection  hasn't been established. Please connect first." % conn_name)
+         raise AssertionError(f"The '{conn_name}' connection  hasn't been established. Please connect first.")
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_folder(src, dest, type)
       except AttributeError as attrErr:
-         raise Exception("'%s' connection type has not been supported for transferring folder." % connection_obj._CONNECTION_TYPE)
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.")
       except Exception as ex:
-         raise Exception("Unable to transfer folder to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+         raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'")
 
 
    @keyword
