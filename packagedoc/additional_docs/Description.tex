@@ -194,6 +194,33 @@ command}}{send command}}\label{description-send-command}}
 \end{quote}
 \end{quote}
 
+\hypertarget{description-transfer-folder}{%
+\subsection{\texorpdfstring{\textbf{transfer folder}}{transfer folder}}\label{description-transfer-folder}}
+
+\begin{quote}
+\textbf{Use for transfering folder from local to remote and vice versa. (Only available for SSHClient connection type)}
+
+\textbf{Syntax}:
+
+\begin{quote}
+
+\textbf{transfer folder}
+\texttt{conn\_name={[}conn\_name{]}\ \ \ src={[}source{]}\ \ \ dest={[}destination{]}\ \ \ type={[}transfer type{]}}
+\end{quote}
+
+\textbf{Arguments}:
+
+\begin{quote}
+\textbf{conn\_name}: Name of the connection.
+
+\textbf{src}: Your source file's path.
+
+\textbf{dest}: The destination path on the remote side.
+
+\textbf{type}: 'put' to send from local to remote, 'get' to bring it back.
+\end{quote}
+\end{quote}
+
 \hypertarget{description-verify}{%
 \subsection{\texorpdfstring{\textbf{verify}}{verify}}\label{description-verify}}
 
@@ -296,6 +323,17 @@ Test SSH Connection
    
     Log To Console    ${res}[1]
 
+    # Copy a local file to the SFTP server
+    transfer file             conn_name=test_ssh
+    ...                       src=${src_put}
+    ...                       dest=${dest_put}
+    ...                       type=put
+
+    # Copy a remote folder from the SFTP server to the local host
+    transfer folder             conn_name=test_ssh
+    ...                         src=${src_get}
+    ...                         dest=${dest_get}
+    ...                         type=get
 
     # Disconnect
     disconnect  test_ssh
