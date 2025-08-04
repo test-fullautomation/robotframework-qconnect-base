@@ -84,6 +84,7 @@ Constructor for SSHClient class.
       # CVirtualSocket.__init__(self, address, port)
       self._llrecv_thrd_obj = None
       self.chan = None
+      self.client = None
 
       self.config = SSHConfig(**config)
       config_tcp = {
@@ -92,7 +93,6 @@ Constructor for SSHClient class.
          'logfile': self.config.logfile
       }
 
-      self.client = None
       self._username = self.config.username
       self._password = self.config.password
       self._key_filename = self.config.key_filename
