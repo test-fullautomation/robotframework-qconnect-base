@@ -60,9 +60,9 @@
                              ],
                       "0.14.2.;0.15.0." : [
 "
-**Folder Transfer Support (For SSH connection only)**
+**Item Transfer Support (For SSH connection only)**
 
-* Introduced the `transfer_folder` feature to enable seamless transfer of entire directories between local and remote.
+* Introduced the `transfer_item` feature to enable seamless transfer of entire directories between local and remote.
 * Handles nested folder structures and transfers all files and subdirectories recursively.
 "
                                           ]

@@ -510,6 +510,7 @@ Send command to a connection.
    @keyword
    def transfer_file(self, conn_name, src, dest, type):
       """
+DEPRECATED!! Use keyword transfer_item instead.
 Transfer file from local to remote and vice versa.
 
 **Arguments:**
@@ -557,9 +558,9 @@ Transfer file from local to remote and vice versa.
          raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'")
 
    @keyword
-   def transfer_folder(self, conn_name, src, dest, type):
+   def transfer_item(self, conn_name, src, dest, type):
       """
-Transfer folder from local to remote and vice versa.
+Transfer item from local to remote and vice versa.
 
 **Arguments:**
 
@@ -573,23 +574,23 @@ Transfer folder from local to remote and vice versa.
 
   / *Condition*: required / *Type*: str /
 
-  Source folder path.
+  Source item path.
 
 * ``dest``
 
   / *Condition*: required / *Type*: str /
 
-  Destination folder path.
+  Destination item path.
 
 * ``type``
 
   / *Condition*: required / *Type*: str /
 
-  Transfer folder type.
+  Transfer item type.
 
-      'get' - Copy a remote folder from the SFTP server to the local host.
+      'get' - Copy a remote item from the SFTP server to the local host.
 
-      'put' - Copy a local folder to the SFTP server.
+      'put' - Copy a local item to the SFTP server.
 
 **Returns:**
 
@@ -599,11 +600,11 @@ Transfer folder from local to remote and vice versa.
          raise AssertionError(f"The '{conn_name}' connection  hasn't been established. Please connect first.")
       connection_obj = self.connection_manage_dict[conn_name]
       try:
-         connection_obj.transfer_folder(src, dest, type)
+         connection_obj.transfer_item(src, dest, type)
       except AttributeError as attrErr:
-         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring folder.")
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring item.")
       except Exception as ex:
-         raise Exception(f"Unable to transfer folder to '{conn_name}' connection. Exception: '{ex}'")
+         raise Exception(f"Unable to transfer item to '{conn_name}' connection. Exception: '{ex}'")
 
 
    @keyword
