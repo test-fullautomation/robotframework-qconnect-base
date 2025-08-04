@@ -235,6 +235,7 @@ Implementation for creating a SSH connection.
 
    def transfer_file(self, src, dest, transfer_type):
       """
+DEPRECATED!! Use keyword transfer_item instead.
 Transfer file from local to remote and vice versa.
 
 **Arguments:**
@@ -288,29 +289,29 @@ Performs the actual file transfer between the local file system and the SFTP ser
 
   / *Condition*: required / *Type*: paramiko.SFTPClient /
 
-  An active SFTP client instance used to perform file and folder operations on the remote server.
+  An active SFTP client instance used to perform file operations on the remote server.
 
 * ``src``
 
   / *Condition*: required / *Type*: str /
 
-  Source folder path.
+  Source file path.
 
 * ``dest``
 
   / *Condition*: required / *Type*: str /
 
-  Destination folder path.
+  Destination file path.
 
 * ``transfer_type``
 
   / *Condition*: required / *Type*: str /
 
-  Transfer folder type.
+  Transfer file type.
 
-      'get' - Copy a remote folder from the SFTP server to the local host
+      'get' - Copy a remote file from the SFTP server to the local host
 
-      'put' - Copy a local folder to the SFTP server
+      'put' - Copy a local file to the SFTP server
 
 **Returns:**
 
@@ -325,9 +326,9 @@ Performs the actual file transfer between the local file system and the SFTP ser
       except Exception as ex:
          raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
 
-   def transfer_folder(self, src, dest, transfer_type):
+   def transfer_item(self, src, dest, transfer_type):
       """
-Transfer folder from local to remote and vice versa.
+Transfer item from local to remote and vice versa.
 
 **Arguments:**
 
@@ -335,23 +336,23 @@ Transfer folder from local to remote and vice versa.
 
   / *Condition*: required / *Type*: str /
 
-  Source folder path.
+  Source item path.
 
 * ``dest``
 
   / *Condition*: required / *Type*: str /
 
-  Destination folder path.
+  Destination item path.
 
 * ``transfer_type``
 
   / *Condition*: required / *Type*: str /
 
-  Transfer folder type.
+  Transfer item type.
 
-      'get' - Copy a remote folder from the SFTP server to the local host
+      'get' - Copy a remote item from the SFTP server to the local host
 
-      'put' - Copy a local folder to the SFTP server
+      'put' - Copy a local item to the SFTP server
 
 **Returns:**
 
@@ -369,7 +370,7 @@ Transfer folder from local to remote and vice versa.
       """
 Performs the actual file or folder transfer between the local file system and the SFTP server.
 
-This function is a helper for `transfer_folder` and handles the low-level operations
+This function is a helper for `transfer_item` and handles the low-level operations
 for transferring individual files or directories.
 It ensures that files are copied correctly and directories are created as needed.
 
@@ -385,23 +386,23 @@ It ensures that files are copied correctly and directories are created as needed
 
   / *Condition*: required / *Type*: str /
 
-  Source folder path.
+  Source item path.
 
 * ``dest``
 
   / *Condition*: required / *Type*: str /
 
-  Destination folder path.
+  Destination item path.
 
 * ``transfer_type``
 
   / *Condition*: required / *Type*: str /
 
-  Transfer folder type.
+  Transfer type.
 
-      'get' - Copy a remote folder from the SFTP server to the local host
+      'get' - Copy a remote item from the SFTP server to the local host
 
-      'put' - Copy a local folder to the SFTP server
+      'put' - Copy a local item to the SFTP server
 
 **Returns:**
 
