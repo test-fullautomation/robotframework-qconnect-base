@@ -148,7 +148,7 @@ Constructor for ConnectionManager class.
 
       self.set_default_emergency_timeout(ConnectionManager.DEFAULT_EMERGENCY_TIMEOUT)
       self.set_default_verify_timeout(ConnectionManager.DEFAULT_VERIFY_TIMEOUT)
-      
+
 
    def __del__(self):
       """
@@ -328,35 +328,35 @@ Keyword for disconnecting a connection by name.
 #          raise Exception("Input parameter are invalid.")
 
    @keyword
-   def connect(self, conn_name='default_conn', conn_type='', conn_mode='', conn_conf={}):
+   def connect(self, conn_conf, conn_name='default_conn', conn_type='', conn_mode=''):
       """
 Making a connection.
 
 **Arguments:**
 
-* ``conn_name``
+* ``conn_conf``
+
+  / *Condition*: required / *Type*: dictionary /
+
+  Configuration for connection.
+
+* ``conn_name`` (deprecated)
 
   / *Condition*: optional / *Type*: str / *Default*: 'default_conn' /
 
-  Name of connection.
+  Name of connection. It can be specified in ``conn_conf`` dictionary.
 
-* ``conn_type``
+* ``conn_type`` (deprecated)
 
   / *Condition*: optional / *Type*: str / *Default*: 'TCPIPClient' /
 
-  Type of connection.
+  Type of connection. It can be specified in ``conn_conf`` dictionary.
 
-* ``conn_mode``
+* ``conn_mode`` (deprecated)
 
   / *Condition*: optional / *Type*: str / *Default*: '' /
 
-  Connection mode.
-
-* ``conn_conf``
-
-  / *Condition*: required / *Type*: dict /
-
-  Configuration for connection.
+  Connection mode. It can be specified in ``conn_conf`` dictionary.
 
 **Returns:**
 
@@ -380,6 +380,13 @@ Making a connection.
       if conn_type not in self.supported_connection_classes_dict.keys():
          raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
                               (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
+
+      if 'conn_mode' in conn_conf:
+         if conn_conf['conn_mode'] != conn_mode and conn_mode != '':
+            raise Exception(constants.String.CONNECTION_MODE_CONFUSED % (conn_mode, conn_conf['conn_mode']))
+         else:
+            conn_mode = conn_conf['conn_mode']
+            conn_conf.pop('conn_mode', None)
 
       if conn_name in self.connection_manage_dict.keys():
          raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
@@ -744,7 +751,7 @@ Supports flexible input formats such as:
       if time_second > self.default_emergency_timeout:
          raise Exception(f"Default verify timeout must not exceed the emergency timeout of {self.default_emergency_timeout} seconds!")
       self.default_verify_timeout = time_out
-   
+
    @keyword
    def set_default_emergency_timeout(self, time_out):
       """
@@ -861,10 +868,10 @@ Verify a pattern from connection response after sending a command.
       connection_obj = self.connection_manage_dict[conn_name]
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
-      
+
       # if 'verify_timeout' not in kwargs:
       kwargs['default_verify_timeout'] = self.default_verify_timeout
-      
+
       kwargs['emergency_timeout'] = self.default_emergency_timeout
 
       for i in range(1, match_try+1):

@@ -34,45 +34,41 @@ in RobotFramework.
 
 \begin{quote}
 \textbf{connect}
-\texttt{conn\_name={[}conn\_name{]}\ \ \ conn\_type={[}conn\_type{]}\ \ \ conn\_mode={[}conn\_mode{]}\ \ \ conn\_conf={[}conn\_conf{]}}
+\texttt{conn\_name={[}conn\_name{]}\ \ \ conn\_conf={[}conn\_conf{]}}
 \end{quote}
+
+\begin{boxhint} {Notice}
+Only \rcode{conn_name} and \rcode{conn_conf} are now required.\\
+
+Legacy syntax with 4 arguments is still supported for backward compatibility
+\begin{robotcode}
+connect   conn_name=[conn_name]   conn_type=[conn_type]   conn_conf=[conn_conf]   conn_mode=[conn_mode]
+\end{robotcode}
+\end{boxhint}
 
 \textbf{Arguments}:
 
 \begin{quote}
-\textbf{conn\_name}: Name of the connection.
+\begin{itemize}
+  \item \textbf{conn\_name}: Name of the connection.
 
-\textbf{conn\_type}: Type of the connection. QConnectBaseLibrary has
-supported below connection types:
-
+  \item \textbf{conn\_conf}: A dictionary containing configurations for the connection.\\
+         It must include \textbf{conn\_type}, and optionally \textbf{conn\_mode} and other connection-specific fields (depending on type).\\
+         This replaces the need to pass \textbf{conn\_type} and \textbf{conn\_mode} as separate arguments.\\
+         Each \textbf{conn\_type} requires a specific structure in \textbf{conn\_conf}.\\
+         Below are examples for each supported type:
+\end{itemize}
 \begin{quote}
 \begin{itemize}
 \tightlist
 \item
   \textbf{TCPIPClient}: Create a Raw TCPIP connection to TCP Server.
-\item
-  \textbf{SSHClient}: Create a client connection to a SSH server.
-\item
-  \textbf{SerialClient}: Create a client connection via Serial Port.
-\end{itemize}
-\end{quote}
-
-\textbf{conn\_mode}: (unused) Mode of a connection type.
-
-\textbf{conn\_conf}: Configurations for making a connection. Depend on
-\textbf{conn\_type} (Type of Connection), there is a suitable
-configuration in JSON format as below.
-
-\begin{quote}
-\begin{itemize}
-\tightlist
-\item
-  \textbf{TCPIPClient}
 \end{itemize}
 
 
 \begin{robotcode}
 {
+    "conn_type": "TCPIPClient",
     "address": [server host], # Optional. Default value is "localhost".
     "port": [server port]     # Optional. Default value is 1234.
     "logfile": [Log file path. Possible values: 'nonlog', 'console', [user define path] ]
@@ -83,12 +79,13 @@ configuration in JSON format as below.
 \begin{itemize}
 \tightlist
 \item
-  \textbf{SSHClient}
+  \textbf{SSHClient}: Create a client connection to a SSH server.
 \end{itemize}
 
 
 \begin{robotcode}
 {
+    "conn_type": "SSHClient",
     "address" : [server host],  # Optional. Default value is "localhost".
     "port" : [server host],     # Optional. Default value is 22.
     "username" : [username],    # Optional. Default value is "root".
@@ -103,12 +100,13 @@ configuration in JSON format as below.
 \begin{itemize}
 \tightlist
 \item
-  \textbf{SerialClient}
+  \textbf{SerialClient}: Create a client connection via Serial Port.
 \end{itemize}
 
 
 \begin{robotcode}
 {
+    "conn_type": "SerialClient",
     "port" : [comport or null],
     "baudrate" : [Baud rate such as 9600 or 115200 etc.],
     "bytesize" : [Number of data bits. Possible values: 5, 6, 7, 8],
@@ -119,8 +117,6 @@ configuration in JSON format as below.
     "logfile": [Log file path. Possible values: 'nonlog', 'console', [user define path] ]
  }
 \end{robotcode}
-
-
 \end{quote}
 \end{quote}
 \end{quote}
@@ -320,7 +316,7 @@ Test SSH Connection
     ...                       search_pattern=\~\~START\~\~\r\n([\\s\\S]*?)\~\~END(\\d+)\~\~
     ...                       fetch_block=True
     ...                       eob_pattern=^\~\~END(\\d*)\~\~
-   
+
     Log To Console    ${res}[1]
 
     # Copy a local file to the SFTP server
