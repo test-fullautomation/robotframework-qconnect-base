@@ -14,13 +14,21 @@
 
 *** Settings ***
 
-Documentation    Common settings for TCP/IP self tests of component 'QConnectBase'
-
 Resource    ../imports/resources.resource
 
-Suite Setup       qconnectbase_suite_setup
-Suite Teardown    qconnectbase_suite_teardown
+*** Test Cases ***
 
-Test Setup       qconnectbase_test_setup
-Test Teardown    qconnectbase_test_teardown
+QCB-TCPIP-GC-030
+    [Documentation]    Verify answer from testserver (verify)
+
+    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${test_category}    GOODCASE
+
+    conn_manager.connect    conn_name=QCB-TCPIP-GC-030-Connection
+    ...                     conn_type=TCPIPClient
+    ...                     conn_conf=${TCPIPClientParam}
+
+    conn_manager.verify    conn_name=QCB-TCPIP-GC-030-Connection    search_pattern=GC-030 ACK    send_cmd=GC-030
+
+    conn_manager.disconnect    QCB-TCPIP-GC-030-Connection
 
