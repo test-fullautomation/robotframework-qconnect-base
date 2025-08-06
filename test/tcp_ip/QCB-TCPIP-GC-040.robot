@@ -18,17 +18,25 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-GC-001
-    [Documentation]    Connect to testserver and disconnect from testserver
+QCB-TCPIP-GC-040
+    [Documentation]    Subsequent connections, commands (verify) and disconnections to same server
+    ...                (always the same connection name)
 
     set_test_variable    ${connection_type}    tcp_ip
     set_test_variable    ${test_category}    GOODCASE
 
-    conn_manager.connect    conn_name=QCB-TCPIP-GC-001-Connection
-    ...                     conn_type=TCPIPClient
-    ...                     conn_conf=${TCPIPClientParam}
+    FOR    ${connection_count}    IN RANGE    1    6
+        log    TCPIP-GC-040 connection count ${connection_count}    console=yes
 
-    Sleep    1s
+        conn_manager.connect    conn_name=QCB-TCPIP-GC-040-Connection
+        ...                     conn_type=TCPIPClient
+        ...                     conn_conf=${TCPIPClientParam}
 
-    conn_manager.disconnect    QCB-TCPIP-GC-001-Connection
+        conn_manager.verify    conn_name=QCB-TCPIP-GC-040-Connection    search_pattern=TCPIP-GC-040 ACK    send_cmd=TCPIP-GC-040
+
+        conn_manager.disconnect    QCB-TCPIP-GC-040-Connection
+
+        Sleep    1s
+
+    END
 
