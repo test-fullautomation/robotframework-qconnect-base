@@ -78,6 +78,14 @@
 * Updated internal logic to raise clearer exceptions when parameters like `conn_name` or `search_pattern` are invalid.
 * Applied various bug fixes and improved logging, especially for disconnected or invalid connections.
 "
-                             ]
+                             ],
+                      "0.14.2.;0.15.0." : [
+"
+**Item Transfer Support (For SSH connection only)**
+
+* Introduced the `transfer_item` feature to enable seamless transfer of entire directories between local and remote.
+* Handles nested folder structures and transfers all files and subdirectories recursively.
+"
+                                          ]
                  }
 }

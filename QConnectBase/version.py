@@ -13,4 +13,5 @@
 #  limitations under the License.
 
 VERSION      = '1.1.6'
-VERSION_DATE = '16.06.2025'
+VERSION_DATE = '30.07.2025'
+

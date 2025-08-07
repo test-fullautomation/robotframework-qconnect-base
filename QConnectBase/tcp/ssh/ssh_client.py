@@ -36,7 +36,8 @@ import time
 import queue
 import paramiko
 from QConnectBase.tcp.tcp_base import BrokenConnError, TCPBaseClient, TCPBase, TCPConfig
-
+import os
+import re
 
 class AuthenticationType:
    KEYFILE = 'keyfile'
@@ -82,6 +83,10 @@ Constructor for SSHClient class.
       """
       # paramiko.SSHClient.__init__(self)
       # CVirtualSocket.__init__(self, address, port)
+      self._llrecv_thrd_obj = None
+      self.chan = None
+      self.client = None
+
       self.config = SSHConfig(**config)
       config_tcp = {
          'address': self.config.address,
@@ -89,8 +94,6 @@ Constructor for SSHClient class.
          'logfile': self.config.logfile
       }
 
-      self.client = None
-      self.chan = None
       self._username = self.config.username
       self._password = self.config.password
       self._key_filename = self.config.key_filename
@@ -100,7 +103,6 @@ Constructor for SSHClient class.
       self.SSHq = queue.Queue()
 
       # configure and initialize the low-level receiver thread
-      self._llrecv_thrd_obj = None
       self._llrecv_thrd_term = threading.Event()
       super(SSHClient, self).__init__(_mode, config_tcp)
       self._init_thrd_llrecv(TCPBase._socket_instance)
@@ -231,8 +233,9 @@ Implementation for creating a SSH connection.
       time.sleep(0.05)
 
 
-   def transfer_file(self, src, dest, type):
+   def transfer_file(self, src, dest, transfer_type):
       """
+DEPRECATED!! Use keyword transfer_item instead.
 Transfer file from local to remote and vice versa.
 
 **Arguments:**
@@ -255,7 +258,7 @@ Transfer file from local to remote and vice versa.
 
   Destination file path.
 
-* ``type``
+* ``transfer_type``
 
   / *Condition*: required / *Type*: str /
 
@@ -271,15 +274,207 @@ Transfer file from local to remote and vice versa.
       """
       try:
          sftp = self.client.open_sftp()
+         self._transfer_file(sftp, src, dest, transfer_type)
+         sftp.close()
+      except Exception as ex:
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
+
+   def _transfer_file(self, sftp, src, dest, transfer_type):
+      """
+Performs the actual file transfer between the local file system and the SFTP server.
+
+**Arguments:**
+
+* ``sftp``
+
+  / *Condition*: required / *Type*: paramiko.SFTPClient /
+
+  An active SFTP client instance used to perform file operations on the remote server.
+
+* ``src``
+
+  / *Condition*: required / *Type*: str /
+
+  Source file path.
+
+* ``dest``
+
+  / *Condition*: required / *Type*: str /
+
+  Destination file path.
+
+* ``transfer_type``
+
+  / *Condition*: required / *Type*: str /
+
+  Transfer file type.
+
+      'get' - Copy a remote file from the SFTP server to the local host
+
+      'put' - Copy a local file to the SFTP server
+
+**Returns:**
+
+(*no returns*)
+      """
+      try:
          method_dict = {
             'put': sftp.put,
             'get': sftp.get
          }
-         method_dict[type](src, dest)
-         sftp.close()
+         method_dict[transfer_type](src, dest)
       except Exception as ex:
-         raise Exception("Exception occurs while transferring file. Details: %s" % str(ex))
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
 
+   def transfer_item(self, src, dest, transfer_type):
+      """
+Transfer item from local to remote and vice versa.
+
+**Arguments:**
+
+* ``src``
+
+  / *Condition*: required / *Type*: str /
+
+  Source item path.
+
+* ``dest``
+
+  / *Condition*: required / *Type*: str /
+
+  Destination item path.
+
+* ``transfer_type``
+
+  / *Condition*: required / *Type*: str /
+
+  Transfer item type.
+
+      'get' - Copy a remote item from the SFTP server to the local host
+
+      'put' - Copy a local item to the SFTP server
+
+**Returns:**
+
+(*no returns*)
+      """
+      try:
+         sftp = self.client.open_sftp()
+         self._transfer(sftp, src, dest, transfer_type)
+      except Exception as ex:
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
+      finally:
+         sftp.close()
+
+   def _transfer(self, sftp, src, dest, transfer_type):
+      """
+Performs the actual file or folder transfer between the local file system and the SFTP server.
+
+This function is a helper for `transfer_item` and handles the low-level operations
+for transferring individual files or directories.
+It ensures that files are copied correctly and directories are created as needed.
+
+**Arguments:**
+
+* ``sftp``
+
+  / *Condition*: required / *Type*: paramiko.SFTPClient /
+
+  An active SFTP client instance used to perform file and folder operations on the remote server.
+
+* ``src``
+
+  / *Condition*: required / *Type*: str /
+
+  Source item path.
+
+* ``dest``
+
+  / *Condition*: required / *Type*: str /
+
+  Destination item path.
+
+* ``transfer_type``
+
+  / *Condition*: required / *Type*: str /
+
+  Transfer type.
+
+      'get' - Copy a remote item from the SFTP server to the local host
+
+      'put' - Copy a local item to the SFTP server
+
+**Returns:**
+
+(*no returns*)
+      """
+      if transfer_type not in ['get', 'put']:
+         raise Exception(f"Unknown transfer type '{transfer_type}'.")
+
+      stat_ifmt = 0o170000  # File type mask
+      stat_ifdir = 0o040000  # Directory type
+      folder_name_pattern = r'[^/\\]+(?=[/\\]*$)'
+      folder_name = ''
+      match = re.search(folder_name_pattern, src)
+      if match:
+         folder_name = match.group(0)
+      BuiltIn().log(f"Transfer from '{src}' to '{dest}' with transfer type '{transfer_type}'", constants.LOG_LEVEL_DEBUG)
+      if transfer_type == 'put':
+         # Check if it's a directory
+         if os.path.isdir(src):
+            dest_folder_path = os.path.normpath(f"{dest}{os.sep}{folder_name}").replace('\\', '/')
+            try:
+               sftp.stat(dest_folder_path)
+            except FileNotFoundError:
+               BuiltIn().log(f"Creating destination folder: '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
+               try:
+                  # Create destination directory on the remote server
+                  sftp.mkdir(dest_folder_path)
+               except Exception as ex:
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details: '{ex}'")
+            for item in os.listdir(src):
+               src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
+               if os.path.isdir(src_item_path):
+                  BuiltIn().log(f"Transferring folder: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
+                  self._transfer(sftp, src_item_path, dest_folder_path, transfer_type)
+               else:
+                  BuiltIn().log(f"Transferring file: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
+                  dest_item_path = f"{dest_folder_path}{os.sep}{item}".replace('\\', '/')
+                  self._transfer_file(sftp, src_item_path, dest_item_path, transfer_type)
+         else:
+            # Transfer a single file
+            item = folder_name
+            dest_item_path = f"{dest}{os.sep}{item}".replace('\\', '/')
+            BuiltIn().log(f"Transferring file: '{src}' to '{dest}'", constants.LOG_LEVEL_DEBUG)
+            self._transfer_file(sftp, src, dest_item_path, transfer_type)
+      elif transfer_type == 'get':
+         # Check if it's a directory
+         if sftp.stat(src).st_mode & stat_ifmt == stat_ifdir:
+            match = re.search(folder_name_pattern, src)
+            if match:
+               folder_name = match.group(0)
+            dest_folder_path = os.path.normpath(f"{dest}{os.sep}{folder_name}").replace('\\', '/')
+            if not os.path.exists(dest_folder_path):
+               BuiltIn().log(f"Creating destination folder: '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
+               try:
+                  # Create destination directory on the local
+                  os.makedirs(dest_folder_path, exist_ok=True)
+               except Exception as ex:
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details '{ex}'")
+            for item in sftp.listdir(src):
+               src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
+               if sftp.stat(src_item_path).st_mode & stat_ifmt == stat_ifdir:
+                  BuiltIn().log(f"Transferring folder: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
+                  self._transfer(sftp, src_item_path, dest_folder_path, transfer_type)
+               else:
+                  BuiltIn().log(f"Transferring file: '{src_item_path}' to '{dest_folder_path}'", constants.LOG_LEVEL_DEBUG)
+                  dest_item_path = f"{dest_folder_path}{os.sep}{item}".replace('\\', '/')
+                  self._transfer_file(sftp, src_item_path, dest_item_path, transfer_type)
+         else:
+            item = folder_name
+            dest_item_path = f"{dest}{os.sep}{item}".replace('\\', '/')
+            BuiltIn().log(f"Transferring file: '{src}' to '{dest}'", constants.LOG_LEVEL_DEBUG)
+            self._transfer_file(sftp, src, dest_item_path, transfer_type)
 
    def _send(self, msg, _cr):
       """
@@ -367,7 +562,6 @@ Quit and stop receiver thread.
 
 (*no returns*)
       """
-
       # stop the low-level receiver thread
       if self._llrecv_thrd_obj and self._llrecv_thrd_obj.is_alive():
          self._llrecv_thrd_term.set()
