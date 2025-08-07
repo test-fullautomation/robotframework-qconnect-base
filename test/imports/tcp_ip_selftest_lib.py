@@ -86,7 +86,7 @@ class tcp_ip_selftest_lib():
         del self.__testresultsoverview_failedonly
 
     def _close(self):
-        timestamp = timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
         msg = f"Executing '_close' method of {self.__sThisModule}"
         BuiltIn().log(msg, level="INFO")
 
@@ -166,7 +166,7 @@ class tcp_ip_selftest_lib():
 
     @keyword
     def quit_tcpip_testserver(self):
-        timestamp = timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
         msg = f"Entering keyword 'quit_tcpip_testserver' at '{timestamp}'"
         BuiltIn().log(msg, level="INFO")
         TCPIPClientParam  = BuiltIn().get_variable_value('${TCPIPClientParam}')
@@ -225,7 +225,7 @@ class tcp_ip_selftest_lib():
 
         conn_manager.disconnect(connection_name)
 
-        timestamp = timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
         msg = f"Leaving keyword 'quit_tcpip_testserver' at '{timestamp}'"
         BuiltIn().log(msg, level="INFO")
 
