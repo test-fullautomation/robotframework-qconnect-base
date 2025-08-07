@@ -1,4 +1,4 @@
-#  Copyright 2020-2024 Robert Bosch GmbH
+#  Copyright 2020-2025 Robert Bosch GmbH
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -54,6 +54,11 @@ qconnectbase_suite_teardown
     tcpip.selftest.quit_tcpip_testserver
     tcpip.selftest.write_html_footer_of_overview_file
 
+    IF    $SUITE_STATUS == 'PASS'
+        log    SUITE '${SUITE_NAME}' finished with result '${SUITE_STATUS}'    console=True
+    ELSE
+        log    SUITE '${SUITE_NAME}' finished with result '${SUITE_STATUS}', reason: ${SUITE_MESSAGE}    console=True
+    END
 
 qconnectbase_test_setup
     [Documentation]    QConnectBase Test Setup

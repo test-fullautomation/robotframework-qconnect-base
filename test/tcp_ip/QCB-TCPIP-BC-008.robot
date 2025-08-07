@@ -42,5 +42,6 @@ QCB-TCPIP-BC-008
     log    TCPIP-BC-008 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    Unable to create connection. Exception: invalid literal for int() with base 10: 'INVALID'
+    should_be_equal    ${result}    Connection Error: invalid literal for int() with base 10: 'INVALID'
+
 

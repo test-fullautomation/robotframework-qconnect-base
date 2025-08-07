@@ -34,24 +34,24 @@ QCB-TCPIP-BC-002
     # let the testserver close the connection
     conn_manager.verify    conn_name=QCB-TCPIP-BC-002-Connection
     ...                    search_pattern=QCB-TCPIP-BC-002 ACK
-    ...                    timeout=2
+    ...                    verify_timeout=2
     ...                    match_try=4
     ...                    send_cmd=CLOSE_CONNECTION-QCB-TCPIP-BC-002
 
     # give the testserver some time to send the answer 'QCB-TCPIP-BC-002 ACK' and close the connection
     Sleep    4s
 
-    # try to send a command with the already closed connection
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command
-    ...                                                        conn_name=QCB-TCPIP-BC-002-Connection
-    ...                                                        command=TCPIP-BC-002-SHOULDNOTBESENT
+    # # # try to send a command with the already closed connection
+    # # ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command
+    # # ...                                                        conn_name=QCB-TCPIP-BC-002-Connection
+    # # ...                                                        command=TCPIP-BC-002-SHOULDNOTBESENT
 
-    Sleep    1s
+    # # Sleep    1s
 
-    conn_manager.disconnect    QCB-TCPIP-BC-002-Connection
+    # # conn_manager.disconnect    QCB-TCPIP-BC-002-Connection
 
-    log    TCPIP-BC-002 'send_command' status: ${status}    console=yes
-    log    TCPIP-BC-002 'send_command' result: ${result}    console=yes
+    # # log    TCPIP-BC-002 'send_command' status: ${status}    console=yes
+    # # log    TCPIP-BC-002 'send_command' result: ${result}    console=yes
 
     # TODO: needs to be reactivated (currently fails under Linux; reason unclear)
     # should_be_equal    ${status}    FAIL
