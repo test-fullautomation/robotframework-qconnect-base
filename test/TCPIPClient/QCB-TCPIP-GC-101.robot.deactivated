@@ -28,11 +28,11 @@ QCB-TCPIP-GC-101
     ...                !!! temporarily 'verify' replaced by 'send_command' !!!
     ...                !!! test not in final version !!!
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    GOODCASE
 
     conn_manager.connect    conn_name=QCB-TCPIP-GC-101-Connection
-    ...                     conn_type=TCPIPClient
+    ...                     conn_type=${connection_type}
     ...                     conn_conf=${TCPIPClientParam}
 
     THREAD    OBSERVER-THREAD-1     False

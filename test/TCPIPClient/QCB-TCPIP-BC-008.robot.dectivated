@@ -27,21 +27,27 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-BC-008
     [Documentation]    Invalid type of connection configuration parameter
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    BADCASE
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-008-Connection
-                                                               ...                     conn_type=TCPIPClient
+                                                               ...                     conn_type=${connection_type}
                                                                ...                     conn_conf=${TCPIPClientParam_err}
-
-    Sleep    1s
-
-    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-008-Connection
 
     log    TCPIP-BC-008 'connect' status: ${status}    console=yes
     log    TCPIP-BC-008 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    Connection Error: invalid literal for int() with base 10: 'INVALID'
+    should_be_equal    ${result}    Connection Error: The configuration 'conn_conf' is invalid. Details: invalid literal for int() with base 10: 'INVALID'
+
+    Sleep    1s
+
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-008-Connection
+
+    log    TCPIP-BC-008 'disconnect' status: ${status}    console=yes
+    log    TCPIP-BC-008 'disconnect' result: ${result}    console=yes
+
+    should_be_equal    ${status}    FAIL
+    should_be_equal    ${result}    Invalid operation: Attempted to disconnect 'conn_name=QCB-TCPIP-BC-008-Connection', but no such connection exists.
 
 

@@ -23,11 +23,11 @@ QCB-TCPIP-GC-100
     [Documentation]    Communication in two threads. The first thread waits for an incoming message
     ...                that is triggered by a command sent within the second thread.
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    GOODCASE
 
     conn_manager.connect    conn_name=QCB-TCPIP-GC-100-Connection
-    ...                     conn_type=TCPIPClient
+    ...                     conn_type=${connection_type}
     ...                     conn_conf=${TCPIPClientParam}
 
     THREAD    VERIFY-THREAD-1     False

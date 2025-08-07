@@ -26,11 +26,11 @@ QCB-TCPIP-GC-050
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/101
     ...                !!! test not in final version !!!
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    GOODCASE
 
     conn_manager.connect    conn_name=QCB-TCPIP-GC-050-Connection
-    ...                     conn_type=TCPIPClient
+    ...                     conn_type=${connection_type}
     ...                     conn_conf=${TCPIPClientParam}
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=QCB-TCPIP-GC-050-Connection

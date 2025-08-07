@@ -31,16 +31,12 @@ QCB-TCPIP-BC-007
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/66#issuecomment-2531780274
     ...                !!! test not in final version !!!
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    BADCASE
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-007-Connection
-                                                               ...                     conn_type=TCPIPClient
+                                                               ...                     conn_type=${connection_type}
                                                                ...                     conn_conf=${TCPIPClientParam_err}
-
-    Sleep    1s
-
-    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-007-Connection
 
     log    TCPIP-BC-007 'connect' status: ${status}    console=yes
     log    TCPIP-BC-007 'connect' result: ${result}    console=yes
@@ -48,5 +44,15 @@ QCB-TCPIP-BC-007
     # !!! need to be implemented and activated after fix !!!
     # should_be_equal    ${status}    FAIL
     # should_be_equal    ${result}    ....
+
+    Sleep    1s
+
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-007-Connection
+
+    log    TCPIP-BC-007 'disconnect' status: ${status}    console=yes
+    log    TCPIP-BC-007 'disconnect' result: ${result}    console=yes
+
+    should_be_equal    ${status}    FAIL
+    should_be_equal    ${result}    Invalid operation: Attempted to disconnect 'conn_name=QCB-TCPIP-BC-007-Connection', but no such connection exists.
 
 

@@ -21,11 +21,11 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-GC-030
     [Documentation]    Verify answer from testserver (verify)
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    GOODCASE
 
     conn_manager.connect    conn_name=QCB-TCPIP-GC-030-Connection
-    ...                     conn_type=TCPIPClient
+    ...                     conn_type=${connection_type}
     ...                     conn_conf=${TCPIPClientParam}
 
     conn_manager.verify    conn_name=QCB-TCPIP-GC-030-Connection    search_pattern=GC-030 ACK    send_cmd=GC-030

@@ -18,17 +18,19 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-GC-001
-    [Documentation]    Connect to testserver and disconnect from testserver
+QCB-TCPIP-GC-002
+    [Documentation]    Send simple command to testserver (send_command)
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    GOODCASE
 
-    conn_manager.connect    conn_name=QCB-TCPIP-GC-001-Connection
-    ...                     conn_type=TCPIPClient
+    conn_manager.connect    conn_name=QCB-TCPIP-GC-002-Connection
+    ...                     conn_type=${connection_type}
     ...                     conn_conf=${TCPIPClientParam}
 
-    Sleep    1s
+    conn_manager.send_command    conn_name=QCB-TCPIP-GC-002-Connection    command=GC-002
 
-    conn_manager.disconnect    QCB-TCPIP-GC-001-Connection
+    Sleep    2s
+
+    conn_manager.disconnect    QCB-TCPIP-GC-002-Connection
 

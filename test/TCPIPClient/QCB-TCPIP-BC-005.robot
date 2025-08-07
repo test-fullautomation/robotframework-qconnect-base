@@ -21,7 +21,7 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-BC-005
     [Documentation]    Invalid connection type in keyword 'connect'
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    BADCASE
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-005-Connection
@@ -33,7 +33,7 @@ QCB-TCPIP-BC-005
 
     should_be_equal    ${status}    FAIL
 
-    should_be_equal    ${result}    The connection type 'INVALID_CONNECTION_TYPE' is not supported. Please choose one of: RabbitmqClient, SSHClient, SerialClient, TCPIPClient, TCPIPServer, Winapp.
+    should_be_equal    ${result}    The connection type 'INVALID_CONNECTION_TYPE' is not supported. Please choose one of: GoepelClient, RabbitmqClient, SSHClient, SerialClient, TCPIPClient, TCPIPServer, Winapp.
 
 
 
