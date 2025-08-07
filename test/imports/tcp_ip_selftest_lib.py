@@ -183,7 +183,7 @@ class tcp_ip_selftest_lib():
             self.__testresultsoverview.tlog("testresults_overview", msg)
             BuiltIn().log(msg, level="WARN")
             self.__process_testserver.terminate()
-            raise Exception("The TCP/IP testserver had to be terminated forcibly.")
+            raise Exception(f"The TCP/IP testserver had to be terminated forcibly due to {ex}.")
 
         # Now the TCP/IP testserver needs some time to quit (send confirmation, disconnect, write final log file entries).
         # We need to wait a bit before we disconnect.

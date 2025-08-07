@@ -57,8 +57,6 @@ def handle_client(client_socket, client_address):
     rf_log.info(msg)
     tcp_ip_testserver_log.tlog("handle_client_enter", msg)
 
-    list_response_threads = []
-
     msg = f"Client connected: {client_address}"
     rf_log.info(msg)
     tcp_ip_testserver_log.tlog("handle_client", msg)
@@ -345,7 +343,7 @@ def start_server(host, port, max_connections):
             continue # TODO: verify
         # TODO, maybe at this position: Go through list of all client_thread objects (list_client_threads)
         # and delete the object of threads not being alive any more.
-        # Otherwise we would habe more and more unused thread objects in list belonging to threads that are not alive any more.
+        # Otherwise we would have more and more unused thread objects in list belonging to threads that are not alive any more.
     # eof while not STOP_EVENT.is_set():
 
     # The only reason for client threads still being alive is, that they wait the specified delay times before sending the
