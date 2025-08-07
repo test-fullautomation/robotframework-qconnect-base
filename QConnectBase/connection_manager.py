@@ -611,19 +611,19 @@ Transfer item from local to remote and vice versa.
    def execute_script(self, conn_name, script_path):
       """
 Executes a script file by sending commands to a device through the provided connection.
-      
-**Arguments:**   
 
-* ``connection_name``    
+**Arguments:**
+
+* ``connection_name``
 
   / *Condition*: required / *Type*: str /
-  
+
   Name of connection.
 
-* ``script_path``    
+* ``script_path``
 
   / *Condition*: required / *Type*: str /
-  
+
   Script file path.
 
 **Returns:**
