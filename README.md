@@ -12,18 +12,10 @@
 
 # QConnectBase Library
 
-QConnectBaseLibrary is a connection testing library for [Robot
-Framework](https://robotframework.org). Library will be supported to
-downloaded from PyPI soon. It provides a mechanism to handle trace log
-continously receiving from a connection (such as Raw TCP, SSH, Serial,
-etc.) besides sending data back to the other side. It's especially
-efficient for monitoring the overflood response trace log from an
-asynchronous trace systems. It is supporting Python 3.7+ and
-RobotFramework 3.2+.
-
 ## Table of Contents
 
 -   [Getting Started](#getting-started)
+    -   [How to install](#how-to-install)
 -   [Usage](#building-and-testing)
 -   [Example](#example)
 -   [Contribution Guidelines](#contribution-guidelines)
@@ -40,16 +32,82 @@ RobotFramework 3.2+.
 
 ## Getting Started
 
-We have a plan to publish all the sourcecode as OSS in the near future
-so that you can downloaded from PyPI. For the current period, you can
-checkout
+**QConnectBaseLibrary** is a connection testing library for [Robot
+Framework](https://robotframework.org). Library will be supported to
+downloaded from PyPI soon. It provides a mechanism to handle trace log
+continously receiving from a connection (such as Raw TCP, SSH, Serial,
+etc.) besides sending data back to the other side. It's especially
+efficient for monitoring the overflood response trace log from an
+asynchronous trace systems. It is supporting Python 3.7+ and
+RobotFramework 3.2+.
 
-[QConnectBaseLibrary](https://github.com/test-fullautomation/robotframework-qconnect-base)
+### How to install
 
-After checking out the source completely, you can install by running
-below command inside **robotframework-qconnect-base** directory.
+**QConnectBaseLibrary** can be installed in two different ways.
 
-    python setup.py install
+1.  Installation via PyPi (recommended for users)
+
+    ``` 
+    pip install robotframework-qconnect-base
+    ```
+
+    [QConnectBaseLibrary in
+    PyPi](https://pypi.org/project/robotframework-qconnect-base/)
+
+2.  Installation via GitHub (recommended for developers)
+
+    -   Clone the **robotframework-qconnect-base** repository to your
+        machine.
+
+        ``` 
+        git clone https://github.com/test-fullautomation/robotframework-qconnect-base.git
+        ```
+
+        [QConnectBaseLibrary in
+        GitHub](https://github.com/test-fullautomation/robotframework-qconnect-base)
+
+    -   Install dependencies
+
+        **QConnectBaseLibrary** requires some additional Python
+        libraries. Before you install the cloned repository sources you
+        have to install the dependencies manually. The names of all
+        related packages you can find in the file `requirements.txt` in
+        the repository root folder. Use pip to install them:
+
+        ``` 
+        pip install -r ./requirements.txt
+        ```
+
+        Additionally install **LaTeX** (recommended: TeX Live). This is
+        used to render the documentation.
+
+    -   Configure dependencies
+
+        The installation of **QConnectBaseLibrary** includes to generate
+        the documentation in PDF format. This is done by an application
+        called **GenPackageDoc**, that is part of the installation
+        dependencies (see `requirements.txt`).
+
+        **GenPackageDoc** uses **LaTeX** to generate the documentation
+        in PDF format. Therefore **GenPackageDoc** needs to know where
+        to find **LaTeX**. This is defined in the **GenPackageDoc**
+        configuration file
+
+        ``` 
+        packagedoc\packagedoc_config.json
+        ```
+
+        Before you start the installation you have to introduce the
+        following environment variable, that is used in
+        `packagedoc_config.json`:
+
+        -   `GENDOC_LATEXPATH` : path to `pdflatex` executable
+
+    -   Use the following command to install **QConnectBaseLibrary**:
+
+        ``` 
+        python setup.py install
+        ```
 
 ## Usage
 
@@ -62,68 +120,87 @@ in RobotFramework.
 >
 > **Syntax**:
 >
-> > **connect** `[conn_name]   [conn_type]   [conn_mode]   [conn_conf]`
-> > *(All parameters are required to be in order)* or
+> > **connect** `[conn_name]   [conn_conf]` *(All parameters are
+> > required to be in order)* or
 > >
-> > **connect**
-> > `conn_name=[conn_name]   conn_type=[conn_type]   conn_mode=[conn_mode]   conn_conf=[conn_conf]`
-> > *(All parameters are assigned by name)*
+> > **connect** `conn_name=[conn_name]   conn_conf=[conn_conf]` *(All
+> > parameters are assigned by name)*
+>
+> **Note**: Although previous syntax with 4 arguments is still supported
+> for backward compatibility, only conn_name and conn_conf are now
+> required. **conn_type** and **conn_mode** can be provided inside
+> **conn_conf**.
 >
 > **Arguments**:
 >
 > > **conn_name**: Name of the connection.
 > >
-> > **conn_type**: Type of the connection. QConnectBaseLibrary has
-> > supported below connection types:
+> > **conn_conf**: A dictionary containing configurations for the connection.
 > >
-> > > -   **TCPIPClient**: Create a Raw TCPIP connection to TCP Server.
-> > > -   **SSHClient**: Create a client connection to a SSH server.
-> > > -   **SerialClient**: Create a client connection via Serial Port.
+> > :   It must include **conn_type**, and optionally **conn_mode** and
+> >     other connection-specific fields (depending on type).
 > >
-> > **conn_mode**: (unused) Mode of a connection type.
+> >     This replaces the need to pass **conn_type** and **conn_mode**
+> >     as separate arguments.
 > >
-> > **conn_conf**: Configurations for making a connection. Depend on
-> > **conn_type** (Type of Connection), there is a suitable
-> > configuration in JSON format as below.
+> >     Each **conn_type** requires a specific structure in
+> >     **conn_conf**. Below are examples for each supported type:
 > >
-> > > -   **TCPIPClient**
-> > >
-> > > <!-- -->
-> > >
-> > >     {
-> > >         "address": [server host], # Optional. Default value is "localhost".
-> > >         "port": [server port]     # Optional. Default value is 1234.
-> > >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
-> > >      }
-> > >
-> > > -   **SSHClient**
-> > >
-> > > <!-- -->
-> > >
-> > >     {
-> > >         "address" : [server host],  # Optional. Default value is "localhost".
-> > >         "port" : [server host],     # Optional. Default value is 22.
-> > >         "username" : [username],    # Optional. Default value is "root".
-> > >         "password" : [password],    # Optional. Default value is "".
-> > >         "authentication" : "password" | "keyfile" | "passwordkeyfile",  # Optional. Default value is "".
-> > >         "key_filename" : [filename or list of filenames], # Optional. Default value is null.
-> > >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
-> > >      }
-> > >
-> > > -   **SerialClient**
-> > >
-> > > <!-- -->
-> > >
-> > >     {
-> > >         "port" : [comport or null],
-> > >         "baudrate" : [Baud rate such as 9600 or 115200 etc.],
-> > >         "bytesize" : [Number of data bits. Possible values: 5, 6, 7, 8],
-> > >         "stopbits" : [Number of stop bits. Possible values: 1, 1.5, 2],
-> > >         "parity" : [Enable parity checking. Possible values: 'N', 'E', 'O', 'M', 'S'],
-> > >         "rtscts" : [Enable hardware (RTS/CTS) flow control.],
-> > >         "xonxoff" : [Enable software flow control.],
-> > >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
-> > >      }
+> >     > -   **TCPIPClient**: Create a Raw TCPIP connection to TCP
+> >     >     Server.
+> >     >
+> >     > ```{=html}
+> >     > <!-- -->
+> >     > ```
+> >     >     {
+> >     >         "conn_type": "TCPIPClient",
+> >     >         "address": [server host], # Optional. Default value is "localhost".
+> >     >         "port": [server port],     # Optional. Default value is 1234.
+> >     >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
+> >     >      }
+> >     >
+> >     > -   **SSHClient**: Create a client connection to a SSH server.
+> >     >
+> >     > ```{=html}
+> >     > <!-- -->
+> >     > ```
+> >     >     {
+> >     >         "conn_type": "SSHClient",
+> >     >         "address" : [server host],  # Optional. Default value is "localhost".
+> >     >         "port" : [server host],     # Optional. Default value is 22.
+> >     >         "username" : [username],    # Optional. Default value is "root".
+> >     >         "password" : [password],    # Optional. Default value is "".
+> >     >         "authentication" : "password" | "keyfile" | "passwordkeyfile",  # Optional. Default value is "".
+> >     >         "key_filename" : [filename or list of filenames], # Optional. Default value is null.
+> >     >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
+> >     >      }
+> >     >
+> >     > -   **SerialClient**: Create a client connection via Serial
+> >     >     Port.
+> >     >
+> >     > ```{=html}
+> >     > <!-- -->
+> >     > ```
+> >     >     {
+> >     >         "conn_type": "SerialClient",
+> >     >         "port" : [comport or null],
+> >     >         "baudrate" : [Baud rate such as 9600 or 115200 etc.],
+> >     >         "bytesize" : [Number of data bits. Possible values: 5, 6, 7, 8],
+> >     >         "stopbits" : [Number of stop bits. Possible values: 1, 1.5, 2],
+> >     >         "parity" : [Enable parity checking. Possible values: 'N', 'E', 'O', 'M', 'S'],
+> >     >         "rtscts" : [Enable hardware (RTS/CTS) flow control.],
+> >     >         "xonxoff" : [Enable software flow control.],
+> >     >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
+> >     >      }
+>
+> **Legacy Syntax** (Still Supported):
+>
+> > **connect** `[conn_name]   [conn_type]   [conn_conf]   [conn_mode]`
+> > *(All parameters are required to be in order)* or
+> >
+> > **connect**
+> > `conn_name=[conn_name]   conn_type=[conn_type]   conn_conf=[conn_conf]   conn_mode=[conn_mode]`
+> > *(All parameters are assigned by name)*
 
 ### **disconnect**
 
@@ -160,8 +237,8 @@ in RobotFramework.
 > **Syntax**:
 >
 > > **verify**
-> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`\*(All
-> > parameters are required to be in order)\* or
+> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`*(All
+> > parameters are required to be in order)* or
 > >
 > > **verify**
 > > `conn_name=[conn_name]   search_pattern=[search_pattern]  timeout=[timeout]  fetch_block=[fetch_block]  eob_pattern=[eob_pattern] filter_pattern=[filter_pattern]  send_cmd=[send_cmd]`
@@ -252,7 +329,7 @@ an extension library for QConnectBaseLibrary, please following below
 steps.
 
 1.  Create a library package which have the prefix name is
-    **robotframework-qconnect-**\*\[your specific name\]\*.
+    **robotframework-qconnect-***\[your specific name\]*.
 2.  Your hadling connection class should be derived from
     **QConnectBase.connection_base.ConnectionBase** class.
 3.  In your *Connection Class*, override below attributes and methods:
@@ -274,7 +351,7 @@ steps.
 > >     necessary) as below
 > >
 > >         self._llrecv_thrd_obj = None
-> >          self._llrecv_thrd_term = threading.Event()
+> >         self._llrecv_thrd_term = threading.Event()
 > >          self._init_thrd_llrecv(cls._socket_instance)
 > >
 > > -   Incase you use the lowlevel receiver thread. You should

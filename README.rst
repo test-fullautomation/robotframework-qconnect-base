@@ -15,19 +15,12 @@
 QConnectBase Library
 ====================
 
-QConnectBaseLibrary is a connection testing library for `Robot
-Framework <https://robotframework.org>`__. Library will be supported to
-downloaded from PyPI soon. It provides a mechanism to handle trace log
-continously receiving from a connection (such as Raw TCP, SSH, Serial,
-etc.) besides sending data back to the other side. It’s especially
-efficient for monitoring the overflood response trace log from an
-asynchronous trace systems. It is supporting Python 3.7+ and
-RobotFramework 3.2+.
-
 Table of Contents
 -----------------
 
 -  `Getting Started <#getting-started>`__
+
+   -  `How to install <#how-to-install>`__
 -  `Usage <#building-and-testing>`__
 -  `Example <#example>`__
 -  `Contribution Guidelines <#contribution-guidelines>`__
@@ -46,18 +39,71 @@ Table of Contents
 Getting Started
 ---------------
 
-We have a plan to publish all the sourcecode as OSS in the near future
-so that you can downloaded from PyPI. For the current period, you can
-checkout
+**QConnectBaseLibrary** is a connection testing library for `Robot
+Framework <https://robotframework.org>`__. Library will be supported to
+downloaded from PyPI soon. It provides a mechanism to handle trace log
+continously receiving from a connection (such as Raw TCP, SSH, Serial,
+etc.) besides sending data back to the other side. It’s especially
+efficient for monitoring the overflood response trace log from an
+asynchronous trace systems. It is supporting Python 3.7+ and
+RobotFramework 3.2+.
 
-`QConnectBaseLibrary <https://github.com/test-fullautomation/robotframework-qconnect-base>`__
+How to install
+~~~~~~~~~~~~~~
 
-After checking out the source completely, you can install by running
-below command inside **robotframework-qconnect-base** directory.
+**QConnectBaseLibrary** can be installed in two different ways.
 
-::
+1. Installation via PyPi (recommended for users)
 
-   python setup.py install
+   .. code::
+
+      pip install robotframework-qconnect-base
+
+   `QConnectBaseLibrary in PyPi <https://pypi.org/project/robotframework-qconnect-base/>`_
+
+2. Installation via GitHub (recommended for developers)
+
+   * Clone the **robotframework-qconnect-base** repository to your machine.
+
+     .. code::
+
+        git clone https://github.com/test-fullautomation/robotframework-qconnect-base.git
+
+     `QConnectBaseLibrary in GitHub <https://github.com/test-fullautomation/robotframework-qconnect-base>`_
+
+   * Install dependencies
+
+     **QConnectBaseLibrary** requires some additional Python libraries. Before you install the cloned repository sources
+     you have to install the dependencies manually. The names of all related packages you can find in the file ``requirements.txt``
+     in the repository root folder. Use pip to install them:
+
+     .. code::
+
+        pip install -r ./requirements.txt
+
+     Additionally install **LaTeX** (recommended: TeX Live). This is used to render the documentation.
+
+   * Configure dependencies
+
+     The installation of **QConnectBaseLibrary** includes to generate the documentation in PDF format. This is done by
+     an application called **GenPackageDoc**, that is part of the installation dependencies (see ``requirements.txt``).
+
+     **GenPackageDoc** uses **LaTeX** to generate the documentation in PDF format. Therefore **GenPackageDoc** needs to know where to find
+     **LaTeX**. This is defined in the **GenPackageDoc** configuration file
+
+     .. code::
+
+        packagedoc\packagedoc_config.json
+
+     Before you start the installation you have to introduce the following environment variable, that is used in ``packagedoc_config.json``:
+
+     - ``GENDOC_LATEXPATH`` : path to ``pdflatex`` executable
+
+   * Use the following command to install **QConnectBaseLibrary**:
+
+     .. code::
+
+        python setup.py install
 
 Usage
 -----
@@ -71,44 +117,46 @@ QConnectBase Library support following keywords for testing connection in RobotF
 
   **Syntax**:
 
-   **connect** ``[conn_name]   [conn_type]   [conn_mode]   [conn_conf]``
+   **connect**  ``[conn_name]   [conn_conf]``
    *(All parameters are required to be in order)*\
 
    or
 
    **connect**
-   ``conn_name=[conn_name]   conn_type=[conn_type]   conn_mode=[conn_mode]   conn_conf=[conn_conf]``
+   ``conn_name=[conn_name]   conn_conf=[conn_conf]``
    *(All parameters are assigned by name)*
+
+  **Note**: Although previous syntax with 4 arguments is still supported for backward compatibility, only conn_name and conn_conf are now required.
+  **conn_type** and **conn_mode** can be provided inside **conn_conf**.
 
   **Arguments**:
 
     **conn_name**: Name of the connection.
 
-    **conn_type**: Type of the connection. QConnectBaseLibrary has supported below connection types:
+    **conn_conf**: A dictionary containing configurations for the connection.
+      It must include **conn_type**, and optionally **conn_mode** and other connection-specific fields (depending on type).
+
+      This replaces the need to pass **conn_type** and **conn_mode** as separate arguments.
+
+      Each **conn_type** requires a specific structure in **conn_conf**. Below are examples for each supported type:
 
         *  **TCPIPClient**: Create a Raw TCPIP connection to TCP Server.
-        *  **SSHClient**: Create a client connection to a SSH server.
-        *  **SerialClient**: Create a client connection via Serial Port.
-
-    **conn_mode**: (unused) Mode of a connection type.
-
-    **conn_conf**: Configurations for making a connection. Depend on **conn_type** (Type of Connection), there is a suitable configuration in JSON format as below.
-
-        *  **TCPIPClient**
 
         ::
 
          {
+             "conn_type": "TCPIPClient",
              "address": [server host], # Optional. Default value is "localhost".
-             "port": [server port]     # Optional. Default value is 1234.
+             "port": [server port],     # Optional. Default value is 1234.
              "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
           }
 
-        *  **SSHClient**
+        *  **SSHClient**: Create a client connection to a SSH server.
 
         ::
 
           {
+              "conn_type": "SSHClient",
               "address" : [server host],  # Optional. Default value is "localhost".
               "port" : [server host],     # Optional. Default value is 22.
               "username" : [username],    # Optional. Default value is "root".
@@ -118,11 +166,12 @@ QConnectBase Library support following keywords for testing connection in RobotF
               "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
            }
 
-        *  **SerialClient**
+        *  **SerialClient**: Create a client connection via Serial Port.
 
         ::
 
           {
+              "conn_type": "SerialClient",
               "port" : [comport or null],
               "baudrate" : [Baud rate such as 9600 or 115200 etc.],
               "bytesize" : [Number of data bits. Possible values: 5, 6, 7, 8],
@@ -132,6 +181,18 @@ QConnectBase Library support following keywords for testing connection in RobotF
               "xonxoff" : [Enable software flow control.],
               "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
            }
+
+  **Legacy Syntax** (Still Supported):
+
+   **connect**  ``[conn_name]   [conn_type]   [conn_conf]   [conn_mode]``
+   *(All parameters are required to be in order)*\
+
+   or
+
+   **connect**
+   ``conn_name=[conn_name]   conn_type=[conn_type]   conn_conf=[conn_conf]   conn_mode=[conn_mode]``
+   *(All parameters are assigned by name)*
+
 
 **disconnect**
 ~~~~~~~~~~~~~~
@@ -280,7 +341,7 @@ steps.
       ::
 
         self._llrecv_thrd_obj = None
-         self._llrecv_thrd_term = threading.Event()
+        self._llrecv_thrd_term = threading.Event()
          self._init_thrd_llrecv(cls._socket_instance)
 
 
@@ -361,4 +422,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
