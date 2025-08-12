@@ -25,11 +25,11 @@ QCB-TCPIP-BC-003
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/85
     ...                !!! test not in final version !!!
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    BADCASE
 
     conn_manager.connect    conn_name=QCB-TCPIP-BC-003-Connection
-    ...                     conn_type=TCPIPClient
+    ...                     conn_type=${connection_type}
     ...                     conn_conf=${TCPIPClientParam}
 
     # 'verify' waits 11 seconds for a 'search_pattern' that never will be received.

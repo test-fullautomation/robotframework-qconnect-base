@@ -21,7 +21,7 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-BC-001
     [Documentation]    Send command without connection
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    BADCASE
 
     # try to send a command without connection

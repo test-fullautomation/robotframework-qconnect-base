@@ -22,17 +22,23 @@ QCB-TCPIP-GC-020
     [Documentation]    Let the testserver close the connection and send a disconnect using the connection
     ...                that has already been closed by the testserver.
 
-    set_test_variable    ${connection_type}    tcp_ip
+    set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}    GOODCASE
 
     conn_manager.connect    conn_name=QCB-TCPIP-GC-020-Connection
-    ...                     conn_type=TCPIPClient
+    ...                     conn_type=${connection_type}
     ...                     conn_conf=${TCPIPClientParam}
 
     conn_manager.send_command    conn_name=QCB-TCPIP-GC-020-Connection    command=CLOSE_CONNECTION-GC-020
 
+    # give the testserver time to close the connection
     Sleep    2s
 
     # this shouldn't matter:
-    conn_manager.disconnect    QCB-TCPIP-GC-020-Connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    QCB-TCPIP-GC-020-Connection
 
+    log    TCPIP-GC-020 'disconnect' status: ${status}    console=yes
+    log    TCPIP-GC-020 'disconnect' result: ${result}    console=yes
+
+    should_be_equal    ${status}    PASS
+    should_be_equal    ${result}    ${None}

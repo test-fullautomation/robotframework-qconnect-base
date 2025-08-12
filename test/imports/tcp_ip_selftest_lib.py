@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.10.0"
-THISMODULEDATE    = "24.02.2025"
+THISMODULEVERSION = "0.11.0"
+THISMODULEDATE    = "22.07.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -66,8 +66,9 @@ class tcp_ip_selftest_lib():
     def __init__(self, sThisModule=THISMODULE):
 
         self.__sThisModule = sThisModule
-        self.__process_testserver = None
-        self.__can_be_connected   = False
+        self.__process_testserver     = None
+        self.__process_testserver_pid = None
+        self.__can_be_connected       = False
 
         self.__testcounter = 0
 
@@ -85,31 +86,9 @@ class tcp_ip_selftest_lib():
         del self.__testresultsoverview_failedonly
 
     def _close(self):
-        pass
-
-    # --------------------------------------------------------------------------------------------------------------
-    #TM***
-
-    # == non keyword methods
-
-    def __get_server_pid(self):
-        TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
-        conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
-        connection_name = "GET_SERVER_PID_CONNECTION"
-        server_pid = None
-        try:
-            conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
-            command = f"GET_SERVER_PID"
-            response = conn_manager.verify(conn_name=connection_name, search_pattern="PID=(.+)", send_cmd=command)
-            server_pid = response[1]
-            BuiltIn().log(f"received PID of TCP/IP testserver: {server_pid}", level="INFO")
-            conn_manager.disconnect(connection_name)
-        except Exception as ex:
-            msg = f"Not able to get the TCP/IP server pid. Reason: {ex}"
-            self.__testresultsoverview.tlog("testresults_overview", msg)
-            BuiltIn().log(msg, level="ERROR")
-            raise Exception("Test execution aborted because of failed information exchange.")
-        return server_pid
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        msg = f"Executing '_close' method of {self.__sThisModule}"
+        BuiltIn().log(msg, level="INFO")
 
     # --------------------------------------------------------------------------------------------------------------
     #TM***
@@ -118,7 +97,8 @@ class tcp_ip_selftest_lib():
 
     @keyword
     def start_tcpip_testserver(self, host="localhost", port=4000, max_connections=1):
-        BuiltIn().log(f"This is '{self.__sThisModule}'", level="INFO", console=True)
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        BuiltIn().log(f"This is '{self.__sThisModule}' at '{timestamp}'", level="INFO", console=True)
         python = sys.executable
         this_library_file_path = os.path.dirname(CString.NormalizePath(__file__))
         # While computing the path to the TCP/IP testserver, the position of this file is the reference.
@@ -139,9 +119,26 @@ class tcp_ip_selftest_lib():
         BuiltIn().log(f"cmd_line '{cmd_line}'", level="INFO", console=True)
         list_cmd_line_parts = shlex.split(cmd_line)
         self.__process_testserver = subprocess.Popen(list_cmd_line_parts) # do not wait for process finished
-        # !!! TODO: PID is replacement for '__get_server_pid()' !!!
-        PID = self.__process_testserver.pid
-        BuiltIn().log(f"PID '{PID}'", level="INFO", console=True)
+
+        max_tries = 6
+        max_try_wait_time = 1
+        for i in range(max_tries):
+            time.sleep(max_try_wait_time)
+            if self.__process_testserver.poll() is None:
+                timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+                BuiltIn().log(f"TCP/IP testserver started at '{timestamp}'.", level="INFO", console=True)
+                break
+            else:
+                timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+                # TODO: change to DEBUG level
+                BuiltIn().log(f"TCP/IP testserver not yet started at '{timestamp}'.", level="INFO", console=True)
+        else:
+            BuiltIn().log(f"Timeout while trying to start the TCP/IP testserver.", level="ERROR", console=True)
+            self.__process_testserver.terminate()
+            raise Exception("Test execution aborted because of the TCP/IP testserver could not be started.")
+
+        self.__process_testserver_pid = self.__process_testserver.pid
+        BuiltIn().log(f"PID '{self.__process_testserver_pid}'", level="INFO", console=True)
 
         # wait for TCP/IP testserver is ready (= accepts a connection)
         TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
@@ -154,7 +151,7 @@ class tcp_ip_selftest_lib():
                 conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
                 conn_manager.disconnect(connection_name)
                 self.__can_be_connected = True
-                BuiltIn().log(f"TCP/IP testserver '{tcpip_testserver}' is ready for being connected.", level="INFO", console=True)
+                BuiltIn().log(f"TCP/IP testserver is ready for being connected.", level="INFO", console=True)
                 break
             except Exception as ex:
                 conn_manager.disconnect(connection_name)
@@ -162,14 +159,16 @@ class tcp_ip_selftest_lib():
                 BuiltIn().log(exception, level="INFO", console=True)
                 time.sleep(max_try_wait_time)
         if self.__can_be_connected is False:
-            BuiltIn().log(f"Not possible to connect to test server '{tcpip_testserver}' within {max_tries} tries ({max_tries} seconds).", level="INFO", console=True)
+            BuiltIn().log(f"Not possible to connect to test server within {max_tries} tries ({max_tries} seconds).", level="INFO", console=True)
             raise Exception("Test execution aborted because of failed precondition.")
+    # eof def start_tcpip_testserver(self, host="localhost", port=4000, max_connections=1):
 
 
     @keyword
     def quit_tcpip_testserver(self):
-        pid               = self.__get_server_pid() # the PID of the current active TCP/IP testserver we want to quit here
-        server_pid        = int(pid)
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        msg = f"Entering keyword 'quit_tcpip_testserver' at '{timestamp}'"
+        BuiltIn().log(msg, level="INFO")
         TCPIPClientParam  = BuiltIn().get_variable_value('${TCPIPClientParam}')
         conn_manager      = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
         connection_name   = "TESTSERVER_QUIT_CONNECTION"
@@ -180,53 +179,57 @@ class tcp_ip_selftest_lib():
             msg = f"Problems with command 'QUIT_TESTSERVER'. Reason: {ex}"
             self.__testresultsoverview.tlog("testresults_overview", msg)
             BuiltIn().log(msg, level="ERROR")
-            msg = f"Now terminating process with PID {server_pid}."
+            msg = f"Now terminating process with PID {self.__process_testserver_pid}."
             self.__testresultsoverview.tlog("testresults_overview", msg)
             BuiltIn().log(msg, level="WARN")
             self.__process_testserver.terminate()
-            raise Exception("The TCP/IP testserver had to be terminated forcibly.")
+            raise Exception(f"The TCP/IP testserver had to be terminated forcibly due to {ex}.")
 
         # Now the TCP/IP testserver needs some time to quit (send confirmation, disconnect, write final log file entries).
         # We need to wait a bit before we disconnect.
-        # This is also to get the command prompt back when the entire test is executed in console.
-        # And 'self.__process_testserver.terminate()' should be an emergency fallback solution only
-        # (because this causes missing log entries, if sent too early).
-        # We use the PID of the testserver to get to know about his status.
-
-        max_tries         = 8
+        # We use the PID of the testserver to get to know about his status (non blocking poll()).
+        max_tries         = 10
         max_try_wait_time = 1
         is_testserver     = True
 
         for cnt_tries in range(1, max_tries+1):
-            finished_pid = None
-            if hasattr(os, 'WNOHANG'): # not available in all os, but on Linux this avoids zombie processes, because it forces to catch the status
-                try:
-                    finished_pid, status = os.waitpid(server_pid, os.WNOHANG) # (why is finished_pid = 0?)
-                    msg = f"process {server_pid} finished with status {status}"
-                    BuiltIn().log(msg, level="INFO", console=True)
-                except ChildProcessError as ex:
-                    BuiltIn().log(f"{ex}", level="INFO", console=True)
-                    break
-
-            # confirmation
-            list_pids = psutil.pids()
-            if not server_pid in list_pids:
-                # no testserver is running any more
+            # loop to wait gently for end of testserver (before terminate() is used finally)
+            timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+            msg = f"Waiting for testserver finished, try {cnt_tries}/{max_tries} at '{timestamp}'"
+            BuiltIn().log(msg, level="INFO", console=True)
+            if self.__process_testserver.poll() is not None: # poll() is not blocking!
+                # testserver finished
                 is_testserver = False
                 break
-
-            msg = f"testserver quit try {cnt_tries}/{max_tries}"
-            BuiltIn().log(msg, level="INFO", console=True)
             time.sleep(max_try_wait_time)
         # eof for cnt_tries in range(1, max_tries+1):
 
         if is_testserver is True:
-            BuiltIn().log(f"Not possible to quit the TCP/IP testserver within {max_tries} tries ({max_tries} seconds).", level="WARN")
-            BuiltIn().log(f"Now terminating process with PID {server_pid}.", level="WARN")
-            self.__process_testserver.terminate()
-            conn_manager.disconnect(connection_name)
-            raise Exception("The TCP/IP testserver had to be terminated forcibly.")
+            timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+            msg = f"Timeout while waiting for testserver finished, try {cnt_tries}/{max_tries} at '{timestamp}'"
+            BuiltIn().log(msg, level="INFO", console=True)
+
+        # try to get more clarity
+        list_pids = psutil.pids()
+        if not self.__process_testserver_pid in list_pids:
+            # no testserver is running any more
+            msg = f"Latest testserver PID not existing any more => testserver finished"
+            BuiltIn().log(msg, level="INFO", console=True)
+        else:
+            msg = f"Emergency: Latest testserver PID still found => testserver process still running!"
+            BuiltIn().log(msg, level="INFO", console=True)
+
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        BuiltIn().log(f"Finally terminating process with PID {self.__process_testserver_pid} - at {timestamp}", level="INFO")
+        self.__process_testserver.terminate()
+
         conn_manager.disconnect(connection_name)
+
+        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        msg = f"Leaving keyword 'quit_tcpip_testserver' at '{timestamp}'"
+        BuiltIn().log(msg, level="INFO")
+
+    # eof def quit_tcpip_testserver(self):
 
 
     @keyword
