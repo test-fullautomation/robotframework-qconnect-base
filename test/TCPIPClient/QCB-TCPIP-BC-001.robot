@@ -21,15 +21,25 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-BC-001
     [Documentation]    Send command without connection
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    BADCASE
+    set_test_variable    ${test_category}      BADCASE
+
+    set_test_variable    ${connection_name}    QCB-TCPIP-BC-001-Connection
+
+    # connection parameter for this test
+    # (! in this test not used !)
+    # &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
+    # ...                                          address=${HOST}
+    # ...                                          port=${PORT}
+    # ...                                          logfile=./tcp_ip_incoming.log
 
     # try to send a command without connection
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=QCB-TCPIP-BC-001-Connection    command=BC-001
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command    conn_name=${connection_name}    command=BC-001
 
     log    TCPIP-BC-001 'send_command' status: ${status}    console=yes
     log    TCPIP-BC-001 'send_command' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    The 'QCB-TCPIP-BC-001-Connection' connection hasn't been established. Please connect first.
+    should_be_equal    ${result}    The '${connection_name}' connection hasn't been established. Please connect first.
 

@@ -18,14 +18,14 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-GC-002
-    [Documentation]    Send simple command to testserver (send_command)
+QCB-TCPIP-BC-020
+    [Documentation]    Deviating connection types
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}      GOODCASE
+    set_test_variable    ${test_category}      BADCASE
 
-    set_test_variable    ${connection_name}    QCB-TCPIP-GC-002-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-BC-020-Connection
 
     # connection parameter for this test
     &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
@@ -33,12 +33,16 @@ QCB-TCPIP-GC-002
     ...                                          port=${PORT}
     ...                                          logfile=./tcp_ip_incoming.log
 
-    conn_manager.connect    conn_name=${connection_name}
-    ...                     conn_conf=${TCPIPClientParam}
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=${connection_name}
+                                                               ...                     conn_type=SSHClient            # deviates from what is defined in TCPIPClientParam
+                                                               ...                     conn_conf=${TCPIPClientParam}
 
-    conn_manager.send_command    conn_name=${connection_name}    command=GC-002
+    log    TCPIP-BC-020 'connect' status: ${status}    console=yes
+    log    TCPIP-BC-020 'connect' result: ${result}    console=yes
 
-    Sleep    2s
+    should_be_equal    ${status}    FAIL
 
-    conn_manager.disconnect    ${connection_name}
+    should_be_equal    ${result}    Mismatch: 'conn_type' (SSHClient) and 'con_conf["conn_type"]' (TCPIPClient) both set but differ. Expected: set in only one or identical in both.
+
+
 

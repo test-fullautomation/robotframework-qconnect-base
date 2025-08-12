@@ -31,10 +31,12 @@ Library    ./tcp_ip_selftest_lib.py    WITH NAME    tcpip.selftest
 ${HOST}=    localhost
 ${PORT}=    ${4000}
 
-&{TCPIPClientParam}    conn_type=TCPIPClient
-...                    saddress=${HOST}
-...                    port=${PORT}
-...                    logfile=./tcp_ip_incoming.log
+# settings for TCP/IP testserver
+&{TCPIPClientParamTS}    conn_type=TCPIPClient
+...                      address=${HOST}
+...                      port=${PORT}
+...                      logfile=./tcp_ip_incoming.log
+# (testcase specific definition of TCPIPClientParam will be done inside the test files)
 
 *** Keywords ***
 
