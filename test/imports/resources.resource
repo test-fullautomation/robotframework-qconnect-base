@@ -31,7 +31,8 @@ Library    ./tcp_ip_selftest_lib.py    WITH NAME    tcpip.selftest
 ${HOST}=    localhost
 ${PORT}=    ${4000}
 
-&{TCPIPClientParam}    address=${HOST}
+&{TCPIPClientParam}    conn_type=TCPIPClient
+...                    saddress=${HOST}
 ...                    port=${PORT}
 ...                    logfile=./tcp_ip_incoming.log
 
