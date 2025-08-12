@@ -328,23 +328,23 @@ Keyword for disconnecting a connection by name.
 #          raise Exception("Input parameter are invalid.")
 
    @keyword
-   def connect(self, conn_conf, conn_name='default_conn', conn_type='', conn_mode=''):
+   def connect(self, conn_name='default_conn', conn_conf=None, conn_type='', conn_mode=''):
       """
 Making a connection.
 
 **Arguments:**
 
-* ``conn_conf``
-
-  / *Condition*: required / *Type*: dictionary /
-
-  Configuration for connection.
-
-* ``conn_name`` (deprecated)
+* ``conn_name``
 
   / *Condition*: optional / *Type*: str / *Default*: 'default_conn' /
 
   Name of connection. It can be specified in ``conn_conf`` dictionary.
+
+* ``conn_conf``
+
+  / *Condition*: optional / *Type*: dictionary / *Default*: None /
+
+  Configuration for connection.
 
 * ``conn_type`` (deprecated)
 
@@ -363,7 +363,17 @@ Making a connection.
 (*no returns*)
       """
       if not conn_conf:
-         raise Exception("The configurations 'conn_conf' for connection have to be provided")
+         if not conn_type:
+            # conn_conf is required for new version which
+            # conn_type (and conn_mode) is specified with conn_conf dictionary
+            raise Exception("The configurations 'conn_conf' for connection have to be provided")
+         else:
+            # to be compatible with previous version
+            # conn_type is provided and default conn_conf is used if not provided
+            conn_conf = {}
+      else:
+         if not isinstance(conn_conf, dict):
+            raise Exception("The configurations 'conn_conf' must be a dictionary")
 
       if 'conn_type' in conn_conf:
          if conn_conf['conn_type'] != conn_type and conn_type != '':
