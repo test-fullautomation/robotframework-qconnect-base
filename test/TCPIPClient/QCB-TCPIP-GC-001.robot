@@ -21,14 +21,22 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-GC-001
     [Documentation]    Connect to testserver and disconnect from testserver
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    GOODCASE
+    set_test_variable    ${test_category}      GOODCASE
 
-    conn_manager.connect    conn_name=QCB-TCPIP-GC-001-Connection
-    ...                     conn_type=${connection_type}
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-001-Connection
+
+    # connection parameter for this test
+    &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
+    ...                                          address=${HOST}
+    ...                                          port=${PORT}
+    ...                                          logfile=./tcp_ip_incoming.log
+
+    conn_manager.connect    conn_name=${connection_name}
     ...                     conn_conf=${TCPIPClientParam}
 
     Sleep    1s
 
-    conn_manager.disconnect    QCB-TCPIP-GC-001-Connection
+    conn_manager.disconnect    ${connection_name}
 

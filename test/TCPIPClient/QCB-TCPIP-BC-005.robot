@@ -21,10 +21,18 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-BC-005
     [Documentation]    Invalid connection type in keyword 'connect'
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    BADCASE
+    set_test_variable    ${test_category}      BADCASE
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-005-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-BC-005-Connection
+
+    # connection parameter for this test
+    &{TCPIPClientParam}=    Create Dictionary    address=${HOST}
+    ...                                          port=${PORT}
+    ...                                          logfile=./tcp_ip_incoming.log
+
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=${connection_name}
                                                                ...                     conn_type=INVALID_CONNECTION_TYPE
                                                                ...                     conn_conf=${TCPIPClientParam}
 

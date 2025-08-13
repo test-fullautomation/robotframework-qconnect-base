@@ -43,8 +43,8 @@ from PythonExtensionsCollection.String.CString import CString
 # --------------------------------------------------------------------------------------------------------------
 
 THISMODULENAME    = "tcp_ip_selftest_lib.py"
-THISMODULEVERSION = "0.11.0"
-THISMODULEDATE    = "22.07.2025"
+THISMODULEVERSION = "0.11.1"
+THISMODULEDATE    = "12.08.2025"
 THISMODULE        = f"{THISMODULENAME} v. {THISMODULEVERSION} / {THISMODULEDATE}"
 
 TESTSERVER_TIME_TO_QUIT = 3
@@ -141,14 +141,15 @@ class tcp_ip_selftest_lib():
         BuiltIn().log(f"PID '{self.__process_testserver_pid}'", level="INFO", console=True)
 
         # wait for TCP/IP testserver is ready (= accepts a connection)
-        TCPIPClientParam = BuiltIn().get_variable_value('${TCPIPClientParam}')
-        conn_manager = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        TCPIPClientParamTS = BuiltIn().get_variable_value('${TCPIPClientParamTS}')
+        # the name of the library like defined during import ("WITH NAME" option)
+        conn_manager       = BuiltIn().get_library_instance("conn_manager")
         max_tries         = 5
         max_try_wait_time = 1
         for cnt_tries in range(1, max_tries+1):
             connection_name = f"WAIT_FOR_TESTSERVER_READY_{cnt_tries}"
             try:
-                conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
+                conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParamTS)
                 conn_manager.disconnect(connection_name)
                 self.__can_be_connected = True
                 BuiltIn().log(f"TCP/IP testserver is ready for being connected.", level="INFO", console=True)
@@ -169,11 +170,11 @@ class tcp_ip_selftest_lib():
         timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
         msg = f"Entering keyword 'quit_tcpip_testserver' at '{timestamp}'"
         BuiltIn().log(msg, level="INFO")
-        TCPIPClientParam  = BuiltIn().get_variable_value('${TCPIPClientParam}')
-        conn_manager      = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
-        connection_name   = "TESTSERVER_QUIT_CONNECTION"
+        TCPIPClientParamTS  = BuiltIn().get_variable_value('${TCPIPClientParamTS}')
+        conn_manager        = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        connection_name     = "TESTSERVER_QUIT_CONNECTION"
         try:
-            conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParam)
+            conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParamTS)
             conn_manager.send_command(conn_name=connection_name, command="QUIT_TESTSERVER")
         except Exception as ex:
             msg = f"Problems with command 'QUIT_TESTSERVER'. Reason: {ex}"
