@@ -16,22 +16,24 @@
 
 Resource    ../imports/resources.resource
 
-*** Variables ***
-
-&{TCPIPClientParam_err}    address=${HOST}
-...                        port=INVALID
-...                        logfile=./tcp_ip_incoming_BC-008.log
-
 *** Test Cases ***
 
 QCB-TCPIP-BC-008
     [Documentation]    Invalid type of connection configuration parameter
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    BADCASE
+    set_test_variable    ${test_category}      BADCASE
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-008-Connection
-                                                               ...                     conn_type=${connection_type}
+    set_test_variable    ${connection_name}    QCB-TCPIP-BC-008-Connection
+
+    # connection parameter for this test (with invalid port number)
+    &{TCPIPClientParam_err}=    Create Dictionary    conn_type=${connection_type}
+    ...                                              address=${HOST}
+    ...                                              port=INVALID
+    ...                                              logfile=./tcp_ip_incoming.log
+
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=${connection_name}
                                                                ...                     conn_conf=${TCPIPClientParam_err}
 
     log    TCPIP-BC-008 'connect' status: ${status}    console=yes
@@ -42,7 +44,7 @@ QCB-TCPIP-BC-008
 
     Sleep    1s
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-008-Connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=${connection_name}
 
     log    TCPIP-BC-008 'disconnect' status: ${status}    console=yes
     log    TCPIP-BC-008 'disconnect' result: ${result}    console=yes

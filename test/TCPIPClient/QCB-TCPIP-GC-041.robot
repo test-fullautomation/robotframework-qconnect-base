@@ -18,29 +18,35 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-BC-005
-    [Documentation]    Invalid connection type in keyword 'connect'
+QCB-TCPIP-GC-041
+    [Documentation]    Subsequent connections, commands (verify) and disconnections to same server
+    ...                (different connection names)
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}      BADCASE
+    set_test_variable    ${test_category}      GOODCASE
 
-    set_test_variable    ${connection_name}    QCB-TCPIP-BC-005-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-041-Connection
 
     # connection parameter for this test
-    &{TCPIPClientParam}=    Create Dictionary    conn_type=INVALID_CONNECTION_TYPE
+    &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
     ...                                          address=${HOST}
     ...                                          port=${PORT}
     ...                                          logfile=./tcp_ip_incoming.log
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=${connection_name}
-                                                               ...                     conn_conf=${TCPIPClientParam}
+    FOR    ${connection_count}    IN RANGE    1    6
+        log    TCPIP-GC-041 connection count ${connection_count}    console=yes
 
-    log    TCPIP-BC-005 'connect' status: ${status}    console=yes
-    log    TCPIP-BC-005 'connect' result: ${result}    console=yes
+        conn_manager.connect    conn_name=${connection_name}-${connection_count}
+        ...                     conn_conf=${TCPIPClientParam}
 
-    should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    The connection type 'INVALID_CONNECTION_TYPE' is not supported. Please choose one of: GoepelClient, RabbitmqClient, SSHClient, SerialClient, TCPIPClient, TCPIPServer, Winapp.
+        conn_manager.verify    conn_name=${connection_name}-${connection_count}
+        ...                    search_pattern=TCPIP-GC-041-${connection_count} ACK
+        ...                    send_cmd=TCPIP-GC-041-${connection_count}
 
+        conn_manager.disconnect    ${connection_name}-${connection_count}
 
+        Sleep    1s
+
+    END
 
