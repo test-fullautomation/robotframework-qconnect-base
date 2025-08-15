@@ -6,3 +6,9 @@ build/
 __pycache__/
 /*.egg-info
 /*.egg
+*.log
+results/
+output.xml
+log.html
+report.html
+*.lock
