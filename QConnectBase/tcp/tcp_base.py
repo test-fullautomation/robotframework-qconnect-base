@@ -83,7 +83,7 @@ Constructor for TCPBase class.
       self.config = TCPConfig(**config)
       address = self.config.address
       port = self.config.port
-      BuiltIn().log("%s: Creating socket for '%s':'%s'" % (_mident, address, port))
+      BuiltIn().log("%s: Creating socket for '%s':'%s'" % (_mident, address, port), constants.LOG_LEVEL_DEBUG)
       ConnectionBase.__init__(self)
       self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
       self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -122,7 +122,7 @@ Destructor for TCPBase class.
 (*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
-      BuiltIn().log("%s" % _mident)
+      BuiltIn().log("%s" % _mident, constants.LOG_LEVEL_DEBUG)
       self.quit()
 
    def _send(self, msg, cr=True):
@@ -171,7 +171,7 @@ Close connection.
 (*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
-      BuiltIn().log('%s' % _mident)
+      BuiltIn().log('%s' % _mident, constants.LOG_LEVEL_DEBUG)
 
       # close listener thread
       # self.quit()
@@ -483,7 +483,7 @@ Wrapper method for handling accept action of TCP Server.
       self.conn, addr = self._accept()
       self.conn_timeout = self._conn_timeout
       self._is_connected = True
-      BuiltIn().log("%s: connected to '%s':'%d' " % (_mident, addr[0], addr[1]))
+      BuiltIn().log("%s: connected to '%s':'%d' " % (_mident, addr[0], addr[1]), constants.LOG_LEVEL_DEBUG)
 
    def connect(self):
       self.accept_connection()
@@ -501,7 +501,7 @@ Base class for TCP client.
    def connect(self):
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       try:
-         BuiltIn().log("%s: Try to connect to '%s':'%d'" % (_mident, self.address, self.port))
+         BuiltIn().log("%s: Try to connect to '%s':'%d'" % (_mident, self.address, self.port), constants.LOG_LEVEL_DEBUG)
          self.socket.connect((self.address, self.port))
          self.conn = self.socket
          self._is_connected = True
@@ -512,7 +512,7 @@ Base class for TCP client.
          # raise BrokenConnError(f"There is no possible server at {address}:{port}'")
          raise reason
 
-      BuiltIn().log("%s: connected to '%s':'%d' " % (_mident, self.address, self.port))
+      BuiltIn().log("%s: connected to '%s':'%d' " % (_mident, self.address, self.port), constants.LOG_LEVEL_DEBUG)
 
    def disconnect(self):
       self._is_connected = False
