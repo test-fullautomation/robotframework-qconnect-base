@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.11.0 / 22.07.2025"
+VERSION = "v. 0.11.1 / 14.08.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -269,13 +269,8 @@ def handle_client(client_socket, client_address):
         # eof while True: # next incoming message
     # eof try:
 
-    except ConnectionResetError:
-        msg = f"TCP/IP testserver detected ConnectionResetError ({client_address})"
-        rf_log.info(msg)
-        tcp_ip_testserver_log.tlog("handle_client", msg)
-
-    except ConnectionAbortedError:
-        msg = f"TCP/IP testserver detected ConnectionAbortedError ({client_address})"
+    except (ConnectionResetError, ConnectionAbortedError) as ex:
+        msg = f"TCP/IP testserver detected {type(ex).__name__} ({client_address})"
         rf_log.info(msg)
         tcp_ip_testserver_log.tlog("handle_client", msg)
 
