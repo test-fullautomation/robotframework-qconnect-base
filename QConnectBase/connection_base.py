@@ -72,7 +72,7 @@ Base class for all connection classes.
    _force_seq_lock = threading.RLock()
    _start_dlt_lock = threading.RLock()
 
-   _traceq_handle = 0   
+   _traceq_handle = 0
    supported_devices = []
 
    # # for continuous processing
@@ -415,13 +415,13 @@ Thread to receive data from connection continuously.
       BuiltIn().log("%s: receiver thread terminated." % _mident, constants.LOG_LEVEL_DEBUG)
 
 
-   def send_obj(self, send_cmd, cr=True):
+   def send_obj(self, send_cmd, cr=True, **kwargs):
       """
 Wrapper method to send message to a tcp connection.
 
 **Arguments:**
 
-* ``obj``
+* ``send_cmd``
 
   / *Condition*: required / *Type*: str /
 
