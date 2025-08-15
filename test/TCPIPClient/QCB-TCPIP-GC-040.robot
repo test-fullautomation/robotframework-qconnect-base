@@ -18,25 +18,31 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-GC-041
+QCB-TCPIP-GC-040
     [Documentation]    Subsequent connections, commands (verify) and disconnections to same server
-    ...                (different connection names)
+    ...                (always the same connection name)
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    GOODCASE
+    set_test_variable    ${test_category}      GOODCASE
+
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-040-Connection
+
+    # connection parameter for this test
+    &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
+    ...                                          address=${HOST}
+    ...                                          port=${PORT}
+    ...                                          logfile=./tcp_ip_incoming.log
 
     FOR    ${connection_count}    IN RANGE    1    6
-        log    TCPIP-GC-041 connection count ${connection_count}    console=yes
+        log    TCPIP-GC-040 connection count ${connection_count}    console=yes
 
-        conn_manager.connect    conn_name=QCB-TCPIP-GC-041-Connection-${connection_count}
-        ...                     conn_type=${connection_type}
+        conn_manager.connect    conn_name=${connection_name}
         ...                     conn_conf=${TCPIPClientParam}
 
-        conn_manager.verify    conn_name=QCB-TCPIP-GC-041-Connection-${connection_count}
-        ...                    search_pattern=TCPIP-GC-041-${connection_count} ACK
-        ...                    send_cmd=TCPIP-GC-041-${connection_count}
+        conn_manager.verify    conn_name=${connection_name}    search_pattern=TCPIP-GC-040 ACK    send_cmd=TCPIP-GC-040
 
-        conn_manager.disconnect    QCB-TCPIP-GC-041-Connection-${connection_count}
+        conn_manager.disconnect    ${connection_name}
 
         Sleep    1s
 

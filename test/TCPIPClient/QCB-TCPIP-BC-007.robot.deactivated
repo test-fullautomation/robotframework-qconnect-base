@@ -16,13 +16,6 @@
 
 Resource    ../imports/resources.resource
 
-*** Variables ***
-
-&{TCPIPClientParam_err}    address=${HOST}
-...                        port=${PORT}
-...                        INVALID=UNKNOWN
-...                        logfile=./tcp_ip_incoming_BC-007.log
-
 *** Test Cases ***
 
 QCB-TCPIP-BC-007
@@ -31,11 +24,20 @@ QCB-TCPIP-BC-007
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/66#issuecomment-2531780274
     ...                !!! test not in final version !!!
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    BADCASE
+    set_test_variable    ${test_category}      BADCASE
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=QCB-TCPIP-BC-007-Connection
-                                                               ...                     conn_type=${connection_type}
+    set_test_variable    ${connection_name}    QCB-TCPIP-BC-007-Connection
+
+    # connection parameter for this test (with invalid parameter)
+    &{TCPIPClientParam_err}=    Create Dictionary    conn_type=${connection_type}
+    ...                                              address=${HOST}
+    ...                                              port=${PORT}
+    ...                                              INVALID=UNKNOWN
+    ...                                              logfile=./tcp_ip_incoming.log
+
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=${connection_name}
                                                                ...                     conn_conf=${TCPIPClientParam_err}
 
     log    TCPIP-BC-007 'connect' status: ${status}    console=yes
@@ -47,12 +49,12 @@ QCB-TCPIP-BC-007
 
     Sleep    1s
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=QCB-TCPIP-BC-007-Connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    conn_name=${connection_name}
 
     log    TCPIP-BC-007 'disconnect' status: ${status}    console=yes
     log    TCPIP-BC-007 'disconnect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    Invalid operation: Attempted to disconnect 'conn_name=QCB-TCPIP-BC-007-Connection', but no such connection exists.
+    should_be_equal    ${result}    Invalid operation: Attempted to disconnect 'conn_name=${connection_name}', but no such connection exists.
 
 

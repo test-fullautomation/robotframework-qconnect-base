@@ -23,22 +23,30 @@ QCB-TCPIP-GC-100
     [Documentation]    Communication in two threads. The first thread waits for an incoming message
     ...                that is triggered by a command sent within the second thread.
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    GOODCASE
+    set_test_variable    ${test_category}      GOODCASE
 
-    conn_manager.connect    conn_name=QCB-TCPIP-GC-100-Connection
-    ...                     conn_type=${connection_type}
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-100-Connection
+
+    # connection parameter for this test
+    &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
+    ...                                          address=${HOST}
+    ...                                          port=${PORT}
+    ...                                          logfile=./tcp_ip_incoming.log
+
+    conn_manager.connect    conn_name=${connection_name}
     ...                     conn_conf=${TCPIPClientParam}
 
     THREAD    VERIFY-THREAD-1     False
-        # now own send_cmd, simply waiting; 'GC-100-T2-6' triggered by VERIFY-THREAD-2
-        conn_manager.verify    conn_name=QCB-TCPIP-GC-100-Connection    search_pattern=GC-100-T2-6    match_try=12
+        # no own send_cmd in this thread, simply waiting; search_pattern 'GC-100-T2-6' triggered by VERIFY-THREAD-2
+        conn_manager.verify    conn_name=${connection_name}    search_pattern=GC-100-T2-6    match_try=12
         send_thread_notification    VERIFY_THREAD_1_DONE
     END
 
     THREAD    VERIFY-THREAD-2     False
         FOR    ${index}    IN RANGE    1    11
-            conn_manager.verify    conn_name=QCB-TCPIP-GC-100-Connection    search_pattern=GC-100-T2-${index}    match_try=6    send_cmd=GC-100-T2-${index}
+            conn_manager.verify    conn_name=${connection_name}    search_pattern=GC-100-T2-${index}    match_try=6    send_cmd=GC-100-T2-${index}
         END
         send_thread_notification    VERIFY_THREAD_2_DONE
     END
@@ -46,5 +54,5 @@ QCB-TCPIP-GC-100
     wait_thread_notification    VERIFY_THREAD_1_DONE    timeout=120
     wait_thread_notification    VERIFY_THREAD_2_DONE    timeout=120
 
-    conn_manager.disconnect    QCB-TCPIP-GC-100-Connection
+    conn_manager.disconnect    ${connection_name}
 
