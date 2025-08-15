@@ -29,7 +29,7 @@ QCB-TCPIP-BC-002
 
     conn_manager.connect    conn_name=QCB-TCPIP-BC-002-Connection
     ...                     conn_type=${connection_type}
-    ...                     conn_conf=${TCPIPClientParam}
+    ...                     conn_conf=${TCPIPClientParamTS}
 
     # let the testserver close the connection
     conn_manager.verify    conn_name=QCB-TCPIP-BC-002-Connection
@@ -56,5 +56,3 @@ QCB-TCPIP-BC-002
     # TODO: needs to be reactivated (currently fails under Linux; reason unclear)
     # should_be_equal    ${status}    FAIL
     # should_contain    ${result}    Unable to send command to 'QCB-TCPIP-BC-002-Connection' connection. Exception: Connection has been broken.
-
-
