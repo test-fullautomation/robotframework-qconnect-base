@@ -242,13 +242,13 @@ Get an exist connection by name.
       return conn
 
    @keyword
-   def disconnect(self, connection_name):
+   def disconnect(self, conn_name):
       """
 Keyword for disconnecting a connection by name.
 
 **Arguments:**
 
-* ``connection_name``
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -258,11 +258,11 @@ Keyword for disconnecting a connection by name.
 
 (*no returns*)
       """
-      if connection_name in self.connection_manage_dict.keys():
-         self.connection_manage_dict[connection_name].quit()
-         del self.connection_manage_dict[connection_name]
+      if conn_name in self.connection_manage_dict.keys():
+         self.connection_manage_dict[conn_name].quit()
+         del self.connection_manage_dict[conn_name]
       else:
-         raise Exception(f"Invalid operation: Attempted to disconnect '{connection_name}', but no such connection exists.")
+         raise Exception(f"Invalid operation: Attempted to disconnect '{conn_name}', but no such connection exists.")
 
 #    @keyword
 #    def connect(self, *args, **kwargs):

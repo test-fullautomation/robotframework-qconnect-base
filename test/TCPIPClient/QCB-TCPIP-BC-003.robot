@@ -30,7 +30,7 @@ QCB-TCPIP-BC-003
 
     conn_manager.connect    conn_name=QCB-TCPIP-BC-003-Connection
     ...                     conn_type=${connection_type}
-    ...                     conn_conf=${TCPIPClientParam}
+    ...                     conn_conf=${TCPIPClientParamTS}
 
     # 'verify' waits 11 seconds for a 'search_pattern' that never will be received.
     # Testserver sends 3 notifications (within 3 seconds), then closes the connection while verify is still waiting.
@@ -46,8 +46,4 @@ QCB-TCPIP-BC-003
     log    TCPIP-BC-003 'verify' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    # TODO: !!! needs to be adapted after bugfix !!!
-    # Should be something like 'Connection has been broken while trying to match the pattern.'
-    should_contain    ${result}    Unable to match the pattern 'NEVER_WILL_BE_RECEIVED' after '11' tries
-
-
+    should_contain    ${result}    Connection has been broken while trying to match the pattern.
