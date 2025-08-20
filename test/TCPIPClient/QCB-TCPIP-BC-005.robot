@@ -40,4 +40,4 @@ QCB-TCPIP-BC-005
     log    TCPIP-BC-005 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_match_regexp    ${result}    The connection type 'INVALID_CONNECTION_TYPE' is not supported. Please choose one of: (GoepelClient, )?RabbitmqClient, SSHClient, SerialClient, TCPIPClient, TCPIPServer, Winapp\.
+    should_match_regexp    ${result}    The connection type 'INVALID_CONNECTION_TYPE' is not supported. Please choose one of: (GoepelClient, )?RabbitmqClient, SSHClient, SerialClient, TCPIPClient, TCPIPServer, Winapp\.$
