@@ -117,7 +117,7 @@ Implementation the thread for getting data from ssh connection.
 (*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
-      BuiltIn().log("%s: low-level receiver thread started." % _mident, constants.LOG_LEVEL_INFO)
+      BuiltIn().log("%s: low-level receiver thread started." % _mident, constants.LOG_LEVEL_DEBUG)
       while self.chan is None and not self._llrecv_thrd_term.isSet():
          time.sleep(TCPBase.RECV_MSGS_POLLING_INTERVAL)
 
@@ -141,7 +141,7 @@ Implementation the thread for getting data from ssh connection.
       # wait here 5 times polling interval
       time.sleep(TCPBase.RECV_MSGS_POLLING_INTERVAL * 5)
       self._llrecv_thrd_term.clear()
-      BuiltIn().log("%s: lowlevel receiver thread terminated." % _mident, constants.LOG_LEVEL_INFO)
+      BuiltIn().log("%s: lowlevel receiver thread terminated." % _mident, constants.LOG_LEVEL_DEBUG)
 
 
    def connect(self):
@@ -162,9 +162,9 @@ Implementation for creating a SSH connection.
       # If authentication mode is 'publickey', the list of key files is used. If the key files are encrypted with a pass phrase, password is used as the pass phrase
 
       self.client = paramiko.SSHClient()
-      BuiltIn().log("%s: starting SSHClient..." % _mident, constants.LOG_LEVEL_INFO)
+      BuiltIn().log("%s: starting SSHClient..." % _mident, constants.LOG_LEVEL_DEBUG)
       self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-      BuiltIn().log("%s: setting SSH policy..." % _mident, constants.LOG_LEVEL_INFO)
+      BuiltIn().log("%s: setting SSH policy..." % _mident, constants.LOG_LEVEL_DEBUG)
 
       # To reset the flag set by CVirtualClient.connect
       self._is_connected = False
@@ -173,13 +173,13 @@ Implementation for creating a SSH connection.
          while max_try > 0:
             try:
                if self._authentication == AuthenticationType.KEYFILE:
-                  BuiltIn().log("%s: trying to establish keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
+                  BuiltIn().log("%s: trying to establish keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_DEBUG)
                   self.client.connect(sock=self.socket, hostname=self._address, username=self._username, key_filename=self._key_filename, timeout=30.0, allow_agent=False)
                elif self._authentication == AuthenticationType.PASSWORD:
-                  BuiltIn().log("%s: trying to establish password based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
+                  BuiltIn().log("%s: trying to establish password based SSH connection..." % _mident, constants.LOG_LEVEL_DEBUG)
                   self.client.connect(sock=self.socket, hostname=self._address, username=self._username, password=self._password, timeout=30.0, allow_agent=False)
                elif self._authentication == AuthenticationType.PASSWORDKEYFILE:
-                  BuiltIn().log("%s: trying to establish password and keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_INFO)
+                  BuiltIn().log("%s: trying to establish password and keyfile based SSH connection..." % _mident, constants.LOG_LEVEL_DEBUG)
                   # From http://docs.paramiko.org/en/1.13/api/client.html
                   # Authentication is attempted in the following order of priority:
                   # 1. The pkey or key_filename passed in (if any)
@@ -204,7 +204,7 @@ Implementation for creating a SSH connection.
             else:
                break
 
-         BuiltIn().log("%s: successfully established SSH connection on existing TCPIP socket." % _mident, constants.LOG_LEVEL_INFO)
+         BuiltIn().log("%s: successfully established SSH connection on existing TCPIP socket." % _mident, constants.LOG_LEVEL_DEBUG)
          self._is_connected = True
 
       except Exception as reason:
@@ -218,7 +218,7 @@ Implementation for creating a SSH connection.
       # and then the next command will start in /to/somewhere.
       # Therefore we need to open a shell.
       self.chan = self.client.invoke_shell()
-      BuiltIn().log("%s: successfully invoked SSH shell for secure communication." % _mident, constants.LOG_LEVEL_INFO)
+      BuiltIn().log("%s: successfully invoked SSH shell for secure communication." % _mident, constants.LOG_LEVEL_DEBUG)
 
       # switch echo off for this terminal
       # echo disturbs when the command contains part of the exepcted reponse, then regexp filtering will

@@ -50,6 +50,4 @@ QCB-TCPIP-BC-008
     log    TCPIP-BC-008 'disconnect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    Invalid operation: Attempted to disconnect 'conn_name=QCB-TCPIP-BC-008-Connection', but no such connection exists.
-
-
+    should_be_equal    ${result}    Invalid operation: Attempted to disconnect 'QCB-TCPIP-BC-008-Connection', but no such connection exists.

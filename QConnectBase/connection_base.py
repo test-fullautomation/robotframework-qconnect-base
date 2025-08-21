@@ -334,7 +334,7 @@ Initialize a thread for receiving data from connection.
       self._recv_thrd_obj.setDaemon(True)
 
       self._recv_thrd_obj.name = conn_id_name
-      BuiltIn().log("%s: starting receiver thread '%s'" % (_mident, self._recv_thrd_obj.name))
+      BuiltIn().log("%s: starting receiver thread '%s'" % (_mident, self._recv_thrd_obj.name), constants.LOG_LEVEL_DEBUG)
       self._recv_thrd_obj.start()
 
    def _thread_receive_from_connection(self, sync_with_start=False):
