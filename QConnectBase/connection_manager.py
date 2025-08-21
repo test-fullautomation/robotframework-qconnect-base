@@ -521,6 +521,7 @@ Send command to a connection.
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.send_obj(command, **kwargs)
+         BuiltIn().log(f"command '{command}' is sent to '{conn_name}'", constants.LOG_LEVEL_INFO)
       except Exception as ex:
          raise Exception("Unable to send command to '%s' connection. Exception: %s" % (conn_name, str(ex)))
 
@@ -884,6 +885,7 @@ Verify a pattern from connection response after sending a command.
 
       kwargs['emergency_timeout'] = self.default_emergency_timeout
 
+      BuiltIn().log(f"sending command '{send_cmd}' to '{conn_name}' ...", constants.LOG_LEVEL_INFO)
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
          res = connection_obj.wait_4_trace(search_pattern, int(timeout), fetch_block, eob_pattern, filter_pattern, **kwargs)
@@ -891,7 +893,8 @@ Verify a pattern from connection response after sending a command.
             # raise AssertionError("Unable to match the pattern after '%s' seconds." % timeout)
             # 14.02.2025 qth2hi changed
             # original # BuiltIn().log("Match try %s/%s timed out" % (i, match_try), constants.LOG_LEVEL_WARNING)
-            BuiltIn().log(f"[{conn_name}] Match try {i}/{match_try} timed out ('{search_pattern}')", constants.LOG_LEVEL_WARNING)
+            log_level = constants.LOG_LEVEL_WARNING if (i == match_try) else constants.LOG_LEVEL_INFO
+            BuiltIn().log(f"[{conn_name}] Match try {i}/{match_try} timed out ('{search_pattern}')", log_level)
          else:
             break
 
@@ -900,6 +903,7 @@ Verify a pattern from connection response after sending a command.
          # raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
          raise AssertionError(f"Unable to match the pattern '{search_pattern}' after '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
+      BuiltIn().log(f"received expected response '{res.group(0)}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
       return res
 
 

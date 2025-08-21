@@ -103,7 +103,7 @@ Constructor for RabbitmqClient class.
    (*no returns*)
          """
          _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
-         BuiltIn().log("%s: low-level receiver thread started." % _mident, constants.LOG_LEVEL_INFO)
+         BuiltIn().log("%s: low-level receiver thread started." % _mident, constants.LOG_LEVEL_DEBUG)
          while self.callback_queue is None and not self._llrecv_thrd_term.isSet():
             time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
          self.channel.basic_consume(queue=self.callback_queue, on_message_callback=self.on_response, auto_ack=True)
@@ -135,8 +135,8 @@ Implementation for creating a rabbitmq connection.
 
          # self.channel.basic_consume(queue=self.callback_queue, on_message_callback=self.on_response, auto_ack=True)
 
-
-         BuiltIn().log("%s: successfully established connection to Rabitmq Broker." % _mident, constants.LOG_LEVEL_INFO)
+         BuiltIn().log(f"connected to Rabbitmq Broker {self._host}:{self._port} (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+               constants.LOG_LEVEL_INFO)
          self._is_connected = True
 
       except Exception as reason:
@@ -217,10 +217,10 @@ Close rabbitmq connection.
                   time.sleep(0.5)
                   self.channel.queue_declare(queue=self.callback_queue, passive=True)
                   self.channel.queue_delete(queue=self.callback_queue)
-               except ChannelClosedByBroker:
+               except pika.exceptions.ChannelClosedByBroker:
                   pass
                # self.channel.queue_delete(queue=self.callback_queue)
-            
+
             self.channel.close()
          except:
             pass
@@ -245,6 +245,8 @@ Quit and stop receiver thread.
 
       self._llrecv_thrd_obj = None
       self.close()
+      BuiltIn().log(f"disconnected from Rabbitmq Broker '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+               constants.LOG_LEVEL_INFO)
 
 
 if __name__ == "__main__":
@@ -273,7 +275,7 @@ RMQSignal class.
    _BROADCAST_EXCHANGE = 'signal_exchange'
    _DIRECT_EXCHANGE = 'direct_signal_exchange'
    _BROADCAST_ROUTING_KEY = 'broadcast'
-   
+
    def __init__(self, host='localhost', port="5672"):
       """
 Constructor for RMQSignal class.
@@ -291,7 +293,7 @@ Constructor for RMQSignal class.
       self.signal_receiver_name = ''
       self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
       self.channel = self.connection.channel()
-      
+
       # self.broadcast_queue_name = "broadcast_signal_queue" + str(uuid.uuid4())
       self.channel.exchange_declare(exchange=RMQSignal._DIRECT_EXCHANGE, exchange_type='direct')
       self.channel.exchange_declare(exchange=RMQSignal._BROADCAST_EXCHANGE, exchange_type='fanout')
@@ -346,7 +348,7 @@ Send sinal to other processes.
 
       send_channel.close()
 
-   def unset_signal_receiver_name(self):     
+   def unset_signal_receiver_name(self):
       """
 Unset siganl receiver.
 
@@ -358,7 +360,7 @@ Unset siganl receiver.
          self.channel.queue_delete(self.signal_receiver_name)
          self.signal_receiver_name = ''
 
-   def set_signal_receiver_name(self, receiver='', force=True):     
+   def set_signal_receiver_name(self, receiver='', force=True):
       """
 Set the signal receiver to be received signal.
 
@@ -390,7 +392,7 @@ Set the signal receiver to be received signal.
          self.signal_receiver_name = receiver
       else:
          import logging
-         logging.getLogger("pika").setLevel(logging.ERROR) 
+         logging.getLogger("pika").setLevel(logging.ERROR)
          try:
          # Attempt to declare the queue
             connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
@@ -404,13 +406,13 @@ Set the signal receiver to be received signal.
                except Exception as ex:
                   # print(ex)
                   pass
-               
+
                print(f"Queue '{receiver}' created.")
                self.signal_receiver_name = receiver
             else:
-               raise Exception("Unable to create signal receiver. Exception: %s" % (e)) 
-         
-      
+               raise Exception("Unable to create signal receiver. Exception: %s" % (e))
+
+
    def consume_channel(self, exchange, queue_name, routing_key, stop_event, signal_name, messages, queue_delete=False):
       """
 Consume the message from specific queue.
@@ -473,7 +475,7 @@ Consume the message from specific queue.
          if isinstance(signal_name, str):
             if signal_name in data:
                messages.append(data[signal_name])
-               stop_event.set() 
+               stop_event.set()
                ch.stop_consuming()
          elif isinstance(signal_name, list):
             intersection = set(signal_name).intersection(set(data.keys()))
@@ -482,26 +484,26 @@ Consume the message from specific queue.
                   sig = intersection.pop()
                   messages[sig] = data[sig]
                   if all(messages.values()):
-                     stop_event.set() 
+                     stop_event.set()
                      ch.stop_consuming()
                except Exception as ex:
                   print(ex)
 
       connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
-      
+
       channel = connection.channel()
       if queue_name=='':
          result = channel.queue_declare(queue='', exclusive=True)
          queue_name = result.method.queue
-         
-      channel.queue_bind(  exchange=exchange, 
-                           queue=queue_name, 
+
+      channel.queue_bind(  exchange=exchange,
+                           queue=queue_name,
                            routing_key=routing_key)
       channel.basic_consume(queue=queue_name, on_message_callback=callback)
       # channel.start_consuming()
       while not stop_event.is_set():
-        channel.connection.process_data_events() 
-      
+        channel.connection.process_data_events()
+
       if queue_delete:
          channel.queue_delete(queue_name)
       channel.close()
@@ -534,22 +536,22 @@ Wait for specific signal in timeout.
       """
       messages = []
       stop_event = threading.Event()
-      thread_broadcast_consume = threading.Thread( target=self.consume_channel, 
-                                                   args=(   RMQSignal._BROADCAST_EXCHANGE, 
-                                                            '', 
-                                                            RMQSignal._BROADCAST_ROUTING_KEY, 
-                                                            stop_event, 
-                                                            signal_name, 
-                                                            messages, 
+      thread_broadcast_consume = threading.Thread( target=self.consume_channel,
+                                                   args=(   RMQSignal._BROADCAST_EXCHANGE,
+                                                            '',
+                                                            RMQSignal._BROADCAST_ROUTING_KEY,
+                                                            stop_event,
+                                                            signal_name,
+                                                            messages,
                                                             True),
                                                    daemon=True)
       if self.signal_receiver_name:
-         thread_direct_comsume = threading.Thread( target=self.consume_channel, 
-                                                   args=(   RMQSignal._DIRECT_EXCHANGE, 
-                                                            self.signal_receiver_name, 
-                                                            self.signal_receiver_name, 
-                                                            stop_event, 
-                                                            signal_name, 
+         thread_direct_comsume = threading.Thread( target=self.consume_channel,
+                                                   args=(   RMQSignal._DIRECT_EXCHANGE,
+                                                            self.signal_receiver_name,
+                                                            self.signal_receiver_name,
+                                                            stop_event,
+                                                            signal_name,
                                                             messages),
                                                    daemon=True)
 
@@ -558,7 +560,7 @@ Wait for specific signal in timeout.
       if self.signal_receiver_name:
          thread_direct_comsume.start()
 
-      stop_event.wait(timeout=timeout) 
+      stop_event.wait(timeout=timeout)
       message_received = stop_event.is_set()
       stop_event.set()
 
@@ -596,22 +598,22 @@ Wait for multiple specific signals in timeout.
       messages = {name: None for name in signal_names}
 
       stop_event = threading.Event()
-      thread_broadcast_consume = threading.Thread( target=self.consume_channel, 
-                                                   args=(   RMQSignal._BROADCAST_EXCHANGE, 
-                                                            '', 
-                                                            RMQSignal._BROADCAST_ROUTING_KEY, 
-                                                            stop_event, 
-                                                            signal_names, 
-                                                            messages, 
+      thread_broadcast_consume = threading.Thread( target=self.consume_channel,
+                                                   args=(   RMQSignal._BROADCAST_EXCHANGE,
+                                                            '',
+                                                            RMQSignal._BROADCAST_ROUTING_KEY,
+                                                            stop_event,
+                                                            signal_names,
+                                                            messages,
                                                             True),
                                                    daemon=True)
       if self.signal_receiver_name:
-         thread_direct_comsume = threading.Thread( target=self.consume_channel, 
-                                                   args=(   RMQSignal._DIRECT_EXCHANGE, 
-                                                            self.signal_receiver_name, 
-                                                            self.signal_receiver_name, 
-                                                            stop_event, 
-                                                            signal_names, 
+         thread_direct_comsume = threading.Thread( target=self.consume_channel,
+                                                   args=(   RMQSignal._DIRECT_EXCHANGE,
+                                                            self.signal_receiver_name,
+                                                            self.signal_receiver_name,
+                                                            stop_event,
+                                                            signal_names,
                                                             messages),
                                                    daemon=True)
 
@@ -620,7 +622,7 @@ Wait for multiple specific signals in timeout.
       if self.signal_receiver_name:
          thread_direct_comsume.start()
 
-      stop_event.wait(timeout=timeout) 
+      stop_event.wait(timeout=timeout)
       message_received = stop_event.is_set()
       stop_event.set()
 

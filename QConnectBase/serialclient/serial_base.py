@@ -115,7 +115,7 @@ Receive and process data from serial connection in low-level.
 (*no returns*)
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
-      BuiltIn().log("%s: lowlevel receiver thread started." % _mident, constants.LOG_LEVEL_INFO)
+      BuiltIn().log("%s: lowlevel receiver thread started." % _mident, constants.LOG_LEVEL_DEBUG)
       while self._is_connected is False and not self._llrecv_thrd_term.isSet():
          time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
 
@@ -143,7 +143,7 @@ Receive and process data from serial connection in low-level.
       time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL * 5)
 
       self._llrecv_thrd_term.clear()
-      BuiltIn().log("%s: lowlevel receiver thread terminated." % _mident, constants.LOG_LEVEL_INFO)
+      BuiltIn().log("%s: lowlevel receiver thread terminated." % _mident, constants.LOG_LEVEL_DEBUG)
 
    def connect(self):
       """
@@ -173,7 +173,8 @@ Disconnect serial port.
       """
       self.socket.close()
       self._is_connected = False
-
+      BuiltIn().log(f"disconnected from COM{self._port}@{self._baudrate} (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+                    constants.LOG_LEVEL_INFO)
 
    def _send(self, msg, _cr):
       """
@@ -331,12 +332,10 @@ Connect to the Serial port.
          # BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_ERROR)
          raise BrokenConnError("Not possible to connect. Reason: '%s'" % (str(reason)))
 
-      BuiltIn().log("%s: connected to COM%s@%s (%s,%s,%s) rtscts=%s xonxoff=%s" % (_mident,
-                                                                                   self._port,
-                                                                                   self._baudrate,
-                                                                                   self._bytesize,
-                                                                                   self._parity,
-                                                                                   self._stopbits,
-                                                                                   self._rtscts,
-                                                                                   self._xonxoff), constants.LOG_LEVEL_INFO)
-
+      BuiltIn().log("connected to COM%s@%s (%s,%s,%s) rtscts=%s xonxoff=%s" % (self._port,
+                                                                              self._baudrate,
+                                                                              self._bytesize,
+                                                                              self._parity,
+                                                                              self._stopbits,
+                                                                              self._rtscts,
+                                                                              self._xonxoff), constants.LOG_LEVEL_INFO)

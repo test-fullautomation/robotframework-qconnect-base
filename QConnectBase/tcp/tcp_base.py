@@ -186,11 +186,10 @@ Close connection.
 
       # noinspection PyBroadException
       try:
-         self.conn.close()
+         self.disconnect()
       except:
          # ignore, if not possible
          pass
-
       # 23.07.2014 Pollerspoeck
       # self.socket.close was in case of tcpip client redundant,
       # and in case of tcpip service not required.
@@ -490,9 +489,12 @@ Wrapper method for handling accept action of TCP Server.
 
    def disconnect(self):
       self._is_connected = False
-      self.socket.close()
-      self.conn.close()
-
+      if self.socket is not None:
+         self.socket.close()
+      if self.conn is not None:
+         self.conn.close()
+         BuiltIn().log(f"disconnected from '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+                  constants.LOG_LEVEL_INFO)
 
 class TCPBaseClient:
    """
@@ -512,8 +514,12 @@ Base class for TCP client.
          # raise BrokenConnError(f"There is no possible server at {address}:{port}'")
          raise reason
 
-      BuiltIn().log("%s: connected to '%s':'%d' " % (_mident, self.address, self.port), constants.LOG_LEVEL_DEBUG)
+      BuiltIn().log(f"connected to '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+                    constants.LOG_LEVEL_INFO)
 
    def disconnect(self):
       self._is_connected = False
-      self.conn.close()
+      if self.conn is not None:
+         self.conn.close()
+         BuiltIn().log(f"disconnected from '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+                  constants.LOG_LEVEL_INFO)
