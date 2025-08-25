@@ -57,6 +57,7 @@ class Singleton(object):  # pylint: disable=R0903
       with cls._lock:
          if not cls._instance:
             cls._instance = super(Singleton, cls).__new__(cls, *args, **kwargs)
+            cls._instance._initialized = False
       return cls._instance
 
 
