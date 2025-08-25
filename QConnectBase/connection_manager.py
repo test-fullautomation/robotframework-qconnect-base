@@ -106,11 +106,17 @@ Class to manage all connections.
    DEFAULT_EMERGENCY_TIMEOUT = 60 * 30
 
    id = 0
+   _initialized = False
 
    def __init__(self):
       """
 Constructor for ConnectionManager class.
       """
+      # Avoid re-initialize when calling the singleton ConnectionManager class
+      if(self._initialized):
+         return
+      self._initialized = True
+
       self.connection_manage_dict = {}
       main_lib_path = dirname(os.path.realpath(__file__))
       site_package_dirs = site.getsitepackages()
