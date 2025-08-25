@@ -111,6 +111,11 @@ Class to manage all connections.
       """
 Constructor for ConnectionManager class.
       """
+      # Avoid re-initialize when calling the singleton ConnectionManager class
+      if getattr(self, "_initialized", False):
+         return
+      self._initialized = True
+
       self.connection_manage_dict = {}
       main_lib_path = dirname(os.path.realpath(__file__))
       site_package_dirs = site.getsitepackages()
