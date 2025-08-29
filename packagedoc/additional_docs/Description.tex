@@ -232,28 +232,81 @@ command}}{send command}}\label{description-send-command}}
 
 \textbf{Arguments}:
 
-\begin{quote}
-\textbf{conn\_name}: Name of the connection.
+\begin{itemize}
+\item \textbf{conn\_name}:
+  \begin{quote}
+    Name of the connection.
+  \end{quote}
 
-\textbf{search\_pattern}: Regular expression for matching with the response.
+  \item \textbf{send\_cmd}:
+  \begin{quote}
+    Command to be sent to the other side of connection and waiting for response.
 
-\textbf{timeout}: Timeout for waiting response matching pattern.
+    Default value: empty string \rcode{''}.
+  \end{quote}
 
-\textbf{match\_try}: Number of time for trying to match the pattern.
+\item \textbf{search\_pattern}:
+  \begin{quote}
+    Expectation expressed as a \textbf{regular expression pattern} (more robust than a plain string comparison).
+    It will match:
+    \begin{itemize}
+      \item a single line by default (\textbf{fetch\_block} not used)
+      \item multiple lines if \textbf{fetch\_block} is enabled
+    \end{itemize}
 
-\textbf{fetch\_block}: If this value is true, every response line will be put into a block untill a line match \textbf{eob\_pattern} pattern.
+    Default value: \rcode{.*}, which means "match any character (\rcode{.}) repeated zero or more times (\rcode{*})".
 
-\textbf{eob\_pattern}: Regular expression for matching the endline when using \textbf{fetch\_block}.
+    In practice, this will always match the response, regardless of its content, unless you specify a stricter pattern.
+  \end{quote}
 
-\textbf{filter\_pattern}: Regular expression for filtering every line of block when using \textbf{fetch\_block}.
+\item \textbf{timeout}:
+  \begin{quote}
+    Timeout (in seconds) for each \textbf{match\_try} (if used) while waiting for the response to match the pattern.
 
-\textbf{send\_cmd}: Command to be sent to the other side of connection and waiting for response.
-\end{quote}
+    Default value: \rcode{5}.
+  \end{quote}
+
+\item \textbf{match\_try}:
+  \begin{quote}
+    Number of times to try matching the pattern.
+
+    Default value: \rcode{1}.
+  \end{quote}
+
+\item \textbf{fetch\_block}:
+  \begin{quote}
+    If \rcode{True}, every response line will be put into a block untill a line match \textbf{eob\_pattern} pattern.
+
+    Default value: \rcode{False}.
+  \end{quote}
+
+\item \textbf{eob\_pattern}: Applicable only when \textbf{fetch\_block} is \rcode{True}.
+  \begin{quote}
+    Regular expression for matching the endline when using \textbf{fetch\_block}.
+
+    Default value: \rcode{.*}.
+  \end{quote}
+
+\item \textbf{filter\_pattern}: Applicable only when \textbf{fetch\_block} is \rcode{True}.
+  \begin{quote}
+    Regular expression for filtering every line to put into the block of response when using \textbf{fetch\_block}.
+
+    Default value: \rcode{.*}.
+  \end{quote}
+
+\end{itemize}
 
 \textbf{Return value}:
 
 \begin{quote}
-\textbf{A corresponding match object if it is found.}
+\textbf{A corresponding match object (list-like) if a match is found.}
+
+The match object contains both the full string matched by the entire
+pattern and the substrings matched by individual capturing groups
+within the pattern.
+
+For experimenting and verifying regular expressions interactively,
+see \href{https://regex101.com/}{regex101}.
 
 \textbf{E.g.}
 
@@ -267,14 +320,22 @@ ${result} = verify  conn_name=SSH_Connection
 \tightlist
 \item
   \$\{result\}{[}0{]} will be \textbf{"This is the 1st test command."}
-  which is the matched string.
+  i.e.\ the entire string segment that matches the full search pattern.
 \item
-  \$\{result\}{[}1{]} will be \textbf{"1st"} which is the first captured
-  string.
+  \$\{result\}{[}1{]} will be \textbf{"1st"},
+  i.e.\ the first \emph{captured group} defined in the pattern \rcode|([0-9]..)|.
 \item
-  \$\{result\}{[}2{]} will be \textbf{"command"} which is the second
-  captured string.
+  \$\{result\}{[}2{]} will be \textbf{"command"},
+  i.e.\ the second \emph{captured group} defined in the pattern \rcode|(command)|.
 \end{itemize}
+
+In general:
+\begin{itemize}
+\tightlist
+\item \${result}[0] = the full match of the entire regular expression.
+\item \${result}[n] (with $n \geq 1$) = the $n$-th capturing group within the pattern.
+\end{itemize}
+
 \end{quote}
 \end{quote}
 

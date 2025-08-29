@@ -126,7 +126,7 @@ QConnectBase Library support following keywords for testing connection in RobotF
    ``conn_name=[conn_name]   conn_conf=[conn_conf]``
    *(All parameters are assigned by name)*
 
-  **Note**: Although previous syntax with 4 arguments is still supported for backward compatibility, only conn_name and conn_conf are now required.
+  **Note**: Although previous syntax with 4 arguments is still supported for backward compatibility, only **conn_name** and **conn_conf** are now required.
   **conn_type** and **conn_mode** can be provided inside **conn_conf**.
 
   **Arguments**:
@@ -134,6 +134,7 @@ QConnectBase Library support following keywords for testing connection in RobotF
     **conn_name**: Name of the connection.
 
     **conn_conf**: A dictionary containing configurations for the connection.
+
       It must include **conn_type**, and optionally **conn_mode** and other connection-specific fields (depending on type).
 
       This replaces the need to pass **conn_type** and **conn_mode** as separate arguments.
@@ -330,7 +331,7 @@ steps.
 
 3.  In your *Connection Class*, override below attributes and methods:
 
-  -  **_CONNECTION_TYPE**: name of your connection type. It will be the input of the conn_type argument when using **connect** keyword. Depend on the type name, the library will detemine the correct connection handling class.
+  -  **_CONNECTION_TYPE**: name of your connection type. It will be the input of the conn\_type argument when using **connect** keyword. Depend on the type name, the library will detemine the correct connection handling class.
 
   -  **__init__(self, \_mode, config)**: in this constructor method, you should:
 
