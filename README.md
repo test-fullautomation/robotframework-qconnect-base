@@ -127,71 +127,69 @@ in RobotFramework.
 > > parameters are assigned by name)*
 >
 > **Note**: Although previous syntax with 4 arguments is still supported
-> for backward compatibility, only conn_name and conn_conf are now
-> required. **conn_type** and **conn_mode** can be provided inside
+> for backward compatibility, only **conn_name** and **conn_conf** are
+> now required. **conn_type** and **conn_mode** can be provided inside
 > **conn_conf**.
 >
 > **Arguments**:
 >
 > > **conn_name**: Name of the connection.
 > >
-> > **conn_conf**: A dictionary containing configurations for the connection.
+> > **conn_conf**: A dictionary containing configurations for the
+> > connection.
 > >
-> > :   It must include **conn_type**, and optionally **conn_mode** and
-> >     other connection-specific fields (depending on type).
-> >
-> >     This replaces the need to pass **conn_type** and **conn_mode**
-> >     as separate arguments.
-> >
-> >     Each **conn_type** requires a specific structure in
-> >     **conn_conf**. Below are examples for each supported type:
-> >
-> >     > -   **TCPIPClient**: Create a Raw TCPIP connection to TCP
-> >     >     Server.
-> >     >
-> >     > ```{=html}
-> >     > <!-- -->
-> >     > ```
-> >     >     {
-> >     >         "conn_type": "TCPIPClient",
-> >     >         "address": [server host], # Optional. Default value is "localhost".
-> >     >         "port": [server port],     # Optional. Default value is 1234.
-> >     >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
-> >     >      }
-> >     >
-> >     > -   **SSHClient**: Create a client connection to a SSH server.
-> >     >
-> >     > ```{=html}
-> >     > <!-- -->
-> >     > ```
-> >     >     {
-> >     >         "conn_type": "SSHClient",
-> >     >         "address" : [server host],  # Optional. Default value is "localhost".
-> >     >         "port" : [server host],     # Optional. Default value is 22.
-> >     >         "username" : [username],    # Optional. Default value is "root".
-> >     >         "password" : [password],    # Optional. Default value is "".
-> >     >         "authentication" : "password" | "keyfile" | "passwordkeyfile",  # Optional. Default value is "".
-> >     >         "key_filename" : [filename or list of filenames], # Optional. Default value is null.
-> >     >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
-> >     >      }
-> >     >
-> >     > -   **SerialClient**: Create a client connection via Serial
-> >     >     Port.
-> >     >
-> >     > ```{=html}
-> >     > <!-- -->
-> >     > ```
-> >     >     {
-> >     >         "conn_type": "SerialClient",
-> >     >         "port" : [comport or null],
-> >     >         "baudrate" : [Baud rate such as 9600 or 115200 etc.],
-> >     >         "bytesize" : [Number of data bits. Possible values: 5, 6, 7, 8],
-> >     >         "stopbits" : [Number of stop bits. Possible values: 1, 1.5, 2],
-> >     >         "parity" : [Enable parity checking. Possible values: 'N', 'E', 'O', 'M', 'S'],
-> >     >         "rtscts" : [Enable hardware (RTS/CTS) flow control.],
-> >     >         "xonxoff" : [Enable software flow control.],
-> >     >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
-> >     >      }
+> > > It must include **conn_type**, and optionally **conn_mode** and
+> > > other connection-specific fields (depending on type).
+> > >
+> > > This replaces the need to pass **conn_type** and **conn_mode** as
+> > > separate arguments.
+> > >
+> > > Each **conn_type** requires a specific structure in **conn_conf**.
+> > > Below are examples for each supported type:
+> > >
+> > > > -   **TCPIPClient**: Create a Raw TCPIP connection to TCP
+> > > >     Server.
+> > > >
+> > > > <!-- -->
+> > > >
+> > > >     {
+> > > >         "conn_type": "TCPIPClient",
+> > > >         "address": [server host], # Optional. Default value is "localhost".
+> > > >         "port": [server port],     # Optional. Default value is 1234.
+> > > >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
+> > > >      }
+> > > >
+> > > > -   **SSHClient**: Create a client connection to a SSH server.
+> > > >
+> > > > <!-- -->
+> > > >
+> > > >     {
+> > > >         "conn_type": "SSHClient",
+> > > >         "address" : [server host],  # Optional. Default value is "localhost".
+> > > >         "port" : [server host],     # Optional. Default value is 22.
+> > > >         "username" : [username],    # Optional. Default value is "root".
+> > > >         "password" : [password],    # Optional. Default value is "".
+> > > >         "authentication" : "password" | "keyfile" | "passwordkeyfile",  # Optional. Default value is "".
+> > > >         "key_filename" : [filename or list of filenames], # Optional. Default value is null.
+> > > >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
+> > > >      }
+> > > >
+> > > > -   **SerialClient**: Create a client connection via Serial
+> > > >     Port.
+> > > >
+> > > > <!-- -->
+> > > >
+> > > >     {
+> > > >         "conn_type": "SerialClient",
+> > > >         "port" : [comport or null],
+> > > >         "baudrate" : [Baud rate such as 9600 or 115200 etc.],
+> > > >         "bytesize" : [Number of data bits. Possible values: 5, 6, 7, 8],
+> > > >         "stopbits" : [Number of stop bits. Possible values: 1, 1.5, 2],
+> > > >         "parity" : [Enable parity checking. Possible values: 'N', 'E', 'O', 'M', 'S'],
+> > > >         "rtscts" : [Enable hardware (RTS/CTS) flow control.],
+> > > >         "xonxoff" : [Enable software flow control.],
+> > > >         "logfile": [Log file path. Possible values: 'nonlog', 'console', <user define path>]
+> > > >      }
 >
 > **Legacy Syntax** (Still Supported):
 >
@@ -237,8 +235,8 @@ in RobotFramework.
 > **Syntax**:
 >
 > > **verify**
-> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`*(All
-> > parameters are required to be in order)* or
+> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`\*(All
+> > parameters are required to be in order)\* or
 > >
 > > **verify**
 > > `conn_name=[conn_name]   search_pattern=[search_pattern]  timeout=[timeout]  fetch_block=[fetch_block]  eob_pattern=[eob_pattern] filter_pattern=[filter_pattern]  send_cmd=[send_cmd]`
@@ -329,7 +327,7 @@ an extension library for QConnectBaseLibrary, please following below
 steps.
 
 1.  Create a library package which have the prefix name is
-    **robotframework-qconnect-***\[your specific name\]*.
+    **robotframework-qconnect-**\*\[your specific name\]\*.
 2.  Your hadling connection class should be derived from
     **QConnectBase.connection_base.ConnectionBase** class.
 3.  In your *Connection Class*, override below attributes and methods:

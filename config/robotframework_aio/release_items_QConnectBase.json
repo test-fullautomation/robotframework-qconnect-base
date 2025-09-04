@@ -20,12 +20,12 @@
 #
 # Basically this component is stand-alone, but can also be used as part of an automation framework called
 # RobotFramework AIO. More information about this framework you can find here:
-# 
+#
 # https://github.com/test-fullautomation/RobotFramework_AIO
-# 
+#
 # This JSON file contains component specific release information for the RobotFramework AIO.
 # In case you use the component stand-alone only, you can ignore this file.
-# 
+#
 # --------------------------------------------------------------------------------------------------------------
 #
 # Format: extended JSON format with the possibility to comment out lines (by '#' at the beginning of the line).
@@ -48,12 +48,12 @@
                    "0.10." : [
 "
 **RMQSignal**
- 
-* RMQSignal provides a synchronization mechanism designed to facilitate inter-process communication (IPC) between Robot Framework test processes using RabbitMQ as the underlying message broker. 
+
+* RMQSignal provides a synchronization mechanism designed to facilitate inter-process communication (IPC) between Robot Framework test processes using RabbitMQ as the underlying message broker.
   This module leverages RabbitMQ's message queues to enable communication and coordination between different test processes, allowing them to exchange signals, notifications, or other relevant information.
- 
+
 **Environment/Installation**
- 
+
 * For using RMQSignal, required to run the
   file QConnectBase/tools/setup rabbitmq.bat to install the entire infrastructure required for these Auxiliary Utilities.
 "
@@ -85,6 +85,26 @@
 
 * Introduced the `transfer_item` feature to enable seamless transfer of entire directories between local and remote.
 * Handles nested folder structures and transfers all files and subdirectories recursively.
+
+**Maintenance and Compatibility**
+
+* Updated keyword `connect` to simplify the input parameters which requires only `conn_name` and `conn_conf`.
+
+  The legacy syntax with 4 arguments (include `conn_type` and `conn_mode`) is still supported for backward compatibility.
+
+**Singleton Pattern Improvement**
+
+* Enhanced the singleton implementation to avoid clearing the established connections.
+
+**Logging Enhancements**
+
+* Moved the debug log messages to the appropriate debug level instead of printing them under the information log level.
+
+* Improved the log messages of `connect`, `disconnect` and `verify` (match try timeout) keywords with proper information and log level.
+
+**Improved Documentation & Usability**
+
+* Updated documentation to include detailed information about the input parameters of `verify` keyword.
 "
                                           ]
                  }
