@@ -41,8 +41,4 @@ QCB-TCPIP-BC-020
     log    TCPIP-BC-020 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-
     should_be_equal    ${result}    Mismatch: 'conn_type' (SSHClient) and 'con_conf["conn_type"]' (TCPIPClient) both set but differ. Expected: set in only one or identical in both.
-
-
-
