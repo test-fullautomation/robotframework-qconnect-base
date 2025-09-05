@@ -562,9 +562,9 @@ Transfer file from local to remote and vice versa.
 
   Transfer file type.
 
-      'get' - Copy a remote file from the SFTP server to the local host.
+      '``get``' - Copy a remote file from the SFTP server to the local host.
 
-      'put' - Copy a local file to the SFTP server.
+      '``put``' - Copy a local file to the SFTP server.
 
 **Returns:**
 
@@ -611,9 +611,9 @@ Transfer item from local to remote and vice versa.
 
   Transfer item type.
 
-      'get' - Copy a remote item from the SFTP server to the local host.
+      '``get``' - Copy a remote item from the SFTP server to the local host.
 
-      'put' - Copy a local item to the SFTP server.
+      '``put``' - Copy a local item to the SFTP server.
 
 **Returns:**
 
@@ -752,15 +752,15 @@ Supports flexible input formats such as:
 
 **Arguments:**
 
-* `time_str`
+* ``time_str``
 
   / *Condition*: required / *Type*: str or float or int /
 
   A string representing the duration. Units supported include:
-    - `h`  for hours
-    - `m`  for minutes (or `ms` for milliseconds)
-    - `s`  for seconds
-    - `ms` for milliseconds
+    - ``h``  for hours
+    - ``m``  for minutes (or ``ms`` for milliseconds)
+    - ``s``  for seconds
+    - ``ms`` for milliseconds
   If no unit is specified, the value is interpreted as seconds.
       """
       time_second = timestr_to_secs(time_out)
@@ -780,15 +780,15 @@ Supports flexible input formats such as:
 
 **Arguments:**
 
-* `time_out`
+* ``time_out``
 
   / *Condition*: required / *Type*: str or float or int /
 
   A string representing the duration. Units supported include:
-    - `h`  for hours
-    - `m`  for minutes (or `ms` for milliseconds)
-    - `s`  for seconds
-    - `ms` for milliseconds
+    - ``h``  for hours
+    - ``m``  for minutes (or ``ms`` for milliseconds)
+    - ``s``  for seconds
+    - ``ms`` for milliseconds
   If no unit is specified, the value is interpreted as seconds.
       """
       time_second = timestr_to_secs(time_out)
@@ -814,7 +814,7 @@ Verify a pattern from connection response after sending a command.
   / *Condition*: optional / *Type*: str / *Default*: .* /
 
   Regular expression all received trace messages are compare to.
-  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module '``re``'.
 
 * ``timeout``
 
@@ -856,13 +856,16 @@ Verify a pattern from connection response after sending a command.
 
   / *Condition*: optional / *Type*: Dict / *Default*: None /
 
-  The optional arguments depend on the connection type used in the 'connect' keyword. Here are the supported options:
+  The optional arguments depend on the connection type used in the '``connect``' keyword.
 
-  | Connection Type     | Argument         | Explaination                      |
-  | ------------------- | ---------------- | --------------------------------- |
-  | Winapp              | element_def      | Definition for detecting GUI item |
-  |                     |                  | / *Type*: str / *Default*: '' /   |
-  |                     |                  |                                   |
+  Supported options:
+
+  =====================   ================   ==================================
+  Connection Type         Argument           Explanation
+  =====================   ================   ==================================
+  Winapp                  element_def        Definition for detecting GUI item:
+                                             *Type*: str / *Default*: ''
+  =====================   ================   ==================================
 
 **Returns:**
 
