@@ -126,9 +126,9 @@ Check if current platform is supported.
 
   / *Type*: bool /
 
-  True if platform is supported.
+  ``True`` if platform is supported.
 
-  False if platform is not supported.
+  ``False`` if platform is not supported.
       """
       return _platform in cls._SUPPORTED_PLATFORM_LIST
 
@@ -141,9 +141,9 @@ Check for precondition.
 
   / *Type*: bool /
 
-  True if passing the precondition.
+  ``True`` if passing the precondition.
 
-  False if failing the precondition.
+  ``False`` if failing the precondition.
       """
       return cls._is_precondition_valid
 
@@ -490,13 +490,13 @@ Suspend the control flow until a Trace message is received which matches to a sp
   / *Condition*: required / *Type*: str /
 
   Regular expression all received trace messages are compare to.
-  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module '``re``'.
 
 * ``use_fetch_block``
 
   / *Condition*: optional / *Type*: bool / *Default*: False /
 
-  Determine if 'fetch block' feature is used.
+  Determine if '``fetch block``' feature is used.
 
 * ``end_of_block_pattern``
 
@@ -528,9 +528,9 @@ Suspend the control flow until a Trace message is received which matches to a sp
 
   / *Type*: re.Match /
 
-  If no trace message matched to the specified regular expression and a timeout occurred, return None.
+  If no trace message matched to the specified regular expression and a timeout occurred, return ``None``.
 
-  If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
+  If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the '``string``' attribute of the match object. For access to groups within the regular expression, use the ``group()`` method. For more information, refer to Python documentation for module '``re``'.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -601,7 +601,7 @@ Getting trace log continuously without creating a new trace queue.
 
   / *Type*: re.Match /
 
-  If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the 'string' attribute of the match object. For access to groups within the regular expression, use the group() method. For more information, refer to Python documentation for module 're'.
+  If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the '``string``' attribute of the match object. For access to groups within the regular expression, use the ``group()`` method. For more information, refer to Python documentation for module '``re``'.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -639,7 +639,7 @@ Create Queue and assign it to _trace_queue object and activate the queue with th
 
   Regular expression all received trace messages are compare to.
 
-  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.#
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module '``re``'.
 
 * ``use_fetch_block``
 
@@ -710,7 +710,7 @@ Activates a trace message filter specified as a regular expression. All matching
 
   Regular expression all received trace messages are compare to. \
 
-  Can be passed either as a string or a regular expression object. Refer to Python documentation for module 're'.
+  Can be passed either as a string or a regular expression object. Refer to Python documentation for module '``re``'.
 
 * ``trace_queue``
 
@@ -773,7 +773,7 @@ Deactivates a trace message filter previously activated by ActivateTraceQ() meth
 
   / *Condition*: required / *Type*: int /
 
-  Integer object returned by ActivateTraceQ() method.
+  Integer object returned by ``ActivateTraceQ()`` method.
 
 **Returns:**
 
@@ -781,9 +781,9 @@ Deactivates a trace message filter previously activated by ActivateTraceQ() meth
 
   / *Type*: bool /
  .
-  False : No trace message filter active with the specified handle (i.e. handle is not in use).
+  ``False`` : No trace message filter active with the specified handle (i.e. handle is not in use).
 
-  True :  Trace message filter successfully deleted.
+  ``True`` :  Trace message filter successfully deleted.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
@@ -838,7 +838,7 @@ Pre-checking message when receiving it from connection.
 
    def post_msg_check(self, msg):
       """
->> This method will be override in derived class <<
+>> This method should be overridden in the derived class <<
 
 Post-checking message when receiving it from connection.
 
@@ -906,9 +906,9 @@ Filter message by regular expression object.
 
   / *Type*: tuple /
 
-  is_hit: Determine if there is any matched.
+  ``is_hit``: Determine if there is any matched.
 
-  matched_obj: Matched object if exists.
+  ``matched_obj``: Matched object if exists.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log(_mident, constants.LOG_LEVEL_DEBUG)
