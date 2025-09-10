@@ -911,8 +911,13 @@ Verify a pattern from connection response after sending a command.
          # raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
          raise AssertionError(f"Unable to match the pattern '{search_pattern}' after '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
-      BuiltIn().log(f"received expected response '{res.group(0)}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
-      return res
+      if hasattr(res, "groups"):
+         match_res = [str(g) for g in res.groups()]
+      else:
+         match_res = [str(res)]
+          
+      BuiltIn().log(f"received expected response '{match_res}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
+      return match_res
 
 
 # >>>> FOR UNIT TEST FUNCTIONALITY
