@@ -894,6 +894,7 @@ Verify a pattern from connection response after sending a command.
       kwargs['emergency_timeout'] = self.default_emergency_timeout
 
       BuiltIn().log(f"sending command '{send_cmd}' to '{conn_name}' ...", constants.LOG_LEVEL_INFO)
+      res = None
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
          res = connection_obj.wait_4_trace(search_pattern, int(timeout), fetch_block, eob_pattern, filter_pattern, **kwargs)
@@ -913,10 +914,12 @@ Verify a pattern from connection response after sending a command.
 
       if hasattr(res, "groups"):
          match_res = [str(g) for g in res.groups()]
+      elif isinstance(res, dict):
+         match_res = res
       else:
          match_res = [str(res)]
           
-      BuiltIn().log(f"received expected response '{match_res}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
+      BuiltIn().log(f"Received expected response '{match_res}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
       return match_res
 
 
