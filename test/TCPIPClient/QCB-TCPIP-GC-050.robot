@@ -26,14 +26,22 @@ QCB-TCPIP-GC-050
     ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/101
     ...                !!! test not in final version !!!
 
+    # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}    GOODCASE
+    set_test_variable    ${test_category}      GOODCASE
 
-    conn_manager.connect    conn_name=QCB-TCPIP-GC-050-Connection
-    ...                     conn_type=${connection_type}
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-050-Connection
+
+    # connection parameter for this test
+    &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
+    ...                                          address=${HOST}
+    ...                                          port=${PORT}
+    ...                                          logfile=./tcp_ip_incoming.log
+
+    conn_manager.connect    conn_name=${connection_name}
     ...                     conn_conf=${TCPIPClientParam}
 
-    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=QCB-TCPIP-GC-050-Connection
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
                                                                ...                    search_pattern=.+(\\[COND-\\d+?\\])
                                                                ...                    eob_pattern=FETCHBLOCK_END
                                                                ...                    fetch_block=${True}
@@ -44,7 +52,7 @@ QCB-TCPIP-GC-050
     # testserver sends a fix sequence; wait until sequence has been finished
     Sleep    4s
 
-    conn_manager.disconnect    QCB-TCPIP-GC-050-Connection
+    conn_manager.disconnect    ${connection_name}
 
     log    TCPIP-GC-050 'verify' status: ${status}    console=yes
     log    TCPIP-GC-050 'verify' result: ${result}    console=yes
