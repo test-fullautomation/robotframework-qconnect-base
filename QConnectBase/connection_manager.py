@@ -393,7 +393,7 @@ Making a connection.
       conn_conf['connection_name'] = conn_name
 
       if conn_type not in self.supported_connection_classes_dict.keys():
-         raise AssertionError("The connection type '%s' is not supported. Please choose one of: %s." %
+         raise Exception("The connection type '%s' is not supported. Please choose one of: %s." %
                               (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
 
       if 'conn_mode' in conn_conf:
@@ -918,7 +918,7 @@ Verify a pattern from connection response after sending a command.
          match_res = res
       else:
          match_res = [str(res)]
-          
+
       BuiltIn().log(f"Received expected response '{match_res}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
       return match_res
 

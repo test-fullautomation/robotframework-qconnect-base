@@ -92,6 +92,10 @@
 
   The legacy syntax with 4 arguments (include `conn_type` and `conn_mode`) is still supported for backward compatibility.
 
+* Modified the response of `verify` keyword to return list of captured strings.
+
+* Updated to raise `UNKNOWN` (extended version) instead of `ERROR` when providing invalid `connection_type`.
+
 **Singleton Pattern Improvement**
 
 * Enhanced the singleton implementation to avoid clearing the established connections.
