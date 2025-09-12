@@ -1,0 +1,37 @@
+@startuml
+|QConnectBase|
+start
+while (match_try exceeded?) is (no)
+   :Start timeout timer;
+   while (timeout reached?) is (no)
+      :Read message from connection;
+      if (fetch_block = False?) then (yes)
+            :Compare message with search_pattern;
+            if (match?) then (yes)
+               :Return match to User;
+               stop
+            endif
+      else (fetch_block = True)
+            if (filter_pattern defined?) then (yes)
+               if (message matches filter_pattern?) then (yes)
+                  :Store message in queue;
+               else (no)
+                  :Discard message;
+               endif
+            else (no)
+               :Store all messages in queue;
+            endif
+
+            if (last stored message matches eob_pattern?) then (yes)
+               :Stop reading;
+               :Compare queued messages with search_pattern;
+               :Return match to User;
+               stop
+            endif
+      endif
+   endwhile
+   :Retry to send command;
+endwhile
+:Verify failed;
+stop
+@enduml
