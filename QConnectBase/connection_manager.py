@@ -838,13 +838,13 @@ Verify a pattern from connection response after sending a command.
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
 
-  The end of block pattern.
+  The end of block pattern if 'fetch block' is used.
 
 * ``filter_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
 
-  Pattern to filter message line by line.
+  Pattern to filter message line by line if 'fetch block' is used.
 
 * ``send_cmd``
 
@@ -869,11 +869,11 @@ Verify a pattern from connection response after sending a command.
 
 **Returns:**
 
-* ``match_res``
+* ``res``
 
-  / *Type*: str /
+  / *Type*: list /
 
-  Matched string.
+  List of captured string.
       """
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)

@@ -300,15 +300,7 @@ command}}{send command}}\label{description-send-command}}
 \textbf{Return value}:
 
 \begin{quote}
-\textbf{A corresponding match object (list-like) if a match is found.}
-
-The match object contains both the full string matched by the entire
-pattern and the substrings matched by individual capturing groups
-within the pattern.
-
-For experimenting and verifying regular expressions interactively,
-see \href{https://regex101.com/}{regex101}.
-
+\textbf{A list of captured string from search.}
 \textbf{E.g.}
 
 \begin{verbatim}
@@ -320,22 +312,48 @@ ${result} = verify  conn_name=SSH_Connection
 \begin{itemize}
 \tightlist
 \item
-  \$\{result\}{[}0{]} will be \textbf{"This is the 1st test command."}
-  i.e.\ the entire string segment that matches the full search pattern.
+  \$\{result\}{[}0{]} will be \textbf{"1st"},
+  i.e.\ the first \emph{captured string} defined in the pattern \rcode{([0-9]..)}.
 \item
-  \$\{result\}{[}1{]} will be \textbf{"1st"},
-  i.e.\ the first \emph{captured group} defined in the pattern \rcode|([0-9]..)|.
-\item
-  \$\{result\}{[}2{]} will be \textbf{"command"},
-  i.e.\ the second \emph{captured group} defined in the pattern \rcode|(command)|.
+  \$\{result\}{[}1{]} will be \textbf{"command"},
+  i.e.\ the second \emph{captured string} defined in the pattern \rcode{(command)}.
 \end{itemize}
 
-In general:
-\begin{itemize}
-\tightlist
-\item \${result}[0] = the full match of the entire regular expression.
-\item \${result}[n] (with $n \geq 1$) = the $n$-th capturing group within the pattern.
-\end{itemize}
+The \$\{result\} can be iterated in \rcode{FOR} loop as below example:
+\begin{robotcode}
+FOR    ${item}    IN    ${result}
+    Log To Console    Captured string: ${item}
+END
+\end{robotcode}
+
+The following diagrams illustrate the internal flow of the \rcode{verify}
+keyword in \rcode{QConnectBase}, including handling of \rcode{fetch\_block},
+\rcode{filter\_pattern}, \rcode{eob\_pattern}, \rcode{timeout}, and
+\rcode{match\_try}.
+
+\newpage
+
+The sequence diagram shows how messages are read from the connection in a
+separate thread, and how the \rcode{verify} keyword processes them depending on
+the keyword arguments.
+
+\begin{figure}[h!]
+  \includegraphics[width=1\linewidth]{./pictures/verify_sequence.png}
+  \caption{Sequence to process messages}
+\end{figure}
+
+\newpage
+
+The activity diagram illustrates the decision flow of the \rcode{verify} keyword.
+It shows how messages are read, optionally filtered, collected into a block, and
+checked against \rcode{search\_pattern}.
+Each match\_try has its own timeout, and the keyword stops immediately if a
+match is found.
+
+\begin{figure}[h!]
+  \includegraphics[width=1\linewidth]{./pictures/verify_activity.png}
+  \caption{Verify workflow}
+\end{figure}
 
 \end{quote}
 \end{quote}
@@ -413,6 +431,102 @@ However, by default, if no additional arguments are provided, only the first lin
 When \textbf{fetch\_block} is set to "True", the \rcode{Verify} keyword will capture all lines returned from the server until it encounters a line that matches the pattern defined by \textbf{eob\_pattern} (End of Block pattern). This extended functionality ensures that we can effectively capture multi-line returns from the server.
 
 To handle variable-length output, the \textbf{send\_cmd} parameter encapsulates the command between "START" and "END\$?". By setting \textbf{fetch\_block} to "True" and specifying the \textbf{eob\_pattern}, we can accurately capture the entire list returned by the server between "START" and "END\$?".
+
+\subsubsection*{Example: Verifying service startup logs with \rcode{fetch\_block}}
+
+\textbf{Use case}:
+This use case demonstrates how to use \rcode{verify} with \rcode{fetch\_block} and \rcode{eob\_pattern} to monitor the startup of a Linux systemd service.
+When restarting a service, the log usually contains multiple lines: some indicate that the service is starting, some show internal information, and finally, one line confirms that the service has been started successfully.
+By using \rcode{fetch\_block}, all these lines can be collected into a block until the end-of-block pattern (\rcode{eob\_pattern}) is reached.
+
+\textbf{Command under test}:
+\begin{robotcode}
+systemctl restart cron; journalctl -u cron --since "now"
+\end{robotcode}
+
+\textbf{Sample log output}:
+\begin{robotlog}
+Sep 12 15:25:01 myhost systemd[1]: Stopping Regular background program processing daemon...
+Sep 12 15:25:01 myhost systemd[1]: Starting Regular background program processing daemon...
+Sep 12 15:25:01 myhost cron[5678]: (CRON) INFO (pidfile fd = 3)
+Sep 12 15:25:01 myhost cron[5678]: (CRON) INFO (Running @reboot jobs)
+Sep 12 15:25:01 myhost systemd[1]: Started Regular background program processing daemon.
+\end{robotlog}
+
+\textbf{Robot Framework usage}:
+\begin{robotcode}
+  ${result} = verify  conn_name=SSH_Connection
+  ...                 fetch_block=True
+  ...                 search_pattern=.*Starting Regular background program processing daemon.*
+  ...                 eob_pattern=.*Started Regular background program processing daemon.*
+  ...                 send_cmd=systemctl restart cron; journalctl -u cron --since "now"
+\end{robotcode}
+
+\textbf{Returned block}:
+\begin{robotlog}
+Sep 12 15:25:01 myhost systemd[1]: Starting Regular background program processing daemon...
+Sep 12 15:25:01 myhost cron[5678]: (CRON) INFO (pidfile fd = 3)
+Sep 12 15:25:01 myhost cron[5678]: (CRON) INFO (Running @reboot jobs)
+Sep 12 15:25:01 myhost systemd[1]: Started Regular background program processing daemon.
+\end{robotlog}
+
+\textbf{Notes}:
+\begin{itemize}
+  \item \rcode{search\_pattern} defines the entry point (\emph{Starting...}).
+  \item \rcode{eob\_pattern} defines the stopping point (\emph{Started...}).
+  \item If the service fails to start (no \emph{Started...} line appears), the keyword will eventually timeout, which makes this a convenient way to verify service startup behavior in automated tests.
+\end{itemize}
+
+\subsubsection{Example: Filtering service startup logs with \rcode{fetch\_block} and \rcode{filter\_pattern}}
+
+\textbf{Use case:}
+When a Linux device boots, it sends a large block of startup logs through the connection (e.g., COM port).
+We only care about one particular service (``systemd-networkd''). By using \rcode{fetch\_block} together with \rcode{filter\_pattern},
+we can extract only the relevant messages. Finally, \rcode{eob\_pattern} is used to stop reading logs as soon as the service reports a successful startup.
+
+\begin{boxhint} {Important Note:}
+\rcode{filter\_pattern} filters the incoming lines, keeping only those relevant to the service of interest.
+
+\rcode{eob\_pattern} is applied \textbf{after filtering}, meaning it must match one of the filtered lines.
+If it does not, the keyword will not stop until timeout occurs.
+
+This ensures the block stops at the correct line related to the service and avoids including unrelated logs.
+\end{boxhint}
+
+\begin{robotcode}
+${result} = verify  conn_name=COM_Connection
+...                 fetch_block=True
+...                 filter_pattern=.*systemd-networkd.*
+...                 eob_pattern=.*eth0: Gained carrier.*
+...                 send_cmd=dmesg --follow
+\end{robotcode}
+
+\textbf{Connection log (sample):}
+\begin{robotlog}
+[    1.234567] systemd[1]: Starting udev Kernel Device Manager...
+[    1.456789] systemd[1]: Started udev Kernel Device Manager.
+[    2.123456] systemd[1]: Starting Network Service...
+[    2.223344] systemd-networkd[120]: eth0: link is up
+[    2.223355] systemd-networkd[120]: eth0: Gained carrier
+[    2.345678] systemd[1]: Started Network Service.
+[    2.456789] systemd[1]: Starting Login Service...
+[    2.567890] systemd[1]: Started Login Service.
+\end{robotlog}
+
+\textbf{Returned block after applying \rcode{filter\_pattern} and stopping at \rcode{eob\_pattern}:}
+\begin{robotlog}
+[    2.223344] systemd-networkd[120]: eth0: link is up
+[    2.223355] systemd-networkd[120]: eth0: Gained carrier
+\end{robotlog}
+
+\textbf{Explanation:}
+\begin{itemize}
+  \item \rcode{fetch\_block=True} collects all filtered lines until \rcode{eob\_pattern} is matched.
+  \item \rcode{filter\_pattern=.*systemd-networkd.*} ensures only logs from the relevant service are included.
+  \item \rcode{eob\_pattern=.*eth0: Gained carrier.*} stops collection when the filtered line matches the pattern.
+  \item Lines from other services (e.g., udev, Login Service) are automatically excluded from the block.
+\end{itemize}
+
 
 
 \hypertarget{auxiliary-utilities}{%

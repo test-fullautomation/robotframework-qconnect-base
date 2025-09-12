@@ -1,0 +1,52 @@
+@startuml
+title QConnectBase verify keyword
+
+participant User
+participant QConnectBase
+participant ReaderThread as "Thread (message reader)"
+participant MessageQueue as "Internal Queue"
+
+box "QConnectBase Lib"
+participant QConnectBase
+participant ReaderThread
+participant MessageQueue
+end box
+
+participant Connection
+
+== Initialize thread to read messages ==
+User -> QConnectBase: connect()
+QConnectBase -> ReaderThread: start()
+ReaderThread -> Connection: read messages continuously
+
+== User sends command ==
+User -> QConnectBase: verify(send_cmd, search_pattern, fetch_block, filter_pattern, eob_pattern)
+QConnectBase -> Connection: send command
+== Proceed message queue for verify ==
+loop Proceed incoming message
+' loop match_try times
+   ' QConnectBase -> ReaderThread: start timeout timer for this try
+   ' loop For each incoming message until timeout
+      Connection -> ReaderThread: message
+      alt fetch_block=False
+         ReaderThread -> QConnectBase: compare search_pattern
+         QConnectBase -> User: return match if found
+      else fetch_block=True
+         alt filter_pattern=None
+            ReaderThread -> MessageQueue: store all messages
+         else filter_pattern defined
+            alt message matches filter_pattern
+                  ReaderThread -> MessageQueue: store message
+            else message not match filter_pattern
+                  ReaderThread -> MessageQueue: discard
+            end
+         end
+         alt last stored message matches eob_pattern
+            ReaderThread -> QConnectBase: stop reading
+            QConnectBase -> User: match stored messages with search_pattern
+         end
+      end
+   ' end
+end
+
+@enduml
