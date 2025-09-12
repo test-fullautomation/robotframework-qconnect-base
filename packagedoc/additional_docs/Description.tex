@@ -300,15 +300,7 @@ command}}{send command}}\label{description-send-command}}
 \textbf{Return value}:
 
 \begin{quote}
-\textbf{A corresponding match object (list-like) if a match is found.}
-
-The match object contains both the full string matched by the entire
-pattern and the substrings matched by individual capturing groups
-within the pattern.
-
-For experimenting and verifying regular expressions interactively,
-see \href{https://regex101.com/}{regex101}.
-
+\textbf{A list of captured string from search.}
 \textbf{E.g.}
 
 \begin{verbatim}
@@ -320,14 +312,11 @@ ${result} = verify  conn_name=SSH_Connection
 \begin{itemize}
 \tightlist
 \item
-  \$\{result\}{[}0{]} will be \textbf{"This is the 1st test command."}
-  i.e.\ the entire string segment that matches the full search pattern.
+  \$\{result\}{[}0{]} will be \textbf{"1st"},
+  i.e.\ the first \emph{captured string} defined in the pattern \rcode{([0-9]..)}.
 \item
-  \$\{result\}{[}1{]} will be \textbf{"1st"},
-  i.e.\ the first \emph{captured group} defined in the pattern \rcode|([0-9]..)|.
-\item
-  \$\{result\}{[}2{]} will be \textbf{"command"},
-  i.e.\ the second \emph{captured group} defined in the pattern \rcode|(command)|.
+  \$\{result\}{[}1{]} will be \textbf{"command"},
+  i.e.\ the second \emph{captured string} defined in the pattern \rcode{(command)}.
 \end{itemize}
 
 In general:
