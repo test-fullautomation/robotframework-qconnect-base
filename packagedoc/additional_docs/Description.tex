@@ -1,6 +1,18 @@
-%
-% Generated at 26.08.2022 - 16:49:31 by QConnectBase
-%
+% Copyright 2020-2025 Robert Bosch GmbH
+
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+
+% http://www.apache.org/licenses/LICENSE-2.0
+
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+
+% --------------------------------------------------------------------------------------------------------------
 
 \hypertarget{description-getting-started}{%
 \section{Getting Started}\label{description-getting-started}}
@@ -221,15 +233,22 @@ command}}{send command}}\label{description-send-command}}
 \hypertarget{description-verify}{%
 \subsection{\texorpdfstring{\textbf{verify}}{verify}}\label{description-verify}}
 
-\begin{quote}
-\textbf{Use for verifying a response from the connection if it matched a pattern.}
+The keyword \rcode{verify} verifies a single message (or several messages) received from the connected server.
+Several pattern are available to filter the messages. Optionally, a message can be sent. 
 
-\textbf{Syntax}:
+\textbf{Prototype}:
 
-\begin{quote}
-\textbf{verify}
-\texttt{conn\_name={[}conn\_name{]}\ \ \ search\_pattern={[}search\_pattern{]}\ \ timeout={[}timeout{]}\ \ match\_try={[}match try time{]}\ \ fetch\_block={[}is using fetchblock{]}\ \ eob\_pattern={[}end of block pattern{]}\ filter\_pattern={[}filter pattern{]}\ \ send\_cmd={[}send comand{]}\ \ {[}argument name{]}={[}argument value{]}}
-\end{quote}
+\begin{robotcode}
+verify(conn_name:      str,
+       search_pattern: str=".*",
+       timeout:        int=1,
+       match_try:      int=1,
+       fetch_block:    bool=False,
+       eob_pattern:    str=".*",
+       filter_pattern: str=".*",
+       send_cmd:       str="",
+       kwargs:         dict) -> dict
+\end{robotcode}
 
 \textbf{Arguments}:
 
@@ -251,8 +270,8 @@ command}}{send command}}\label{description-send-command}}
     Expectation expressed as a \textbf{regular expression pattern} (more robust than a plain string comparison).
     It will match:
     \begin{itemize}
-      \item a single line by default (\textbf{fetch\_block} not used)
-      \item multiple lines if \textbf{fetch\_block} is enabled
+      \item a single line by default (\rcode{fetch_block} not used)
+      \item multiple lines if \rcode{fetch_block} is enabled
     \end{itemize}
 
     Default value: \rcode{.*}, which means "match any character (\rcode{.}) repeated zero or more times (\rcode{*})".
@@ -262,7 +281,7 @@ command}}{send command}}\label{description-send-command}}
 
 \item \textbf{timeout}:
   \begin{quote}
-    Timeout (in seconds) for each \textbf{match\_try} (if used) while waiting for the response to match the pattern.
+    Timeout (in seconds) for each \rcode{match_try} (if used) while waiting for the response to match the pattern.
 
     Default value: \rcode{5}.
   \end{quote}
@@ -276,21 +295,25 @@ command}}{send command}}\label{description-send-command}}
 
 \item \textbf{fetch\_block}:
   \begin{quote}
-    If \rcode{True}, every response line will be put into a block until a line match \textbf{eob\_pattern} pattern.
+    If \rcode{True}, every response line will be put into a block until a line match \rcode{eob_pattern} pattern.
 
     Default value: \rcode{False}.
   \end{quote}
 
-\item \textbf{eob\_pattern}: Applicable only when \textbf{fetch\_block} is \rcode{True}.
+\item \textbf{eob\_pattern}:
   \begin{quote}
-    Regular expression for matching the endline when using \textbf{fetch\_block}.
+    Applicable only when \rcode{fetch_block} is \rcode{True}.
+
+    Regular expression for matching the endline when using \rcode{fetch_block}.
 
     Default value: \rcode{.*}.
   \end{quote}
 
-\item \textbf{filter\_pattern}: Applicable only when \textbf{fetch\_block} is \rcode{True}.
+\item \textbf{filter\_pattern}:
   \begin{quote}
-    Regular expression for filtering every line to put into the block of response when using \textbf{fetch\_block}.
+    Applicable only when \rcode{fetch_block} is \rcode{True}.
+
+    Regular expression for filtering every line to put into the block of response when using \rcode{fetch_block}.
 
     Default value: \rcode{.*}.
   \end{quote}
@@ -301,27 +324,28 @@ command}}{send command}}\label{description-send-command}}
 
 \begin{quote}
 \textbf{A list of captured string from search.}
-\textbf{E.g.}
 
-\begin{verbatim}
+\textbf{Example}
+
+\begin{robotcode}
 ${result} = verify  conn_name=SSH_Connection
-...                 search_pattern=(?<=\s).*([0-9]..).*(command).$
+...                 search_pattern=(?<\textless{}>=\s).*([0-9]..).*(command).$
 ...                 send_cmd=echo This is the 1st test command.
-\end{verbatim}
+\end{robotcode}
 
 \begin{itemize}
 \tightlist
 \item
-  \$\{result\}{[}0{]} will be \textbf{"1st"},
+  \rcode{$\{result\}[0]} will be \rlog{1st},
   i.e.\ the first \emph{captured string} defined in the pattern \rcode{([0-9]..)}.
 \item
-  \$\{result\}{[}1{]} will be \textbf{"command"},
+  \rcode{$\{result\}[1]} will be \rlog{command},
   i.e.\ the second \emph{captured string} defined in the pattern \rcode{(command)}.
 \end{itemize}
 
-The \$\{result\} can be iterated in \rcode{FOR} loop as below example:
+The \rcode{$\{result\}} can be iterated in \rcode{FOR} loop as below example:
 \begin{robotcode}
-FOR    ${item}    IN    ${result}
+FOR    ${item}    IN    &{result}
     Log To Console    Captured string: ${item}
 END
 \end{robotcode}
@@ -355,7 +379,6 @@ match is found.
   \caption{Verify workflow}
 \end{figure}
 
-\end{quote}
 \end{quote}
 
 \newpage
