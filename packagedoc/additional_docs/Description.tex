@@ -457,7 +457,7 @@ Sep 12 15:25:01 myhost systemd[1]: Started Regular background program processing
 \begin{robotcode}
   ${result} = verify  conn_name=SSH_Connection
   ...                 fetch_block=True
-  ...                 search_pattern=.*Starting Regular background program processing daemon.*
+  ...                 search_pattern=([^\r\n]*Starting Regular background program processing daemon.*)
   ...                 eob_pattern=.*Started Regular background program processing daemon.*
   ...                 send_cmd=systemctl restart cron; journalctl -u cron --since "now"
 \end{robotcode}
@@ -496,6 +496,7 @@ This ensures the block stops at the correct line related to the service and avoi
 \begin{robotcode}
 ${result} = verify  conn_name=COM_Connection
 ...                 fetch_block=True
+...                 search_pattern=(.*)
 ...                 filter_pattern=.*systemd-networkd.*
 ...                 eob_pattern=.*eth0: Gained carrier.*
 ...                 send_cmd=dmesg --follow
