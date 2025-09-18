@@ -153,9 +153,45 @@ def handle_client(client_socket, client_address):
                 tcp_ip_testserver_log.tlog("communication", msg)
                 response = f"{response}\n"
                 client_socket.send(response.encode('utf-8'))
+            elif data_received.startswith("QUICKTEST"):
+                #
+                # send several answers (test of 'fetch_block' parameter of keyword 'verify')
+                #
+                msg = "Now TCP/IP testserver sends several answers ('fetch_block' test)"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                list_messages = [f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-1] [FETCHBLOCK_START]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-2] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-4] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-5] [FETCHBLOCK_END]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-6] [OUTSIDE_FETCHBLOCK]",
+                                 f"{data_received} ACK"]
+                time.sleep(1)
+                response = "\r\n".join(list_messages)
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("communication", msg)
+                response = f"{response}\n"
+                client_socket.send(response.encode('utf-8'))
+
+                # for index, message in enumerate(list_messages):
+                    # time.sleep(1)
+                    # response = f"{message} ({index+1})"
+                    # msg = f"[{client_address}] (SEND) '{response}'"
+                    # rf_log.info(msg)
+                    # tcp_ip_testserver_log.tlog("communication", msg)
+                    # response = f"{response}\n"
+                    # client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("FETCHBLOCK"):
                 #
-                # send several answers (test of 'fetch_block' parameter of keyxword 'verify')
+                # send several answers (test of 'fetch_block' parameter of keyword 'verify')
                 #
                 msg = "Now TCP/IP testserver sends several answers ('fetch_block' test)"
                 rf_log.info(msg)
