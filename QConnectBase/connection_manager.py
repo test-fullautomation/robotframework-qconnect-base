@@ -153,6 +153,8 @@ Constructor for ConnectionManager class.
 
       self.set_default_emergency_timeout(ConnectionManager.DEFAULT_EMERGENCY_TIMEOUT)
       self.set_default_verify_timeout(ConnectionManager.DEFAULT_VERIFY_TIMEOUT)
+      self.ROBOT_LIBRARY_LISTENER = self
+      self.ROBOT_LISTENER_API_VERSION = 3
 
 
    def __del__(self):
@@ -162,6 +164,10 @@ Destructor for ConnectionManager class.
 **Returns:**
          None.
       """
+      pass
+      # self.quit()
+   
+   def end_suite(self, data, result):
       self.quit()
 
    def quit(self):
