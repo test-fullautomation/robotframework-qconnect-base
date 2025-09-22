@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.11.1 / 14.08.2025"
+VERSION = "v. 0.11.2 / 22.09.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -153,9 +153,45 @@ def handle_client(client_socket, client_address):
                 tcp_ip_testserver_log.tlog("communication", msg)
                 response = f"{response}\n"
                 client_socket.send(response.encode('utf-8'))
+            elif data_received.startswith("QUICKTEST"):
+                #
+                # send several answers (test of 'fetch_block' parameter of keyword 'verify')
+                #
+                msg = "Now TCP/IP testserver sends several answers ('fetch_block' test)"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("handle_client", msg)
+                list_messages = [f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-1] [FETCHBLOCK_START]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-2] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-3] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-4] [FETCHBLOCK_MIDDLE]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-5] [FETCHBLOCK_END]",
+                                 f"{data_received} ACK",
+                                 f"{data_received} ACK [COND-6] [OUTSIDE_FETCHBLOCK]",
+                                 f"{data_received} ACK"]
+                time.sleep(1)
+                response = "\r\n".join(list_messages)
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("communication", msg)
+                response = f"{response}\n"
+                client_socket.send(response.encode('utf-8'))
+
+                # for index, message in enumerate(list_messages):
+                    # time.sleep(1)
+                    # response = f"{message} ({index+1})"
+                    # msg = f"[{client_address}] (SEND) '{response}'"
+                    # rf_log.info(msg)
+                    # tcp_ip_testserver_log.tlog("communication", msg)
+                    # response = f"{response}\n"
+                    # client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("FETCHBLOCK"):
                 #
-                # send several answers (test of 'fetch_block' parameter of keyxword 'verify')
+                # send several answers (test of 'fetch_block' parameter of keyword 'verify')
                 #
                 msg = "Now TCP/IP testserver sends several answers ('fetch_block' test)"
                 rf_log.info(msg)
@@ -362,26 +398,28 @@ def start_server(host, port, max_connections):
     tcp_ip_testserver_log.tlog("start_server_leave", msg)
 
     list_client_thread_names = []
-    msg = f"Status of client threads:"
-    rf_log.info(msg)
-    tcp_ip_testserver_log.tlog("client_threads", msg)
+    # debug only
+    # msg = f"Status of client threads:"
+    # rf_log.info(msg)
+    # tcp_ip_testserver_log.tlog("client_threads", msg)
     for client_thread in list_client_threads:
         client_thread_name     = client_thread.name
         client_thread_daemon   = client_thread.daemon
         client_thread_id       = client_thread.ident
         client_thread_is_alive = client_thread.is_alive()
-        msg = f"* Thread name: '{client_thread_name}'"
-        rf_log.info(msg)
-        tcp_ip_testserver_log.tlog("client_threads", msg)
-        msg = f"  Is daemon: '{client_thread_daemon}'"
-        rf_log.info(msg)
-        tcp_ip_testserver_log.tlog("client_threads", msg)
-        msg = f"  Thread ID: '{client_thread_id}'"
-        rf_log.info(msg)
-        tcp_ip_testserver_log.tlog("client_threads", msg)
-        msg = f"  Is alive: '{client_thread_is_alive}'"
-        rf_log.info(msg)
-        tcp_ip_testserver_log.tlog("client_threads", msg)
+        # debug only
+        # msg = f"* Thread name: '{client_thread_name}'"
+        # rf_log.info(msg)
+        # tcp_ip_testserver_log.tlog("client_threads", msg)
+        # msg = f"  Is daemon: '{client_thread_daemon}'"
+        # rf_log.info(msg)
+        # tcp_ip_testserver_log.tlog("client_threads", msg)
+        # msg = f"  Thread ID: '{client_thread_id}'"
+        # rf_log.info(msg)
+        # tcp_ip_testserver_log.tlog("client_threads", msg)
+        # msg = f"  Is alive: '{client_thread_is_alive}'"
+        # rf_log.info(msg)
+        # tcp_ip_testserver_log.tlog("client_threads", msg)
         list_client_thread_names.append(client_thread_name)
     # eof for client_thread in list_client_threads:
 
@@ -389,15 +427,17 @@ def start_server(host, port, max_connections):
     rf_log.info(msg)
     tcp_ip_testserver_log.tlog("client_threads", msg)
 
+    # -- join threads
     for client_thread in list_client_threads:
-        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
-        msg = f"Currently unjoined threads: [" + ", ".join(list_client_thread_names) + f"] at '{timestamp}'"
-        rf_log.info(msg)
-        tcp_ip_testserver_log.tlog("client_threads", msg)
-        timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
-        msg = f"Waiting for end of client_thread '{client_thread.name}' at '{timestamp}'"
-        rf_log.info(msg)
-        tcp_ip_testserver_log.tlog("client_threads", msg)
+        # debug only
+        # timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        # msg = f"Currently unjoined threads: [" + ", ".join(list_client_thread_names) + f"] at '{timestamp}'"
+        # rf_log.info(msg)
+        # tcp_ip_testserver_log.tlog("client_threads", msg)
+        # timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
+        # msg = f"Waiting for end of client_thread '{client_thread.name}' at '{timestamp}'"
+        # rf_log.info(msg)
+        # tcp_ip_testserver_log.tlog("client_threads", msg)
         client_thread.join()
         list_client_thread_names.remove(client_thread.name)
         del client_thread
@@ -475,10 +515,10 @@ finally:
 # TODO: In case of a crash 'tcp_ip_testserver.lock' remains. But also PID is checked.
 # Also the socket is checked. Do we need the lock file?
 
-# -- analyze thread situation (temporary debugging)
-for thread in threading.enumerate():
-    msg = f"Thread: {thread.name} / is_alive: {thread.is_alive()} / daemon: {thread.daemon}"
-    tcp_ip_testserver_log.tlog("at_end_of_testserver", msg)
+# -- analyze thread situation (debug only)
+# for thread in threading.enumerate():
+    # msg = f"Thread: {thread.name} / is_alive: {thread.is_alive()} / daemon: {thread.daemon}"
+    # tcp_ip_testserver_log.tlog("at_end_of_testserver", msg)
 
 timestamp = time.strftime('%d.%m.%Y - %H:%M:%S')
 msg = f"<<< TCP/IP testserver finished at '{timestamp}' >>>"

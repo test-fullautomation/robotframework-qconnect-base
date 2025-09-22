@@ -35,11 +35,11 @@ QConnectBase<br>Test Cases
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-001.robot">QCB-TCPIP-BC-001</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-001.robot">QCB-TCPIP-BC-001</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#FF0000">
@@ -59,11 +59,11 @@ BADCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-002.robot">QCB-TCPIP-BC-002</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-002.robot">QCB-TCPIP-BC-002</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#FF0000">
@@ -72,7 +72,8 @@ BADCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
 <b>A command is sent that forces the testserver to close the connection. After this the test tries to send another command<br>
-(that uses the connection that has already been closed by the testserver).</b>
+(that uses the connection that has already been closed by the testserver).<br>
+!!! currently fails under Linux; reason: Windows is more strict than Linux w.r.t. handling of broken connections) !!!</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -84,11 +85,11 @@ BADCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-003.robot">QCB-TCPIP-BC-003</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-003.robot">QCB-TCPIP-BC-003</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#FF0000">
@@ -97,10 +98,7 @@ BADCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
 <b>Testserver stops sending notifications and closes the socket while the test still waits for a certain notification ('verify')<br>
-that not yet has been sent.<br>
-!!! needs to be adapted after bugfix !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/85<br>
-!!! test not in final version !!!</b>
+that not yet has been sent. The broken connection causes a premature end of the mytch_try loop.</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -112,11 +110,11 @@ https://github.com/test-fullautomation/robotframework-qconnect-base/issues/85<br
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-004.robot">QCB-TCPIP-BC-004</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-004.robot">QCB-TCPIP-BC-004</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#FF0000">
@@ -124,10 +122,10 @@ BADCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Duplicate connection name<br>
+<b>Duplicate connection name: A second connection uses the same connection name than the first one.<br>
+The first connection has not been disconnected before.<br>
 !!! Wording of error message needs to be maintained !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/57<br>
-!!! test not in final version !!!</b>
+https://github.com/test-fullautomation/robotframework-qconnect-base/issues/166</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -139,11 +137,11 @@ https://github.com/test-fullautomation/robotframework-qconnect-base/issues/57<br
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-005.robot">QCB-TCPIP-BC-005</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-005.robot">QCB-TCPIP-BC-005</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#FF0000">
@@ -151,10 +149,7 @@ BADCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Invalid connection type in keyword 'connect'<br>
-!!! The 'Please choose one of' list differs in every test execution. Rework required. !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/92<br>
-!!! test not in final version !!!</b>
+<b>Invalid connection type in keyword 'connect'</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -166,11 +161,11 @@ https://github.com/test-fullautomation/robotframework-qconnect-base/issues/92<br
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-006.robot">QCB-TCPIP-BC-006</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-006.robot">QCB-TCPIP-BC-006</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#FF0000">
@@ -178,10 +173,7 @@ BADCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Unknown connection name in keyword 'disconnect' (no corresponding 'connect')<br>
-!!! The 'UNKNOWN_CONNECTION_NAME' is ignored. No error thrown. Rework required !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/93<br>
-!!! test not in final version !!!</b>
+<b>Unknown connection name in keyword 'disconnect' (no corresponding 'connect')</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -193,38 +185,11 @@ https://github.com/test-fullautomation/robotframework-qconnect-base/issues/93<br
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-007.robot">QCB-TCPIP-BC-007</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-008.robot">QCB-TCPIP-BC-008</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
-</font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
-<font size="2" face="Arial" color="#FF0000">
-BADCASE
-</font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
-<font size="2" face="Arial" color="#595959"><i>
-<b>Invalid connection configuration parameter<br>
-!!! The invalid parameter is ignored. No error thrown. Rework required !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/66#issuecomment-2531780274<br>
-!!! test not in final version !!!</b>
-</i></font></td>
-</tr>
-<tr valign="middle" align="left">
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
-<font size="2" face="Arial" color="#FF0000">
-<b>
-8
-</b></font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
-<font size="2" face="Arial" color="#595959">
-<b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-BC-008.robot">QCB-TCPIP-BC-008</a>
-</b></font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
-<font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#FF0000">
@@ -239,16 +204,40 @@ BADCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
+8
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-020.robot">QCB-TCPIP-BC-020</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#FF0000">
+BADCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Deviating connection types</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
 9
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-001.robot">QCB-TCPIP-GC-001</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-001.robot">QCB-TCPIP-GC-001</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -268,11 +257,11 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-002.robot">QCB-TCPIP-GC-002</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-002.robot">QCB-TCPIP-GC-002</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -292,11 +281,11 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-020.robot">QCB-TCPIP-GC-020</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-020.robot">QCB-TCPIP-GC-020</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -317,11 +306,11 @@ that has already been closed by the testserver.</b>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-030.robot">QCB-TCPIP-GC-030</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-030.robot">QCB-TCPIP-GC-030</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -341,11 +330,11 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-040.robot">QCB-TCPIP-GC-040</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-040.robot">QCB-TCPIP-GC-040</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -366,11 +355,11 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-041.robot">QCB-TCPIP-GC-041</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-041.robot">QCB-TCPIP-GC-041</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -391,11 +380,11 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-050.robot">QCB-TCPIP-GC-050</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-042.robot">QCB-TCPIP-GC-042</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -403,12 +392,7 @@ GOODCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Fetch block<br>
-!!! several clarifications required !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/99<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/100<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/101<br>
-!!! test not in final version !!!</b>
+<b>Two connections with same connection parameter, but different names.</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -420,11 +404,11 @@ https://github.com/test-fullautomation/robotframework-qconnect-base/issues/101<b
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-100.robot">QCB-TCPIP-GC-100</a>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-100.robot">QCB-TCPIP-GC-100</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#4169E1">
-tcp_ip
+TCPIPClient
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#008000">
@@ -436,38 +420,9 @@ GOODCASE
 that is triggered by a command sent within the second thread.</b><br>Test tags: ['threading']
 </i></font></td>
 </tr>
-<tr valign="middle" align="left">
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
-<font size="2" face="Arial" color="#FF0000">
-<b>
-17
-</b></font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
-<font size="2" face="Arial" color="#595959">
-<b>
-<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/tcp_ip/QCB-TCPIP-GC-101.robot">QCB-TCPIP-GC-101</a>
-</b></font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
-<font size="2" face="Arial" color="#4169E1">
-tcp_ip
-</font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
-<font size="2" face="Arial" color="#008000">
-GOODCASE
-</font></td>
-<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
-<font size="2" face="Arial" color="#595959"><i>
-<b>Communication in three threads. Three observer threads wait for certain blocks of incoming messages.<br>
-These messages are triggered by a command that is sent to the testserver after the observer threads<br>
-have been started.<br>
-!!! return values need to be defined after bugfix !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/101<br>
-!!! test not in final version !!!</b><br>Test tags: ['threading']
-</i></font></td>
-</tr>
 </tbody></table></div>
 <div>&nbsp;</div>
 <hr width="100%" color="#FF8C00" align="center">
-<div align="center"><font size="2" color="#27408B">Generated: 14.02.2025 - 18:11:11</font></div>
+<div align="center"><font size="2" color="#27408B">Generated: 22.09.2025 - 15:09:11</font></div>
 <div>&nbsp;</div>
 </body></html>
