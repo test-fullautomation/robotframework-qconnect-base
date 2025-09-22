@@ -21,8 +21,7 @@ Resource    ../imports/resources.resource
 QCB-TCPIP-BC-002
     [Documentation]    A command is sent that forces the testserver to close the connection. After this the test tries to send another command
     ...                (that uses the connection that has already been closed by the testserver).
-    ...                !!! needs to be completed (currently fails under Linux; reason unclear) !!!
-    ...                !!! test not in final version !!!
+    ...                !!! currently fails under Linux; reason: Windows is more strict than Linux w.r.t. handling of broken connections) !!!
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
@@ -37,7 +36,7 @@ QCB-TCPIP-BC-002
     ...                                          logfile=./tcp_ip_incoming.log
 
     conn_manager.connect    conn_name=${connection_name}
-    ...                     conn_conf=${TCPIPClientParamTS}
+    ...                     conn_conf=${TCPIPClientParam}
 
     # let the testserver close the connection
     conn_manager.verify    conn_name=${connection_name}
@@ -49,27 +48,11 @@ QCB-TCPIP-BC-002
     # give the testserver some time to send the answer 'QCB-TCPIP-BC-002 ACK' and close the connection
     Sleep    4s
 
-    # # version 1 (send_command)
-    # # try to send a command with the connection already closed by testserver
-    # ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.send_command
-    # ...                                                        conn_name=${connection_name}
-    # ...                                                        command=TCPIP-BC-002-SHOULDNOTBESENT
-
-    # log    TCPIP-BC-002 'send_command' status: ${status}    console=yes
-    # log    TCPIP-BC-002 'send_command' result: ${result}    console=yes
-
-    # # to be verified: currently fails under Linux; reason unclear
-    # should_be_equal    ${status}    FAIL
-    # should_contain    ${result}    Unable to send command to 'QCB-TCPIP-BC-002-Connection' connection. Exception: Connection has been broken.
-
-    # Sleep    1s
-
-    # !!! TODO: divide into two tests (version 1 and version 2) !!!
-
-    # version 2 (verify)
     # try to verify with the connection already closed by testserver
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
                                                                ...                    search_pattern=NEVER_WILL_BE_RECEIVED
+                                                               ...                    timeout=2
+                                                               ...                    match_try=4
                                                                ...                    send_cmd=TCPIP-BC-002
 
     log    TCPIP-BC-002 'verify' status: ${status}    console=yes
@@ -80,7 +63,7 @@ QCB-TCPIP-BC-002
 
     Sleep    1s
 
-    # this shouldn't matter (because of connection alread closed by testserver):
+    # this shouldn't matter (because of connection already closed by testserver):
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    ${connection_name}
 
     log    TCPIP-BC-002 'disconnect' status: ${status}    console=yes
@@ -88,4 +71,3 @@ QCB-TCPIP-BC-002
 
     should_be_equal    ${status}    PASS
     should_be_equal    ${result}    ${None}
-
