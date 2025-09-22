@@ -532,6 +532,8 @@ Suspend the control flow until a Trace message is received which matches to a sp
 
   If a trace message has matched to the specified regular expression, a match object is returned as the result.The complete trace message can be accessed by the '``string``' attribute of the match object. For access to groups within the regular expression, use the ``group()`` method. For more information, refer to Python documentation for module '``re``'.
       """
+      if self._broken_conn.is_set():
+         raise Exception(constants.String.CONNECTION_BROKEN)
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       BuiltIn().log('Execute %s' % _mident, constants.LOG_LEVEL_DEBUG)
       if search_obj is None:
@@ -543,7 +545,7 @@ Suspend the control flow until a Trace message is received which matches to a sp
       try:
          self.send_obj(**fct_args)
       except BrokenConnError:
-         raise Exception("Connection has been broken while trying to match the pattern.")
+         raise Exception(constants.String.CONNECTION_BROKEN)
       except Exception as err_msg:  # pylint: disable=W0703
          BuiltIn().log('%s: An Exception occurred executing function object: %s' % (_mident, repr(self.send_obj)), 'ERROR')
          BuiltIn().log('Function Arguments: %s' % repr(fct_args), 'ERROR')
@@ -562,7 +564,6 @@ Suspend the control flow until a Trace message is received which matches to a sp
          return match
       else:
          return None
-
 
    def wait_4_trace_continuously(self, trace_queue, timeout=0, *fct_args):
       """
