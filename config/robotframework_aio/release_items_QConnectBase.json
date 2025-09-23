@@ -83,18 +83,18 @@
 "
 **Item Transfer Support (For SSH connection only)**
 
-* Introduced the `transfer_item` feature to enable seamless transfer of entire directories between local and remote.
+* Introduced the ``transfer_item`` feature to enable seamless transfer of entire directories between local and remote.
 * Handles nested folder structures and transfers all files and subdirectories recursively.
 
 **Maintenance and Compatibility**
 
-* Updated keyword `connect` to simplify the input parameters which requires only `conn_name` and `conn_conf`.
+* Updated keyword ``connect`` to simplify the input parameters which requires only ``conn_name`` and ``conn_conf``.
 
-  The legacy syntax with 4 arguments (include `conn_type` and `conn_mode`) is still supported for backward compatibility.
+  The legacy syntax with 4 arguments (include ``conn_type`` and ``conn_mode``) is still supported for backward compatibility.
 
-* Modified the response of `verify` keyword to return list of captured strings.
+* Modified the response of ``verify`` keyword to return list of captured strings.
 
-* Updated to raise `UNKNOWN` (extended version) instead of `ERROR` when providing invalid `connection_type`.
+* Updated to raise ``UNKNOWN`` (extended version) instead of ``ERROR`` when providing invalid ``connection_type``.
 
 **Singleton Pattern Improvement**
 
@@ -104,11 +104,11 @@
 
 * Moved the debug log messages to the appropriate debug level instead of printing them under the information log level.
 
-* Improved the log messages of `connect`, `disconnect` and `verify` (match try timeout) keywords with proper information and log level.
+* Improved the log messages of ``connect``, ``disconnect`` and ``verify`` (``match_try`` timeout) keywords with proper information and log level.
 
 **Improved Documentation & Usability**
 
-* Updated documentation to include detailed information about the input parameters of `verify` keyword.
+* Updated documentation to include detailed information about the input parameters of ``verify`` keyword.
 "
                                           ]
                  }
