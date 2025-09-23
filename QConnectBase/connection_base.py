@@ -259,8 +259,11 @@ Start a thread which receive message from connection continuously.
 
 **Arguments:**
 
+* ``n_thrd_id``
 
-         n_thrd_id: thread id.
+  / *Condition*: required / *Type*: int /
+
+  Thread ID number.
 
 **Returns:**
 

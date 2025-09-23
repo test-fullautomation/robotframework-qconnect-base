@@ -166,7 +166,7 @@ Destructor for ConnectionManager class.
       """
       pass
       # self.quit()
-   
+
    def end_suite(self, data, result):
       self.quit()
 
@@ -275,69 +275,6 @@ Keyword for disconnecting a connection by name.
       else:
          raise Exception(f"Invalid operation: Attempted to disconnect '{conn_name}', but no such connection exists.")
 
-#    @keyword
-#    def connect(self, *args, **kwargs):
-#       """
-# Keyword for making a connection.
-
-# **Arguments:**
-
-# (*refer to connect_unnamed_args method for details*)
-
-# * ``args``
-
-#   / *Condition*: required / *Type*: tuple /
-
-#   Non-Keyword Arguments.
-
-# * ``kwargs``
-
-#   / *Condition*: required / *Type*: dict /
-
-#   Keyword Arguments.
-
-# **Returns:**
-
-# (*no returns*)
-#       """
-#       if len(args) > 0 and len(kwargs) > 0:
-#          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
-
-#       if len(args) > 0:
-#          self.connect_unnamed_args(*args)
-#       elif len(kwargs) > 0:
-#          self.connect_named_args(**kwargs)
-#       else:
-#          raise Exception("Not received any input param.")
-
-#    def connect_named_args(self, **kwargs):
-#       """
-# Making a connection with name arguments.
-
-# **Arguments:**
-
-# (*refer to connect_unnamed_args method for details*)
-
-#   * ``kwargs``
-
-#   / *Condition*: required / *Type*: dict /
-
-#   Keyword Arguments.
-
-# **Returns:**
-
-# (*no returns*)
-#       """
-#       org_args = ConnectParam.get_attr_list()
-#       if set(kwargs.keys()).issubset(set(org_args)):
-#          params = ConnectParam(**kwargs)
-#          self.connect_unnamed_args(params.conn_name,
-#                                    params.conn_type,
-#                                    params.conn_mode,
-#                                    params.conn_conf)
-#       else:
-#          raise Exception("Input parameter are invalid.")
-
    @keyword
    def connect(self, conn_name='default_conn', conn_conf=None, conn_type='', conn_mode=''):
       """
@@ -355,13 +292,32 @@ Making a connection.
 
   / *Condition*: optional / *Type*: dictionary / *Default*: None /
 
-  Configuration for connection.
+  A dictionary containing configurations for the connection.
+
+  It must include ``conn_type``, and optionally ``conn_mode`` and other connection-specific fields (depending on type).
+
+  Example ``conn_conf`` for ``TCPIPClient``:
+
+  ```
+  {
+    "conn_type": "TCPIPClient",
+    "address": [server host], # Optional. Default value is "localhost".
+    "port": [server port]     # Optional. Default value is 1234.
+  }
+  ```
 
 * ``conn_type`` (deprecated)
 
   / *Condition*: optional / *Type*: str / *Default*: 'TCPIPClient' /
 
   Type of connection. It can be specified in ``conn_conf`` dictionary.
+
+  Supported connection types:
+  - ``TCPIPClient``: Create a Raw TCP/IP connection to TCP Server.
+  - ``SSHClient``: Create a client connection to a SSH server.
+  - ``SerialClient``: Create a client connection via Serial Port.
+
+  In addition to the connection types listed above, other types are also available through classes inheriting from ``QConnectBase``.
 
 * ``conn_mode`` (deprecated)
 
@@ -435,69 +391,6 @@ Making a connection.
          # BuiltIn().log("Unable to create connection. Exception: %s" % ex, constants.LOG_LEVEL_ERROR)
          raise Exception("Connection Error: %s" % ex)
 
-#    @keyword
-#    def send_command(self, *args, **kwargs):
-#       """
-# Keyword for sending command to a connection.
-#
-# **Arguments:**
-#
-# (*refer to send_unnamed_args method for details*)
-#
-# * ``args``
-#
-#   / *Condition*: require / *Type*: tuple /
-#
-#   Non-Keyword Arguments.
-#
-# * ``kwargs``
-#
-#   / *Condition*: require / *Type*: dict /
-#
-#   Keyword Arguments.
-#
-# **Returns:**
-#
-# (*no returns*)
-#       """
-#       if len(args) > 0 and len(kwargs) > 0:
-#          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
-#
-#       if len(args) > 0:
-#          self.send_command_unnamed_args(*args)
-#       elif len(kwargs) > 0:
-#          self.send_command_named_args(**kwargs)
-#       else:
-#          raise Exception("Not received any input param.")
-#
-#    def send_command_named_args(self, **args):
-#       """
-# Send command to a connection with name arguments.
-#
-# **Arguments:**
-#
-# (*refer to send_unnamed_args method for details*)
-#
-#   * ``kwargs``
-#
-#   / *Condition*: required / *Type*: dict /
-#
-#   Keyword Arguments.
-#
-# **Returns:**
-#
-# (*no returns*)
-#       """
-#       org_args = SendCommandParam.get_attr_list()
-#       if set(args.keys()).issubset(set(org_args)):
-#          params = SendCommandParam(**args)
-#          self.send_command_unnamed_args(params.conn_name,
-#                                         params.command,
-#                                         params.element_def.__dict__,
-#                                         params.args)
-#       else:
-#          raise Exception("Input parameter are invalid.")
-
    @keyword
    def send_command(self, conn_name, command, **kwargs):
       """
@@ -521,7 +414,7 @@ Send command to a connection.
 
   / *Condition*: optional / *Type*: dict / *Default*: {} /
 
-  Keyword Arguments.
+  The optional arguments depend on the connection type used in the '``connect``' keyword.
 
 **Returns:**
 
@@ -670,82 +563,6 @@ Executes a script file by sending commands to a device through the provided conn
       except Exception as ex:
          raise Exception("Unable to execute script path '%s'. Exception: %s" % (script_path, str(ex)))
 
-#    @keyword
-#    def verify(self, *args, **kwargs):
-#       """
-# Keyword uses to verify a pattern from connection response after sending a command.
-#
-# **Arguments:**
-#
-# (*refer to verify_unnamed_args method for details*)
-#
-# * ``args``
-#
-#   / *Condition*: required / *Type*: tuple /
-#
-#   Non-Keyword Arguments.
-#
-# * ``kwargs``
-#
-#   / *Condition*: required / *Type*: dict /
-#
-#   Keyword Arguments.
-#
-# **Returns:**
-#
-# * ``match_res``
-#
-#   / *Type*: str /
-#
-#   Matched string.
-#       """
-#       if len(args) > 0 and len(kwargs) > 0:
-#          raise AssertionError("Getting both Non-Keyword Arguments and Keyword Arguments. Please select to use only Non-Keyword Arguments or Keyword Arguments.")
-#
-#       if len(args) > 0:
-#          return self.verify_unnamed_args(*args)
-#       elif len(kwargs) > 0:
-#          return self.verify_named_args(**kwargs)
-#       else:
-#          raise Exception("Not received any input param.")
-#
-#    def verify_named_args(self, **kwargs):
-#       """
-# Verify a pattern from connection response after sending a command with named arguments.
-#
-# **Arguments:**
-#
-# (*refer to verify_unnamed_args method for details*)
-#
-# * ``kwargs``
-#
-#   / *Condition*: required / *Type*: dict /
-#
-#   Keyword Arguments.
-#
-# **Returns:**
-#
-# * ``match_res``
-#
-#   / *Type*: str /
-#
-#   Matched string.
-#       """
-#       org_args = VerifyParam.get_attr_list()
-#       if set(kwargs.keys()).issubset(set(org_args)):
-#          params = VerifyParam(**kwargs)
-#          return self.verify_unnamed_args(params.conn_name,
-#                                          params.search_pattern,
-#                                          params.timeout,
-#                                          params.fetch_block,
-#                                          params.eob_pattern,
-#                                          params.filter_pattern,
-#                                          params.send_cmd,
-#                                          params.element_def.__dict__,
-#                                          params.args)
-#       else:
-#          raise Exception("Input parameter are invalid.")
-
    @keyword
    def set_default_verify_timeout(self, time_out):
       """
@@ -819,8 +636,15 @@ Verify a pattern from connection response after sending a command.
 
   / *Condition*: optional / *Type*: str / *Default*: .* /
 
-  Regular expression all received trace messages are compare to.
-  Can be passed either as a string or a regular expression object. Refer to Python documentation for module '``re``'.
+  Expectation expressed as a **regular expression pattern** (more robust than a plain string comparison).
+
+  It will match:
+  - a single line by default (``fetch_block`` not used)
+  - multiple lines if ``fetch_block`` is enabled
+
+  Default value: ``.*``, which means "match any character (``.``) repeated zero or more times (``*``)".
+
+  In practice, this will always match the response, regardless of its content, unless you specify a stricter pattern.
 
 * ``timeout``
 
@@ -840,17 +664,23 @@ Verify a pattern from connection response after sending a command.
 
   Determine if 'fetch block' feature is used.
 
+  If ``True``, every single line of received message will be put into a block until a line match ``eob_pattern`` pattern.
+
 * ``eob_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
 
-  The end of block pattern if 'fetch block' is used.
+  Applicable only when ``fetch_block`` is ``True``.
+
+  Regular expression for matching the endline when using ``fetch_block``.
 
 * ``filter_pattern``
 
   / *Condition*: optional / *Type*: str / *Default*: '.*' /
 
-  Pattern to filter message line by line if 'fetch block' is used.
+  Applicable only when ``fetch_block`` is ``True``.
+
+  Regular expression for filtering every line to put into the block of response when using ``fetch_block``.
 
 * ``send_cmd``
 
@@ -879,7 +709,19 @@ Verify a pattern from connection response after sending a command.
 
   / *Type*: list /
 
-  List of captured string.
+  List of captured string from ``search_pattern``
+
+  For example, if ``search_pattern`` is ``(?<=\s).*([0-9]..)..*(command).$``,
+  and the response from connection is ``This is the 1st test command.``,
+  then the returned list will be ``['1st', 'command']``.
+
+  Thus:
+  - ``${res}[0]`` will be **1st**,
+  i.e. the first *captured string* defined in the pattern ``([0-9]..)``.
+
+  - ``${res}[1]`` will be **command**,
+  i.e. the second *captured string* defined in the pattern ``(command)``.
+
       """
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
