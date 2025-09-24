@@ -12,5 +12,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
+The **QConnectBase** package provides Robot Framework keywords for interacting
+with devices, servers, or services through various communication protocols such
+as *TCP/IP*, *SSH*, or *Serial*.
+It enables users to establish (multiple) connections, send commands, and verify
+responses with ease.
 
-QConnectBaseLibrary is a connection testing library for `Robot Framework <https://robotframework.org>`__. Library will be supported to downloaded from PyPI soon. It provides a mechanism to handle trace log continously receiving from a connection (such as Raw TCP, SSH, Serial, etc.) besides sending data back to the other side. It’s especially efficient for monitoring the overflood response trace log from an asynchronous trace systems. It is supporting Python 3.7+ and RobotFramework 3.2+.
+Key features include:
+
+- Support for multiple simultaneous connections.
+- Built-in keywords for sending and receiving data.
+- Protocol abstraction for TCP/IP, SSH, and Serial.
+- Flexible connection management and session handling.
+- Extensible architecture for custom protocols or behaviors.
+
+Developers can also extend the **QConnectBase** class to support additional
+connection types or specialized behaviors, ensuring the library remains
+adaptable for diverse automation needs.
