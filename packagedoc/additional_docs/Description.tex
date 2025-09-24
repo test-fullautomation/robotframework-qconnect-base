@@ -455,7 +455,7 @@ When \textbf{fetch\_block} is set to "True", the \rcode{Verify} keyword will cap
 
 To handle variable-length output, the \textbf{send\_cmd} parameter encapsulates the command between "START" and "END\$?". By setting \textbf{fetch\_block} to "True" and specifying the \textbf{eob\_pattern}, we can accurately capture the entire list returned by the server between "START" and "END\$?".
 
-\subsubsection*{Example: Verifying service startup logs with \rcode{fetch\_block}}
+\textbf{Example: Verifying service startup logs with \rcode{fetch\_block}}
 
 \textbf{Use case}:
 This use case demonstrates how to use \rcode{verify} with \rcode{fetch\_block} and \rcode{eob\_pattern} to monitor the startup of a Linux systemd service.
@@ -500,7 +500,7 @@ Sep 12 15:25:01 myhost systemd[1]: Started Regular background program processing
   \item If the service fails to start (no \emph{Started...} line appears), the keyword will eventually timeout, which makes this a convenient way to verify service startup behavior in automated tests.
 \end{itemize}
 
-\subsubsection{Example: Filtering service startup logs with \rcode{fetch\_block} and \rcode{filter\_pattern}}
+\textbf{Example: Filtering service startup logs with \rcode{fetch\_block} and \rcode{filter\_pattern}}
 
 \textbf{Use case:}
 When a Linux device boots, it sends a large block of startup logs through the connection (e.g., COM port).

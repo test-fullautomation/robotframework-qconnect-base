@@ -283,6 +283,31 @@ def handle_client(client_socket, client_address):
                     if list_data_received[3] == "CLOSE_CONNECTION":
                         time.sleep(TIME_WAIT_BEFORE_CLOSE_SOCKET) # giving the client a chance to receive the response before the socket is closed
                         break
+
+
+            elif data_received.startswith("GC-031-ABC-123"):
+                response = f"{data_received} ACK"
+                response_sent = f"{response}\r\n"
+                msg = f"[{client_address}] (SEND) '{response}'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("communication", msg)
+                client_socket.send(response_sent.encode('utf-8'))
+                time.sleep(2)
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("communication", msg)
+                client_socket.send(response_sent.encode('utf-8'))
+                time.sleep(2)
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("communication", msg)
+                client_socket.send(response_sent.encode('utf-8'))
+                time.sleep(2)
+                response = f"END\r\n"
+                msg = f"[{client_address}] (SEND) 'END'"
+                rf_log.info(msg)
+                tcp_ip_testserver_log.tlog("communication", msg)
+                client_socket.send(response.encode('utf-8'))
+                time.sleep(2)
+
             else:
                 #
                 # send standard answer (default)
