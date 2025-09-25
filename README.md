@@ -150,9 +150,8 @@ in RobotFramework.
 > > > > -   **TCPIPClient**: Create a Raw TCPIP connection to TCP
 > > > >     Server.
 > > > >
-> > > > ```{=html}
 > > > > <!-- -->
-> > > > ```
+> > > >
 > > > >     {
 > > > >         "conn_type": "TCPIPClient",
 > > > >         "address": [server host], # Optional. Default value is "localhost".
@@ -162,9 +161,8 @@ in RobotFramework.
 > > > >
 > > > > -   **SSHClient**: Create a client connection to a SSH server.
 > > > >
-> > > > ```{=html}
 > > > > <!-- -->
-> > > > ```
+> > > >
 > > > >     {
 > > > >         "conn_type": "SSHClient",
 > > > >         "address" : [server host],  # Optional. Default value is "localhost".
@@ -179,9 +177,8 @@ in RobotFramework.
 > > > > -   **SerialClient**: Create a client connection via Serial
 > > > >     Port.
 > > > >
-> > > > ```{=html}
 > > > > <!-- -->
-> > > > ```
+> > > >
 > > > >     {
 > > > >         "conn_type": "SerialClient",
 > > > >         "port" : [comport or null],
@@ -241,8 +238,8 @@ in RobotFramework.
 > **Syntax**:
 >
 > > **verify**
-> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`*(All
-> > parameters are required to be in order)* or
+> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`\*(All
+> > parameters are required to be in order)\* or
 > >
 > > **verify**
 > > `conn_name=[conn_name]   search_pattern=[search_pattern]  timeout=[timeout]  fetch_block=[fetch_block]  eob_pattern=[eob_pattern] filter_pattern=[filter_pattern]  send_cmd=[send_cmd]`
@@ -337,7 +334,7 @@ an extension library for QConnectBaseLibrary, please following below
 steps.
 
 1.  Create a library package which have the prefix name is
-    **robotframework-qconnect-***\[your specific name\]*.
+    **robotframework-qconnect-**\*\[your specific name\]\*.
 2.  Your hadling connection class should be derived from
     **QConnectBase.connection_base.ConnectionBase** class.
 3.  In your *Connection Class*, override below attributes and methods:
