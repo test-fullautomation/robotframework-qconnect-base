@@ -150,9 +150,8 @@ in RobotFramework.
 > > > > -   **TCPIPClient**: Create a Raw TCPIP connection to TCP
 > > > >     Server.
 > > > >
-> > > > ```{=html}
 > > > > <!-- -->
-> > > > ```
+> > > >
 > > > >     {
 > > > >         "conn_type": "TCPIPClient",
 > > > >         "address": [server host], # Optional. Default value is "localhost".
@@ -162,9 +161,8 @@ in RobotFramework.
 > > > >
 > > > > -   **SSHClient**: Create a client connection to a SSH server.
 > > > >
-> > > > ```{=html}
 > > > > <!-- -->
-> > > > ```
+> > > >
 > > > >     {
 > > > >         "conn_type": "SSHClient",
 > > > >         "address" : [server host],  # Optional. Default value is "localhost".
@@ -179,9 +177,8 @@ in RobotFramework.
 > > > > -   **SerialClient**: Create a client connection via Serial
 > > > >     Port.
 > > > >
-> > > > ```{=html}
 > > > > <!-- -->
-> > > > ```
+> > > >
 > > > >     {
 > > > >         "conn_type": "SerialClient",
 > > > >         "port" : [comport or null],
@@ -225,10 +222,13 @@ in RobotFramework.
 > > required to be in order)* or
 > >
 > > **send command** `conn_name=[conn_name]   command=[command]` *(All
-> > parameters are assigned by name)* \##### *Arguments*:
-
--   **conn_name**: Name of the connection.
--   **command**: Command to be sent.
+> > parameters are assigned by name)*
+>
+> **Arguments**:
+>
+> > **conn_name**: Name of the connection.
+> >
+> > **command**: Command to be sent.
 
 ### **verify**
 
@@ -238,8 +238,8 @@ in RobotFramework.
 > **Syntax**:
 >
 > > **verify**
-> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`*(All
-> > parameters are required to be in order)* or
+> > `[conn_name]   [search_pattern]   [timeout]   [fetch_block]  [eob_pattern] [filter_pattern]  [send_cmd]`\*(All
+> > parameters are required to be in order)\* or
 > >
 > > **verify**
 > > `conn_name=[conn_name]   search_pattern=[search_pattern]  timeout=[timeout]  fetch_block=[fetch_block]  eob_pattern=[eob_pattern] filter_pattern=[filter_pattern]  send_cmd=[send_cmd]`
@@ -268,19 +268,23 @@ in RobotFramework.
 >
 > **Return value**:
 >
-> > **A corresponding match object if it is found.**
+> > **List of captured string from search_pattern**
 > >
-> > **E.g.**
+> > **E.g.** The message from connection is **This is the 1st test
+> > command.**
+> >
+> > The [verify]{.title-ref} keyword of RobotFramework test case is
+> > defined as below:
 > >
 > >     ${result} = verify  conn_name=SSH_Connection
 > >                          search_pattern=(?<=\s).*([0-9]..).*(command).$
 > >                          send_cmd=*echo This is the 1st test command.*
 > >
-> > -   \${result}\[0\] will be **\"This is the 1st test command.\"**
-> >     which is the matched string.
-> > -   \${result}\[1\] will be **\"1st\"** which is the first captured
-> >     string.
-> > -   \${result}\[2\] will be **\"command\"** which is the second
+> > The result will be a list of 2 strings:
+> >
+> > -   **\${result}\[0\]** will be **\"1st\"** which is the first
+> >     captured string.
+> > -   **\${result}\[1\]** will be **\"command\"** which is the second
 > >     captured string.
 
 ## Example
@@ -330,7 +334,7 @@ an extension library for QConnectBaseLibrary, please following below
 steps.
 
 1.  Create a library package which have the prefix name is
-    **robotframework-qconnect-***\[your specific name\]*.
+    **robotframework-qconnect-**\*\[your specific name\]\*.
 2.  Your hadling connection class should be derived from
     **QConnectBase.connection_base.ConnectionBase** class.
 3.  In your *Connection Class*, override below attributes and methods:
@@ -353,7 +357,7 @@ steps.
 > >
 > >         self._llrecv_thrd_obj = None
 > >         self._llrecv_thrd_term = threading.Event()
-> >          self._init_thrd_llrecv(cls._socket_instance)
+> >         self._init_thrd_llrecv(cls._socket_instance)
 > >
 > > -   Incase you use the lowlevel receiver thread. You should
 > >     implement the **thrd_llrecv_from_connection_interface()**

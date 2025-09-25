@@ -96,6 +96,8 @@
 
 * Updated to raise ``UNKNOWN`` (extended version) instead of ``ERROR`` when providing invalid ``connection_type``.
 
+* Fixed issue that Broken Connection is not detected on Linux.
+
 **Singleton Pattern Improvement**
 
 * Enhanced the singleton implementation to avoid clearing the established connections.
