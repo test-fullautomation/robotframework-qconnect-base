@@ -222,11 +222,13 @@ QConnectBase Library support following keywords for testing connection in RobotF
 
    **send command**
    ``conn_name=[conn_name]   command=[command]`` *(All parameters are
-   assigned by name)* ##### *Arguments*:
+   assigned by name)*
 
--  **conn_name**: Name of the connection.
+  **Arguments**:
 
--  **command**: Command to be sent.
+   **conn_name**: Name of the connection.
+
+   **command**: Command to be sent.
 
 **verify**
 ~~~~~~~~~~
@@ -262,9 +264,12 @@ QConnectBase Library support following keywords for testing connection in RobotF
 
   **Return value**:
 
-   **A corresponding match object if it is found.**
+   **List of captured string from search_pattern**
 
    **E.g.**
+   The message from connection is **This is the 1st test command.**
+
+   The `verify` keyword of RobotFramework test case is defined as below:
 
    ::
 
@@ -272,10 +277,10 @@ QConnectBase Library support following keywords for testing connection in RobotF
                             search_pattern=(?<=\s).*([0-9]..).*(command).$
                             send_cmd=*echo This is the 1st test command.*
 
+   The result will be a list of 2 strings:
 
-   - ${result}[0] will be **"This is the 1st test command."** which is the matched string.
-   - ${result}[1] will be **"1st"** which is the first captured string.
-   - ${result}[2] will be **"command"** which is the second captured string.
+   - **${result}[0]** will be **"1st"** which is the first captured string.
+   - **${result}[1]** will be **"command"** which is the second captured string.
 
 Example
 -------
@@ -343,7 +348,7 @@ steps.
 
         self._llrecv_thrd_obj = None
         self._llrecv_thrd_term = threading.Event()
-         self._init_thrd_llrecv(cls._socket_instance)
+        self._init_thrd_llrecv(cls._socket_instance)
 
 
     - Incase you use the lowlevel receiver thread. You should implement the **thrd_llrecv_from_connection_interface()** method. This method is a mediate layer which will receive the data from connection at the very beginning, do some process then put them in a queue for the **receiver thread** above getting later.

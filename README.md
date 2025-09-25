@@ -225,10 +225,13 @@ in RobotFramework.
 > > required to be in order)* or
 > >
 > > **send command** `conn_name=[conn_name]   command=[command]` *(All
-> > parameters are assigned by name)* \##### *Arguments*:
-
--   **conn_name**: Name of the connection.
--   **command**: Command to be sent.
+> > parameters are assigned by name)*
+>
+> **Arguments**:
+>
+> > **conn_name**: Name of the connection.
+> >
+> > **command**: Command to be sent.
 
 ### **verify**
 
@@ -268,19 +271,23 @@ in RobotFramework.
 >
 > **Return value**:
 >
-> > **A corresponding match object if it is found.**
+> > **List of captured string from search_pattern**
 > >
-> > **E.g.**
+> > **E.g.** The message from connection is **This is the 1st test
+> > command.**
+> >
+> > The [verify]{.title-ref} keyword of RobotFramework test case is
+> > defined as below:
 > >
 > >     ${result} = verify  conn_name=SSH_Connection
 > >                          search_pattern=(?<=\s).*([0-9]..).*(command).$
 > >                          send_cmd=*echo This is the 1st test command.*
 > >
-> > -   \${result}\[0\] will be **\"This is the 1st test command.\"**
-> >     which is the matched string.
-> > -   \${result}\[1\] will be **\"1st\"** which is the first captured
-> >     string.
-> > -   \${result}\[2\] will be **\"command\"** which is the second
+> > The result will be a list of 2 strings:
+> >
+> > -   **\${result}\[0\]** will be **\"1st\"** which is the first
+> >     captured string.
+> > -   **\${result}\[1\]** will be **\"command\"** which is the second
 > >     captured string.
 
 ## Example
@@ -353,7 +360,7 @@ steps.
 > >
 > >         self._llrecv_thrd_obj = None
 > >         self._llrecv_thrd_term = threading.Event()
-> >          self._init_thrd_llrecv(cls._socket_instance)
+> >         self._init_thrd_llrecv(cls._socket_instance)
 > >
 > > -   Incase you use the lowlevel receiver thread. You should
 > >     implement the **thrd_llrecv_from_connection_interface()**
