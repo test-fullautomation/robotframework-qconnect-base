@@ -366,7 +366,7 @@ Making a connection.
             conn_conf.pop('conn_mode', None)
 
       if conn_name in self.connection_manage_dict.keys():
-         raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
+         raise AssertionError(constants.String.CONNECTION_NAME_EXIST)
 
       if conn_name == 'default_conn':
          conn_name += str(ConnectionManager.id)

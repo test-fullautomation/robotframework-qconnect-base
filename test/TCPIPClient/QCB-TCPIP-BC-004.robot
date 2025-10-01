@@ -51,7 +51,7 @@ QCB-TCPIP-BC-004
     # !!! Wording of error message needs to be maintained !!! 
     # Better: This connection name is already in use. Please select another name.
     # https://github.com/test-fullautomation/robotframework-qconnect-base/issues/166
-    should_be_equal    ${result}    The connection name 'QCB-TCPIP-BC-004-Connection' has already existed! Please use other name
+    should_be_equal    ${result}    This connection name is already in use. Please select another name.
 
     Sleep    1s
 
