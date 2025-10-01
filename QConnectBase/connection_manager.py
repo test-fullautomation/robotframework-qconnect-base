@@ -121,10 +121,15 @@ Constructor for ConnectionManager class.
       site_package_dirs = site.getsitepackages()
       extension_lib_paths = []
       for site_package_dir in site_package_dirs:
-         curr_dir = os.walk(site_package_dir).__next__()[0]
-         lib_path = [constants.SLASH.join([curr_dir, lib_ext]) for lib_ext in os.walk(site_package_dir).__next__()[1]
-                     if (ConnectionManager.LIBRARY_EXTENSION_PREFIX in lib_ext) or lib_ext.startswith(ConnectionManager.LIBRARY_EXTENSION_PREFIX2)]
-         extension_lib_paths.extend(lib_path)
+         try:
+            walk_iter = os.walk(site_package_dir)
+            curr_dir, subdirs, files = next(walk_iter)
+            lib_path = [constants.SLASH.join([curr_dir, lib_ext]) for lib_ext in subdirs
+                        if (ConnectionManager.LIBRARY_EXTENSION_PREFIX in lib_ext) or lib_ext.startswith(ConnectionManager.LIBRARY_EXTENSION_PREFIX2)]
+            extension_lib_paths.extend(lib_path)
+         except (StopIteration, OSError):
+            # Skip if site package directory doesn't exist or is inaccessible
+            continue
 
       all_libs = [main_lib_path]
       all_libs.extend(extension_lib_paths)
@@ -723,6 +728,15 @@ Verify a pattern from connection response after sending a command.
   i.e. the second *captured string* defined in the pattern ``(command)``.
 
       """
+      # Parameter validation: eob_pattern and filter_pattern are only valid when fetch_block is True
+      if not fetch_block:
+         if eob_pattern != '.*':
+            raise Exception("Parameter 'eob_pattern' is only applicable when 'fetch_block' is True. "
+                           f"Current values: fetch_block={fetch_block}, eob_pattern='{eob_pattern}'")
+         if filter_pattern != '.*':
+            raise Exception("Parameter 'filter_pattern' is only applicable when 'fetch_block' is True. "
+                           f"Current values: fetch_block={fetch_block}, filter_pattern='{filter_pattern}'")
+
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
 
