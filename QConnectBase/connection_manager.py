@@ -760,7 +760,10 @@ Verify a pattern from connection response after sending a command.
          # raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
          raise AssertionError(f"Unable to match the pattern '{search_pattern}' after '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
-      if hasattr(res, "groups"):
+      if isinstance(res, MultipleMatchResult):
+         # Handle multiple matches from fetch_block with multiple groups
+         match_res = res.get_all_groups()
+      elif hasattr(res, "groups"):
          match_res = [str(g) for g in res.groups()]
       elif isinstance(res, dict):
          match_res = res

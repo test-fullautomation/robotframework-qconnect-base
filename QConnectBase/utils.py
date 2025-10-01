@@ -358,3 +358,66 @@ Get string data result
       except Exception as _ex:
          pass
       return res
+
+
+class MultipleMatchResult(object):
+   """
+   Container for multiple regex match results when using fetch_block=True.
+   This class holds a list of individual match objects from different lines.
+   """
+   def __init__(self, matches=None):
+      """
+      Initialize with a list of match objects.
+      
+      **Arguments:**
+      
+      * ``matches``
+      
+        / *Condition*: optional / *Type*: list / *Default*: None /
+        
+        List of regex match objects or None to start with an empty list.
+      """
+      self.matches = matches if matches is not None else []
+   
+   def add_match(self, match):
+      """
+      Add a match object to the collection.
+      
+      **Arguments:**
+      
+      * ``match``
+      
+        / *Condition*: required / *Type*: re.Match /
+        
+        A regex match object to add to the collection.
+      """
+      if match is not None:
+         self.matches.append(match)
+   
+   def get_all_groups(self):
+      """
+      Get all groups from all matches as a 2D array.
+      
+      **Returns:**
+      
+      * ``groups_list``
+      
+        / *Type*: list /
+        
+        A list of lists, where each inner list contains the groups from one match.
+      """
+      return [[str(g) for g in match.groups()] for match in self.matches if match.groups()]
+   
+   def has_matches(self):
+      """
+      Check if there are any matches.
+      
+      **Returns:**
+      
+      * ``has_matches``
+      
+        / *Type*: bool /
+        
+        True if there are matches, False otherwise.
+      """
+      return len(self.matches) > 0

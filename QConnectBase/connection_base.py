@@ -32,6 +32,7 @@ from inspect import currentframe
 from collections import deque
 from robot.libraries.BuiltIn import BuiltIn
 from QConnectBase.qlogger import QLogger
+from QConnectBase.utils import MultipleMatchResult
 import QConnectBase.constants as constants
 import queue
 import abc
@@ -402,7 +403,13 @@ Thread to receive data from connection continuously.
                         if is_hit:
                            now = time.time()
                            if use_fetch_block is True and regex_end_block_pattern.pattern != ".*":
-                              result_obj = regex_filter.search("\r\n".join(back_trace_queue))
+                              # Collect all individual matches from the accumulated lines
+                              multiple_result = MultipleMatchResult()
+                              for line in back_trace_queue:
+                                 line_match = regex_filter.search(line)
+                                 if line_match:
+                                    multiple_result.add_match(line_match)
+                              result_obj = multiple_result if multiple_result.has_matches() else result_obj
                               back_trace_queue.clear()
                            msg_queue.put((now, result_obj), False)
                self.post_msg_check(msg)
