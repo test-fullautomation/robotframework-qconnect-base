@@ -19,13 +19,13 @@ Resource    ../imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-BC-030
-    [Documentation]    Test parameter validation: fetch_block=False with custom eob_pattern should fail
+    [Documentation]    Test parameter validation: fetch_block=False with custom filter_pattern should fail
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}      BADCASE
 
-    set_test_variable    ${connection_name}    QCB-TCPIP-BC-030-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-BC-031-Connection
 
     # Test parameter validation - no connection needed since validation happens first
 
@@ -33,11 +33,12 @@ QCB-TCPIP-BC-030
                                                                ...                    search_pattern=.*
                                                                ...                    timeout=1
                                                                ...                    fetch_block=${False}
-                                                               ...                    eob_pattern=END
+                                                               ...                    filter_pattern=test_filter
                                                                ...                    send_cmd=PING
 
-    log    TCPIP-BC-030 'verify' status: ${status}    console=yes
-    log    TCPIP-BC-030 'verify' result: ${result}    console=yes
+    log    TCPIP-BC-031 'verify' status: ${status}    console=yes
+    log    TCPIP-BC-031 'verify' result: ${result}    console=yes
+
 
     should_be_equal    ${status}    FAIL
-    should_contain     ${result}    Parameter 'eob_pattern' is only applicable when 'fetch_block' is True
+    should_contain     ${result}    Parameter 'filter_pattern' is only applicable when 'fetch_block' is True
