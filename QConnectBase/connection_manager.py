@@ -42,6 +42,13 @@ import inspect
 import importlib.util
 import pkgutil
 import sys
+import re
+
+
+def has_capturing_groups(pattern):
+    """Checks whether a pattern contains capturing groups"""
+    compiled = re.compile(pattern)
+    return compiled.groups > 0
 
 
 class InputParam(DictToClass):
@@ -711,7 +718,7 @@ Verify a pattern from connection response after sending a command.
 
   List of captured string from ``search_pattern``
 
-  For example, if ``search_pattern`` is ``(?<=\s).*([0-9]..)..*(command).$``,
+  For example, if ``search_pattern`` is ``(?<=\\s).*([0-9]..)..*(command).$``,
   and the response from connection is ``This is the 1st test command.``,
   then the returned list will be ``['1st', 'command']``.
 
@@ -725,6 +732,10 @@ Verify a pattern from connection response after sending a command.
       """
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
+
+      # Validate eob_pattern for potential issues when fetch_block is True
+      if fetch_block and eob_pattern and has_capturing_groups(eob_pattern):
+         BuiltIn().log(f"Warning: eob_pattern '{eob_pattern}' contains capturing groups, which may not work as expected for end-of-block detection", constants.LOG_LEVEL_WARNING)
 
       # if search_pattern is None:
       #    raise Exception("The 'search_pattern' have to be a regex string instead of None.")
@@ -760,14 +771,26 @@ Verify a pattern from connection response after sending a command.
          # raise AssertionError(f"Unable to match the pattern after '{match_try}' {'try' if match_try == 1 else 'tries'}.")
          raise AssertionError(f"Unable to match the pattern '{search_pattern}' after '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
+      # Determine if the pattern has capturing groups
+      has_groups = has_capturing_groups(search_pattern) if search_pattern else False
+
       if hasattr(res, "groups"):
-         match_res = [str(g) for g in res.groups()]
+         if has_groups:
+            match_res = [str(g) for g in res.groups()]
+         else:
+            # Pattern has no capturing groups, return the entire matched text
+            match_res = [str(res.group())]
       elif isinstance(res, dict):
          match_res = res
       else:
          match_res = [str(res)]
 
-      BuiltIn().log(f"Received expected response '{match_res}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
+      # Improve log message based on capturing groups
+      if has_groups:
+         BuiltIn().log(f"Received expected response '{match_res}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
+      else:
+         BuiltIn().log(f"Search pattern '{search_pattern}' matched on connection '{conn_name}'", constants.LOG_LEVEL_INFO)
+      
       return match_res
 
 
@@ -808,7 +831,7 @@ if __name__ == "__main__":
       # conn_manager.send_command("test_ssh", "cd ..")
       test = conn_manager.verify_unnamed_args(
          "test_ssh",
-         r"(?<=\s).*([0-9]..).*(command).$",
+         r"(?<=\\s).*([0-9]..).*(command).$",
          5,
          False,
          ".*",
