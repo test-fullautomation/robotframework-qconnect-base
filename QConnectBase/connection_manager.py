@@ -731,10 +731,10 @@ Verify a pattern from connection response after sending a command.
       # Parameter validation: eob_pattern and filter_pattern are only valid when fetch_block is True
       if not fetch_block:
          if eob_pattern != '.*':
-            raise ValueError("Parameter 'eob_pattern' is only applicable when 'fetch_block' is True. "
+            raise Exception("Parameter 'eob_pattern' is only applicable when 'fetch_block' is True. "
                            f"Current values: fetch_block={fetch_block}, eob_pattern='{eob_pattern}'")
          if filter_pattern != '.*':
-            raise ValueError("Parameter 'filter_pattern' is only applicable when 'fetch_block' is True. "
+            raise Exception("Parameter 'filter_pattern' is only applicable when 'fetch_block' is True. "
                            f"Current values: fetch_block={fetch_block}, filter_pattern='{filter_pattern}'")
 
       if conn_name not in self.connection_manage_dict.keys():
