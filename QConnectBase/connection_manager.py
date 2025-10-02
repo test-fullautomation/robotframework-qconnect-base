@@ -360,8 +360,8 @@ Making a connection.
       conn_conf['connection_name'] = conn_name
 
       if conn_type not in self.supported_connection_classes_dict.keys():
-         raise Exception("The connection type '%s' is not supported. Please choose one of: %s." %
-                              (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
+         raise Exception(constants.String.CONNECTION_TYPE_UNSUPPORTED %
+                         (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
 
       if 'conn_mode' in conn_conf:
          if conn_conf['conn_mode'] != conn_mode and conn_mode != '':
