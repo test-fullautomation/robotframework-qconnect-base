@@ -34,6 +34,7 @@ import platform
 import json
 import collections
 import subprocess
+import re
 from ctypes import *
 sPlatform = platform.system().lower()
 
@@ -358,3 +359,8 @@ Get string data result
       except Exception as _ex:
          pass
       return res
+
+def has_capturing_groups(pattern):
+   """Checks whether a pattern contains capturing groups"""
+   compiled = re.compile(pattern)
+   return compiled.groups > 0

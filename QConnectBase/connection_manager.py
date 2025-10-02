@@ -360,8 +360,8 @@ Making a connection.
       conn_conf['connection_name'] = conn_name
 
       if conn_type not in self.supported_connection_classes_dict.keys():
-         raise Exception("The connection type '%s' is not supported. Please choose one of: %s." %
-                              (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
+         raise Exception(constants.String.CONNECTION_TYPE_UNSUPPORTED %
+                         (conn_type, ', '.join(sorted(k for k in self.supported_connection_classes_dict.keys() if not k.endswith('Base')))))
 
       if 'conn_mode' in conn_conf:
          if conn_conf['conn_mode'] != conn_mode and conn_mode != '':
@@ -371,7 +371,7 @@ Making a connection.
             conn_conf.pop('conn_mode', None)
 
       if conn_name in self.connection_manage_dict.keys():
-         raise AssertionError(constants.String.CONNECTION_NAME_EXIST)
+         raise AssertionError(constants.String.CONNECTION_NAME_EXIST % conn_name)
 
       if conn_name == 'default_conn':
          conn_name += str(ConnectionManager.id)
@@ -736,6 +736,11 @@ Verify a pattern from connection response after sending a command.
          if filter_pattern != '.*':
             raise Exception("Parameter 'filter_pattern' is only applicable when 'fetch_block' is True. "
                            f"Current values: fetch_block={fetch_block}, filter_pattern='{filter_pattern}'")
+      else:
+         if eob_pattern and has_capturing_groups(eob_pattern):
+            BuiltIn().log(f"Warning: eob_pattern '{eob_pattern}' contains capturing groups, which may not work as expected for end-of-block detection.", constants.LOG_LEVEL_WARNING)
+         if filter_pattern and has_capturing_groups(filter_pattern):
+            BuiltIn().log(f"Warning: filter_pattern '{filter_pattern}' contains capturing groups, which may not work as expected for filtering message.", constants.LOG_LEVEL_WARNING)
 
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
@@ -769,14 +774,21 @@ Verify a pattern from connection response after sending a command.
       if not res:
          raise AssertionError(f"Failed to match the pattern '{search_pattern}' within '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
+      # Determine if the pattern has capturing groups
+      has_groups = has_capturing_groups(search_pattern) if search_pattern else False
+
       if hasattr(res, "groups"):
-         match_res = [str(g) for g in res.groups()]
+         if has_groups:
+            match_res = [str(g) for g in res.groups()]
+         else:
+            match_res = None
       elif isinstance(res, dict):
          match_res = res
       else:
          match_res = [str(res)]
 
-      BuiltIn().log(f"Received expected response '{match_res}' from '{conn_name}'", constants.LOG_LEVEL_INFO)
+      BuiltIn().log(f"Search pattern '{search_pattern}' matched (try {i}) on connection '{conn_name}'", constants.LOG_LEVEL_INFO)
+
       return match_res
 
 
