@@ -48,10 +48,10 @@ QCB-TCPIP-BC-004
     log    TCPIP-BC-004 'connect' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    # !!! Wording of error message needs to be maintained !!! 
+    # !!! Wording of error message needs to be maintained !!!
     # Better: This connection name is already in use. Please select another name.
     # https://github.com/test-fullautomation/robotframework-qconnect-base/issues/166
-    should_be_equal    ${result}    This connection name is already in use. Please select another name.
+    should_be_equal    ${result}    This connection name 'QCB-TCPIP-BC-004-Connection' is already in use. Please select another name.
 
     Sleep    1s
 
