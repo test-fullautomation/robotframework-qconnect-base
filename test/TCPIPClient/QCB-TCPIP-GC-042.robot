@@ -51,7 +51,7 @@ QCB-TCPIP-GC-042
     log    TCPIP-GC-042 'verify' result 1: ${result1}    console=yes
 
     should_be_equal    ${status1}    PASS
-    should_be_empty    ${result1}
+    should_be_equal    ${result1}    ${None}
 
     # using the second name
     ${status2}    ${result2}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name_2}
@@ -62,7 +62,7 @@ QCB-TCPIP-GC-042
     log    TCPIP-GC-042 'verify 2' result 2: ${result2}    console=yes
 
     should_be_equal    ${status2}    PASS
-    should_be_empty    ${result2}
+    should_be_equal    ${result1}    ${None}
 
     # disconnect the first connection
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    ${connection_name_1}
@@ -82,7 +82,7 @@ QCB-TCPIP-GC-042
     log    TCPIP-GC-042 'verify 2' result 2: ${result2}    console=yes
 
     should_be_equal    ${status2}    PASS
-    should_be_empty    ${result2}
+    should_be_equal    ${result1}    ${None}
 
     # disconnect the second connection
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.disconnect    ${connection_name_2}
