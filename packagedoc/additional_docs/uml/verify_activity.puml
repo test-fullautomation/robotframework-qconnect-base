@@ -12,12 +12,12 @@ while (match_try exceeded?) is (no)
             if (Block of messages in trace_back queue match the search_pattern?) then (no   )
                break
             else (yes)
-               :Verify passed;
                if (search_pattern contains capture group) then (yes)
                   :Return captured message(s);
                else (no)
                   :Return None;
                endif
+               :Verify passed;
                stop
             endif
          else (no)
@@ -33,12 +33,12 @@ while (match_try exceeded?) is (no)
          endif
       else (false)
          if (Message matches the search_pattern?) then (yes)
-            :Verify passed;
             if (search_pattern contains capture group) then (yes)
                :Return captured message(s);
             else (no)
                :Return None;
             endif
+            :Verify passed;
             stop
          endif
       endif
