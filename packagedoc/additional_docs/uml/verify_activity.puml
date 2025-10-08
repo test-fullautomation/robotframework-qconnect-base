@@ -1,36 +1,46 @@
 @startuml
-|QConnectBase|
+|title QConnectBase verify keyword|
 start
 while (match_try exceeded?) is (no)
    :Start timeout timer;
    while (timeout reached?) is (no)
+      :Initialize trace_back queue;
       :Read message from connection;
-      if (fetch_block?) then (false    )
-            if (Message matches the search_pattern?) then (yes)
-               :Return message;
+      if (fetch_block?) then (true)
+         if (Incoming message matches the eob_pattern?) then (yes)
+            :Stop waiting for further messages;
+            if (Block of messages in trace_back queue match the search_pattern?) then (no   )
+               break
+            else (yes)
+               :Verify passed;
+               if (search_pattern contains capture group) then (yes)
+                  :Return captured message(s);
+               else (no)
+                  :Return None;
+               endif
                stop
             endif
-      else (    true)
+         else (no)
             if (filter_pattern defined?) then (yes    )
                if (Message matches filter_pattern?) then (yes  )
-                  :Store message in queue;
+                  :Store message in trace_back queue;
                else (  no)
                   :Discard message;
                endif
             else (    no)
-               :Store message in queue;
+               :Store message in trace_back queue;
             endif
-
-            if (Most recent stored message matches the eob_pattern?) then (yes)
-               :Stop waiting for further messages;
-               if (Any of the lines in queue match the search_pattern?) then (yes   )
-                  :Return list of queued messages;
-                  stop
-               else (   no)
-                  :Return empty list;
-                  stop
-               endif
+         endif
+      else (false)
+         if (Message matches the search_pattern?) then (yes)
+            :Verify passed;
+            if (search_pattern contains capture group) then (yes)
+               :Return captured message(s);
+            else (no)
+               :Return None;
             endif
+            stop
+         endif
       endif
    endwhile
    :Retry to send command;
