@@ -386,17 +386,19 @@ Thread to receive data from connection continuously.
                         is_hit = False
                         result_obj = None
                         if use_fetch_block is True:
+                           # BuiltIn().log_to_console(msg)
                            matchObj = regex_line_filter.search(msg)
-                           if matchObj is not None:
-                              back_trace_queue.append(msg)
-                              # BuiltIn().log_to_console(msg)
-                              if regex_end_block_pattern and regex_end_block_pattern.pattern != ".*":
-                                (is_hit, result_obj) = self._filter_msg(regex_end_block_pattern, msg)
+                           if regex_end_block_pattern and regex_end_block_pattern.pattern != ".*":
+                              (is_hit, result_obj) = self._filter_msg(regex_end_block_pattern, msg)
+                              if is_hit:
+                                 back_trace_queue.append(msg)
                               else:
-                                # BuiltIn().log_to_console(regex_filter.pattern)
-                                # BuiltIn().log_to_console(msg)
-                                # BuiltIn().log_to_console("\r\n".join(back_trace_queue))
-                                (is_hit, result_obj) = self._filter_msg(regex_filter, "\n".join(back_trace_queue))
+                                 if matchObj is not None:
+                                    back_trace_queue.append(msg)
+                           else:
+                              if matchObj is not None:
+                                 back_trace_queue.append(msg)
+                              (is_hit, result_obj) = self._filter_msg(regex_filter, "\n".join(back_trace_queue))
                         else:
                            (is_hit, result_obj) = self._filter_msg(regex_filter, msg)
                         if is_hit:
