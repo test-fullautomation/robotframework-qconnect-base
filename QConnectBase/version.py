@@ -12,5 +12,5 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-VERSION      = '1.1.9'
-VERSION_DATE = '02.10.2025'
+VERSION      = '1.1.10'
+VERSION_DATE = '08.10.2025'
