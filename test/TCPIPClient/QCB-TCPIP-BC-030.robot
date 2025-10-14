@@ -19,7 +19,9 @@ Resource    ../imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-BC-030
-    [Documentation]    Test parameter validation: fetch_block=False with custom eob_pattern should fail
+    [Documentation]    Verify parameter validation (1)
+    ...                eob_pattern defined together with fetch_block is False
+    ...                Error expected: Parameter 'eob_pattern' is only applicable when 'fetch_block' is True
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
@@ -27,10 +29,16 @@ QCB-TCPIP-BC-030
 
     set_test_variable    ${connection_name}    QCB-TCPIP-BC-030-Connection
 
-    # Test parameter validation - no connection needed since validation happens first
+    # connection parameter for this test
+    &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
+    ...                                          address=${HOST}
+    ...                                          port=${PORT}
+    ...                                          logfile=./tcp_ip_incoming.log
+
+    conn_manager.connect    conn_name=${connection_name}
+    ...                     conn_conf=${TCPIPClientParam}
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
-                                                               ...                    search_pattern=.*
                                                                ...                    timeout=1
                                                                ...                    fetch_block=${False}
                                                                ...                    eob_pattern=END
@@ -40,4 +48,6 @@ QCB-TCPIP-BC-030
     log    TCPIP-BC-030 'verify' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_contain     ${result}    Parameter 'eob_pattern' is only applicable when 'fetch_block' is True
+    should_be_equal    ${result}    Parameter 'eob_pattern' is only applicable when 'fetch_block' is True. Current values: fetch_block=False, eob_pattern='END'
+
+    conn_manager.disconnect    ${connection_name}

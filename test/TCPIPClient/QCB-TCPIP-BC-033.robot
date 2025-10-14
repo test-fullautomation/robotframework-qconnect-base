@@ -18,16 +18,20 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-BC-031
-    [Documentation]    Verify parameter validation (2)
-    ...                filter_pattern defined together with fetch_block is False
-    ...                Error expected: Parameter 'filter_pattern' is only applicable when 'fetch_block' is True
+QCB-TCPIP-BC-033
+    [Documentation]    Verify parameter validation (4)
+    ...                filter_pattern defined with capturing groups, but this is not supported.
+    ...                Detected properly: Warning: filter_pattern 'IN(VAL)ID' contains capturing groups, which may not work as expected for filtering message.
+    ...                Because filter_pattern does not match, the status is PASS. But an error would be better.
+    ...                Error message itself has unfavorable wording.
+    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/183
+    ...                !!! TEST NOT IN FINAL VERSION !!!
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}      BADCASE
 
-    set_test_variable    ${connection_name}    QCB-TCPIP-BC-031-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-BC-033-Connection
 
     # connection parameter for this test
     &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
@@ -39,16 +43,17 @@ QCB-TCPIP-BC-031
     ...                     conn_conf=${TCPIPClientParam}
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
-                                                               ...                    timeout=1
-                                                               ...                    fetch_block=${False}
-                                                               ...                    filter_pattern=test_filter
+                                                               ...                    filter_pattern=IN(VAL)ID
+                                                               ...                    eob_pattern=ACK
+                                                               ...                    fetch_block=${True}
                                                                ...                    send_cmd=PING
 
-    log    TCPIP-BC-031 'verify' status: ${status}    console=yes
-    log    TCPIP-BC-031 'verify' result: ${result}    console=yes
+    log    TCPIP-BC-033 'verify' status: ${status}    console=yes
+    log    TCPIP-BC-033 'verify' result: ${result}    console=yes
 
-    should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    Parameter 'filter_pattern' is only applicable when 'fetch_block' is True. Current values: fetch_block=False, filter_pattern='test_filter'
+    # Because filter_pattern does not match, the status is PASS
+    # should_be_equal    ${status}    FAIL
+    # should_be_equal    ${result}    !!! NEEDS TO BE DEFINED AFTER FIX !!!
 
     conn_manager.disconnect    ${connection_name}
 

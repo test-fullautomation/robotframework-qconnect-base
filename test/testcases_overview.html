@@ -124,8 +124,7 @@ BADCASE
 <font size="2" face="Arial" color="#595959"><i>
 <b>Duplicate connection name: A second connection uses the same connection name than the first one.<br>
 The first connection has not been disconnected before.<br>
-!!! Wording of error message needs to be maintained !!!<br>
-https://github.com/test-fullautomation/robotframework-qconnect-base/issues/166</b>
+Expected: Error message that this connection is already in use.</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
@@ -233,6 +232,143 @@ BADCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
 <b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-030.robot">QCB-TCPIP-BC-030</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#FF0000">
+BADCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Verify parameter validation (1)<br>
+eob_pattern defined together with fetch_block is False<br>
+Error expected: Parameter 'eob_pattern' is only applicable when 'fetch_block' is True</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+10
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-031.robot">QCB-TCPIP-BC-031</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#FF0000">
+BADCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Verify parameter validation (2)<br>
+filter_pattern defined together with fetch_block is False<br>
+Error expected: Parameter 'filter_pattern' is only applicable when 'fetch_block' is True</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+11
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-032.robot">QCB-TCPIP-BC-032</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#FF0000">
+BADCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Verify parameter validation (3)<br>
+eob_pattern defined with capturing groups, but this is not supported.<br>
+Detected properly: Warning: eob_pattern 'IN(VAL)ID' contains capturing groups, which may not work as expected for end-of-block detection.<br>
+But even so verify runs into timeout. Error message itself has unfavorable wording.<br>
+https://github.com/test-fullautomation/robotframework-qconnect-base/issues/183<br>
+https://github.com/test-fullautomation/robotframework-qconnect-base/issues/184<br>
+!!! TEST NOT IN FINAL VERSION !!!</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+12
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-033.robot">QCB-TCPIP-BC-033</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#FF0000">
+BADCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Verify parameter validation (4)<br>
+filter_pattern defined with capturing groups, but this is not supported.<br>
+Detected properly: Warning: filter_pattern 'IN(VAL)ID' contains capturing groups, which may not work as expected for filtering message.<br>
+Because filter_pattern does not match, the status is PASS. But an error would be better.<br>
+Error message itself has unfavorable wording.<br>
+https://github.com/test-fullautomation/robotframework-qconnect-base/issues/183<br>
+!!! TEST NOT IN FINAL VERSION !!!</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+13
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-BC-034.robot">QCB-TCPIP-BC-034</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#FF0000">
+BADCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Verify parameter validation (5)<br>
+Syntax error in search_pattern (missing closed round bracket, incomplete capturing group).</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+14
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
 <a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-001.robot">QCB-TCPIP-GC-001</a>
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
@@ -252,7 +388,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
-10
+15
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
@@ -276,7 +412,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
-11
+16
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
@@ -301,7 +437,7 @@ that has already been closed by the testserver.</b>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
-12
+17
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
@@ -318,14 +454,42 @@ GOODCASE
 </font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
 <font size="2" face="Arial" color="#595959"><i>
-<b>Verify answer from testserver (verify)</b>
+<b>Verify answer from testserver.<br>
+Search pattern defined without capturing groups.<br>
+Expected is a match with result is None.</b>
 </i></font></td>
 </tr>
 <tr valign="middle" align="left">
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
-13
+18
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-031.robot">QCB-TCPIP-GC-031</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#008000">
+GOODCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Verify answer from testserver.<br>
+Search pattern defined with two capturing groups.<br>
+Expected result is a list containing two elements containing the captured content.</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+19
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
@@ -350,7 +514,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
-14
+20
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
@@ -375,7 +539,7 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
-15
+21
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
@@ -399,7 +563,143 @@ GOODCASE
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
 <font size="2" face="Arial" color="#FF0000">
 <b>
-16
+22
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-050.robot">QCB-TCPIP-GC-050</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#008000">
+GOODCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Fetch block (1)<br>
+No filter pattern defined, no search pattern defined.<br>
+Therefore, no capturing groups are involved.<br>
+Default value '.*' is active for both patterns.<br>
+Expected is a match with result is None.</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+23
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-051.robot">QCB-TCPIP-GC-051</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#008000">
+GOODCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Fetch block (2)<br>
+No filter pattern defined, search pattern defined (without capturing groups).<br>
+Default value '.*' is active for filter pattern only.<br>
+Expected is a match with result is None.</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+24
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-052.robot">QCB-TCPIP-GC-052</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#008000">
+GOODCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Fetch block (3)<br>
+No filter pattern defined, search pattern defined (with single capturing group).<br>
+Default value '.*' is active for filter pattern only.<br>
+Expected result is a list containing one single element containing the captured content.</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+25
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-053.robot">QCB-TCPIP-GC-053</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#008000">
+GOODCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Fetch block (4)<br>
+No filter pattern defined, search pattern defined (with two capturing groups).<br>
+Default value '.*' is active for filter pattern only.<br>
+Expected result is a list containing two elements containing the captured content.</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+26
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#595959">
+<b>
+<a target="_blank" href="https://github.com/test-fullautomation/robotframework-qconnect-base/tree/develop/test/TCPIPClient/QCB-TCPIP-GC-054.robot">QCB-TCPIP-GC-054</a>
+</b></font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#4169E1">
+TCPIPClient
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
+<font size="2" face="Arial" color="#008000">
+GOODCASE
+</font></td>
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="left">
+<font size="2" face="Arial" color="#595959"><i>
+<b>Fetch block (5)<br>
+Filter pattern defined, search pattern defined (with two capturing groups).<br>
+Expected result is a list containing two elements containing the captured content.<br>
+The captured content is limited to the lines filtered by the filter pattern.</b>
+</i></font></td>
+</tr>
+<tr valign="middle" align="left">
+<td colspan="1" valign="center" bgcolor="#F5F5F5" align="right">
+<font size="2" face="Arial" color="#FF0000">
+<b>
+27
 </b></font></td>
 <td colspan="1" valign="center" bgcolor="#F5F5F5" align="middle">
 <font size="2" face="Arial" color="#595959">
@@ -423,6 +723,6 @@ that is triggered by a command sent within the second thread.</b><br>Test tags: 
 </tbody></table></div>
 <div>&nbsp;</div>
 <hr width="100%" color="#FF8C00" align="center">
-<div align="center"><font size="2" color="#27408B">Generated: 22.09.2025 - 15:09:11</font></div>
+<div align="center"><font size="2" color="#27408B">Generated: 14.10.2025 - 16:12:33</font></div>
 <div>&nbsp;</div>
 </body></html>

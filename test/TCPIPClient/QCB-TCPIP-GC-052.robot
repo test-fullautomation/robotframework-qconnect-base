@@ -18,20 +18,17 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-BC-032
-    [Documentation]    Verify parameter validation (3)
-    ...                eob_pattern defined with capturing groups, but this is not supported.
-    ...                Detected properly: Warning: eob_pattern 'IN(VAL)ID' contains capturing groups, which may not work as expected for end-of-block detection.
-    ...                But even so verify runs into timeout. Error message itself has unfavorable wording.
-    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/183
-    ...                https://github.com/test-fullautomation/robotframework-qconnect-base/issues/184
-    ...                !!! TEST NOT IN FINAL VERSION !!!
+QCB-TCPIP-GC-052
+    [Documentation]    Fetch block (3)
+    ...                No filter pattern defined, search pattern defined (with single capturing group).
+    ...                Default value '.*' is active for filter pattern only.
+    ...                Expected result is a list containing one single element containing the captured content.
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}      BADCASE
+    set_test_variable    ${test_category}      GOODCASE
 
-    set_test_variable    ${connection_name}    QCB-TCPIP-BC-032-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-052-Connection
 
     # connection parameter for this test
     &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
@@ -43,15 +40,19 @@ QCB-TCPIP-BC-032
     ...                     conn_conf=${TCPIPClientParam}
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
-                                                               ...                    eob_pattern=IN(VAL)ID
+                                                               ...                    eob_pattern=transmission\\sended
+                                                               ...                    search_pattern=^transmission\\sstarted\\r\\n(.*)
                                                                ...                    fetch_block=${True}
-                                                               ...                    send_cmd=PING
+                                                               ...                    timeout=12
+                                                               ...                    match_try=1
+                                                               ...                    send_cmd=FETCHBLOCK-1
 
-    log    TCPIP-BC-032 'verify' status: ${status}    console=yes
-    log    TCPIP-BC-032 'verify' result: ${result}    console=yes
+    log    TCPIP-GC-052 'verify' status: ${status}    console=yes
+    log    TCPIP-GC-052 'verify' result: ${result}    console=yes
 
-    should_be_equal    ${status}    FAIL
-    # should_be_equal    ${result}    !!! NEEDS TO BE DEFINED AFTER FIX !!!
+    should_be_equal     ${status}       PASS
+    length_should_be    ${result}       1
+    should_be_equal     ${result}[0]    transmission point 1 passed\r\nany noise message\r\ntransmission point 2 passed\r\nany noise message\r\ntransmission point 3 passed\r\nany noise message\r\ntransmission ended with code '0'
 
     conn_manager.disconnect    ${connection_name}
 
