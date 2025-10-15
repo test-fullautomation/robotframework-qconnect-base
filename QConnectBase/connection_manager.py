@@ -738,9 +738,9 @@ Verify a pattern from connection response after sending a command.
                            f"Current values: fetch_block={fetch_block}, filter_pattern='{filter_pattern}'")
       else:
          if eob_pattern and has_capturing_groups(eob_pattern):
-            BuiltIn().log(f"Warning: eob_pattern '{eob_pattern}' contains capturing groups, which may not work as expected for end-of-block detection.", constants.LOG_LEVEL_WARNING)
+            BuiltIn().log(f"Warning: Capturing groups are not supported within the eob_pattern.", constants.LOG_LEVEL_WARNING)
          if filter_pattern and has_capturing_groups(filter_pattern):
-            BuiltIn().log(f"Warning: filter_pattern '{filter_pattern}' contains capturing groups, which may not work as expected for filtering message.", constants.LOG_LEVEL_WARNING)
+            BuiltIn().log(f"Warning: Capturing groups are not supported within the filter_pattern.", constants.LOG_LEVEL_WARNING)
 
       if conn_name not in self.connection_manage_dict.keys():
          raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
