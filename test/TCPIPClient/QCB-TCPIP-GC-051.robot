@@ -18,16 +18,17 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-BC-031
-    [Documentation]    Verify parameter validation (2)
-    ...                filter_pattern defined together with fetch_block is False
-    ...                Error expected: Parameter 'filter_pattern' is only applicable when 'fetch_block' is True
+QCB-TCPIP-GC-051
+    [Documentation]    Fetch block (2)
+    ...                No filter pattern defined, search pattern defined (without capturing groups).
+    ...                Default value '.*' is active for filter pattern only.
+    ...                Expected is a match with result is None.
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
-    set_test_variable    ${test_category}      BADCASE
+    set_test_variable    ${test_category}      GOODCASE
 
-    set_test_variable    ${connection_name}    QCB-TCPIP-BC-031-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-051-Connection
 
     # connection parameter for this test
     &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
@@ -39,16 +40,18 @@ QCB-TCPIP-BC-031
     ...                     conn_conf=${TCPIPClientParam}
 
     ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
-                                                               ...                    timeout=1
-                                                               ...                    fetch_block=${False}
-                                                               ...                    filter_pattern=test_filter
-                                                               ...                    send_cmd=PING
+                                                               ...                    eob_pattern=transmission\\sended
+                                                               ...                    search_pattern=noise\\smessage
+                                                               ...                    fetch_block=${True}
+                                                               ...                    timeout=12
+                                                               ...                    match_try=1
+                                                               ...                    send_cmd=FETCHBLOCK-1
 
-    log    TCPIP-BC-031 'verify' status: ${status}    console=yes
-    log    TCPIP-BC-031 'verify' result: ${result}    console=yes
+    log    TCPIP-GC-051 'verify' status: ${status}    console=yes
+    log    TCPIP-GC-051 'verify' result: ${result}    console=yes
 
-    should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    Parameter 'filter_pattern' is only applicable when 'fetch_block' is True. Current values: fetch_block=False, filter_pattern='test_filter'
+    should_be_equal    ${status}    PASS
+    should_be_equal    ${result}    ${None}
 
     conn_manager.disconnect    ${connection_name}
 

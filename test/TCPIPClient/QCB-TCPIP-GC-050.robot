@@ -18,16 +18,18 @@ Resource    ../imports/resources.resource
 
 *** Test Cases ***
 
-QCB-TCPIP-GC-100
-    [Tags]    threading
-    [Documentation]    Communication in two threads. The first thread waits for an incoming message
-    ...                that is triggered by a command sent within the second thread.
+QCB-TCPIP-GC-050
+    [Documentation]    Fetch block (1)
+    ...                No filter pattern defined, no search pattern defined.
+    ...                Therefore, no capturing groups are involved.
+    ...                Default value '.*' is active for both patterns.
+    ...                Expected is a match with result is None.
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
     set_test_variable    ${test_category}      GOODCASE
 
-    set_test_variable    ${connection_name}    QCB-TCPIP-GC-100-Connection
+    set_test_variable    ${connection_name}    QCB-TCPIP-GC-050-Connection
 
     # connection parameter for this test
     &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}
@@ -38,22 +40,18 @@ QCB-TCPIP-GC-100
     conn_manager.connect    conn_name=${connection_name}
     ...                     conn_conf=${TCPIPClientParam}
 
-    THREAD    VERIFY-THREAD-1     False
-        # no own send_cmd in this thread, simply waiting; search_pattern 'GC-100-T2-6' triggered by VERIFY-THREAD-2
-        conn_manager.verify    conn_name=${connection_name}    search_pattern=GC-100-T2-6    match_try=12
-        # conn_manager.verify    conn_name=${connection_name}    search_pattern=GC-100-T2-6    match_try=12    send_cmd=${None}
-        send_thread_notification    VERIFY_THREAD_1_DONE
-    END
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
+                                                               ...                    eob_pattern=transmission\\sended
+                                                               ...                    fetch_block=${True}
+                                                               ...                    timeout=12
+                                                               ...                    match_try=1
+                                                               ...                    send_cmd=FETCHBLOCK-1
 
-    THREAD    VERIFY-THREAD-2     False
-        FOR    ${index}    IN RANGE    1    11
-            conn_manager.verify    conn_name=${connection_name}    search_pattern=GC-100-T2-${index}    match_try=6    send_cmd=GC-100-T2-${index}
-        END
-        send_thread_notification    VERIFY_THREAD_2_DONE
-    END
+    log    TCPIP-GC-050 'verify' status: ${status}    console=yes
+    log    TCPIP-GC-050 'verify' result: ${result}    console=yes
 
-    wait_thread_notification    VERIFY_THREAD_1_DONE    timeout=120
-    wait_thread_notification    VERIFY_THREAD_2_DONE    timeout=120
+    should_be_equal    ${status}    PASS
+    should_be_equal    ${result}    ${None}
 
     conn_manager.disconnect    ${connection_name}
 

@@ -19,7 +19,9 @@ Resource    ../imports/resources.resource
 *** Test Cases ***
 
 QCB-TCPIP-GC-030
-    [Documentation]    Verify answer from testserver (verify)
+    [Documentation]    Verify answer from testserver.
+    ...                Search pattern defined without capturing groups.
+    ...                Expected is a match with result is None.
 
     # supports HTML overview
     set_test_variable    ${connection_type}    TCPIPClient
@@ -36,7 +38,15 @@ QCB-TCPIP-GC-030
     conn_manager.connect    conn_name=${connection_name}
     ...                     conn_conf=${TCPIPClientParam}
 
-    conn_manager.verify    conn_name=${connection_name}    search_pattern=GC-030 ACK    send_cmd=GC-030
+    ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.verify    conn_name=${connection_name}
+                                                               ...                    search_pattern=GC-030 ACK
+                                                               ...                    send_cmd=GC-030
+
+    log    TCPIP-GC-030 'verify' status: ${status}    console=yes
+    log    TCPIP-GC-030 'verify' result: ${result}    console=yes
+
+    should_be_equal    ${status}    PASS
+    should_be_equal    ${result}    ${None}
 
     conn_manager.disconnect    ${connection_name}
 

@@ -18,7 +18,7 @@
 #
 # XC-HWP/ESW3-Queckenstedt
 #
-VERSION = "v. 0.11.2 / 22.09.2025"
+VERSION = "v. 0.12.0 / 14.10.2025"
 #
 # --------------------------------------------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ def handle_client(client_socket, client_address):
                 msg = f"[{client_address}] (SEND) '{response}'"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("communication", msg)
-                response = f"{response}\n"
+                response = f"{response}\r\n"
                 client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("GET_SERVER_PID"):
                 #
@@ -130,7 +130,7 @@ def handle_client(client_socket, client_address):
                 msg = f"[{client_address}] (SEND) '{response}'"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("communication", msg)
-                response = f"{response}\n"
+                response = f"{response}\r\n"
                 client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("DELAY"):
                 #
@@ -151,7 +151,7 @@ def handle_client(client_socket, client_address):
                 msg = f"[{client_address}] (SEND) '{response}'"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("communication", msg)
-                response = f"{response}\n"
+                response = f"{response}\r\n"
                 client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("QUICKTEST"):
                 #
@@ -178,7 +178,7 @@ def handle_client(client_socket, client_address):
                 msg = f"[{client_address}] (SEND) '{response}'"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("communication", msg)
-                response = f"{response}\n"
+                response = f"{response}\r\n"
                 client_socket.send(response.encode('utf-8'))
 
                 # for index, message in enumerate(list_messages):
@@ -187,35 +187,30 @@ def handle_client(client_socket, client_address):
                     # msg = f"[{client_address}] (SEND) '{response}'"
                     # rf_log.info(msg)
                     # tcp_ip_testserver_log.tlog("communication", msg)
-                    # response = f"{response}\n"
+                    # response = f"{response}\r\n"
                     # client_socket.send(response.encode('utf-8'))
-            elif data_received.startswith("FETCHBLOCK"):
+            elif data_received.startswith("FETCHBLOCK-1"):
                 #
                 # send several answers (test of 'fetch_block' parameter of keyword 'verify')
                 #
-                msg = "Now TCP/IP testserver sends several answers ('fetch_block' test)"
+                msg = "Now TCP/IP testserver sends several answers ('FETCHBLOCK-1' test)"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("handle_client", msg)
-                list_messages = [f"{data_received} ACK",
-                                 f"{data_received} ACK [COND-1] [FETCHBLOCK_START]",
-                                 f"{data_received} ACK",
-                                 f"{data_received} ACK [COND-2] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK",
-                                 f"{data_received} ACK [COND-3] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK",
-                                 f"{data_received} ACK [COND-4] [FETCHBLOCK_MIDDLE]",
-                                 f"{data_received} ACK",
-                                 f"{data_received} ACK [COND-5] [FETCHBLOCK_END]",
-                                 f"{data_received} ACK",
-                                 f"{data_received} ACK [COND-6] [OUTSIDE_FETCHBLOCK]",
-                                 f"{data_received} ACK"]
-                for index, message in enumerate(list_messages):
+                list_messages = [f"transmission started",
+                                 f"transmission point 1 passed",
+                                 f"any noise message",
+                                 f"transmission point 2 passed",
+                                 f"any noise message",
+                                 f"transmission point 3 passed",
+                                 f"any noise message",
+                                 f"transmission ended with code '0'"]
+                for message in list_messages:
                     time.sleep(1)
-                    response = f"{message} ({index+1})"
+                    response = f"{message}"
                     msg = f"[{client_address}] (SEND) '{response}'"
                     rf_log.info(msg)
                     tcp_ip_testserver_log.tlog("communication", msg)
-                    response = f"{response}\n"
+                    response = f"{response}\r\n"
                     client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("FETCHNESTEDBLOCKS"):
                 #
@@ -255,7 +250,7 @@ def handle_client(client_socket, client_address):
                     msg = f"[{client_address}] (SEND) '{response}'"
                     rf_log.info(msg)
                     tcp_ip_testserver_log.tlog("communication", msg)
-                    response = f"{response}\n"
+                    response = f"{response}\r\n"
                     client_socket.send(response.encode('utf-8'))
             elif data_received.startswith("GETNOTIFICATIONS"):
                 #
@@ -277,36 +272,22 @@ def handle_client(client_socket, client_address):
                     msg = f"[{client_address}] (SEND) '{response}'"
                     rf_log.info(msg)
                     tcp_ip_testserver_log.tlog("communication", msg)
-                    response = f"{response}\n"
+                    response = f"{response}\r\n"
                     client_socket.send(response.encode('utf-8'))
                 if len(list_data_received) > 3:
                     if list_data_received[3] == "CLOSE_CONNECTION":
                         time.sleep(TIME_WAIT_BEFORE_CLOSE_SOCKET) # giving the client a chance to receive the response before the socket is closed
                         break
 
-
-            elif data_received.startswith("GC-031-ABC-123"):
-                response = f"{data_received} ACK"
-                response_sent = f"{response}\r\n"
-                msg = f"[{client_address}] (SEND) '{response}'"
-                rf_log.info(msg)
-                tcp_ip_testserver_log.tlog("communication", msg)
-                client_socket.send(response_sent.encode('utf-8'))
-                time.sleep(2)
-                rf_log.info(msg)
-                tcp_ip_testserver_log.tlog("communication", msg)
-                client_socket.send(response_sent.encode('utf-8'))
-                time.sleep(2)
-                rf_log.info(msg)
-                tcp_ip_testserver_log.tlog("communication", msg)
-                client_socket.send(response_sent.encode('utf-8'))
-                time.sleep(2)
-                response = f"END\r\n"
-                msg = f"[{client_address}] (SEND) 'END'"
-                rf_log.info(msg)
-                tcp_ip_testserver_log.tlog("communication", msg)
-                client_socket.send(response.encode('utf-8'))
-                time.sleep(2)
+                for index, message in enumerate(list_messages):
+                    time.sleep(1)
+                    # response = f"{message} ({index+1})"
+                    response = f"{message}"
+                    msg = f"[{client_address}] (SEND) '{response}'"
+                    rf_log.info(msg)
+                    tcp_ip_testserver_log.tlog("communication", msg)
+                    response = f"{response}\r\n"
+                    client_socket.send(response.encode('utf-8'))
 
             else:
                 #
@@ -316,7 +297,7 @@ def handle_client(client_socket, client_address):
                 msg = f"[{client_address}] (SEND) '{response}'"
                 rf_log.info(msg)
                 tcp_ip_testserver_log.tlog("communication", msg)
-                response = f"{response}\n"
+                response = f"{response}\r\n"
                 client_socket.send(response.encode('utf-8'))
 
             # special comands
@@ -551,3 +532,71 @@ rf_log.info(f"\n{msg}\n")
 tcp_ip_testserver_log.tlog("tcp_ip_testserver", msg)
 
 sys.exit(0)
+
+# --------------------------------------------------------------------------------------------------------------
+
+# ==== PREVIOUSLY USED:
+
+                # list_messages = [f"{data_received} ACK",
+                                 # f"{data_received} ACK [COND-1] [FETCHBLOCK_START]",
+                                 # f"{data_received} ACK",
+                                 # f"{data_received} ACK [COND-2] [FETCHBLOCK_MIDDLE]",
+                                 # f"{data_received} ACK",
+                                 # f"{data_received} ACK [COND-3] [FETCHBLOCK_MIDDLE]",
+                                 # f"{data_received} ACK",
+                                 # f"{data_received} ACK [COND-4] [FETCHBLOCK_MIDDLE]",
+                                 # f"{data_received} ACK",
+                                 # f"{data_received} ACK [COND-5] [FETCHBLOCK_END]",
+                                 # f"{data_received} ACK",
+                                 # f"{data_received} ACK [COND-6] [OUTSIDE_FETCHBLOCK]",
+                                 # f"{data_received} ACK"]
+
+                # for index, message in enumerate(list_messages):
+                    # time.sleep(1)
+                    # response = f"{message} ({index+1})"
+                    # msg = f"[{client_address}] (SEND) '{response}'"
+                    # rf_log.info(msg)
+                    # tcp_ip_testserver_log.tlog("communication", msg)
+                    # response = f"{response}\r\n"
+                    # client_socket.send(response.encode('utf-8'))
+
+
+            # elif data_received.startswith("GC-031-ABC-123"):
+                # # -- V1
+                # # response = f"{data_received} ACK"
+                # # response_sent = f"{response}\r\n"
+                # # msg = f"[{client_address}] (SEND) '{response}'"
+                # # rf_log.info(msg)
+                # # tcp_ip_testserver_log.tlog("communication", msg)
+                # # client_socket.send(response_sent.encode('utf-8'))
+                # # time.sleep(2)
+                # # rf_log.info(msg)
+                # # tcp_ip_testserver_log.tlog("communication", msg)
+                # # client_socket.send(response_sent.encode('utf-8'))
+                # # time.sleep(2)
+                # # rf_log.info(msg)
+                # # tcp_ip_testserver_log.tlog("communication", msg)
+                # # client_socket.send(response_sent.encode('utf-8'))
+                # # time.sleep(2)
+                # # response = f"END\r\n"
+                # # msg = f"[{client_address}] (SEND) 'END'"
+                # # rf_log.info(msg)
+                # # tcp_ip_testserver_log.tlog("communication", msg)
+                # # client_socket.send(response.encode('utf-8'))
+                # # time.sleep(2)
+
+                # # -- V2
+                # # time.sleep(5)
+                # msg = "Now TCP/IP testserver sends 'GC-031-ABC-123' messages"
+                # rf_log.info(msg)
+                # tcp_ip_testserver_log.tlog("handle_client", msg)
+                # list_messages = ["",
+                                 # "MSG1 name='dev1' value='d1.v1'",
+                                 # "noise message",
+                                 # "MSG2 name='dev2' value='d2.v1'",
+                                 # "noise message",
+                                 # "MSG3 name='dev1' value='d1.v2'",
+                                 # "noise message",
+                                 # "MSG4 name='dev2' value='d2.v2'",
+                                 # "noise message",
+                                 # "MSGEND"]
