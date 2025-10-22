@@ -12,23 +12,552 @@
 % See the License for the specific language governing permissions and
 % limitations under the License.
 
-% --------------------------------------------------------------------------------------------------------------
+\section{User interface}
 
-\hypertarget{description-getting-started}{%
-\section{Getting Started}\label{description-getting-started}}
+\subsection{Keyword overview}
 
-We have a plan to publish all the sourcecode as OSS in the near future
-so that you can downloaded from PyPI. For the current period, you can
-checkout
+QConnectBase contains the following keywords:
 
-\href{https://github.com/test-fullautomation/robotframework-qconnect-base}{QConnectBaseLibrary}
+\begin{itemize}
+   \item \rcode{connect}\\
+         \textit{Establishes a connection to a specified host.}
+   \item \rcode{disconnect}\\
+         \textit{Terminates the connection to a host.}
+   \item \rcode{send_command}\\
+         \textit{Sends a command to the connected host.}
+   \item \rcode{verify}\\
+         \textit{Verifies the answer received from the connected host. Optionally sends a command (usually to trigger the answer).}
+   \item \rcode{transfer_item}\\
+         \textit{Sends an item to the connected host. Receives items from the connected host also.}
+   \item \rcode{transfer file}\\
+         \textit{Deprecated: Use \rcode{transfer_item} instead!}
+\end{itemize}
 
-After checking out the source completely, you can install by running
-below command inside \textbf{robotframework-qconnect-base} directory.
+\subsection{Library import}
 
-\begin{verbatim}
-python setup.py install
-\end{verbatim}
+The keywords can be accessed with the following library import:
+
+\begin{robotcode}
+Library    QConnectBase.ConnectionManager    WITH NAME    conn_manager
+\end{robotcode}
+
+\textit{We recommend to shorten the QConnectBase library name by using the \rcode{WITH NAME} statement.}
+
+\newpage
+
+\subsection{Usecases}
+
+\textbf{QConnectBase} supports various types of connections. This results in different \rcode{connect} parameters.
+The following examples refer to the connection type \rcode{TCPIPClient}.
+
+The \rcode{connect} parameters for the connection type \rcode{TCPIPClient} are defined as follows:
+
+\begin{robotcode}
+*** Variables ***
+
+${HOST}=    localhost
+${PORT}=    ${1234}
+
+&{TCPIPClientParams}    conn_type=TCPIPClient
+...                     address=${HOST}
+...                     port=${PORT}
+...                     logfile=./tcp_ip_incoming.log
+\end{robotcode}
+
+The logfile parameter is optional. It contains the path and the name of a file in which \textbf{QConnectBase}
+logs all incoming messages.
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsubsection{Connect to a host}
+
+Required are a name of the connection together with the connection parameters.
+
+\begin{robotcode}
+conn_manager.connect    conn_name=my_test_connection
+...                     conn_conf=${TCPIPClientParam}
+\end{robotcode}
+
+In case of errors, \textbf{QConnectBase} terminates the test execution. If you want to keep full control over
+the test flow, you'll need to use the Robot Framework BuiltIn keyword \rcode{run_keyword_and_ignore_error}
+(\textit{the same for all other keywords also}).
+
+\begin{robotcode}
+${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=my_test_connection
+                                                           ...                     conn_conf=${TCPIPClientParam}
+\end{robotcode}
+
+\rcode{status} can be one of \rcode{PAsS}, \rcode{FAIL}. \rcode{result} is either \rcode{None} or contains
+an error message.
+
+\vspace{2ex}
+
+A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-connect]{here}.
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsubsection{Terminate a connection}
+
+\begin{robotcode}
+conn_manager.disconnect    conn_name=my_test_connection
+\end{robotcode}
+
+The connection must be established before, using \rcode{connect}.
+
+\vspace{2ex}
+
+A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-disconnect]{here}.
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsubsection{Send a command}
+
+\textit{Send a command to the connected host.}
+
+\begin{robotcode}
+conn_manager.send_command    conn_name=my_test_connection    <\textless{}the command to send\textgreater{}>
+\end{robotcode}
+
+The connection must be established before, using \rcode{connect}.
+
+\vspace{2ex}
+
+A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-send-command]{here}.
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\newpage
+
+\subsubsection{Verify an answer}
+
+\textit{Verify an answer received from connected host. Optionally send a command (usually to trigger the answer).}
+
+\rcode{verify} distinguishes between the verification of a single incoming message and a block of several incoming messages.
+The verification occurs by checking whether an incoming message or a block of messages matches one or more than one pattern.
+\rcode{verify} patterns are regular expressions. Several different patterns are supported. Some allow matching groups,
+while others do not.
+
+\vspace{2ex}
+
+This results in the following possibilities:
+
+\begin{enumerate}
+    \item Verify a single incoming message.
+    \begin{enumerate}
+        \item The pattern does not contain matching groups:\\
+        \textit{In case of a match, \rcode{verify} returns \rcode{PASS} (but not the entire message), otherwise \rcode{FAIL}.}
+        \item The pattern contain one or more than one matching group:\\
+        \textit{In case of a match, \rcode{verify} returns a list of substrings captured from the incoming message, otherwise \rcode{None}.}
+    \end{enumerate}
+    \item Verify a block of several incoming messages.\\
+        In case of a block is verified, the pattern is interpreted as \textit{multiline} pattern by the regex engine.
+        This multiline pattern is applied to all messages of the block \textbf{in one single step}.
+        This means: No iteration of a list of messages happens!
+    \begin{enumerate}
+        \item The pattern does not contain matching groups:\\
+        \textit{In case of a match, \rcode{verify} returns \rcode{PASS} (but not the entire block of messages), otherwise \rcode{FAIL}.}
+        \item The pattern contain one or more than one matching group:\\
+        \textit{In case of a match, \rcode{verify} returns a list of substrings captured from the entire block of messages, otherwise \rcode{None}.}
+    \end{enumerate}
+\end{enumerate}
+
+\vspace{2ex}
+
+The \rcode{verify} keyword has the following prototype:
+
+\begin{robotcode}
+verify    conn_name      <\textless{} the name of the connection \textgreater{}>
+          search_pattern <\textless{} the regular expression used to verify the message(s) \textgreater{}>
+          timeout        <\textless{} timeout while waiting for messages within a match\_try \textgreater{}>
+          match_try      <\textless{} number of attempts to match the search\_pattern \textgreater{}>
+          fetch_block    <\textless{} whether to wait for a single message or for a block \textgreater{}>
+          eob_pattern    <\textless{} pattern to define the end of a block \textgreater{}>
+          filter_pattern <\textless{} pattern to make a preselection of block messages \textgreater{}>
+          send_cmd       <\textless{} command sent to the connected host \textgreater{}>
+          kwargs         <\textless{} additional parameter \textgreater{}>
+\end{robotcode}
+
+\vspace{2ex}
+
+The boolean parameter \rcode{fetch_block} is the main switch to distinguish between waiting for a single message
+or for a block of messages. The default is \rcode{False} (= wait for a single massage only).
+
+The regex parameter \rcode{search_pattern}
+\begin{itemize}
+   \item decides if the received message is the desired one or not (if \rcode{fetch_block} is \rcode{False}),
+   \item decides if all received messages of a block are the desired ones or not (if \rcode{fetch_block} is \rcode{True}).
+\end{itemize}
+
+\rcode{verify} waits within \rcode{timeout} \rcode{match_try} times. Every single \rcode{match_try} causes \rcode{verify}
+to send \rcode{send_cmd} again (if defined).
+
+\newpage
+
+\textit{Block detection}
+
+A block is a list of incoming messages and is used if a certain pattern (the \rcode{search_pattern}) is not expected to match a single message only but
+several messages instead. Therefore, the \rcode{search_pattern} is a multiline pattern.
+
+A block of messages has a begin and an end.
+\begin{itemize}
+   \item The block detection starts with the execution of the \rcode{verify} keyword (= \textit{moment in time})
+   \item The block detection ends when an incoming message matches a pattern named \rcode{eob_pattern} (= \textit{event driven}).
+\end{itemize}
+
+Like the \rcode{search_pattern}, the \rcode{eob_pattern} is a regular expression - but must not contain matching groups. It's a simple
+yes/no decision. The \rcode{eob_pattern} does not extract any content.
+
+All messages belonging to a block, are stored within an internal message queue intermediately. After the block is detected (match of \rcode{eob_pattern}),
+the list of messages within this queue is converted to a single string with hard coded line ending characters (\rcode{\\r\\n}).
+\begin{robotcode}
+"message1\r\nmessage2\r\nmessage3\r\nmessage4"
+\end{robotcode}
+And exactly this is finally the string on which the \rcode{search_pattern} is applied.
+
+\vspace{2ex}
+
+\textit{Preselection of incoming messages}
+
+Up to now, we have assumed that during block detection, every incoming message is temporarily stored in the message queue.
+But that doesn’t necessarily have to be the case.
+If many of the incoming messages are irrelevant for later content analysis, it is possible to place a filter in front
+that only allows messages with the desired content to pass through.
+
+This filter is called \rcode{filter_pattern}. Optionally this filter can be used to make a preselection of messages.
+If the \rcode{filter_pattern} is not defined, all incoming messages will be accepted and stored in the message queue.
+
+Like the \rcode{eob_pattern}, the \rcode{filter_pattern} is a regular expression - and must also not contain matching groups. It's a simple
+yes/no decision. The \rcode{filter_pattern} does not extract any content.
+
+\vspace{2ex}
+
+\textbf{Consider: If you use backslashes within regular expressions defined in Robot Framework code, you have to mask the backslashes:} \rcode{\\\\}!
+
+\vspace{2ex}
+
+A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-verify]{here}.
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\newpage
+
+\section{Verify examples}
+
+Because the \rcode{verify} keyword provides a lot of parameters, this section contains some examples that demonstrate the usage.
+
+\subsection{Verify a single message (1)}
+
+\textit{Verify a single message without matching groups.}
+
+\vspace{2ex}
+
+\textit{Use case}:
+\begin{itemize}
+   \item Outgoing message: \rlog{TEST-MESSAGE}
+   \item Received message: \rlog{TEST-MESSAGE ACK}
+   \item \rcode{fetch_block} is \rcode{False} (\textit{default})
+   \item No matching groups within the \rcode{search_pattern}
+   \item \rcode{search_pattern} matches the received message
+\end{itemize}
+
+\textit{Code}:
+\begin{robotcode}
+${result}=    conn_manager.verify    conn_name=TEST-CONNECTION
+              ...                    search_pattern=TEST-MESSAGE\\sACK
+              ...                    send_cmd=TEST-MESSAGE
+\end{robotcode}
+
+\textbf{Consider: In Robot Framework code, backslashes need to me masked:} \rcode{\\\\}!
+
+\textit{Result}:
+
+Because the \rcode{search_pattern} does not contain matching groups, the result is \rcode{None}.
+
+\begin{robotlog}
+INFO - Search pattern 'TEST-MESSAGE\sACK' matched (try 1) on connection 'TEST-CONNECTION'
+INFO - ${result} = None
+\end{robotlog}
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsection{Verify a single message (2)}
+
+\textit{Verify a single message with matching groups.}
+
+\vspace{2ex}
+
+\textit{Use case}:
+\begin{itemize}
+   \item Outgoing message: \rlog{TEST-MESSAGE-1}
+   \item Received message: \rlog{TEST-MESSAGE-1 ACK}
+   \item \rcode{fetch_block} is \rcode{False} (\textit{default})
+   \item \rcode{search_pattern} contains matching groups
+   \item \rcode{search_pattern} matches the received message
+\end{itemize}
+
+\textit{Code}:
+\begin{robotcode}
+conn_manager.verify    conn_name=TEST-CONNECTION
+...                    search_pattern=TEST-MESSAGE-(\\d)\\s(\\w+)
+...                    send_cmd=TEST-MESSAGE-1
+\end{robotcode}
+
+\newpage
+
+\textit{Result}:
+
+Because \rcode{search_pattern} contains matching groups, the result is a list containing the captured substrings
+from incoming message.
+
+\begin{robotlog}
+INFO - Search pattern 'TEST-MESSAGE-(\d)\s(\w+)' matched (try 1) on connection 'TEST-CONNECTION'
+INFO - ${result} = ['1', 'ACK']
+\end{robotlog}
+
+The result list can be iterated as follows:
+\begin{robotcode}
+FOR    ${element}    IN    @{result}
+    log    element: '${element}'
+END
+\end{robotcode}
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsection{Verify a block of messages (1)}
+
+\textit{Verify a block of messages without filtering and without \rcode{search_pattern}.}
+
+\vspace{2ex}
+
+\textit{Use case}:
+\begin{itemize}
+   \item Outgoing message: \rlog{FETCHBLOCK-1}
+   \item Received list of messages:\\
+         \begin{robotlog}
+transmission started
+transmission point 1 passed
+any noise message
+transmission point 2 passed
+any noise message
+transmission point 3 passed
+any noise message
+transmission ended with code '0'\end{robotlog}
+   \item \rcode{fetch_block} is \rcode{True}
+   \item No \rcode{filter_pattern} defined
+   \item No \rcode{search_pattern} defined
+\end{itemize}
+
+\textit{Code}:
+\begin{robotcode}
+${result}=    conn_manager.verify    conn_name=TEST-CONNECTION
+              ...                    eob_pattern=transmission\\sended
+              ...                    fetch_block=${True}
+              ...                    send_cmd=FETCHBLOCK-1
+              ...                    timeout=10
+\end{robotcode}
+
+In this example it requires eight seconds to receive all messages that belongs to the block.
+Therefore, it is required to define a \rcode{timeout} also (here: 10 seconds). The default value (1 second)
+would cause a verify timeout.
+
+\newpage
+
+\textit{Result}:
+\begin{itemize}
+   \item Because the \rcode{filter_pattern} is not defined, all incoming messages are stored intermediately in the internal message queue.
+   \item Because the \rcode{search_pattern} is not defined, the default value ('\rcode{.*}') becomes active. Therefore, we will have a match in every case.
+\end{itemize}
+
+\begin{robotlog}
+INFO - Search pattern '.*' matched (try 1) on connection 'TEST-CONNECTION'
+INFO - ${result} = None
+\end{robotlog}
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsection{Verify a block of messages (2)}
+
+\textit{Verify a block of messages without filtering - but with \rcode{search_pattern} without matching groups.}
+
+\vspace{2ex}
+
+\textit{Use case}:
+\begin{itemize}
+   \item Outgoing message: \rlog{FETCHBLOCK-1}
+   \item Received list of messages:\\
+         \begin{robotlog}
+transmission started
+transmission point 1 passed
+any noise message
+transmission point 2 passed
+any noise message
+transmission point 3 passed
+any noise message
+transmission ended with code '0'\end{robotlog}
+   \item \rcode{fetch_block} is \rcode{True}
+   \item No \rcode{filter_pattern} defined
+   \item No matching groups within the \rcode{search_pattern}
+   \item \rcode{search_pattern} matches the received block of messages
+\end{itemize}
+
+\textit{Code}:
+\begin{robotcode}
+${result}=    conn_manager.verify    conn_name=TEST-CONNECTION
+              ...                    eob_pattern=transmission\\sended
+              ...                    search_pattern=transmission
+              ...                    fetch_block=${True}
+              ...                    send_cmd=FETCHBLOCK-1
+              ...                    timeout=10
+\end{robotcode}
+
+\textit{Result}:
+\begin{itemize}
+   \item Because the \rcode{filter_pattern} is not defined, all incoming messages are stored intermediately in the internal message queue.
+   \item Because the \rcode{search_pattern} does not contain matching groups, the result is \rcode{None}.
+\end{itemize}
+
+\begin{robotlog}
+INFO - Search pattern 'transmission' matched (try 1) on connection 'TEST-CONNECTION'
+INFO - ${result} = None
+\end{robotlog}
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsection{Verify a block of messages (3)}
+
+\textit{Verify a block of messages without filtering - but with \rcode{search_pattern} containing matching groups.}
+
+\vspace{2ex}
+
+\textit{Use case}:
+
+\begin{itemize}
+   \item Outgoing message: \rlog{FETCHBLOCK-1}
+   \item Received list of messages:\\
+         \begin{robotlog}
+transmission started
+transmission point 1 passed
+any noise message
+transmission point 2 passed
+any noise message
+transmission point 3 passed
+any noise message
+transmission ended with code '0'\end{robotlog}
+   \item \rcode{fetch_block} is \rcode{True}
+   \item No \rcode{filter_pattern} defined
+   \item \rcode{search_pattern} contains matching groups
+   \item \rcode{search_pattern} matches the received block of messages
+\end{itemize}
+
+\textit{Code}:
+\begin{robotcode}
+${result}=    conn_manager.verify    conn_name=TEST-CONNECTION
+              ...                    eob_pattern=transmission\\sended
+              ...                    search_pattern=^transmission\\sstarted\\r\\n(.*)\\r\\ntransmission\\sended with\\scode\\s'(\\d+)'
+              ...                    fetch_block=${True}
+              ...                    send_cmd=FETCHBLOCK-1
+              ...                    timeout=10
+\end{robotcode}
+
+In this example, the \rcode{search_pattern} is used to capture two parts of the content:
+\begin{itemize}
+   \item the entire message content between \rcode{transmission started} and \rcode{transmission ended},
+   \item the exit code at end of the last message.
+\end{itemize}
+
+\textit{Result}:
+\begin{itemize}
+   \item Because the \rcode{filter_pattern} is not defined, all incoming messages are stored intermediately in the internal message queue.
+   \item Because the \rcode{search_pattern} contains matching groups, the result is a list of all captured message parts.
+\end{itemize}
+
+\begin{robotlog}
+INFO - Search pattern '^transmission\sstarted\r\n(.*)\r\ntransmission\sended\swith\scode\s'(\d+)'' matched (try 1) on connection 'TEST-CONNECTION'
+INFO - ${result} = ['transmission point 1 passed\r\nany noise message\r\ntransmission point 2 passed\r\nany noise message\r\ntransmission point 3 passed\r\nany noise message', '0']
+\end{robotlog}
+
+\textbf{Remember: The \rcode{search_pattern} is a multiline pattern! Therefore, the first element of the result list is a single string that is a concatenation of all affected messages from
+the message queue (with hard coded line endings).}
+
+\noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
+
+\subsection{Verify a block of messages (4)}
+
+\textit{Verify a block of messages with \rcode{search_pattern} containing matching groups and with \rcode{filter_pattern} defined.}
+
+\vspace{2ex}
+
+\textit{Use case}:
+
+\begin{itemize}
+   \item Outgoing message: \rlog{FETCHBLOCK-1}
+   \item Received list of messages:\\
+         \begin{robotlog}
+transmission started
+transmission point 1 passed
+any noise message
+transmission point 2 passed
+any noise message
+transmission point 3 passed
+any noise message
+transmission ended with code '0'\end{robotlog}
+   \item \rcode{fetch_block} is \rcode{True}
+   \item \rcode{filter_pattern} defined
+   \item \rcode{search_pattern} contains matching groups
+   \item \rcode{search_pattern} matches the received block of messages
+\end{itemize}
+
+\textit{Code}:
+\begin{robotcode}
+${result}=    conn_manager.verify    conn_name=TEST-CONNECTION
+              ...                    eob_pattern=transmission\\sended
+              ...                    filter_pattern=transmission
+              ...                    search_pattern=^transmission\\sstarted\\r\\n(.*)\\r\\ntransmission\\sended with\\scode\\s'(\\d+)'
+              ...                    fetch_block=${True}
+              ...                    send_cmd=FETCHBLOCK-1
+              ...                    timeout=10
+\end{robotcode}
+
+In this example, the \rcode{search_pattern} is used to capture two parts of the content:
+\begin{itemize}
+   \item the entire message content between \rcode{transmission started} and \rcode{transmission ended},
+   \item the exit code at end of the last message.
+\end{itemize}
+
+But we only want to have the \rlog{transmission point} messages within our results. We are not interested in all \rlog{noise} messages.
+Therefore, we use the \rcode{filter_pattern} to collect the \rlog{transmission} messages only.
+
+\textit{Result}:
+\begin{itemize}
+   \item Because the \rcode{filter_pattern} is defined, the result only contains messages that matches this filter.
+   \item Because the \rcode{search_pattern} contains matching groups, the result is a list of all captured message parts.
+\end{itemize}
+
+\begin{robotlog}
+INFO - Search pattern '^transmission\sstarted\r\n(.*)\r\ntransmission\sended\swith\scode\s'(\d+)'' matched (try 1) on connection 'TEST-CONNECTION'
+INFO - ${result} = ['transmission point 1 passed\r\ntransmission point 2 passed\r\ntransmission point 3 passed', '0']
+\end{robotlog}
+
+Now the result only contains the \rlog{transmission point} messages together with the exit code.
+
+\textbf{Remember: The \rcode{search_pattern} is a multiline pattern! Therefore, the first element of the result list is a single string that is a concatenation of all affected messages from
+the message queue (with hard coded line endings).}
+
+
+% % % % % !!!!! ADD: hint w.r.t. match_try > 1 !!!!!
+% % % % % !!!!! ADD: further error scenarios !!!!!
+
+\vspace{2ex}
+
+\section{=== REWORKED ===}
+
+\newpage
+
+\section{Connection types}
+
+\textbf{TODO}
+
+
 
 \hypertarget{description-usage}{%
 \section{Usage}\label{description-usage}}
