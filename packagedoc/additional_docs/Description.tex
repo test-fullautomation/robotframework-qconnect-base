@@ -75,7 +75,7 @@ Required are a name of the connection together with the connection parameters.
 
 \begin{robotcode}
 conn_manager.connect    conn_name=my_test_connection
-...                     conn_conf=${TCPIPClientParam}
+...                     conn_conf=${TCPIPClientParams}
 \end{robotcode}
 
 In case of errors, \textbf{QConnectBase} terminates the test execution. If you want to keep full control over
@@ -84,15 +84,15 @@ the test flow, you'll need to use the Robot Framework BuiltIn keyword \rcode{run
 
 \begin{robotcode}
 ${status}    ${result}=    run_keyword_and_ignore_error    conn_manager.connect    conn_name=my_test_connection
-                                                           ...                     conn_conf=${TCPIPClientParam}
+                                                           ...                     conn_conf=${TCPIPClientParams}
 \end{robotcode}
 
-\rcode{status} can be one of \rcode{PAsS}, \rcode{FAIL}. \rcode{result} is either \rcode{None} or contains
+\rcode{status} can be one of \rcode{PASS}, \rcode{FAIL}. \rcode{result} is either \rcode{None} or contains
 an error message.
 
 \vspace{2ex}
 
-A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-connect]{here}.
+A full description of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-connect]{here}.
 
 \noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
 
@@ -106,7 +106,7 @@ The connection must be established before, using \rcode{connect}.
 
 \vspace{2ex}
 
-A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-disconnect]{here}.
+A full description of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-disconnect]{here}.
 
 \noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
 
@@ -122,7 +122,7 @@ The connection must be established before, using \rcode{connect}.
 
 \vspace{2ex}
 
-A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-send-command]{here}.
+A full description of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-send-command]{here}.
 
 \noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
 
@@ -180,7 +180,7 @@ verify    conn_name      <\textless{} the name of the connection \textgreater{}>
 \vspace{2ex}
 
 The boolean parameter \rcode{fetch_block} is the main switch to distinguish between waiting for a single message
-or for a block of messages. The default is \rcode{False} (= wait for a single massage only).
+or for a block of messages. The default is \rcode{False} (= wait for a single message only).
 
 The regex parameter \rcode{search_pattern}
 \begin{itemize}
@@ -235,7 +235,7 @@ yes/no decision. The \rcode{filter_pattern} does not extract any content.
 
 \vspace{2ex}
 
-A full decription of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-verify]{here}.
+A full description of the keyword interface can be found \hyperref[qconnectbase-connection-manager-connectionmanager-verify]{here}.
 
 \noindent\centerline{\rule{0.2\linewidth}{0.4pt} \large $\star$ \normalsize \rule{0.2\linewidth}{0.4pt}}
 
@@ -267,7 +267,7 @@ ${result}=    conn_manager.verify    conn_name=TEST-CONNECTION
               ...                    send_cmd=TEST-MESSAGE
 \end{robotcode}
 
-\textbf{Consider: In Robot Framework code, backslashes need to me masked:} \rcode{\\\\}!
+\textbf{Consider: In Robot Framework code, backslashes need to be masked:} \rcode{\\\\}!
 
 \textit{Result}:
 
