@@ -97,7 +97,7 @@
 
 * Updated to raise ``UNKNOWN`` (extended version) instead of ``ERROR`` when providing invalid ``connection_type``.
 
-* Fixed issue where broken connection were not detected on Linux.
+* Fixed issue where broken connections were not detected on Linux.
 
 **Singleton Pattern Improvement**
 
