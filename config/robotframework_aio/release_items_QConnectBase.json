@@ -95,7 +95,7 @@
 
 * Modified the response of the ``verify`` keyword to return list of captured strings.
 
-* Updated to raise ``UNKNOWN`` (extended version) instead of ``ERROR`` when providing invalid ``connection_type``.
+* Updated to raise ``UNKNOWN`` (extended version) instead of ``FAIL`` when providing invalid connection type.
 
 * Fixed issue where broken connections were not detected on Linux.
 
