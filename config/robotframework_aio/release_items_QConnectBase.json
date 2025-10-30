@@ -85,18 +85,14 @@
 
 * Introduced the ``transfer_item`` feature to enable seamless transfer of entire directories between local and remote.
 * Handles nested folder structures and transfers all files and subdirectories recursively.
-
 * ``transfer_item`` serves as the successor to ``transfer_file``. The ``transfer_file`` keyword is now deprecated.
+
 **Maintenance and Compatibility**
 
-* Updated the ``connect`` keyword to simplify the input parameters - it now requires only ``conn_name`` and ``conn_conf``.
-
-  The legacy syntax with 4 arguments (include ``conn_type`` and ``conn_mode``) remains supported for backward compatibility.
-
+* | Updated the ``connect`` keyword to simplify the input parameters - it now requires only ``conn_name`` and ``conn_conf``.
+  | The legacy syntax with 4 arguments (include ``conn_type`` and ``conn_mode``) remains supported for backward compatibility.
 * Modified the response of the ``verify`` keyword to return list of captured strings.
-
 * Updated to raise ``UNKNOWN`` (extended version) instead of ``FAIL`` when providing invalid connection type.
-
 * Fixed issue where broken connections were not detected on Linux.
 
 **Singleton Pattern Improvement**
