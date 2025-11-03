@@ -758,13 +758,14 @@ Activates a trace message filter specified as a regular expression. All matching
          self.__class__._traceq_handle += 1
          back_trace_queue = deque(maxlen=self.__class__.MAX_LEN_BACKTRACE)
          search_regex_obj = re.compile(search_obj)
+         eob_regex = end_of_block_pattern
          if end_of_block_pattern:
-            end_of_block_pattern = re.compile(end_of_block_pattern, re.M | re.S | re.U)
+            eob_regex = re.compile(end_of_block_pattern, re.M | re.S | re.U)
          self._traceq_obj[self.__class__._traceq_handle] = (search_regex_obj,
                                                 trace_queue,
                                                 back_trace_queue,
                                                 use_fetch_block,
-                                                end_of_block_pattern,
+                                                eob_regex,
                                                 line_filter_pattern)
          handle_id = self.__class__._traceq_handle
       BuiltIn().log('Completed %s' % _mident, constants.LOG_LEVEL_DEBUG)
