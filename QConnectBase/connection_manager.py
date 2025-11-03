@@ -625,7 +625,7 @@ Supports flexible input formats such as:
       self.default_emergency_timeout = time_second
 
    @keyword
-   def verify(self, conn_name, search_pattern='.*', timeout=5, match_try=1, fetch_block=False, eob_pattern='.*', filter_pattern='.*', send_cmd='', **kwargs):
+   def verify(self, conn_name, search_pattern='.*', timeout=5, match_try=1, fetch_block=False, eob_pattern=None, filter_pattern='.*', send_cmd='', **kwargs):
       """
 Verify a pattern from connection response after sending a command.
 
@@ -673,7 +673,7 @@ Verify a pattern from connection response after sending a command.
 
 * ``eob_pattern``
 
-  / *Condition*: optional / *Type*: str / *Default*: '.*' /
+  / *Condition*: optional / *Type*: str / *Default*: None /
 
   Applicable only when ``fetch_block`` is ``True``.
 
@@ -730,7 +730,7 @@ Verify a pattern from connection response after sending a command.
       """
       # Parameter validation: eob_pattern and filter_pattern are only valid when fetch_block is True
       if not fetch_block:
-         if eob_pattern != '.*':
+         if eob_pattern != None:
             raise Exception("Parameter 'eob_pattern' is only applicable when 'fetch_block' is True. "
                            f"Current values: fetch_block={fetch_block}, eob_pattern='{eob_pattern}'")
          if filter_pattern != '.*':

@@ -388,7 +388,7 @@ Thread to receive data from connection continuously.
                         if use_fetch_block is True:
                            # BuiltIn().log_to_console(msg)
                            matchObj = regex_line_filter.search(msg)
-                           if regex_end_block_pattern and regex_end_block_pattern.pattern != ".*":
+                           if regex_end_block_pattern:
                               (is_hit, result_obj) = self._filter_msg(regex_end_block_pattern, msg)
                               if is_hit:
                                  back_trace_queue.append(msg)
@@ -484,7 +484,7 @@ Wrapper method to get the response from connection.
    # endregion
 
    # region TRACE INFRASTRUCTURE METHODS
-   def wait_4_trace(self, search_obj, timeout=0, use_fetch_block=False, end_of_block_pattern=".*", filter_pattern=".*", **fct_args):
+   def wait_4_trace(self, search_obj, timeout=0, use_fetch_block=False, end_of_block_pattern=None, filter_pattern=".*", **fct_args):
       """
 Suspend the control flow until a Trace message is received which matches to a specified regular expression.
 
@@ -505,7 +505,7 @@ Suspend the control flow until a Trace message is received which matches to a sp
 
 * ``end_of_block_pattern``
 
-  / *Condition*: optional / *Type*: str / *Default*: '.*' /
+  / *Condition*: optional / *Type*: str / *Default*: None /
 
   The end of block pattern.
 
@@ -633,7 +633,7 @@ Getting trace log continuously without creating a new trace queue.
          return None
 
    # @classmethod
-   def create_and_activate_trace_queue(self, search_element, use_fetch_block=False, end_of_block_pattern='.*', regex_line_filter_pattern=None):
+   def create_and_activate_trace_queue(self, search_element, use_fetch_block=False, end_of_block_pattern=None, regex_line_filter_pattern=None):
       """
 Create Queue and assign it to _trace_queue object and activate the queue with the search element.
 
@@ -655,7 +655,7 @@ Create Queue and assign it to _trace_queue object and activate the queue with th
 
 * ``end_of_block_pattern``
 
-  / *Condition*: optional / *Type*: str / *Default*: '.*' /
+  / *Condition*: optional / *Type*: str / *Default*: None /
 
   The end of block pattern.
 
@@ -704,7 +704,7 @@ Deactivate trace queue and delete.
       del trace_queue
 
    # @classmethod
-   def activate_trace_queue(self, search_obj, trace_queue, use_fetch_block=False, end_of_block_pattern='.*', line_filter_pattern=None):
+   def activate_trace_queue(self, search_obj, trace_queue, use_fetch_block=False, end_of_block_pattern=None, line_filter_pattern=None):
       """
 Activates a trace message filter specified as a regular expression. All matching trace messages are put in the specified queue object.
 
@@ -734,7 +734,7 @@ Activates a trace message filter specified as a regular expression. All matching
 
 * ``end_of_block_pattern``
 
-  / *Condition*: optional / *Type*: str / *Default*: '.*' /
+  / *Condition*: optional / *Type*: str / *Default*: None /
 
   The end of block pattern.
 
@@ -758,11 +758,14 @@ Activates a trace message filter specified as a regular expression. All matching
          self.__class__._traceq_handle += 1
          back_trace_queue = deque(maxlen=self.__class__.MAX_LEN_BACKTRACE)
          search_regex_obj = re.compile(search_obj)
+         eob_regex = end_of_block_pattern
+         if end_of_block_pattern:
+            eob_regex = re.compile(end_of_block_pattern, re.M | re.S | re.U)
          self._traceq_obj[self.__class__._traceq_handle] = (search_regex_obj,
                                                 trace_queue,
                                                 back_trace_queue,
                                                 use_fetch_block,
-                                                re.compile(end_of_block_pattern, re.M | re.S | re.U),
+                                                eob_regex,
                                                 line_filter_pattern)
          handle_id = self.__class__._traceq_handle
       BuiltIn().log('Completed %s' % _mident, constants.LOG_LEVEL_DEBUG)

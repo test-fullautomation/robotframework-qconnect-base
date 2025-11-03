@@ -515,7 +515,7 @@ Base class for TCP client.
 
    def disconnect(self):
       self._is_connected = False
-      if self.conn is not None:
+      if (self.conn is not None) and hasattr(self.conn, '_closed') and (not self.conn._closed):
          self.conn.close()
          BuiltIn().log(f"disconnected from '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
                   constants.LOG_LEVEL_INFO)
