@@ -728,6 +728,7 @@ Verify a pattern from connection response after sending a command.
   i.e. the second *captured string* defined in the pattern ``(command)``.
 
       """
+      validate_regex_pattern(search_pattern, 'search_pattern')
       # Parameter validation: eob_pattern and filter_pattern are only valid when fetch_block is True
       if not fetch_block:
          if eob_pattern != None:
@@ -737,9 +738,9 @@ Verify a pattern from connection response after sending a command.
             raise Exception("Parameter 'filter_pattern' is only applicable when 'fetch_block' is True. "
                            f"Current values: fetch_block={fetch_block}, filter_pattern='{filter_pattern}'")
       else:
-         if eob_pattern and has_capturing_groups(eob_pattern):
+         if eob_pattern and has_capturing_groups(eob_pattern, 'eob_pattern'):
             BuiltIn().log(f"Warning: Capturing groups are not supported within the eob_pattern '{eob_pattern}'.", constants.LOG_LEVEL_WARNING)
-         if filter_pattern and has_capturing_groups(filter_pattern):
+         if filter_pattern and has_capturing_groups(filter_pattern, 'filter_pattern'):
             BuiltIn().log(f"Warning: Capturing groups are not supported within the filter_pattern '{filter_pattern}'.", constants.LOG_LEVEL_WARNING)
 
       if conn_name not in self.connection_manage_dict.keys():

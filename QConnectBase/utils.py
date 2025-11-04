@@ -360,7 +360,18 @@ Get string data result
          pass
       return res
 
-def has_capturing_groups(pattern):
+def has_capturing_groups(pattern, param_name=None):
    """Checks whether a pattern contains capturing groups"""
-   compiled = re.compile(pattern)
+   compiled = validate_regex_pattern(pattern, param_name)
    return compiled.groups > 0
+
+def validate_regex_pattern(pattern, param_name=None):
+   """Checks whether the given pattern is valid"""
+   try:
+      compiled = re.compile(pattern)
+   except Exception as reason:
+      if param_name is not None:
+         raise Exception(f"{type(reason).__name__} in '{param_name}': {reason}")
+      else:
+         raise Exception(f"{type(reason).__name__}: {reason}")
+   return compiled
