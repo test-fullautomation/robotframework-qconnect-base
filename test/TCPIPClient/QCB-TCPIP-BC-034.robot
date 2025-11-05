@@ -47,7 +47,6 @@ QCB-TCPIP-BC-034
     log    TCPIP-BC-034 'verify' result: ${result}    console=yes
 
     should_be_equal    ${status}    FAIL
-    should_be_equal    ${result}    PatternError: missing ), unterminated subpattern at position 2
+    should_be_equal    ${result}    PatternError in 'search_pattern': missing ), unterminated subpattern at position 2
 
     conn_manager.disconnect    ${connection_name}
-

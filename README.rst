@@ -382,8 +382,6 @@ git correctly as defined.
 Sourcecode Documentation
 ------------------------
 
-For investigating sourcecode, please refer to `QConnectBase library documentation <docs/html/index.html>`__
-
 A detailed documentation of the QConnectBase package can also be found here: `QConnectBase.pdf <https://github.com/test-fullautomation/robotframework-qconnect-base/blob/develop/QConnectBase/QConnectBase.pdf>`_
 
 Feedback
