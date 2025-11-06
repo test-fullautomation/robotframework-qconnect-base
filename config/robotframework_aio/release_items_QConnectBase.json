@@ -109,6 +109,15 @@
 
 * Updated documentation to include detailed descriptions of the input parameters for the ``verify`` keyword.
 "
+                             ],
+                      "0.14.3.;0.15.0." : [
+"
+**Maintenance**
+
+* Updated the default value of the ``eob_pattern` parameter in the ``verify`` keyword to ``None``.
+* Improved the ``verify`` keyword to validate all input regex patterns.
+* Updated the ``connect`` keyword to make ``conn_name`` a required parameter.
+"
                                           ]
                  }
 }
