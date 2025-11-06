@@ -212,13 +212,13 @@ Add a connection to managed dictionary.
       if name not in self.connection_manage_dict.keys():
          self.connection_manage_dict[name] = conn
 
-   def remove_connection(self, connection_name):
+   def remove_connection(self, conn_name):
       """
 Remove a connection by name.
 
 **Arguments:**
 
-* ``connection_name``
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -228,17 +228,17 @@ Remove a connection by name.
 
 (*no returns*)
       """
-      if connection_name in self.connection_manage_dict.keys():
-         del self.connection_manage_dict[connection_name]
+      if conn_name in self.connection_manage_dict.keys():
+         del self.connection_manage_dict[conn_name]
 
 
-   def get_connection_by_name(self, connection_name):
+   def get_connection_by_name(self, conn_name):
       """
 Get an exist connection by name.
 
 **Arguments:**
 
-* ``connection_name``
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -253,8 +253,8 @@ Get an exist connection by name.
   Connection object.
       """
       conn = None
-      if connection_name in self.connection_manage_dict.keys():
-         conn = self.connection_manage_dict[connection_name]
+      if conn_name in self.connection_manage_dict.keys():
+         conn = self.connection_manage_dict[conn_name]
       return conn
 
    @keyword
@@ -357,7 +357,7 @@ Making a connection.
       if conn_type == '':
          conn_type = "TCPIPClient"
 
-      conn_conf['connection_name'] = conn_name
+      conn_conf['conn_name'] = conn_name
 
       if conn_type not in self.supported_connection_classes_dict.keys():
          raise Exception(constants.String.CONNECTION_TYPE_UNSUPPORTED %
@@ -384,9 +384,9 @@ Making a connection.
          raise Exception("Connection Error: %s" % ex)
 
       if connection_obj is not None:
-         setattr(connection_obj, 'connection_name', conn_name)
+         setattr(connection_obj, 'conn_name', conn_name)
          if hasattr(connection_obj, "real_obj"):
-            setattr(connection_obj.real_obj, 'connection_name', conn_name)
+            setattr(connection_obj.real_obj, 'conn_name', conn_name)
          self.add_connection(conn_name, connection_obj)
 
       try:
@@ -403,7 +403,7 @@ Send command to a connection.
 
 **Arguments:**
 
-* ``connection_name``
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -442,7 +442,7 @@ Transfer file from local to remote and vice versa.
 
 **Arguments:**
 
-* ``connection_name``
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -491,7 +491,7 @@ Transfer item from local to remote and vice versa.
 
 **Arguments:**
 
-* ``connection_name``
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
 
@@ -541,7 +541,7 @@ Executes a script file by sending commands to a device through the provided conn
 
 **Arguments:**
 
-* ``connection_name``
+* ``conn_name``
 
   / *Condition*: required / *Type*: str /
 

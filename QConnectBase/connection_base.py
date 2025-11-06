@@ -320,8 +320,8 @@ Initialize a thread for receiving data from connection.
       if mode is not None:
          thread_name = mode
 
-      if hasattr(self, 'connection_name'):
-         thread_name = self.connection_name
+      if hasattr(self, 'conn_name'):
+         thread_name = self.conn_name
 
 
       conn_id_name = str(thread_name) + '-' + str(thread_id)

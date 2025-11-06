@@ -173,7 +173,7 @@ Disconnect serial port.
       """
       self.socket.close()
       self._is_connected = False
-      BuiltIn().log(f"disconnected from COM{self._port}@{self._baudrate} (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+      BuiltIn().log(f"disconnected from COM{self._port}@{self._baudrate} (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                     constants.LOG_LEVEL_INFO)
 
    def _send(self, msg, _cr):
