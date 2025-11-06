@@ -92,8 +92,8 @@ Constructor for TCPBase class.
       self._port = port
       self._mode = mode
       self.conn = None
-      if 'connection_name' in config:
-         self.connection_name = config['connection_name']
+      if 'conn_name' in config:
+         self.conn_name = config['conn_name']
 
       # default timeout for send/receive is 10 seconds
       self._conn_timeout = 10
@@ -489,7 +489,7 @@ Wrapper method for handling accept action of TCP Server.
          self.socket.close()
       if self.conn is not None:
          self.conn.close()
-         BuiltIn().log(f"disconnected from '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+         BuiltIn().log(f"disconnected from '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                   constants.LOG_LEVEL_INFO)
 
 class TCPBaseClient:
@@ -510,12 +510,12 @@ Base class for TCP client.
          # raise BrokenConnError(f"There is no possible server at {address}:{port}'")
          raise reason
 
-      BuiltIn().log(f"connected to '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+      BuiltIn().log(f"connected to '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                     constants.LOG_LEVEL_INFO)
 
    def disconnect(self):
       self._is_connected = False
       if (self.conn is not None) and hasattr(self.conn, '_closed') and (not self.conn._closed):
          self.conn.close()
-         BuiltIn().log(f"disconnected from '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+         BuiltIn().log(f"disconnected from '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                   constants.LOG_LEVEL_INFO)

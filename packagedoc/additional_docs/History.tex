@@ -39,7 +39,7 @@
 
 \historyversiondate{1.1.8}{09/2025}
 \historychange{- Modified the response of \texttt{verify} keyword to return list of captured strings.\newline
-- Updated to raise \texttt{UNKNOWN} instead of \texttt{ERROR} when providing invalid \texttt{connection\_type}.
+- Updated to raise \texttt{UNKNOWN} instead of \texttt{ERROR} when providing invalid \texttt{connection\_type}.\newline
 - Fixed issue that Broken Connection is not detected on Linux.
 }
 
@@ -47,6 +47,11 @@
 \historychange{Improved the logging messages}
 
 \historyversiondate{1.1.10}{10/2025}
-\historychange{Change logic of verify keyword to check the \texttt{eob\_pattern} before applying \texttt{filter\_pattern}}
+\historychange{Changed logic of verify keyword to check the \texttt{eob\_pattern} before applying \texttt{filter\_pattern}}
+
+\historyversiondate{1.2.0}{11/2025}
+\historychange{- Updated the default value of the \texttt{eob\_pattern} parameter in the \texttt{verify} keyword to \texttt{None}.\newline
+- Improved the \texttt{verify} keyword to validate all input regex patterns.\newline
+- Updated the \texttt{connect} keyword to make \texttt{conn\_name} a required parameter.}
 
 \end{packagehistory}

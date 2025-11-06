@@ -240,12 +240,6 @@ Transfer file from local to remote and vice versa.
 
 **Arguments:**
 
-* ``connection_name``
-
-  / *Condition*: required / *Type*: str /
-
-  Name of connection.
-
 * ``src``
 
   / *Condition*: required / *Type*: str /

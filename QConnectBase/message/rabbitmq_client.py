@@ -135,7 +135,7 @@ Implementation for creating a rabbitmq connection.
 
          # self.channel.basic_consume(queue=self.callback_queue, on_message_callback=self.on_response, auto_ack=True)
 
-         BuiltIn().log(f"connected to Rabbitmq Broker {self._host}:{self._port} (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+         BuiltIn().log(f"connected to Rabbitmq Broker {self._host}:{self._port} (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                constants.LOG_LEVEL_INFO)
          self._is_connected = True
 
@@ -245,7 +245,7 @@ Quit and stop receiver thread.
 
       self._llrecv_thrd_obj = None
       self.close()
-      BuiltIn().log(f"disconnected from Rabbitmq Broker '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.connection_name}')",
+      BuiltIn().log(f"disconnected from Rabbitmq Broker '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                constants.LOG_LEVEL_INFO)
 
 
