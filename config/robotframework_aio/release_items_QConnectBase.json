@@ -114,7 +114,7 @@
 "
 **Maintenance**
 
-* Updated the default value of the ``eob_pattern` parameter in the ``verify`` keyword to ``None``.
+* Updated the default value of the ``eob_pattern`` parameter in the ``verify`` keyword to ``None``.
 * Improved the ``verify`` keyword to validate all input regex patterns.
 * Updated the ``connect`` keyword to make ``conn_name`` a required parameter.
 "
