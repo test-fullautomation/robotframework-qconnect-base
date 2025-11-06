@@ -281,7 +281,7 @@ Keyword for disconnecting a connection by name.
          raise Exception(f"Invalid operation: Attempted to disconnect '{conn_name}', but no such connection exists.")
 
    @keyword
-   def connect(self, conn_name='default_conn', conn_conf=None, conn_type='', conn_mode=''):
+   def connect(self, conn_name, conn_conf=None, conn_type='', conn_mode=''):
       """
 Making a connection.
 
@@ -289,7 +289,7 @@ Making a connection.
 
 * ``conn_name``
 
-  / *Condition*: optional / *Type*: str / *Default*: 'default_conn' /
+  / *Condition*: required / *Type*: str /
 
   Name of connection. It can be specified in ``conn_conf`` dictionary.
 
