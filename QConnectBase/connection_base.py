@@ -403,7 +403,7 @@ Thread to receive data from connection continuously.
                            (is_hit, result_obj) = self._filter_msg(regex_filter, msg)
                         if is_hit:
                            now = time.time()
-                           if use_fetch_block is True and regex_end_block_pattern.pattern != ".*":
+                           if (use_fetch_block is True) and regex_end_block_pattern and (regex_end_block_pattern.pattern != ".*"):
                               result_obj = regex_filter.search("\r\n".join(back_trace_queue))
                               back_trace_queue.clear()
                            msg_queue.put((now, result_obj), False)
