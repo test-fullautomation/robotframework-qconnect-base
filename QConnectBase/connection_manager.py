@@ -42,6 +42,7 @@ import inspect
 import importlib.util
 import pkgutil
 import sys
+import copy
 
 
 class InputParam(DictToClass):
@@ -334,6 +335,7 @@ Making a connection.
 
 (*no returns*)
       """
+      conn_conf = copy.deepcopy(conn_conf) if conn_conf else None
       if not conn_conf:
          if not conn_type:
             # conn_conf is required for new version which
