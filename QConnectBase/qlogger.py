@@ -370,11 +370,11 @@ Set handler for logger.
       for handler in supported_handler_classes_list:
          # noinspection PyBroadException
          try:
-            if handler.get_config_supported(config):
+            if hasattr(handler, 'get_config_supported') and handler.get_config_supported(config):
                handler_ins = handler(config, self.logger_name, self.formatter)
                handler_ins.setLevel(log_level)
                self.logger.addHandler(handler_ins)
                return handler_ins
-         except:
-            pass
+         except Exception as reason:
+            raise Exception(f"Failed to initialize logger for '{config.logfile}'. Reason: {reason}") from None
       return None
