@@ -452,7 +452,7 @@ Wrapper method to send message to a tcp connection.
             self._send(msg, cr)
          except Exception as ex:
             self._is_connected = False
-            raise BrokenConnError(f"Connection has been broken. Details: {ex}")
+            raise BrokenConnError(f"Connection has been broken. Details: {ex}") from None
 
    def read_obj(self):
       """
@@ -550,7 +550,7 @@ Suspend the control flow until a Trace message is received which matches to a sp
       try:
          self.send_obj(**fct_args)
       except BrokenConnError:
-         raise Exception(constants.String.CONNECTION_BROKEN)
+         raise Exception(constants.String.CONNECTION_BROKEN) from None
       except Exception as err_msg:  # pylint: disable=W0703
          BuiltIn().log('%s: An Exception occurred executing function object: %s' % (_mident, repr(self.send_obj)), 'ERROR')
          BuiltIn().log('Function Arguments: %s' % repr(fct_args), 'ERROR')

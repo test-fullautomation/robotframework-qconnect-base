@@ -85,7 +85,7 @@ Class for converting dictionary to class object.
                else:
                   self.__dict__[k] = v
       except Exception as ex:
-         raise Exception(f"The configuration 'conn_conf' is invalid. Details: {ex}")
+         raise Exception(f"The configuration 'conn_conf' is invalid. Details: {ex}") from None
       self.validate()
 
    def validate(self):
@@ -371,7 +371,7 @@ def validate_regex_pattern(pattern, param_name=None):
       compiled = re.compile(pattern)
    except Exception as reason:
       if param_name is not None:
-         raise Exception(f"{type(reason).__name__} in '{param_name}': {reason}")
+         raise Exception(f"{type(reason).__name__} in '{param_name}': {reason}") from None
       else:
-         raise Exception(f"{type(reason).__name__}: {reason}")
+         raise Exception(f"{type(reason).__name__}: {reason}") from None
    return compiled
