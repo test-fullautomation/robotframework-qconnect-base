@@ -504,7 +504,7 @@ Base class for TCP client.
          self.conn = self.socket
          self._is_connected = True
       except socket.error as e:
-         raise BrokenConnError(f"Socket error: {e}")
+         raise BrokenConnError(f"Socket error: {e}") from None
       except Exception as reason:
          BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_ERROR)
          # raise BrokenConnError(f"There is no possible server at {address}:{port}'")

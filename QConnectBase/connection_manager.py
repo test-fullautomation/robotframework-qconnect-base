@@ -383,7 +383,7 @@ Making a connection.
          connection_obj = self.supported_connection_classes_dict[conn_type](conn_mode, conn_conf)
       except Exception as ex:
          # BuiltIn().log("Unable to create connection. Exception: %s" % ex, constants.LOG_LEVEL_ERROR)
-         raise Exception("Connection Error: %s" % ex)
+         raise Exception("Connection Error: %s" % ex) from None
 
       if connection_obj is not None:
          setattr(connection_obj, 'conn_name', conn_name)
@@ -396,7 +396,7 @@ Making a connection.
       except Exception as ex:
          self.remove_connection(conn_name)
          # BuiltIn().log("Unable to create connection. Exception: %s" % ex, constants.LOG_LEVEL_ERROR)
-         raise Exception("Connection Error: %s" % ex)
+         raise Exception("Connection Error: %s" % ex) from None
 
    @keyword
    def send_command(self, conn_name, command, **kwargs):
@@ -434,7 +434,7 @@ Send command to a connection.
          connection_obj.send_obj(command, **kwargs)
          BuiltIn().log(f"command '{command}' is sent to '{conn_name}'", constants.LOG_LEVEL_INFO)
       except Exception as ex:
-         raise Exception("Unable to send command to '%s' connection. Exception: %s" % (conn_name, str(ex)))
+         raise Exception("Unable to send command to '%s' connection. Exception: %s" % (conn_name, str(ex))) from None
 
    @keyword
    def transfer_file(self, conn_name, src, dest, type):
@@ -481,10 +481,10 @@ Transfer file from local to remote and vice versa.
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_file(src, dest, type)
-      except AttributeError as attrErr:
-         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.")
+      except AttributeError:
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.") from None
       except Exception as ex:
-         raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'")
+         raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'") from None
 
    @keyword
    def transfer_item(self, conn_name, src, dest, type):
@@ -530,10 +530,10 @@ Transfer item from local to remote and vice versa.
       connection_obj = self.connection_manage_dict[conn_name]
       try:
          connection_obj.transfer_item(src, dest, type)
-      except AttributeError as attrErr:
-         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring item.")
+      except AttributeError:
+         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring item.") from None
       except Exception as ex:
-         raise Exception(f"Unable to transfer item to '{conn_name}' connection. Exception: '{ex}'")
+         raise Exception(f"Unable to transfer item to '{conn_name}' connection. Exception: '{ex}'") from None
 
 
    @keyword
@@ -566,9 +566,9 @@ Executes a script file by sending commands to a device through the provided conn
          connection_obj.execute_script(script_path)
       except AttributeError as attrErr:
          test = inspect.getfile(connection_obj.__class__)
-         raise Exception("'%s' connection type has not been supported for execute script." % connection_obj._CONNECTION_TYPE)
+         raise Exception("'%s' connection type has not been supported for execute script." % connection_obj._CONNECTION_TYPE) from None
       except Exception as ex:
-         raise Exception("Unable to execute script path '%s'. Exception: %s" % (script_path, str(ex)))
+         raise Exception("Unable to execute script path '%s'. Exception: %s" % (script_path, str(ex))) from None
 
    @keyword
    def set_default_verify_timeout(self, time_out):

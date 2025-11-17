@@ -209,7 +209,7 @@ Implementation for creating a SSH connection.
 
       except Exception as reason:
          BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_ERROR)
-         raise BrokenConnError("Not possible to connect. Reason: '%s'" % reason)
+         raise BrokenConnError("Not possible to connect. Reason: '%s'" % reason) from None
 
       # per default a SSH connection is only usesd for one command, then
       # it will be reset.
@@ -271,7 +271,7 @@ Transfer file from local to remote and vice versa.
          self._transfer_file(sftp, src, dest, transfer_type)
          sftp.close()
       except Exception as ex:
-         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'") from None
 
    def _transfer_file(self, sftp, src, dest, transfer_type):
       """
@@ -318,7 +318,7 @@ Performs the actual file transfer between the local file system and the SFTP ser
          }
          method_dict[transfer_type](src, dest)
       except Exception as ex:
-         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'") from None
 
    def transfer_item(self, src, dest, transfer_type):
       """
@@ -356,7 +356,7 @@ Transfer item from local to remote and vice versa.
          sftp = self.client.open_sftp()
          self._transfer(sftp, src, dest, transfer_type)
       except Exception as ex:
-         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'")
+         raise Exception(f"Exception occurs while transferring '{src}'. Details: '{ex}'") from None
       finally:
          sftp.close()
 
@@ -425,7 +425,7 @@ It ensures that files are copied correctly and directories are created as needed
                   # Create destination directory on the remote server
                   sftp.mkdir(dest_folder_path)
                except Exception as ex:
-                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details: '{ex}'")
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details: '{ex}'") from None
             for item in os.listdir(src):
                src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
                if os.path.isdir(src_item_path):
@@ -454,7 +454,7 @@ It ensures that files are copied correctly and directories are created as needed
                   # Create destination directory on the local
                   os.makedirs(dest_folder_path, exist_ok=True)
                except Exception as ex:
-                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details '{ex}'")
+                  raise Exception(f"Failed to create destination folder '{dest_folder_path}'. Details '{ex}'") from None
             for item in sftp.listdir(src):
                src_item_path = os.path.normpath(f"{src}{os.sep}{item}").replace('\\', '/')
                if sftp.stat(src_item_path).st_mode & stat_ifmt == stat_ifdir:

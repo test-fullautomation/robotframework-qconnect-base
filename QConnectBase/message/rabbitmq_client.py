@@ -141,7 +141,7 @@ Implementation for creating a rabbitmq connection.
 
       except Exception as reason:
          BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_ERROR)
-         raise BrokenConnError("Not possible to connect. Reason: '%s'" % reason)
+         raise BrokenConnError("Not possible to connect. Reason: '%s'" % reason) from None
 
    def _send(self, msg, _cr):
       """

@@ -330,7 +330,7 @@ Connect to the Serial port.
          self._is_connected = True
       except Exception as reason:
          # BuiltIn().log("%s: %s" % (_mident, reason), constants.LOG_LEVEL_ERROR)
-         raise BrokenConnError("Not possible to connect. Reason: '%s'" % (str(reason)))
+         raise BrokenConnError("Not possible to connect. Reason: '%s'" % (str(reason))) from None
 
       BuiltIn().log("connected to COM%s@%s (%s,%s,%s) rtscts=%s xonxoff=%s" % (self._port,
                                                                               self._baudrate,

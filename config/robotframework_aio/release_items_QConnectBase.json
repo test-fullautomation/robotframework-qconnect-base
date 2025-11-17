@@ -117,6 +117,7 @@
 * Updated the default value of the ``eob_pattern`` parameter in the ``verify`` keyword to ``None``.
 * Improved the ``verify`` keyword to validate all input regex patterns.
 * Updated the ``connect`` keyword to make ``conn_name`` a required parameter.
+* Fixed exception chaining to avoid ``During handling of the above exception`` warning in debug log file.
 "
                                           ]
                  }
