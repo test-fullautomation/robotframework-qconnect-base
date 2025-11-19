@@ -67,7 +67,7 @@ class DictToClass:
 Class for converting dictionary to class object.
    """
    exclude_list = []
-   logfile = None
+   logfile = constants.DEFAULT_LOGGER
    encoding = 'utf-8'
 
    def __init__(self, **dictionary):

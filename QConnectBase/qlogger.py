@@ -156,7 +156,10 @@ Check if the connection config is supported by this handler.
 
   False if the config is not supported.
       """
-      return config.logfile is not None and config.logfile != 'nonlog' and config.logfile != 'console'
+      return config.logfile is not None and \
+             config.logfile and \
+             config.logfile != 'nonlog' and \
+             config.logfile != 'console'
 
 
 class QDefaultFileHandler(logging.FileHandler):
@@ -239,7 +242,8 @@ Check if the connection config is supported by this handler.
 
   False if the config is not supported.
       """
-      return config.logfile is None
+      return isinstance(config.logfile, bool) and config.logfile or \
+             config.logfile == constants.DEFAULT_LOGGER
 
 
 class QConsoleHandler(logging.StreamHandler):
@@ -377,5 +381,5 @@ Set handler for logger.
                self.logger.addHandler(handler_ins)
                return handler_ins
          except Exception as reason:
-            raise Exception(f"Failed to initialize logger for '{config.logfile}'. Reason: {reason}") from None
+            raise Exception(f"Failed to initialize logger for '{config.logfile}'. Reason: {reason}.") from None
       return None
