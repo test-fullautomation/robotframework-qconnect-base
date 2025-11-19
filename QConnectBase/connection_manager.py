@@ -43,6 +43,7 @@ import importlib.util
 import pkgutil
 import sys
 import copy
+from QConnectBase.version import VERSION
 
 
 class InputParam(DictToClass):
@@ -105,6 +106,7 @@ Class to manage all connections.
    LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
    DEFAULT_VERIFY_TIMEOUT = 5
    DEFAULT_EMERGENCY_TIMEOUT = 60 * 30
+   ROBOT_LIBRARY_VERSION = VERSION
 
    id = 0
 
