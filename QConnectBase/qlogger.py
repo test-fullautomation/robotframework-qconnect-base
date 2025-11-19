@@ -105,7 +105,7 @@ Constructor for QFileHandler class.
   Log's formatter.
       """
       path = self.get_log_path(config)
-      super(QFileHandler, self).__init__(path)
+      super(QFileHandler, self).__init__(path, mode='w')
       self.setFormatter(formatter)
 
    @staticmethod
