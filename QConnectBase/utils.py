@@ -86,6 +86,13 @@ Class for converting dictionary to class object.
                   self.__dict__[k] = v
       except Exception as ex:
          raise Exception(f"The configuration 'conn_conf' is invalid. Details: {ex}") from None
+
+      if not isinstance(self.logfile, (bool, str)) and self.logfile is not None:
+         raise TypeError(
+            f"The configuration parameter 'logfile' inside 'conn_conf' must be of type bool, str, or None. "
+            f"Received type: {type(self.logfile).__name__} with value: {self.logfile!r}."
+         )
+
       self.validate()
 
    def validate(self):

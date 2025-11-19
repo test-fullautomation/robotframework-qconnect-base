@@ -156,8 +156,7 @@ Check if the connection config is supported by this handler.
 
   False if the config is not supported.
       """
-      return config.logfile is not None and \
-             config.logfile and \
+      return isinstance(config.logfile, str) and \
              config.logfile != 'nonlog' and \
              config.logfile != 'console'
 
