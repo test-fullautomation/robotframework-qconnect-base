@@ -31,6 +31,7 @@ from QConnectBase.utils import *
 import QConnectBase.constants as constants
 import logging
 import os
+import sys
 
 
 class ColorFormatter(logging.Formatter):
@@ -247,7 +248,7 @@ Handler class for console log.
    """
    def __init__(self, _config, _logger_name, _formatter):
       """
-Constructor for QDefaultFileHandler class.
+Constructor for QConsoleHandler class.
 
 **Arguments:**
 
@@ -273,7 +274,7 @@ Constructor for QDefaultFileHandler class.
 
 (*no returns*)
       """
-      super(QConsoleHandler, self).__init__()
+      super(QConsoleHandler, self).__init__(sys.__stdout__)
       self.setFormatter(ColorFormatter())
 
    @staticmethod
