@@ -130,7 +130,7 @@ Get the log file path for this handler.
       out_dir = BuiltIn()._context.output._settings.output_directory
       dir_log = os.path.dirname(config.logfile)
       if not os.path.isabs(dir_log):
-         dir_log = out_dir + '/' + dir_log
+         dir_log = os.path.join(out_dir, dir_log)
       if not os.path.exists(dir_log):
          os.makedirs(dir_log)
       return "{0}/{1}".format(dir_log, os.path.basename(config.logfile))
