@@ -241,7 +241,7 @@ Check if the connection config is supported by this handler.
 
   False if the config is not supported.
       """
-      return isinstance(config.logfile, bool) and config.logfile or \
+      return (isinstance(config.logfile, bool) and config.logfile) or \
              config.logfile == constants.DEFAULT_LOGGER
 
 
