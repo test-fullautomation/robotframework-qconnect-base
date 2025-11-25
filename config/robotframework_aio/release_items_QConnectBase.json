@@ -118,6 +118,59 @@
 * Improved the ``verify`` keyword to validate all input regex patterns.
 * Updated the ``connect`` keyword to make ``conn_name`` a required parameter.
 * Fixed exception chaining to avoid ``During handling of the above exception`` warning in debug log file.
+* Enforced a minimum timeout of *0.001*s for the ``verify`` keyword
+
+**Log File (`logfile` configuration) Improvements**
+
+* Improved error handling when initializing logger configuration.
+
+* Fixed issue the logger did not write any log messages when using configuration with ``logfile`` set to ``console``.
+
+* Aligned behavior of writing logfile: overwrite existing logfile instead of appending to it.
+
+* Improved acceptable values and datatypes for this parameter.
+
+  * Disable logfile writing by setting ``logfile`` to ``None`` or ``False`` or ``nonlog``:
+
+    .. code-block::
+
+      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${None}
+
+    or
+
+    .. code-block::
+
+      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${False}
+
+    or
+
+    .. code-block::
+
+      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=nonlog
+
+  * Use default logfile name by omitting the ``logfile`` parameter or setting it to ``True``:
+
+    .. code-block::
+
+      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}
+
+    or
+
+    .. code-block::
+
+      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${True}
+
+  * Use console logging only by setting ``logfile`` to ``console``:
+
+    .. code-block::
+
+      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=console
+
+  * Specify a custom logfile name by providing a string value:
+
+    .. code-block::
+
+      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=custom_logfile.log
 "
                                           ]
                  }
