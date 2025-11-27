@@ -517,7 +517,7 @@ Suspend the control flow until a Trace message is received which matches to a sp
 
 * ``timeout``
 
-  / *Condition*: optional / *Type*: int / *Default*: 0 /
+  / *Condition*: optional / *Type*: float / *Default*: 0 /
 
   Timeout parameter specified as a floating point number in the unit 'seconds'.
 

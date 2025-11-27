@@ -57,4 +57,11 @@
 \historyversiondate{1.2.1}{11/2025}
 \historychange{Fixed exception chaining to avoid 'During handling of the above exception' warning in debug log file.}
 
+\historyversiondate{1.2.2}{11/2025}
+\historychange{- Improved parameter \texttt{logfile}: error handling, datatype validation and acceptable values.\newline
+- Fixed issue with logger did not write any log messages when using \texttt{console}.\newline
+- Aligned behavior of writing logfile: overwrite the existing one.\newline
+- Enforced a minimum timeout of \texttt{0.001}s for the \texttt{verify} keyword
+}
+
 \end{packagehistory}

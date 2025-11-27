@@ -104,6 +104,7 @@ Class to manage all connections.
    ROBOT_AUTO_KEYWORDS = False
    LIBRARY_EXTENSION_PREFIX = 'robotframework_qconnect'
    LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
+   MIN_VERIFY_TIMEOUT = 0.001
    DEFAULT_VERIFY_TIMEOUT = 5
    DEFAULT_EMERGENCY_TIMEOUT = 60 * 30
    ROBOT_LIBRARY_VERSION = VERSION
@@ -758,6 +759,11 @@ Verify a pattern from connection response after sending a command.
 
       """
       validate_regex_pattern(search_pattern, 'search_pattern')
+      if timeout is not None and timeout < self.MIN_VERIFY_TIMEOUT:
+         raise Exception(
+            f"Timeout value '{timeout}' is too small. "
+            f"Please provide a value greater than or equal to {self.MIN_VERIFY_TIMEOUT} seconds."
+         )
       # Parameter validation: eob_pattern and filter_pattern are only valid when fetch_block is True
       if not fetch_block:
          if eob_pattern != None:
@@ -794,7 +800,7 @@ Verify a pattern from connection response after sending a command.
       res = None
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
-         res = connection_obj.wait_4_trace(search_pattern, int(timeout), fetch_block, eob_pattern, filter_pattern, **kwargs)
+         res = connection_obj.wait_4_trace(search_pattern, timeout, fetch_block, eob_pattern, filter_pattern, **kwargs)
          if res is None:
             log_level = constants.LOG_LEVEL_WARNING if (i == match_try) else constants.LOG_LEVEL_INFO
             BuiltIn().log(f"[{conn_name}] Match try {i}/{match_try} timed out ('{search_pattern}')", log_level)

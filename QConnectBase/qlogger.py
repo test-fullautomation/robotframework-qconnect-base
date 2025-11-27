@@ -31,6 +31,7 @@ from QConnectBase.utils import *
 import QConnectBase.constants as constants
 import logging
 import os
+import sys
 
 
 class ColorFormatter(logging.Formatter):
@@ -104,7 +105,7 @@ Constructor for QFileHandler class.
   Log's formatter.
       """
       path = self.get_log_path(config)
-      super(QFileHandler, self).__init__(path)
+      super(QFileHandler, self).__init__(path, mode='w')
       self.setFormatter(formatter)
 
    @staticmethod
@@ -129,7 +130,7 @@ Get the log file path for this handler.
       out_dir = BuiltIn()._context.output._settings.output_directory
       dir_log = os.path.dirname(config.logfile)
       if not os.path.isabs(dir_log):
-         dir_log = out_dir + '/' + dir_log
+         dir_log = os.path.join(out_dir, dir_log)
       if not os.path.exists(dir_log):
          os.makedirs(dir_log)
       return "{0}/{1}".format(dir_log, os.path.basename(config.logfile))
@@ -155,7 +156,9 @@ Check if the connection config is supported by this handler.
 
   False if the config is not supported.
       """
-      return config.logfile is not None and config.logfile != 'nonlog' and config.logfile != 'console'
+      return isinstance(config.logfile, str) and \
+             config.logfile != 'nonlog' and \
+             config.logfile != 'console'
 
 
 class QDefaultFileHandler(logging.FileHandler):
@@ -238,7 +241,8 @@ Check if the connection config is supported by this handler.
 
   False if the config is not supported.
       """
-      return config.logfile is None
+      return (isinstance(config.logfile, bool) and config.logfile) or \
+             config.logfile == constants.DEFAULT_LOGGER
 
 
 class QConsoleHandler(logging.StreamHandler):
@@ -247,7 +251,7 @@ Handler class for console log.
    """
    def __init__(self, _config, _logger_name, _formatter):
       """
-Constructor for QDefaultFileHandler class.
+Constructor for QConsoleHandler class.
 
 **Arguments:**
 
@@ -273,7 +277,7 @@ Constructor for QDefaultFileHandler class.
 
 (*no returns*)
       """
-      super(QConsoleHandler, self).__init__()
+      super(QConsoleHandler, self).__init__(sys.__stdout__)
       self.setFormatter(ColorFormatter())
 
    @staticmethod
@@ -370,11 +374,11 @@ Set handler for logger.
       for handler in supported_handler_classes_list:
          # noinspection PyBroadException
          try:
-            if handler.get_config_supported(config):
+            if hasattr(handler, 'get_config_supported') and handler.get_config_supported(config):
                handler_ins = handler(config, self.logger_name, self.formatter)
                handler_ins.setLevel(log_level)
                self.logger.addHandler(handler_ins)
                return handler_ins
-         except:
-            pass
+         except Exception as reason:
+            raise Exception(f"Failed to initialize logger for '{config.logfile}'. Reason: {reason}.") from None
       return None
