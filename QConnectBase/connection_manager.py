@@ -137,25 +137,7 @@ Constructor for ConnectionManager class.
       all_libs = [main_lib_path]
       all_libs.extend(extension_lib_paths)
       all_libs = list(set(all_libs))
-      for path in all_libs:
-         if path not in sys.path:
-            sys.path.append(path)
-      for module_loader, name, is_pkg in pkgutil.walk_packages(all_libs):
-         # noinspection PyBroadException
-         try:
-            if not is_pkg and not name.startswith("setup"):
-               importlib.import_module(name)
-            else:
-               # _module = module_loader.find_module(name).load_module(name)
-               spec = importlib.util.find_spec(name)
-               if spec and spec.loader:
-                  module = importlib.util.module_from_spec(spec)
-                  spec.loader.exec_module(module)
-               else:
-                  print(f"⚠️ Could not load module: {name}")
-         except Exception as _ex:
-            pass
-
+      ConnectionManager.import_modules_from_paths(all_libs)
       supported_connection_classes_list = Utils.get_all_descendant_classes(ConnectionBase)
       self.supported_connection_classes_dict = {cls._CONNECTION_TYPE: cls for cls in supported_connection_classes_list}
 
@@ -164,6 +146,49 @@ Constructor for ConnectionManager class.
       self.ROBOT_LIBRARY_LISTENER = self
       self.ROBOT_LISTENER_API_VERSION = 3
 
+   @staticmethod
+   def import_modules_from_paths(paths):
+      """
+Import all modules from given paths.
+
+**Arguments:**
+
+* ``paths``
+
+  / *Condition*: required / *Type*: list /
+
+  List of paths to import modules from.
+      """
+      for path in paths:
+         for prefix in [ConnectionManager.LIBRARY_EXTENSION_PREFIX, ConnectionManager.LIBRARY_EXTENSION_PREFIX2]:
+            if prefix in path:
+               if os.path.isdir(path):
+                  for root, dirs, files in os.walk(path):
+                     for file in files:
+                        if file.endswith('.py'):
+                           module_path = os.path.join(root, file)
+                           module_name = os.path.splitext(os.path.relpath(module_path, os.path.dirname(path)))[0].replace(
+                              os.sep, '.')
+                           if module_name not in sys.modules:
+                              spec = importlib.util.spec_from_file_location(module_name, module_path)
+                              if spec and spec.loader:
+                                 module = importlib.util.module_from_spec(spec)
+                                 sys.modules[module_name] = module
+                                 try:
+                                    spec.loader.exec_module(module)
+                                 except Exception as _ex:
+                                    pass
+               elif os.path.isfile(path) and path.endswith('.py'):
+                  module_name = os.path.splitext(os.path.basename(path))[0]
+                  if module_name not in sys.modules:
+                     spec = importlib.util.spec_from_file_location(module_name, path)
+                     if spec and spec.loader:
+                        module = importlib.util.module_from_spec(spec)
+                        sys.modules[module_name] = module
+                        try:
+                           spec.loader.exec_module(module)
+                        except Exception as _ex:
+                           pass
 
    def __del__(self):
       """
