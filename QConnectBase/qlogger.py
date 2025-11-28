@@ -129,8 +129,9 @@ Get the log file path for this handler.
       """
       try:
          out_dir = BuiltIn()._context.output._settings.output_directory
-      except:
+      except Exception:
          out_dir = os.getcwd()
+
       dir_log = os.path.dirname(config.logfile)
       if not os.path.isabs(dir_log):
          dir_log = os.path.join(out_dir, dir_log)
@@ -223,7 +224,7 @@ Get the log file path for this handler.
       """
       try:
          out_dir = BuiltIn()._context.output._settings.output_directory
-      except:
+      except Exception:
          out_dir = os.getcwd()
       return os.path.join(out_dir, logger_name + "_trace.log")
 
