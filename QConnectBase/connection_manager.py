@@ -339,13 +339,11 @@ Making a connection.
 
   Example ``conn_conf`` for ``TCPIPClient``:
 
-  ```
-  {
-    "conn_type": "TCPIPClient",
-    "address": [server host], # Optional. Default value is "localhost".
-    "port": [server port]     # Optional. Default value is 1234.
-  }
-  ```
+  |   {
+  |      "conn_type": "TCPIPClient",
+  |      "address": [server host], # Optional. Default value is "localhost".
+  |      "port": [server port]     # Optional. Default value is 1234.
+  |   }
 
 * ``conn_type`` (deprecated)
 
@@ -354,6 +352,7 @@ Making a connection.
   Type of connection. It can be specified in ``conn_conf`` dictionary.
 
   Supported connection types:
+
   - ``TCPIPClient``: Create a Raw TCP/IP connection to TCP Server.
   - ``SSHClient``: Create a client connection to a SSH server.
   - ``SerialClient``: Create a client connection via Serial Port.
@@ -564,7 +563,6 @@ Transfer item from local to remote and vice versa.
       except Exception as ex:
          raise Exception(f"Unable to transfer item to '{conn_name}' connection. Exception: '{ex}'") from None
 
-
    @keyword
    def execute_script(self, conn_name, script_path):
       """
@@ -603,6 +601,7 @@ Executes a script file by sending commands to a device through the provided conn
 Set the default verify timeout value for the connection.
 
 Supports flexible input formats such as:
+
 - Duration with units (e.g. '1h 10s', '2m30s', '500ms')
 - HH:MM:SS format (e.g. '01:00:10' for 1 hour, 0 minutes, 10 seconds)
 - Plain numeric values (e.g. '42') interpreted as seconds
@@ -618,6 +617,7 @@ Supports flexible input formats such as:
     - ``m``  for minutes (or ``ms`` for milliseconds)
     - ``s``  for seconds
     - ``ms`` for milliseconds
+
   If no unit is specified, the value is interpreted as seconds.
       """
       time_second = timestr_to_secs(time_out)
@@ -646,6 +646,7 @@ Supports flexible input formats such as:
     - ``m``  for minutes (or ``ms`` for milliseconds)
     - ``s``  for seconds
     - ``ms`` for milliseconds
+
   If no unit is specified, the value is interpreted as seconds.
       """
       time_second = timestr_to_secs(time_out)
@@ -673,6 +674,7 @@ Verify a pattern from connection response after sending a command.
   Expectation expressed as a **regular expression pattern** (more robust than a plain string comparison).
 
   It will match:
+
   - a single line by default (``fetch_block`` not used)
   - multiple lines if ``fetch_block`` is enabled
 
@@ -750,11 +752,9 @@ Verify a pattern from connection response after sending a command.
   then the returned list will be ``['1st', 'command']``.
 
   Thus:
-  - ``${res}[0]`` will be **1st**,
-  i.e. the first *captured string* defined in the pattern ``([0-9]..)``.
 
-  - ``${res}[1]`` will be **command**,
-  i.e. the second *captured string* defined in the pattern ``(command)``.
+  - ``${res}[0]`` will be **1st**, i.e. the first *captured string* defined in the pattern ``([0-9]..)``.
+  - ``${res}[1]`` will be **command**, i.e. the second *captured string* defined in the pattern ``(command)``.
 
       """
       validate_regex_pattern(search_pattern, 'search_pattern')
