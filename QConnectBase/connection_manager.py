@@ -32,6 +32,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from os.path import dirname
 from QConnectBase.utils import DictToClass
 from robot.api.deco import keyword
+from robot.api.deco import library
 from robot.utils import timestr_to_secs
 import os
 import importlib
@@ -95,19 +96,16 @@ Class for storing parameters for verify action.
    element_def = {}
    args = None
 
-
+@library(scope='GLOBAL', version=VERSION, auto_keywords=False, doc_format="reST")
 class ConnectionManager(Singleton):
    """
 Class to manage all connections.
    """
-   ROBOT_LIBRARY_SCOPE = 'GLOBAL'
-   ROBOT_AUTO_KEYWORDS = False
    LIBRARY_EXTENSION_PREFIX = 'robotframework_qconnect'
    LIBRARY_EXTENSION_PREFIX2 = 'QConnect'
    MIN_VERIFY_TIMEOUT = 0.001
    DEFAULT_VERIFY_TIMEOUT = 5
    DEFAULT_EMERGENCY_TIMEOUT = 60 * 30
-   ROBOT_LIBRARY_VERSION = VERSION
 
    id = 0
 
@@ -260,8 +258,7 @@ Remove a connection by name.
       if conn_name in self.connection_manage_dict.keys():
          del self.connection_manage_dict[conn_name]
 
-
-   def get_connection_by_name(self, conn_name):
+   def get_connection_by_name(self, conn_name, raise_exception=False):
       """
 Get an exist connection by name.
 
@@ -272,6 +269,12 @@ Get an exist connection by name.
   / *Condition*: required / *Type*: str /
 
   Connection's name.
+
+* ``raise_exception``
+
+  / *Condition*: optional / *Type*: bool /
+
+  If True, raise exception when connection is not found.
 
 **Returns:**
 
@@ -284,6 +287,10 @@ Get an exist connection by name.
       conn = None
       if conn_name in self.connection_manage_dict.keys():
          conn = self.connection_manage_dict[conn_name]
+
+      if raise_exception and conn is None:
+         raise Exception(constants.String.CONNECTION_NOT_CONNECTED % conn_name)
+
       return conn
 
    @keyword
@@ -332,13 +339,11 @@ Making a connection.
 
   Example ``conn_conf`` for ``TCPIPClient``:
 
-  ```
-  {
-    "conn_type": "TCPIPClient",
-    "address": [server host], # Optional. Default value is "localhost".
-    "port": [server port]     # Optional. Default value is 1234.
-  }
-  ```
+  |   {
+  |      "conn_type": "TCPIPClient",
+  |      "address": [server host], # Optional. Default value is "localhost".
+  |      "port": [server port]     # Optional. Default value is 1234.
+  |   }
 
 * ``conn_type`` (deprecated)
 
@@ -347,6 +352,7 @@ Making a connection.
   Type of connection. It can be specified in ``conn_conf`` dictionary.
 
   Supported connection types:
+
   - ``TCPIPClient``: Create a Raw TCP/IP connection to TCP Server.
   - ``SSHClient``: Create a client connection to a SSH server.
   - ``SerialClient``: Create a client connection via Serial Port.
@@ -455,9 +461,7 @@ Send command to a connection.
 
 (*no returns*)
       """
-      if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
-      connection_obj = self.connection_manage_dict[conn_name]
+      connection_obj = self.get_connection_by_name(conn_name, raise_exception=True)
       try:
          connection_obj.send_obj(command, **kwargs)
          BuiltIn().log(f"command '{command}' is sent to '{conn_name}'", constants.LOG_LEVEL_INFO)
@@ -504,13 +508,11 @@ Transfer file from local to remote and vice versa.
 
 (*no returns*)
       """
-      if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError(f"The '{conn_name}' connection  hasn't been established. Please connect first.")
-      connection_obj = self.connection_manage_dict[conn_name]
+      connection_obj = self.get_connection_by_name(conn_name, raise_exception=True)
       try:
          connection_obj.transfer_file(src, dest, type)
       except AttributeError:
-         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring file.") from None
+         raise Exception(constants.String.CONNECTION_UNSUPPORTED_KEYWORD % (connection_obj._CONNECTION_TYPE, "file transfer")) from None
       except Exception as ex:
          raise Exception(f"Unable to transfer file to '{conn_name}' connection. Exception: '{ex}'") from None
 
@@ -553,16 +555,13 @@ Transfer item from local to remote and vice versa.
 
 (*no returns*)
       """
-      if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError(f"The '{conn_name}' connection  hasn't been established. Please connect first.")
-      connection_obj = self.connection_manage_dict[conn_name]
+      connection_obj = self.get_connection_by_name(conn_name, raise_exception=True)
       try:
          connection_obj.transfer_item(src, dest, type)
       except AttributeError:
-         raise Exception(f"'{connection_obj._CONNECTION_TYPE}' connection type has not been supported for transferring item.") from None
+         raise Exception(constants.String.CONNECTION_UNSUPPORTED_KEYWORD % (connection_obj._CONNECTION_TYPE, "item transfer")) from None
       except Exception as ex:
          raise Exception(f"Unable to transfer item to '{conn_name}' connection. Exception: '{ex}'") from None
-
 
    @keyword
    def execute_script(self, conn_name, script_path):
@@ -587,14 +586,12 @@ Executes a script file by sending commands to a device through the provided conn
 
 (*no returns*)
       """
-      if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
-      connection_obj = self.connection_manage_dict[conn_name]
+      connection_obj = self.get_connection_by_name(conn_name, raise_exception=True)
       try:
          connection_obj.execute_script(script_path)
       except AttributeError as attrErr:
          test = inspect.getfile(connection_obj.__class__)
-         raise Exception("'%s' connection type has not been supported for execute script." % connection_obj._CONNECTION_TYPE) from None
+         raise Exception(constants.String.CONNECTION_UNSUPPORTED_KEYWORD % (connection_obj._CONNECTION_TYPE, "script execution")) from None
       except Exception as ex:
          raise Exception("Unable to execute script path '%s'. Exception: %s" % (script_path, str(ex))) from None
 
@@ -604,6 +601,7 @@ Executes a script file by sending commands to a device through the provided conn
 Set the default verify timeout value for the connection.
 
 Supports flexible input formats such as:
+
 - Duration with units (e.g. '1h 10s', '2m30s', '500ms')
 - HH:MM:SS format (e.g. '01:00:10' for 1 hour, 0 minutes, 10 seconds)
 - Plain numeric values (e.g. '42') interpreted as seconds
@@ -619,6 +617,7 @@ Supports flexible input formats such as:
     - ``m``  for minutes (or ``ms`` for milliseconds)
     - ``s``  for seconds
     - ``ms`` for milliseconds
+
   If no unit is specified, the value is interpreted as seconds.
       """
       time_second = timestr_to_secs(time_out)
@@ -647,6 +646,7 @@ Supports flexible input formats such as:
     - ``m``  for minutes (or ``ms`` for milliseconds)
     - ``s``  for seconds
     - ``ms`` for milliseconds
+
   If no unit is specified, the value is interpreted as seconds.
       """
       time_second = timestr_to_secs(time_out)
@@ -674,6 +674,7 @@ Verify a pattern from connection response after sending a command.
   Expectation expressed as a **regular expression pattern** (more robust than a plain string comparison).
 
   It will match:
+
   - a single line by default (``fetch_block`` not used)
   - multiple lines if ``fetch_block`` is enabled
 
@@ -751,18 +752,16 @@ Verify a pattern from connection response after sending a command.
   then the returned list will be ``['1st', 'command']``.
 
   Thus:
-  - ``${res}[0]`` will be **1st**,
-  i.e. the first *captured string* defined in the pattern ``([0-9]..)``.
 
-  - ``${res}[1]`` will be **command**,
-  i.e. the second *captured string* defined in the pattern ``(command)``.
+  - ``${res}[0]`` will be **1st**, i.e. the first *captured string* defined in the pattern ``([0-9]..)``.
+  - ``${res}[1]`` will be **command**, i.e. the second *captured string* defined in the pattern ``(command)``.
 
       """
       validate_regex_pattern(search_pattern, 'search_pattern')
       if timeout is not None and timeout < self.MIN_VERIFY_TIMEOUT:
          raise Exception(
             f"Timeout value '{timeout}' is too small. "
-            f"Please provide a value greater than or equal to {self.MIN_VERIFY_TIMEOUT} seconds."
+            f"Please enter a value of {self.MIN_VERIFY_TIMEOUT} seconds or higher."
          )
       # Parameter validation: eob_pattern and filter_pattern are only valid when fetch_block is True
       if not fetch_block:
@@ -778,16 +777,13 @@ Verify a pattern from connection response after sending a command.
          if filter_pattern and has_capturing_groups(filter_pattern, 'filter_pattern'):
             BuiltIn().log(f"Warning: Capturing groups are not supported within the filter_pattern '{filter_pattern}'.", constants.LOG_LEVEL_WARNING)
 
-      if conn_name not in self.connection_manage_dict.keys():
-         raise AssertionError("The '%s' connection hasn't been established. Please connect first." % conn_name)
-
       # if search_pattern is None:
       #    raise Exception("The 'search_pattern' have to be a regex string instead of None.")
 
       if send_cmd is None:
          send_cmd = ''
 
-      connection_obj = self.connection_manage_dict[conn_name]
+      connection_obj = self.get_connection_by_name(conn_name, raise_exception=True)
       if connection_obj.get_connection_type() in ["DLT", "DLTConnector", "TTFisclient"]:
          match_try = 5
 

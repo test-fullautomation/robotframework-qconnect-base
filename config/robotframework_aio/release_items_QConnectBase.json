@@ -134,43 +134,43 @@
 
     .. code-block::
 
-      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${None}
+      &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${None}
 
     or
 
     .. code-block::
 
-      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${False}
+      &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${False}
 
     or
 
     .. code-block::
 
-      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=nonlog
+      &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=nonlog
 
   * Use default logfile name by omitting the ``logfile`` parameter or setting it to ``True``:
 
     .. code-block::
 
-      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}
+      &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}
 
     or
 
     .. code-block::
 
-      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${True}
+      &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=${True}
 
   * Use console logging only by setting ``logfile`` to ``console``:
 
     .. code-block::
 
-      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=console
+      &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=console
 
   * Specify a custom logfile name by providing a string value:
 
     .. code-block::
 
-      &{TCPIPClientParam}=    Create Dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=custom_logfile.log
+      &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=custom_logfile.log
 "
                                           ]
                  }
