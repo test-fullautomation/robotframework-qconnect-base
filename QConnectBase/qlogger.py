@@ -127,13 +127,17 @@ Get the log file path for this handler.
 
   Log file path.
       """
-      out_dir = BuiltIn()._context.output._settings.output_directory
+      try:
+         out_dir = BuiltIn()._context.output._settings.output_directory
+      except Exception:
+         out_dir = os.getcwd()
+
       dir_log = os.path.dirname(config.logfile)
       if not os.path.isabs(dir_log):
          dir_log = os.path.join(out_dir, dir_log)
       if not os.path.exists(dir_log):
          os.makedirs(dir_log)
-      return "{0}/{1}".format(dir_log, os.path.basename(config.logfile))
+      return os.path.join(dir_log, os.path.basename(config.logfile))
 
    @staticmethod
    def get_config_supported(config):
@@ -158,7 +162,8 @@ Check if the connection config is supported by this handler.
       """
       return isinstance(config.logfile, str) and \
              config.logfile != 'nonlog' and \
-             config.logfile != 'console'
+             config.logfile != 'console' and \
+             config.logfile != constants.DEFAULT_LOGGER
 
 
 class QDefaultFileHandler(logging.FileHandler):
@@ -217,8 +222,11 @@ Get the log file path for this handler.
 
   Log file path.
       """
-      out_dir = BuiltIn()._context.output._settings.output_directory
-      return "{0}/{1}.log".format(out_dir, logger_name + "_trace")
+      try:
+         out_dir = BuiltIn()._context.output._settings.output_directory
+      except Exception:
+         out_dir = os.getcwd()
+      return os.path.join(out_dir, logger_name + "_trace.log")
 
    @staticmethod
    def get_config_supported(config):
