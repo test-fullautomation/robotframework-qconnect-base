@@ -55,6 +55,8 @@ Class to store the configuration for SSH connection.
    password = ''
    authentication = 'password'
    key_filename = None
+   prompt_regex = r'[#$>] ?$'
+   timeout = 10
 
 
 class SSHClient(TCPBase, TCPBaseClient):
@@ -87,7 +89,6 @@ Constructor for SSHClient class.
       self.chan = None
       self.client = None
       self.shell_ready = threading.Event()
-      self.prompt_regex = re.compile(rb'[#$>] ?$')
 
       self.config = SSHConfig(**config)
       config_tcp = {
@@ -100,7 +101,8 @@ Constructor for SSHClient class.
       self._password = self.config.password
       self._key_filename = self.config.key_filename
       self._authentication = self.config.authentication
-      self._conn_timeout = 10
+      self._conn_timeout = getattr(self.config, 'timeout', 10)
+      self._prompt_regex = re.compile(getattr(self.config, 'prompt_regex', r'[#$>] ?$'))
 
       # create the queue for this connection
       self.SSHq = queue.Queue()
@@ -136,7 +138,7 @@ Implementation the thread for getting data from ssh connection.
                self.SSHq.put(character)
 
             if not self.shell_ready.is_set():
-               if self.prompt_regex.search(data.encode(self.config.encoding, 'ignore')):
+               if self._prompt_regex.search(data):
                   self.shell_ready.set()
 
             if self.chan.closed is True:
