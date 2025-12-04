@@ -404,7 +404,7 @@ Thread to receive data from connection continuously.
                               if matchObj is not None:
                                  back_trace_queue.append(msg)
                               if len(back_trace_queue):
-                                 (is_hit, result_obj) = self._filter_msg(regex_filter, "\n".join(back_trace_queue))
+                                 (is_hit, result_obj) = self._filter_msg(regex_filter, "\r\n".join(back_trace_queue))
                         else:
                            (is_hit, result_obj) = self._filter_msg(regex_filter, msg)
                         if is_hit:
