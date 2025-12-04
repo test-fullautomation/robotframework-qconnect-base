@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools==79.0.1", "wheel", "colorama==0.4.6", "pypandoc_binary==1.15", "PythonExtensionsCollection"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "QConnectBase"
+version = "1.2.2"
+description = "Robot Framework test library for TCP, SSH, serial connection"
+readme = "README.md"
+requires-python = ">=3.13"
+license = "Apache-2.0"
+authors = [
+    {name = "Nguyen Huynh Tri Cuong", email = "cuong.nguyenhuynhtri@vn.bosch.com"}
+]
+keywords = ["Robot Framework", "TCP", "SSH", "Serial", "Connection"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "robotframework",
+    "paramiko",
+    "pyserial",
+]
+
+[project.urls]
+Homepage = "https://github.com/test-fullautomation/robotframework-qconnect-base"
+Repository = "https://github.com/test-fullautomation/robotframework-qconnect-base"
+
+[tool.setuptools]
+packages = [
+   "QConnectBase",
+   "QConnectBase.message",
+   "QConnectBase.serialclient",
+   "QConnectBase.tcp",
+   "QConnectBase.tcp.raw",
+   "QConnectBase.tcp.ssh"
+]
+
+[tool.setuptools.package-data]
+QConnectBase = ["*.pdf"]
