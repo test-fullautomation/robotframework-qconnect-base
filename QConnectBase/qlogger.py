@@ -163,6 +163,7 @@ Check if the connection config is supported by this handler.
       return isinstance(config.logfile, str) and \
              config.logfile != 'nonlog' and \
              config.logfile != 'console' and \
+             config.logfile != '' and \
              config.logfile != constants.DEFAULT_LOGGER
 
 
@@ -250,7 +251,8 @@ Check if the connection config is supported by this handler.
   False if the config is not supported.
       """
       return (isinstance(config.logfile, bool) and config.logfile) or \
-             config.logfile == constants.DEFAULT_LOGGER
+             config.logfile == constants.DEFAULT_LOGGER or \
+             config.logfile == ''
 
 
 class QConsoleHandler(logging.StreamHandler):
