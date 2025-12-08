@@ -35,7 +35,8 @@ ${PORT}=    ${4000}
 &{TCPIPClientParamTS}    conn_type=TCPIPClient
 ...                      address=${HOST}
 ...                      port=${PORT}
-...                      logfile=./tcp_ip_incoming.log
+...                      logfile=./tcp_ip_incomingTS.log
+# ...                      logfile=${None}
 # (testcase specific definition of TCPIPClientParam will be done inside the test files)
 
 *** Keywords ***
