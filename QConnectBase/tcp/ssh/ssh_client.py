@@ -55,6 +55,8 @@ Class to store the configuration for SSH connection.
    password = ''
    authentication = 'password'
    key_filename = None
+   prompt_regex = r'[#$>] ?$'
+   timeout = 10
 
 
 class SSHClient(TCPBase, TCPBaseClient):
@@ -86,6 +88,7 @@ Constructor for SSHClient class.
       self._llrecv_thrd_obj = None
       self.chan = None
       self.client = None
+      self.shell_ready = threading.Event()
 
       self.config = SSHConfig(**config)
       config_tcp = {
@@ -98,6 +101,8 @@ Constructor for SSHClient class.
       self._password = self.config.password
       self._key_filename = self.config.key_filename
       self._authentication = self.config.authentication
+      self._conn_timeout = getattr(self.config, 'timeout', 10)
+      self._prompt_regex = re.compile(getattr(self.config, 'prompt_regex', r'[#$>] ?$'))
 
       # create the queue for this connection
       self.SSHq = queue.Queue()
@@ -131,6 +136,10 @@ Implementation the thread for getting data from ssh connection.
 
             for character in data:
                self.SSHq.put(character)
+
+            if not self.shell_ready.is_set():
+               if self._prompt_regex.search(data):
+                  self.shell_ready.set()
 
             if self.chan.closed is True:
                break
@@ -219,7 +228,8 @@ Implementation for creating a SSH connection.
       # Therefore we need to open a shell.
       self.chan = self.client.invoke_shell()
       BuiltIn().log("%s: successfully invoked SSH shell for secure communication." % _mident, constants.LOG_LEVEL_DEBUG)
-
+      if not self.shell_ready.wait(timeout=self._conn_timeout):
+         raise TimeoutError(f"Shell prompt is not ready within {self._conn_timeout} seconds after invoking shell.")
       # switch echo off for this terminal
       # echo disturbs when the command contains part of the exepcted reponse, then regexp filtering will
       # fetch the command instead of the response.

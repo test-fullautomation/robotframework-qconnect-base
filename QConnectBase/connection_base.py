@@ -46,6 +46,11 @@ _platform = platform.system().lower()
 class BrokenConnError(Exception):
    pass
 
+class EndOfBlockNotFound(Exception):
+   pass
+
+class NoFilteredMsgFound(Exception):
+   pass
 
 class ConnectionBase(object):
    """
@@ -398,14 +403,14 @@ Thread to receive data from connection continuously.
                            else:
                               if matchObj is not None:
                                  back_trace_queue.append(msg)
-                              (is_hit, result_obj) = self._filter_msg(regex_filter, "\n".join(back_trace_queue))
+                              if len(back_trace_queue):
+                                 (is_hit, result_obj) = self._filter_msg(regex_filter, "\r\n".join(back_trace_queue))
                         else:
                            (is_hit, result_obj) = self._filter_msg(regex_filter, msg)
                         if is_hit:
                            now = time.time()
-                           if (use_fetch_block is True) and regex_end_block_pattern and (regex_end_block_pattern.pattern != ".*"):
+                           if (use_fetch_block is True) and regex_end_block_pattern and (regex_end_block_pattern.pattern != ".*") and len(back_trace_queue):
                               result_obj = regex_filter.search("\r\n".join(back_trace_queue))
-                              back_trace_queue.clear()
                            msg_queue.put((now, result_obj), False)
                self.post_msg_check(msg)
          except BrokenConnError as reason:
@@ -562,12 +567,20 @@ Suspend the control flow until a Trace message is received which matches to a sp
       except queue.Empty:
          success = False
       finally:
+         back_trace_queue = self._traceq_obj[trq_handle][2]
+         filtered_line_counter = len(back_trace_queue)
+         back_trace_queue.clear()
          self.deactivate_and_delete_trace_queue(trq_handle, trace_queue)
 
       BuiltIn().log('Completed %s' % _mident, constants.LOG_LEVEL_DEBUG)
+
+      if match is None and filtered_line_counter == 0 and filter_pattern != ".*":
+         raise NoFilteredMsgFound()
       if success:
          return match
       else:
+         if end_of_block_pattern is not None:
+            raise EndOfBlockNotFound()
          return None
 
    def wait_4_trace_continuously(self, trace_queue, timeout=0, *fct_args):

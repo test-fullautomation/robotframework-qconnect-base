@@ -27,7 +27,7 @@
 #
 # *******************************************************************************
 from QConnectBase.utils import *
-from QConnectBase.connection_base import ConnectionBase
+from QConnectBase.connection_base import ConnectionBase, EndOfBlockNotFound, NoFilteredMsgFound
 from robot.libraries.BuiltIn import BuiltIn
 from os.path import dirname
 from QConnectBase.utils import DictToClass
@@ -794,9 +794,16 @@ Verify a pattern from connection response after sending a command.
 
       BuiltIn().log(f"sending command '{send_cmd}' to '{conn_name}' ...", constants.LOG_LEVEL_INFO)
       res = None
+      eob_found = True
+      has_filtered_msg = True
       for i in range(1, match_try+1):
          kwargs['send_cmd'] = send_cmd
-         res = connection_obj.wait_4_trace(search_pattern, timeout, fetch_block, eob_pattern, filter_pattern, **kwargs)
+         try:
+            res = connection_obj.wait_4_trace(search_pattern, timeout, fetch_block, eob_pattern, filter_pattern, **kwargs)
+         except EndOfBlockNotFound:
+            eob_found = False
+         except NoFilteredMsgFound:
+            has_filtered_msg = False
          if res is None:
             log_level = constants.LOG_LEVEL_WARNING if (i == match_try) else constants.LOG_LEVEL_INFO
             BuiltIn().log(f"[{conn_name}] Match try {i}/{match_try} timed out ('{search_pattern}')", log_level)
@@ -804,7 +811,12 @@ Verify a pattern from connection response after sending a command.
             break
 
       if not res:
-         raise AssertionError(f"Failed to match the pattern '{search_pattern}' within '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
+         if not eob_found:
+            raise AssertionError(f"Failed to match the end of block pattern '{eob_pattern}' within '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
+         elif not has_filtered_msg:
+            raise AssertionError(f"Failed to receive any message that matches the filter pattern '{filter_pattern}' within '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
+         else:
+            raise AssertionError(f"Failed to match the pattern '{search_pattern}' within '{match_try}' {'try' if match_try == 1 else 'tries'} ({conn_name}).")
 
       # Determine if the pattern has capturing groups
       has_groups = has_capturing_groups(search_pattern) if search_pattern else False
