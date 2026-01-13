@@ -66,6 +66,8 @@ Base class for all connection classes.
 
    RECV_MSGS_POLLING_INTERVAL = 0.005
 
+   ACCEPT_VERIFY_PARAMS = None
+
    _call_thrd_obj = None
    _call_thrd_init = threading.Event()
    _call_thrd_term = threading.Event()

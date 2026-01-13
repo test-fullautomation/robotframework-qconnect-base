@@ -58,6 +58,7 @@ Class for handling serial connection.
    """
    _CONNECTION_TYPE = "SerialBase"
    _socket_instance = 0
+   ACCEPT_VERIFY_PARAMS = []
 
    def __init__(self, _mode, config):
       """

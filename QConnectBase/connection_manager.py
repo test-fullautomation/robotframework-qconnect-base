@@ -145,6 +145,31 @@ Constructor for ConnectionManager class.
       self.ROBOT_LIBRARY_LISTENER = self
       self.ROBOT_LISTENER_API_VERSION = 3
 
+   def __validate_optional_verify_parameters(self, optional_params, conn_name):
+      """
+Validate optional parameters for verify keyword.
+
+**Arguments:**
+
+* ``optional_params``
+
+  / *Condition*: required / *Type*: dict /
+
+  Dictionary of optional parameters
+  """
+      connection_obj = self.get_connection_by_name(conn_name, raise_exception=True)
+      accept_verify_params = getattr(connection_obj, 'ACCEPT_VERIFY_PARAMS', None)
+      if accept_verify_params is None:
+         return
+
+      msg_supported_params = ''
+      if len(accept_verify_params) > 0:
+         msg_supported_params = f" Valid params: {', '.join(accept_verify_params)}"
+
+      invalid_params = [k for k in optional_params.keys() if k not in accept_verify_params]
+      if len(invalid_params) > 0:
+         raise Exception(f"Unexpected 'verify' parameter(s) found for '{connection_obj._CONNECTION_TYPE}' connection type: {', '.join(invalid_params)}.{msg_supported_params}")
+
    @staticmethod
    def import_modules_from_paths(paths):
       """
@@ -757,6 +782,7 @@ Verify a pattern from connection response after sending a command.
   - ``${res}[1]`` will be **command**, i.e. the second *captured string* defined in the pattern ``(command)``.
 
       """
+      self.__validate_optional_verify_parameters(kwargs, conn_name)
       validate_regex_pattern(search_pattern, 'search_pattern')
       if timeout is not None and timeout < self.MIN_VERIFY_TIMEOUT:
          raise Exception(

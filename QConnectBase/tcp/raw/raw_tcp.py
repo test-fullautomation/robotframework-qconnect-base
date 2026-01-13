@@ -92,6 +92,7 @@ class RawTCPServer(TCPBaseServer, RawTCPBase):
 Class for a raw tcp connection server.
    """
    _CONNECTION_TYPE = "TCPIPServer"
+   ACCEPT_VERIFY_PARAMS = []
 
    def __init__(self, mode=None, config=None):
       """
@@ -120,6 +121,7 @@ class RawTCPClient(TCPBaseClient, RawTCPBase):
 Class for a raw tcp connection client.
    """
    _CONNECTION_TYPE = "TCPIPClient"
+   ACCEPT_VERIFY_PARAMS = []
 
    def __init__(self, mode=None, config=None):
       """
