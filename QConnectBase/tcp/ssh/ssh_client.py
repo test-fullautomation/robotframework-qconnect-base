@@ -64,6 +64,7 @@ class SSHClient(TCPBase, TCPBaseClient):
 SSH client connection class.
    """
    _CONNECTION_TYPE = "SSHClient"
+   ACCEPT_VERIFY_PARAMS = []
 
    def __init__(self, _mode, config):
       """
