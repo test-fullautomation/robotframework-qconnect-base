@@ -172,6 +172,11 @@
 
       &{TCPIPClientParam}=    create_dictionary    conn_type=${connection_type}   address=${HOST}   port=${PORT}   logfile=custom_logfile.log
 "
+                             ],
+                      "0.14.4.;0.15.0." : [
+"
+* Added verification for acceptable optional parameters in the `verify` keyword.
+"
                                           ]
                  }
 }
