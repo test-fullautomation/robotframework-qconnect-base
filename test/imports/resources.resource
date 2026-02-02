@@ -20,11 +20,11 @@ Library    BuiltIn
 Library    Process
 
 # the library under test
-Library    QConnectBase.ConnectionManager    WITH NAME    conn_manager
+Library    QConnectBase.ConnectionManager    AS    conn_manager
 
 # additional libraries
-Library    RobotframeworkExtensions.Collection    WITH NAME    rf.extensions
-Library    ./tcp_ip_selftest_lib.py    WITH NAME    tcpip.selftest
+Library    RobotframeworkExtensions.Collection    AS    rf.extensions
+Library    ./tcp_ip_selftest_lib.py    AS    tcpip.selftest
 
 *** Variables ***
 
