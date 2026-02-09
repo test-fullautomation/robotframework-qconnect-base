@@ -34,10 +34,12 @@ from inspect import currentframe
 import QConnectBase.constants as constants
 import time
 import threading
-import uuid
 import json
 import pika
 import queue
+
+from MicroserviceBase.adapters.config.rabbitmq_config import RabbitMQConfig
+from MicroserviceBase.adapters.transport.rabbitmq_adapter import RabbitMQTransportAdapter
 
 
 class RabbitmqClientConfig(DictToClass):
@@ -76,16 +78,13 @@ Constructor for RabbitmqClient class.
   Configurations for rabbitmq Client.
       """
       self.config = RabbitmqClientConfig(**config)
-      self.connection = None
-      self.channel = None
       self.exchange_name = 'services_request'
-      self.queue_name = "RabbitmqClient" + str(uuid.uuid4())
       self._host = self.config.address
       self._port = self.config.port
       self._routing_key = self.config.routing_key
       self.resp_queue = queue.Queue()
       self._is_connected = False
-      self.callback_queue = None
+      self._transport = None
       # configure and initialize the low-level receiver thread
       RabbitmqClient._rabbit_instance += 1
       self._init_thread_receiver(RabbitmqClient._rabbit_instance)
@@ -98,23 +97,17 @@ Constructor for RabbitmqClient class.
          """
    Implementation the thread for getting data from rabbitmq connection.
 
+   With the transport adapter, rpc_call() handles its own response consumption,
+   so this thread simply stays alive until termination is requested.
+
    **Returns:**
 
    (*no returns*)
          """
          _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
          BuiltIn().log("%s: low-level receiver thread started." % _mident, constants.LOG_LEVEL_DEBUG)
-         while self.callback_queue is None and not self._llrecv_thrd_term.isSet():
+         while not self._llrecv_thrd_term.is_set():
             time.sleep(ConnectionBase.RECV_MSGS_POLLING_INTERVAL)
-         self.channel.basic_consume(queue=self.callback_queue, on_message_callback=self.on_response, auto_ack=True)
-         self.channel.start_consuming()
-
-   def on_response(self, ch, method, properties, body):
-      # program_information = json.loads(body)
-      # print(program_information)
-      if isinstance(body, bytes):
-            body = body.decode('utf-8')
-      self.resp_queue.put(body)
 
    def connect(self):
       """
@@ -126,14 +119,9 @@ Implementation for creating a rabbitmq connection.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       try:
-         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self._host, port=self._port))
-         self.channel = self.connection.channel()
-         queue = self.channel.queue_declare(queue=self.queue_name, durable=False)
-         self.callback_queue = queue.method.queue
-
-         # self.channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
-
-         # self.channel.basic_consume(queue=self.callback_queue, on_message_callback=self.on_response, auto_ack=True)
+         config = RabbitMQConfig(host=self._host, port=self._port)
+         self._transport = RabbitMQTransportAdapter(config)
+         self._transport.connect()
 
          BuiltIn().log(f"connected to Rabbitmq Broker {self._host}:{self._port} (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                constants.LOG_LEVEL_INFO)
@@ -165,22 +153,17 @@ Send message to rabbitmq connection.
 
 (*no returns*)
       """
-      # noinspection PyBroadException
       try:
          _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
          BuiltIn().log("%s: sending: '%s'" % (_mident, msg), constants.LOG_LEVEL_DEBUG)
-         connection = pika.BlockingConnection(pika.ConnectionParameters(host=self._host, port=self._port))
-         channel = connection.channel()
-         channel.basic_publish(
-            exchange=self.exchange_name,
-            routing_key=self._routing_key,
-            properties=pika.BasicProperties(
-               correlation_id=str(uuid.uuid4()),
-               reply_to=self.callback_queue
-            ),
-            body=msg
+         request_data = json.loads(msg) if isinstance(msg, str) else msg
+         resp = self._transport.rpc_call(
+            request_data,
+            self.exchange_name,
+            self._routing_key,
+            timeout=30
          )
-         connection.close()
+         self.resp_queue.put(json.dumps(resp))
       except Exception as _reason:
          self._is_connected = False
 
@@ -209,24 +192,13 @@ Close rabbitmq connection.
 
 (*no returns*)
       """
-      if self.channel is not None:
+      if self._transport is not None:
          try:
-            self.channel.stop_consuming()
-            if self.callback_queue is not None:
-               try:
-                  time.sleep(0.5)
-                  self.channel.queue_declare(queue=self.callback_queue, passive=True)
-                  self.channel.queue_delete(queue=self.callback_queue)
-               except pika.exceptions.ChannelClosedByBroker:
-                  pass
-               # self.channel.queue_delete(queue=self.callback_queue)
-
-            self.channel.close()
-         except:
+            self._transport.disconnect()
+         except Exception:
             pass
-
-      # Execute parents close()
-      # super(RabbitmqClient, self).close()
+         self._transport = None
+      self._is_connected = False
 
    def quit(self):
       """
@@ -245,7 +217,7 @@ Quit and stop receiver thread.
 
       self._llrecv_thrd_obj = None
       self.close()
-      BuiltIn().log(f"disconnected from Rabbitmq Broker '{self.address}':'{self.port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
+      BuiltIn().log(f"disconnected from Rabbitmq Broker '{self._host}':'{self._port}' (connection type '{self._CONNECTION_TYPE}' with name '{self.conn_name}')",
                constants.LOG_LEVEL_INFO)
 
 
@@ -286,27 +258,34 @@ Constructor for RMQSignal class.
 
   / *Condition*: optional / *Type*: str / *Default*: 'localhost' /
 
-  Unused
+  Host address of the RabbitMQ broker.
+
+* ``port``
+
+  / *Condition*: optional / *Type*: str / *Default*: '5672' /
+
+  Port of the RabbitMQ broker.
       """
       self.host = host
-      self._port = port
+      self._port = int(port)
       self.signal_receiver_name = ''
-      self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
-      self.channel = self.connection.channel()
+      self._config = RabbitMQConfig(host=self.host, port=self._port)
+      self._transport = RabbitMQTransportAdapter(self._config)
+      self._transport.connect()
 
-      # self.broadcast_queue_name = "broadcast_signal_queue" + str(uuid.uuid4())
-      self.channel.exchange_declare(exchange=RMQSignal._DIRECT_EXCHANGE, exchange_type='direct')
-      self.channel.exchange_declare(exchange=RMQSignal._BROADCAST_EXCHANGE, exchange_type='fanout')
+      channel = self._transport.connection.channel()
+      channel.exchange_declare(exchange=RMQSignal._DIRECT_EXCHANGE, exchange_type='direct')
+      channel.exchange_declare(exchange=RMQSignal._BROADCAST_EXCHANGE, exchange_type='fanout')
+      channel.close()
 
    def __del__(self):
       """
 Destructor for RMQSignal class.
       """
       self.unset_signal_receiver_name()
-      if self.channel.is_open:
-         self.channel.close()
-      if self.connection.is_open:
-         self.connection.close()
+      if self._transport is not None:
+         self._transport.disconnect()
+         self._transport = None
 
    def send_signal(self, signal_name, payload, receiver=None):
       """
@@ -336,17 +315,14 @@ Send sinal to other processes.
 
 (*no returns*)
       """
-      send_channel = self.connection.channel()
       send_data = {
          signal_name: payload
       }
 
       if receiver is not None:
-         send_channel.basic_publish(exchange=RMQSignal._DIRECT_EXCHANGE, routing_key=receiver, body=json.dumps(send_data))
+         self._transport.publish(RMQSignal._DIRECT_EXCHANGE, receiver, json.dumps(send_data))
       else:
-         send_channel.basic_publish(exchange=RMQSignal._BROADCAST_EXCHANGE, routing_key='', body=json.dumps(send_data))
-
-      send_channel.close()
+         self._transport.publish(RMQSignal._BROADCAST_EXCHANGE, '', json.dumps(send_data))
 
    def unset_signal_receiver_name(self):
       """
@@ -356,8 +332,13 @@ Unset siganl receiver.
 
 (*no returns*)
       """
-      if self.signal_receiver_name:
-         self.channel.queue_delete(self.signal_receiver_name)
+      if self.signal_receiver_name and self._transport and self._transport.connection and not self._transport.connection.is_closed:
+         channel = self._transport.connection.channel()
+         try:
+            channel.queue_delete(self.signal_receiver_name)
+         finally:
+            if channel.is_open:
+               channel.close()
          self.signal_receiver_name = ''
 
    def set_signal_receiver_name(self, receiver='', force=True):
@@ -384,28 +365,38 @@ Set the signal receiver to be received signal.
 (*no returns*)
       """
       if force:
+         channel = self._transport.connection.channel()
          try:
-            self.channel.queue_delete(receiver)
-            self.channel.queue_declare(queue=receiver, passive=False)
+            channel.queue_delete(receiver)
+            channel.queue_declare(queue=receiver, passive=False)
          except Exception as ex:
              print(ex)
+         finally:
+            if channel.is_open:
+               channel.close()
          self.signal_receiver_name = receiver
       else:
          import logging
          logging.getLogger("pika").setLevel(logging.ERROR)
          try:
-         # Attempt to declare the queue
-            connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
+            # Attempt to declare the queue — uses a separate connection
+            # because passive=True will close the channel on 404.
+            connection = pika.BlockingConnection(
+               pika.ConnectionParameters(**self._config.to_connection_params())
+            )
             channel = connection.channel()
             channel.queue_declare(queue=receiver, passive=True)
             raise Exception(f"Signal '{receiver}' receiver already exists.")
          except pika.exceptions.ChannelClosedByBroker as e:
             if e.reply_code == 404:
+               ch = self._transport.connection.channel()
                try:
-                  self.channel.queue_declare(queue=receiver, passive=False)
-               except Exception as ex:
-                  # print(ex)
+                  ch.queue_declare(queue=receiver, passive=False)
+               except Exception:
                   pass
+               finally:
+                  if ch.is_open:
+                     ch.close()
 
                print(f"Queue '{receiver}' created.")
                self.signal_receiver_name = receiver
@@ -489,7 +480,9 @@ Consume the message from specific queue.
                except Exception as ex:
                   print(ex)
 
-      connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.host, port=self._port))
+      connection = pika.BlockingConnection(
+         pika.ConnectionParameters(**self._config.to_connection_params())
+      )
 
       channel = connection.channel()
       if queue_name=='':
