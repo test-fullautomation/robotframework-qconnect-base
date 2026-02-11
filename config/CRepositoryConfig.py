@@ -169,7 +169,7 @@ class CRepositoryConfig():
         self.__dictRepositoryConfig['DOCUMENTATIONBUILDER'] = CString.NormalizePath(f"{self.__sReferencePath}/genpackagedoc.py")
 
         # - folder containing the package source files (will also contain the PDF documentation)
-        self.__dictRepositoryConfig['PACKAGESOURCEFOLDER'] = CString.NormalizePath(f"{self.__sReferencePath}/{self.__dictRepositoryConfig['PACKAGENAME']}")
+        self.__dictRepositoryConfig['PACKAGESOURCEFOLDER'] = CString.NormalizePath(f"{self.__sReferencePath}/{self.__dictRepositoryConfig['IMPORTNAME']}")
 
         # ====== 2. PIP/TOML/setuptools
 
