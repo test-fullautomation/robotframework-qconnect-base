@@ -177,6 +177,11 @@
 "
 * Added verification for acceptable optional parameters in the `verify` keyword.
 "
-                                          ]
+                                          ],
+                      "1.0.0.;1.1.0." : [
+"
+* Usage of **Setuptools** replaced by usage of **PIP/TOML/Setuptools**.
+"
+                      ]
                  }
 }
