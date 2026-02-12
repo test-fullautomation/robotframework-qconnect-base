@@ -181,6 +181,8 @@
                       "1.0.0.;1.1.0." : [
 "
 * Usage of **Setuptools** replaced by usage of **PIP/TOML/Setuptools**.
+
+  Details about how to install the component with PIP, can be found in the `README <https://github.com/test-fullautomation/robotframework-qconnect-base/blob/develop/README.rst>`__
 "
                       ]
                  }
