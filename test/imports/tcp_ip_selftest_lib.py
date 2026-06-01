@@ -142,7 +142,7 @@ class tcp_ip_selftest_lib():
 
         # wait for TCP/IP testserver is ready (= accepts a connection)
         TCPIPClientParamTS = BuiltIn().get_variable_value('${TCPIPClientParamTS}')
-        # the name of the library like defined during import ("WITH NAME" option)
+        # the name of the library like defined during import ("AS" option)
         conn_manager       = BuiltIn().get_library_instance("conn_manager")
         max_tries         = 5
         max_try_wait_time = 1
@@ -171,7 +171,7 @@ class tcp_ip_selftest_lib():
         msg = f"Entering keyword 'quit_tcpip_testserver' at '{timestamp}'"
         BuiltIn().log(msg, level="INFO")
         TCPIPClientParamTS  = BuiltIn().get_variable_value('${TCPIPClientParamTS}')
-        conn_manager        = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("WITH NAME" option)
+        conn_manager        = BuiltIn().get_library_instance("conn_manager") # the name of the library like defined during import ("AS" option)
         connection_name     = "TESTSERVER_QUIT_CONNECTION"
         try:
             conn_manager.connect(conn_name=connection_name, conn_type="TCPIPClient", conn_conf=TCPIPClientParamTS)
