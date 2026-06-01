@@ -1,19 +1,19 @@
-.. Copyright 2020-2023 Robert Bosch GmbH
+.. Copyright 2020-2026 Robert Bosch GmbH
 
-   Licensed under the Apache License, Version 2.0 (the "License");
+.. Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-   http://www.apache.org/licenses/LICENSE-2.0
+.. http://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
+.. Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
 
-QConnectBase Library
-====================
+Package Description
+===================
 
 Table of Contents
 -----------------
@@ -39,19 +39,18 @@ Table of Contents
 Getting Started
 ---------------
 
-**QConnectBaseLibrary** is a connection testing library for `Robot
-Framework <https://robotframework.org>`__. Library will be supported to
-downloaded from PyPI soon. It provides a mechanism to handle trace log
-continously receiving from a connection (such as Raw TCP, SSH, Serial,
-etc.) besides sending data back to the other side. It’s especially
-efficient for monitoring the overflood response trace log from an
-asynchronous trace systems. It is supporting Python 3.7+ and
-RobotFramework 3.2+.
+**QConnectBase** is a library that enables `Robot Framework <https://robotframework.org>`__
+to establish and manage connections to external systems.
+
+**QConnectBase** provides a mechanism for continuously receiving trace logs from a connection (such as Raw TCP,
+SSH, Serial, etc.) while sending data back to the remote side. It's especially efficient for monitoring
+overflood response trace logs from asynchronous trace systems.
+It supports Python 3.7+ and Robot Framework 6.1+.
 
 How to install
-~~~~~~~~~~~~~~
+--------------
 
-**QConnectBaseLibrary** can be installed in two different ways.
+**QConnectBase** can be installed in two different ways.
 
 1. Installation via PyPi (recommended for users)
 
@@ -59,7 +58,7 @@ How to install
 
       pip install robotframework-qconnect-base
 
-   `QConnectBaseLibrary in PyPi <https://pypi.org/project/robotframework-qconnect-base/>`_
+   `QConnectBase in PyPi <https://pypi.org/project/robotframework-qconnect-base/>`_
 
 2. Installation via GitHub (recommended for developers)
 
@@ -69,51 +68,70 @@ How to install
 
         git clone https://github.com/test-fullautomation/robotframework-qconnect-base.git
 
-     `QConnectBaseLibrary in GitHub <https://github.com/test-fullautomation/robotframework-qconnect-base>`_
+     `QConnectBase in GitHub <https://github.com/test-fullautomation/robotframework-qconnect-base>`_
 
-   * Install dependencies
-
-     **QConnectBaseLibrary** requires some additional Python libraries. Before you install the cloned repository sources
-     you have to install the dependencies manually. The names of all related packages you can find in the file ``requirements.txt``
-     in the repository root folder. Use pip to install them:
+   * Use the following command to install **QConnectBase** (executed in repository main folder):
 
      .. code::
 
-        pip install -r ./requirements.txt
+        python -m pip install .
 
-     Additionally install **LaTeX** (recommended: TeX Live). This is used to render the documentation.
-
-   * Configure dependencies
-
-     The installation of **QConnectBaseLibrary** includes to generate the documentation in PDF format. This is done by
-     an application called **GenPackageDoc**, that is part of the installation dependencies (see ``requirements.txt``).
-
-     **GenPackageDoc** uses **LaTeX** to generate the documentation in PDF format. Therefore **GenPackageDoc** needs to know where to find
-     **LaTeX**. This is defined in the **GenPackageDoc** configuration file
+     Or:
 
      .. code::
 
-        packagedoc\packagedoc_config.json
+        python -m pip install --proxy <proxy> .
 
-     Before you start the installation you have to introduce the following environment variable, that is used in ``packagedoc_config.json``:
+     This command will also download and install all dependencies that are required to work with the source files in the current repository.
+     After the initial installation of **QConnectBase** is done, you have the following two possibilities:
 
-     - ``GENDOC_LATEXPATH`` : path to ``pdflatex`` executable
+     1. *Clean the previous installation*:
 
-   * Use the following command to install **QConnectBaseLibrary**:
+        .. code::
+
+           python "./cleanup_installation.py"
+
+        ``cleanup_installation.py`` explicitly deletes all files and folders within the component installation folder under
+        ``site-packages`` and also deletes local build artefacts.
+
+     2. *Render the component documentation*:
+
+        .. code::
+
+           python "./genpackagedoc.py"
+
+        This would e.g. be required in case of changes in the interface of **QConnectBase**.
+
+        The documentation is rendered by a separate application called **GenPackageDoc**, that is part
+        of the build dependencies and runtime dependencies of **QConnectBase**.
+
+        **GenPackageDoc** needs to be configured. Details about how to do this, can be found in the
+        `README.rst <https://github.com/test-fullautomation/python-genpackagedoc/blob/develop/README.rst>`_
+        (sections *Install dependencies* and *Configure dependencies*).
+
+   * Use the following command to build **QConnectBase** (executed in repository main folder):
 
      .. code::
 
-        python setup.py install
+        python -m build .
+
+     Or:
+
+     .. code::
+
+        python -m pip config set global.proxy <proxy>
+        python -m build .
+
 
 Usage
 -----
 
-QConnectBase Library support following keywords for testing connection in RobotFramework.
+**QConnectBase** supports the following Robot Framework keywords to establish and manage connections to external systems:
 
 **connect**
 ~~~~~~~~~~~
 
-  **Use for establishing a connection.**
+  **Establishes a connection.**
 
   **Syntax**:
 
@@ -198,7 +216,7 @@ QConnectBase Library support following keywords for testing connection in RobotF
 **disconnect**
 ~~~~~~~~~~~~~~
 
-  **Use for disconnect a connection by name.**
+  **Disconnects a connection by name.**
 
   **Syntax**:
 
@@ -211,7 +229,7 @@ QConnectBase Library support following keywords for testing connection in RobotF
 **send command**
 ~~~~~~~~~~~~~~~~
 
-  **Use for sending a command to the other side of connection.**
+  **Sends a command to the other side of the connection.**
 
   **Syntax**:
 
@@ -233,7 +251,7 @@ QConnectBase Library support following keywords for testing connection in RobotF
 **verify**
 ~~~~~~~~~~
 
-  **Use for verifying a response from the connection if it matched a pattern.**
+  **Verifies a response from the connection if it matched a pattern.**
 
   **Syntax**:
 
@@ -326,9 +344,9 @@ Example
 Contribution Guidelines
 -----------------------
 
-QConnectBaseLibrary is designed for ease of making an extension library. By that way you can take advantage of the QConnectBaseLibrary’s
-infrastructure for handling your own connection protocal. For creating an extension library for QConnectBaseLibrary, please following below
-steps.
+**QConnectBase** is designed for ease of making an extension library. By that way you can take advantage of the
+infrastructure of **QConnectBase** for handling your own connection protocol. For creating an extension library
+for **QConnectBase**, please following below steps.
 
 1.  Create a library package which have the prefix name is **robotframework-qconnect-**\ *[your specific name]*.
 
@@ -413,7 +431,7 @@ Contributors
 License
 -------
 
-Copyright 2020-2023 Robert Bosch GmbH
+Copyright 2020-2026 Robert Bosch GmbH
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
