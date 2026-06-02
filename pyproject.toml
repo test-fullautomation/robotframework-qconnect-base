@@ -106,6 +106,7 @@ Issues        = "https://github.com/test-fullautomation/robotframework-qconnect-
 [tool.setuptools]
 packages = [
     "QConnectBase",
+    "QConnectBase.grpc",
     "QConnectBase.message",
     "QConnectBase.serialclient",
     "QConnectBase.tcp",
