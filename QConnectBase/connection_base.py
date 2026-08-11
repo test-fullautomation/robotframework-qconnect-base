@@ -86,7 +86,7 @@ Base class for all connection classes.
    # _msgq_c_handle = 0
    # _msgq_c_obj = {}
    # _msgq_c_lock = threading.Lock()
-   self._broken_conn = threading.Event()
+   
 
 
    _is_precondition_valid = True
@@ -325,6 +325,7 @@ Initialize a thread for receiving data from connection.
       """
       _mident = '%s.%s()' % (self.__class__.__name__, currentframe().f_code.co_name)
       thread_name = self._CONNECTION_TYPE
+      self._broken_conn = threading.Event()
       if mode is not None:
          thread_name = mode
 
