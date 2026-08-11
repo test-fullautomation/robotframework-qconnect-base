@@ -108,7 +108,7 @@ Constructor for TCPBase class.
 
       self._recv_thrd_term = threading.Event()
       self._recv_thrd_start = threading.Event()
-      self._broken_conn = threading.Event()
+      # self._broken_conn = threading.Event()
 
       self._recv_thrd_term.clear()
       self._recv_thrd_start.clear()
