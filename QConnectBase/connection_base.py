@@ -86,6 +86,7 @@ Base class for all connection classes.
    # _msgq_c_handle = 0
    # _msgq_c_obj = {}
    # _msgq_c_lock = threading.Lock()
+   self._broken_conn = threading.Event()
 
 
    _is_precondition_valid = True
